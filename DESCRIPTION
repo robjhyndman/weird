@@ -1,0 +1,17 @@
+Package: weird
+Title: Data sets for "That's Weird" by Rob J Hyndman
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Rob",
+             family = "Hyndman",
+             role = c("aut", "cre", "cph"),
+             email = "Rob.Hyndman@monash.edu",
+             comment = c(ORCID = "0000-0002-2140-5352"))
+Description: All data sets required for the examples in the book
+    "That's weird" by Rob J Hyndman <https://OTexts.com/weird/>.  
+    All packages required to run the examples are also loaded.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
