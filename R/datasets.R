@@ -23,3 +23,18 @@
 #' }
 #' @source \url{http://espncricinfo.com}
 "cricket_batting"
+
+#' Old faithful eruption data
+#'
+#' A data set containing data on recorded eruptions of Old Faithful since 2015.
+#' Recordings are incomplete, especially during the winter months when observers
+#' may not be present.
+#'
+#' @format A data frame with 1937 rows and 3 columns:
+#' \describe{
+#'   \item{time}{Time eruption started}
+#'   \item{duration}{Duration of eruption in seconds}
+#'   \item{waiting}{Time to the following eruption}
+#' }
+#' @source \url{http://geysertimes.org}
+"oldfaithful"
