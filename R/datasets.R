@@ -47,7 +47,7 @@
 #' @format A data frame with 111,593 rows and 10 columns:
 #' \describe{
 #'   \item{country}{Country of origin}
-#'   \item{province}{Province of origin}
+#'   \item{state}{State or province of origin}
 #'   \item{region}{Region of origin}
 #'   \item{winery}{Name of vineyard that made the wine}
 #'   \item{variety}{Variety of grape}
@@ -58,5 +58,5 @@
 #'   \item{year}{Year of wine extracted from `title`}
 #' }
 #' @source \url{http://kaggle.com}
-"wine"
+"wine_reviews"
 

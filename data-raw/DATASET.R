@@ -36,13 +36,13 @@ usethis::use_data(oldfaithful, overwrite = TRUE)
 
 # Wine data
 
-wine <- readr::read_csv(here::here("data-raw/winemag-data-130k-v2.csv")) %>%
+wine_reviews <- readr::read_csv(here::here("data-raw/winemag-data-130k-v2.csv")) %>%
   filter(!is.na(points), !is.na(price)) %>%
   mutate(
     year = as.numeric(stringr::str_extract(title, "(198|199|200|201)\\d")),
     region_1 = if_else(is.na(region_2), region_1, region_2)
   ) %>%
-  select(country, province, region=region_1, winery, variety, title, description, points, price, year) %>%
+  select(country, state=province, region=region_1, winery, variety, title, description, points, price, year) %>%
   distinct()
 
-usethis::use_data(wine, overwrite=TRUE)
+usethis::use_data(wine_reviews, overwrite=TRUE)
