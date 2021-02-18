@@ -37,7 +37,7 @@ peirce_threshold <- function(n) {
   # Eq (B) after taking logs
   LnQN <- (n - 1) * log(n - 1) - n * log(n)
   # Loop until convergence
-  while (abs(x - oldx) >= .Machine$double.eps) {
+  while (abs(x - oldx) >= n*.Machine$double.eps) {
     # Eq (D)
     R1 <- 2 * exp(0.5*(x^2 - 1)) * stats::pnorm(x, lower.tail = FALSE)
     # Eq (A') after taking logs and solving for R (plug in lambda from top of page)

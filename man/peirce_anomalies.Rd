@@ -23,8 +23,8 @@ to either Peirce's criterion or Chauvenet's criterion.
 }
 \examples{
 y <- rnorm(1000)
-tibble(y =y) \%>\% dplyr::filter(peirce_anomalies(y))
-tibble(y =y) \%>\% dplyr::filter(chauvenet_anomalies(y))
+tibble(y = y) \%>\% dplyr::filter(peirce_anomalies(y))
+tibble(y = y) \%>\% dplyr::filter(chauvenet_anomalies(y))
 }
 \references{
 Peirce, B. (1852). Criterion for the rejection of doubtful observations.
@@ -34,5 +34,5 @@ Chauvenet, W. (1863). 'Method of least squares'. Appendix to
 \emph{Manual of Spherical and Practical Astronomy}, Vol.2, Lippincott, Philadelphia, pp.469-566.
 }
 \author{
-Rob J Hyndman, K Thomsen, C Dardis, S Muller
+Rob J Hyndman
 }
