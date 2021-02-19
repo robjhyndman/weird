@@ -2,9 +2,12 @@
 % Please edit documentation in R/kde_scores.R
 \name{kde_scores}
 \alias{kde_scores}
-\title{Kernel density estimate scores}
+\alias{lookout_prob}
+\title{Kernel density estimate scores and lookout probabilities}
 \usage{
 kde_scores(y, h = stats::bw.nrd(y), binned = FALSE, loo = FALSE)
+
+lookout_prob(y, h = stats::bw.nrd(y), binned = FALSE)
 }
 \arguments{
 \item{y}{Numerical vector of data}
@@ -22,9 +25,15 @@ Numerical vector containing kde scores
 Compute kernel density estimate scores,
 defined as minus the log of the kernel density estimate at each observation.
 A Gaussian kernel is used, with default h given by a normal reference rule.
+Leave-one-out scores are optionally computed.
+Lookout probabilities are returned by \code{lookout_prob} computed using a
+Generalized Pareto Distribution estimated from the kde scores and applied
+to the leave-one-out kde scores.
 }
 \examples{
-kde_scores(c(rnorm(9),5))
+y <- c(rnorm(9), 5)
+kde_scores(y)
+lookout_prob(y)
 }
 \seealso{
 \code{\link[stats]{bandwidth}}
