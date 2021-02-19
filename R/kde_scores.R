@@ -18,6 +18,6 @@
 #' @importFrom stats bw.nrd
 #' @importFrom ks kde
 kde_scores <- function(y, h=stats::bw.nrd(y), binned=FALSE, loo=FALSE) {
-  -log(ks::kde(y, h = h,  binned=binned, eval.points = y)$estimate) -
-    log(length(y)*h*sqrt(2*pi)) * loo
+  -log(pmax(0, ks::kde(y, h = h,  binned=binned, eval.points = y)$estimate -
+    loo/(length(y)*h*sqrt(2*pi))))
 }
