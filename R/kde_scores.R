@@ -37,6 +37,8 @@ lookout_prob <- function(y, h=stats::bw.nrd(y), binned=FALSE) {
   scores <- -log(pmax(0, fi))
   loo_scores <- -log(pmax(0, fi - 1/(length(y)*h*sqrt(2*pi))))
   threshold <- quantile(y, prob = 0.90)
+  if(sum(y > threshold) <= 3)
+    stop("Not enough data to fit a POT model")
   gpd <- evd::fpot(y, threshold = threshold)$estimate
   evd::pgpd(loo_scores, loc = threshold,
             scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
