@@ -21,7 +21,8 @@ Imports:
   purrr (>= 0.2.4),
   rstudioapi (>= 0.7),
   tibble (>= 1.4.2),
-  tidyr (>= 0.8.3)
+  tidyr (>= 0.8.3),
+  ks
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
