@@ -48,15 +48,14 @@ lookout_prob <- function(y, h = stats::bw.nrd(y),
   n <- length(y)
   scores <- kde_scores(y, h, kernel)
   loo_scores <- -log(pmax(0, (n * exp(-scores) - K0(kernel, h)) / (n - 1)))
-  threshold <- quantile(y, prob = 0.90)
+  threshold <- quantile(scores, prob = 0.90)
   if (sum(y > threshold) <= 3) {
     stop("Not enough data to fit a POT model")
   }
-  gpd <- evd::fpot(y, threshold = threshold, std.err = FALSE)$estimate
+  gpd <- evd::fpot(scores, threshold = threshold, std.err = FALSE)$estimate
   evd::pgpd(loo_scores,
     loc = threshold,
-    scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
-  )
+    scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
 }
 
 K0 <- function(kernel, h) {
