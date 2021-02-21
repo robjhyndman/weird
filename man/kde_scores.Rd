@@ -5,16 +5,21 @@
 \alias{lookout_prob}
 \title{Kernel density estimate scores and lookout probabilities}
 \usage{
-kde_scores(y, h = stats::bw.nrd(y), binned = FALSE, loo = FALSE)
+kde_scores(
+  y,
+  h = stats::bw.nrd(y),
+  kernel = c("gaussian", "epanechnikov"),
+  loo = FALSE
+)
 
-lookout_prob(y, h = stats::bw.nrd(y), binned = FALSE)
+lookout_prob(y, h = stats::bw.nrd(y), kernel = c("gaussian", "epanechnikov"))
 }
 \arguments{
 \item{y}{Numerical vector of data}
 
-\item{h}{Bandwidth. Dfault: \code{\link[stats]{bw.nrd}(y)}}
+\item{h}{Bandwidth. Default: \code{\link[stats]{bw.nrd}(y)}}
 
-\item{binned}{Should binning be used to speed up calculation? Default: FALSE}
+\item{kernel}{A character string giving the kernel to be used.}
 
 \item{loo}{Should leave-one-scores be returned? Default: FALSE}
 }

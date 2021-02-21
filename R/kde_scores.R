@@ -7,8 +7,8 @@
 #'  Generalized Pareto Distribution estimated from the kde scores and applied
 #'  to the leave-one-out kde scores.
 #' @param y Numerical vector of data
-#' @param h Bandwidth. Dfault: \code{\link[stats]{bw.nrd}(y)}
-#' @param binned Should binning be used to speed up calculation? Default: FALSE
+#' @param h Bandwidth. Default: \code{\link[stats]{bw.nrd}(y)}
+#' @param kernel A character string giving the kernel to be used.
 #' @param loo Should leave-one-scores be returned? Default: FALSE
 #' @return Numerical vector containing kde scores
 #' @author Rob J Hyndman
@@ -21,31 +21,49 @@
 #' @seealso
 #'  \code{\link[stats]{bandwidth}}
 #'  \code{\link[ks]{kde}}
-#' @importFrom stats bw.nrd quantile
-#' @importFrom ks kde
+#' @importFrom stats bw.nrd quantile density
 #' @importFrom evd fpot pgpd
-kde_scores <- function(y, h=stats::bw.nrd(y), binned=FALSE, loo=FALSE) {
+kde_scores <- function(y, h = stats::bw.nrd(y),
+                       kernel = c("gaussian", "epanechnikov"), loo = FALSE) {
+  kernel <- match.arg(kernel)
+  y <- na.omit(y)
   n <- length(y)
-  fi <- ks::kde(y, h = h,  binned=binned, eval.points = y)$estimate
-  if(loo)
-    scores <- -log(pmax(0, (n*fi - 1/(h*sqrt(2*pi)))/(n-1)))
-  else
+  fi <- approx(stats::density(y, bw = h, kernel = kernel, n = 1e5), xout = y)$y
+  if (loo) {
+    scores <- -log(pmax(0, (n * fi - K0(kernel)) / (n - 1)))
+  } else {
     scores <- -log(pmax(0, fi))
+  }
   return(scores)
 }
 
 #' @rdname kde_scores
 #' @export
 
-lookout_prob <- function(y, h=stats::bw.nrd(y), binned=FALSE) {
+lookout_prob <- function(y, h = stats::bw.nrd(y),
+                         kernel = c("gaussian", "epanechnikov")) {
+  kernel <- match.arg(kernel)
+  y <- na.omit(y)
   n <- length(y)
-  fi <- ks::kde(y, h = h,  binned=binned, eval.points = y)$estimate
-  scores <- -log(pmax(0, fi))
-  loo_scores <- -log(pmax(0, (n*fi - 1/(h*sqrt(2*pi)))/(n-1)))
+  scores <- kde_scores(y, h, kernel)
+  loo_scores <- -log(pmax(0, (n * exp(-scores) - K0(kernel)) / (n - 1)))
   threshold <- quantile(y, prob = 0.90)
-  if(sum(y > threshold) <= 3)
+  if (sum(y > threshold) <= 3) {
     stop("Not enough data to fit a POT model")
+  }
   gpd <- evd::fpot(y, threshold = threshold)$estimate
-  evd::pgpd(loo_scores, loc = threshold,
-            scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
+  evd::pgpd(loo_scores,
+    loc = threshold,
+    scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
+  )
+}
+
+K0 <- function(kernel) {
+  if (kernel == "gaussian") {
+    return(dnorm(0, sd = h))
+  } else if (kernel == "epanechnikov") {
+    return(0.75 / h / sqrt(5))
+  } else {
+    stop("Unknown kernel")
+  }
 }
