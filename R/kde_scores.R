@@ -53,7 +53,7 @@ lookout_prob <- function(y, h = stats::bw.nrd(y),
     stop("Not enough data to fit a POT model")
   }
   gpd <- evd::fpot(y, threshold = threshold)$estimate
-  1 - evd::pgpd(loo_scores,
+  evd::pgpd(loo_scores,
     loc = threshold,
     scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
   )
