@@ -33,9 +33,10 @@ kde_scores <- function(y, h=stats::bw.nrd(y), binned=FALSE, loo=FALSE) {
 #' @export
 
 lookout_prob <- function(y, h=stats::bw.nrd(y), binned=FALSE) {
+  n <- length(y)
   fi <- ks::kde(y, h = h,  binned=binned, eval.points = y)$estimate
   scores <- -log(pmax(0, fi))
-  loo_scores <- -log(pmax(0, fi - 1/(length(y)*h*sqrt(2*pi))))
+  loo_scores <- -log(pmax(0, (n*fi - 1/(h*sqrt(2*pi)))/(n-1)))
   threshold <- quantile(y, prob = 0.90)
   if(sum(y > threshold) <= 3)
     stop("Not enough data to fit a POT model")
