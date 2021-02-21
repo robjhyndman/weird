@@ -25,8 +25,13 @@
 #' @importFrom ks kde
 #' @importFrom evd fpot pgpd
 kde_scores <- function(y, h=stats::bw.nrd(y), binned=FALSE, loo=FALSE) {
-  -log(pmax(0, ks::kde(y, h = h,  binned=binned, eval.points = y)$estimate -
-    loo/(length(y)*h*sqrt(2*pi))))
+  n <- length(y)
+  fi <- ks::kde(y, h = h,  binned=binned, eval.points = y)$estimate
+  if(loo)
+    scores <- -log(pmax(0, (n*fi - 1/(h*sqrt(2*pi)))/(n-1)))
+  else
+    scores <- -log(pmax(0, fi))
+  return(scores)
 }
 
 #' @rdname kde_scores
