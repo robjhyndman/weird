@@ -48,3 +48,9 @@ wine_reviews <- readr::read_csv(here::here("data-raw/winemag-data-130k-v2.csv"))
   distinct()
 
 usethis::use_data(wine_reviews, overwrite=TRUE)
+
+# Synthetic data
+set.seed(1)
+n01 <- matrix(rnorm(1e4), ncol=10) %>% as_tibble(.name_repair = "unique")
+colnames(n01) <- paste("v",seq(10),sep="")
+usethis::use_data(n01, overwrite=TRUE)

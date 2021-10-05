@@ -61,3 +61,10 @@
 #' @source \url{http://kaggle.com}
 "wine_reviews"
 
+#' Multivariate standard normal data
+#'
+#' A synthetic data set containing 1000 observations on 10 variables generated
+#' from independent standard normal distributions.
+#'
+#' @format A data frame with 1000 rows and 10 columns.
+"n01"
