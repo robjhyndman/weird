@@ -17,7 +17,9 @@
 #' @importFrom dbscan lof
 lof_scores <- function(y, k=10, ...) {
   y <- na.omit(y)
-  dbscan::lof(as.matrix(y), minPts=k, ...)
+  lof <- dbscan::lof(as.matrix(y), minPts=k, ...)
+  lof[lof == Inf] <- 0
+  return(lof)
 }
 
 #' @title GLOSH scores
