@@ -5,7 +5,7 @@
 \alias{oldfaithful}
 \title{Old faithful eruption data}
 \format{
-A data frame with 1937 rows and 3 columns:
+A data frame with 2261 rows and 3 columns:
 \describe{
 \item{time}{Time eruption started}
 \item{duration}{Duration of eruption in seconds}
@@ -19,7 +19,8 @@ A data frame with 1937 rows and 3 columns:
 oldfaithful
 }
 \description{
-A data set containing data on recorded eruptions of Old Faithful since 2015.
+A data set containing data on recorded eruptions of Old Faithful from
+1 January 2015 to 1 October 2021.
 Recordings are incomplete, especially during the winter months when observers
 may not be present.
 }
