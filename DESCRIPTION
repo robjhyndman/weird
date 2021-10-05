@@ -23,12 +23,14 @@ Imports:
   tibble (>= 1.4.2),
   tidyr (>= 0.8.3),
   ks,
-  evd
+  evd,
+  dbscan
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: 
     R (>= 2.10)
 Suggests: 
