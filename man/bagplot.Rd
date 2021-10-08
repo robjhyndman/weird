@@ -4,7 +4,14 @@
 \alias{gg_bagplot}
 \title{Bagplot}
 \usage{
-gg_bagplot(data, var1, var2, col = "#0072B2", ...)
+gg_bagplot(
+  data,
+  var1,
+  var2,
+  col = c("#0072B2", "#71abcd", "#bcd2df", "#000000"),
+  scatterplot = FALSE,
+  ...
+)
 }
 \arguments{
 \item{data}{A data frame or matrix containing the data.}
@@ -13,13 +20,15 @@ gg_bagplot(data, var1, var2, col = "#0072B2", ...)
 
 \item{var2}{The name of the second variable to plot (a bare expression).}
 
-\item{col}{The main color to use. The median is shown at full strength, while the
-bag and loop have some transparency added.}
+\item{col}{The colors to use in the order: median, bag, loop and outliers.}
+
+\item{scatterplot}{A logical argument indicating if a regular bagplot is required
+(\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).}
 
 \item{...}{Other arguments currently ignored.}
 }
 \value{
-A ggplot object showing a bagplot of the data.
+A ggplot object showing a bagplot or scatterplot of the data.
 }
 \description{
 Produces a bivariate bagplot. A bagplot is analagous to a
@@ -29,6 +38,7 @@ showing the remaining observations other than outliers, and any outliers.
 }
 \examples{
 gg_bagplot(n01, v1, v2)
+gg_bagplot(n01, v1, v2, scatterplot=TRUE)
 }
 \references{
 Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999).
