@@ -29,7 +29,7 @@
 gg_bagplot <- function(data, var1, var2, col=c("#0072B2","#71abcd","#bcd2df","#000000"),
                        scatterplot=FALSE, ...) {
   data <- data %>% select({{var1}},{{var2}})
-  bp <- aplpack::compute.bagplot(as.matrix(data))
+  bp <- aplpack::compute.bagplot(as.matrix(data), na.rm = TRUE, approx.limit = 1000)
   cn <- colnames(data)
   p <- data %>%
     ggplot(aes(x={{ var1 }}, y={{ var2 }}))
