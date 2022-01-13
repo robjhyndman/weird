@@ -28,10 +28,10 @@
 
 gg_bagplot <- function(data, var1, var2, col=c("#0072B2","#71abcd","#bcd2df","#000000"),
                        scatterplot=FALSE, ...) {
-  data <- data %>% select({{var1}},{{var2}})
+  data <- data |> select({{var1}},{{var2}})
   bp <- aplpack::compute.bagplot(as.matrix(data), na.rm = TRUE, approx.limit = 1000)
   cn <- colnames(data)
-  p <- data %>%
+  p <- data |>
     ggplot(aes(x={{ var1 }}, y={{ var2 }}))
   if(scatterplot) {
     # Bag points
@@ -46,7 +46,7 @@ gg_bagplot <- function(data, var1, var2, col=c("#0072B2","#71abcd","#bcd2df","#0
     }
     # Deepest point
     colnames(bp$xy) <- cn
-    deep <- bp$xy %>% as.data.frame() %>% dplyr::filter(bp$hdepths == max(bp$hdepths))
+    deep <- bp$xy |> as.data.frame() |> dplyr::filter(bp$hdepths == max(bp$hdepths))
     p <- p + geom_point(aes(x={{ var1 }}, y={{ var2 }}),
                         data = deep, color=col[1])
   } else {

@@ -21,7 +21,6 @@ Imports:
   evd,
   ggplot2 (>= 3.1.1),
   ks,
-  magrittr (>= 1.5),
   purrr (>= 0.2.4),
   rstudioapi (>= 0.7),
   tibble (>= 1.4.2),
