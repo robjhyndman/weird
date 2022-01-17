@@ -44,7 +44,7 @@ wine_reviews <- readr::read_csv(here::here("data-raw/winemag-data-130k-v2.csv"))
     year = as.numeric(stringr::str_extract(title, "(198|199|200|201)\\d")),
     region_1 = if_else(is.na(region_2), region_1, region_2)
   ) %>%
-  select(country, state=province, region=region_1, winery, variety, title, description, points, price, year) %>%
+  select(country, state=province, region=region_1, winery, variety, points, price, year) %>%
   distinct()
 
 usethis::use_data(wine_reviews, overwrite=TRUE)
