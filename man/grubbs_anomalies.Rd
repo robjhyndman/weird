@@ -2,38 +2,57 @@
 % Please edit documentation in R/grubbs.R
 \name{grubbs_anomalies}
 \alias{grubbs_anomalies}
+\alias{dixon_anomalies}
 \title{Statistical tests for anomalies using Grubbs' test and Dixon's test}
 \usage{
 grubbs_anomalies(y, alpha = 0.05)
+
+dixon_anomalies(y, alpha = 0.05, two_sided = TRUE)
 }
 \arguments{
 \item{y}{numerical vector of observations}
 
 \item{alpha}{size of the test.}
+
+\item{two_sided}{If \code{TRUE}, both minimum and maximums will be considered. Otherwise
+only the maximum will be used. (Take negative values to consider only the minimum with
+\code{two_sided=FALSE}.)}
 }
 \description{
 Grubbs' test (proposed in 1950) identifies possible anomalies in univariate
 data using z-scores assuming the data come from a normal distribution.
+Dixon's test (also from 1950) compares the difference in the largest two values
+to the range of the data. Critical values for Dixon's test have been
+computed using simulation with interpolation using a quadratic model on
+logit(alpha) and log(log(n)).
 }
 \details{
-The test is based on z-scores, and a point is identified as an
+Grubbs' test is based on z-scores, and a point is identified as an
 anomaly when the associated absolute z-score is greater than a threshold value.
 A vector of logical values is returned, where \code{TRUE} indicates an anomaly.
 This version of Grubbs' test looks for outliers anywhere in the sample.
 Grubbs' original test came in several variations which looked for one outlier,
 or two outliers in one tail, or two outliers on opposite tails. These variations
 are implemented in the \code{\link[outliers]{grubbs.test}} function.
+Dixon's test only considers the maximum (and possibly the minimum) as potential outliers.
 }
 \examples{
-y <- c(rnorm(1000), 3:6)
+library(dplyr)
+x <- c(rnorm(1000), 5:10)
+tibble(x = x) |> filter(grubbs_anomalies(x))
+tibble(x = x) |> filter(dixon_anomalies(x))
+y <- c(rnorm(1000), 5)
 tibble(y = y) |> filter(grubbs_anomalies(y))
+tibble(y = y) |> filter(dixon_anomalies(y))
 }
 \references{
 Grubbs, F. E. (1950). Sample criteria for testing outlying observations.
 \emph{Annals of Mathematical Statistics}, 21(1), 27–58.
+Dixon, W. J. (1950). Analysis of extreme values.
+\emph{Annals of Mathematical Statistics}, 21(4), 488–506.
 }
 \seealso{
-\code{\link[outliers]{grubbs.test}}, \code{\link[outliers]{dixons.test}}
+\code{\link[outliers]{grubbs.test}}, \code{\link[outliers]{dixon.test}}
 }
 \author{
 Rob J Hyndman

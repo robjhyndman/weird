@@ -2,6 +2,7 @@
 
 S3method(print,weird_conflicts)
 export(chauvenet_anomalies)
+export(dixon_anomalies)
 export(gg_bagplot)
 export(glosh_scores)
 export(grubbs_anomalies)
