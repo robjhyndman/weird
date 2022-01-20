@@ -37,21 +37,38 @@ usethis::use_data(dixon_cv, overwrite = TRUE, internal=TRUE)
 
 # Fit local quadratic model in loglog(n) and logit(alpha) to find critical values
 # for other alpha and n values.
-alpha <- 0.1
-n <- 2
-alpha_grid <- sort(unique(dixon_cv$alpha))
-n_grid <- sort(unique(dixon_cv$n))
+dixon_cv <- weird:::dixon_cv
+alpha <- 0.05
+n <- 55
+# Find critical value using linear model fitted to simulated critical values
+# Subset data to nearest alpha and n values
 logit <- function(u) { log(u/(1-u)) }
 loglog <- function(u) { log(log(u)) }
-# Find 4 nearest alpha and n points to give grid of 16
+# Find four nearest alpha values
+alpha_grid <- sort(unique(dixon_cv$alpha))
 nearest_alpha <- (alpha_grid[order(abs(logit(alpha_grid) - logit(alpha)))])[1:4]
-nearest_n <- (n_grid[order(abs(loglog(n_grid) - loglog(n)))])[1:4]
-cv_subset <- dixon_cv[dixon_cv$alpha %in% nearest_alpha & dixon_cv$n %in% nearest_n,]
+# Fit model using only alpha values?
+alpha_only_model <- (n %in% 3:50)
+# Find nearest n values
+if (alpha_only_model) {
+  nearest_n <- n
+} else {
+  # Find four nearest n values
+  n_grid <- sort(unique(dixon_cv$n))
+  nearest_n <- (n_grid[order(abs(loglog(n_grid) - loglog(n)))])[1:4]
+}
+cv_subset <- dixon_cv[dixon_cv$alpha %in% nearest_alpha & dixon_cv$n %in% nearest_n, ]
 cv_subset$loglogn <- loglog(cv_subset$n)
 cv_subset$logitalpha <- logit(cv_subset$alpha)
-# Almost quadratic interpolation/extrapolation. 7 df
-dixonfit <- lm(log(cv) ~ poly(loglogn,2) + poly(logitalpha, 2) + poly(logitalpha*loglogn,1),
-               data = cv_subset)
+if (alpha_only_model) {
+  # Cubic interpolation to 4 points. 4 df
+  dixonfit <- stats::lm(log(cv) ~ poly(logitalpha, 3), data = cv_subset)
+} else {
+  # Quadratic bivariate model to 16 points. 6 df
+  dixonfit <- stats::lm(log(cv) ~ poly(loglogn, 2) + poly(logitalpha, 2) + I(logitalpha * loglogn),
+                        data = cv_subset)
+}
+
 summary(dixonfit)
 pred <- exp(predict(dixonfit))
 
@@ -60,6 +77,7 @@ cv_subset %>%
   ggplot(aes(x=logit(alpha), y=cv, group=n, col=as.factor(n))) +
   geom_point() + scale_y_log10() +
   geom_line(aes(y=pred))
+
 cv_subset %>%
   ggplot(aes(x=loglog(n), y=cv, group=alpha, col=as.factor(alpha))) +
   geom_point() +
