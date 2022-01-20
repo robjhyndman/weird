@@ -100,8 +100,8 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
   cv_subset$loglogn <- loglog(cv_subset$n)
   cv_subset$logitalpha <- logit(cv_subset$alpha)
   if (alpha_only_model) {
-    # Quadratic model to 4 points. 3 df
-    dixonfit <- stats::lm(log(cv) ~ poly(logitalpha, 2), data = cv_subset)
+    # Cubic interpolation to 4 points. 4 df
+    dixonfit <- stats::lm(log(cv) ~ poly(logitalpha, 3), data = cv_subset)
   } else {
     # Quadratic bivariate model to 16 points. 6 df
     dixonfit <- stats::lm(log(cv) ~ poly(loglogn, 2) + poly(logitalpha, 2) + I(logitalpha * loglogn),
