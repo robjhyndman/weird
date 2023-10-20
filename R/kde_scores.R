@@ -48,7 +48,7 @@ lookout_prob <- function(y, h = stats::bw.nrd(y),
   n <- length(y)
   scores <- kde_scores(y, h, kernel)
   loo_scores <- -log(pmax(0, (n * exp(-scores) - K0(kernel, h)) / (n - 1)))
-  threshold <- quantile(scores, prob = 0.90)
+  threshold <- quantile(scores, prob = 0.90, type = 8)
   gpd <- evd::fpot(scores, threshold = threshold, std.err = FALSE)$estimate
   evd::pgpd(loo_scores,
     loc = threshold,

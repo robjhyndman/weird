@@ -17,7 +17,7 @@ qdixon <- function(n, alpha = 0.05, rep=1e5) {
       y <- sort(rnorm(n))
       Q[i] <- max(y[2]-y[1], y[n]-y[n-1]) / (y[n]-y[1])
     }
-    quantile(Q, prob=1-alpha)
+    quantile(Q, prob=1-alpha, type = 8)
   }
 }
 
