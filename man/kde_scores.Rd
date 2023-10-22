@@ -5,26 +5,19 @@
 \alias{lookout_prob}
 \title{Kernel density estimate scores and lookout probabilities}
 \usage{
-kde_scores(
-  y,
-  h = stats::bw.nrd(y),
-  kernel = c("gaussian", "epanechnikov"),
-  loo = FALSE
-)
+kde_scores(y, loo = FALSE, ...)
 
-lookout_prob(y, h = stats::bw.nrd(y), kernel = c("gaussian", "epanechnikov"))
+lookout_prob(y, ...)
 }
 \arguments{
-\item{y}{Numerical vector of data}
+\item{y}{Numerical vector or matrix of data (up to 6 dimensions).}
 
-\item{h}{Bandwidth. Default: \code{\link[stats]{bw.nrd}(y)}}
+\item{loo}{Should leave-one-scores be returned? Default: FALSE.}
 
-\item{kernel}{A character string giving the kernel to be used.}
-
-\item{loo}{Should leave-one-scores be returned? Default: FALSE}
+\item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
 }
 \value{
-Numerical vector containing kde scores
+Numerical vector containing kde scores.
 }
 \description{
 Compute kernel density estimate scores,

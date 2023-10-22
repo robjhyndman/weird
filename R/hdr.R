@@ -1,51 +1,41 @@
 #' @title Table of Highest Density Regions
 #' @description
-#' Compute the highest density regions (HDR) for either a specified density function, or
-#' a kernel density estimate based on the data provided. Either 1 or 2 dimensional HDRs can be
-#' calculated. The HDRs are returned as a tibble with one row per interval and columns:
+#' Compute the highest density regions (HDR) for a kernel density estimate. The HDRs
+#' are returned as a tibble with one row per interval and columns:
 #' `prob` (giving the probability coverage),
-#' `lower` (the lower end of the interval),
-#' `upper` (the upper end of the interval), and
-#' `density` (the value of the density at the ends of the interval).
-#' The first row of the tibble has `prob` set to 0 and specifies the mode of the distribution.
+#' `density` (the value of the density at the boundary of the HDR),
+#' `mode` (the local mode equal to the highest density value within the corresponding HDR).
+#' For one dimensional density functions, the tibble also has columns
+#' `lower` (the lower ends of the intervals), and
+#' `upper` (the upper ends of the interval).
 #'
-#' @param x Numerical vector of data, or a 2-column matrix of data
-#' @param y Numerical vector of data
-#' @param density Density estimate
+#' @param y Numerical vector or matrix of data
+#' @param density Probablity density function, either estimated by `ks::kde()` or
+#' a list with components `x` and `y` defining the density function.
 #' @param prob Probability of the HDR
-#' @param bw Bandwidth for density estimate
-#' @return A tibble with columns prob, lower and upper
+#' @param ... If `y` is supplied, other arguments are passed to \code{\link[ks]{kde}}.
+#' Otherwise, additional arguments are ignored.
+#' @return A tibble
 #' @author Rob J Hyndman
 #' @examples
-#' hdr_table(c(rnorm(50), rnorm(50, 3, 1)), prob = 0.95)
-#' hdr_table(c(rnorm(50), rnorm(50, 3, 1)), prob = 0.95)
+#' hdr_table(c(rnorm(100), rnorm(100, 3, 1)))
+#' x <- seq(-4,4, l=501)
+#' hdr_table(density = list(x=x, y=dnorm(x)), prob = 0.95)
 #' @export
-hdr_table <- function(x = NULL, y = NULL, density = NULL,
-      prob = c(0.50, 0.99), bw = NULL, ...) {
+hdr_table <- function(y = NULL, density = NULL,
+      prob = c(0.50, 0.99), ...) {
   if(min(prob) < 0 | max(prob) > 1) {
     stop("prob must be between 0 and 1")
   }
-  # density supplied
-  if (!is.null(density)) {
-    if (!is.null(x) & !is.null(y)) {
-      warning("Ignoring x and y")
-    } else if (!is.null(x) & is.null(y)) {
-      warning("Ignoring x")
-    } else if (is.null(x) & !is.null(y)) {
-      warning("Ignoring y")
+  # Data supplied
+  if(!is.null(y)) {
+    if(!is.null(density)) {
+      warning("Ignoring density")
     }
-    hdr <- hdr(prob = prob, den = den)
-  } else if (!is.null(x) & is.null(y)) {
-    # only x supplied
-    if(is.null(bw)) {
-      bw <- stats::bw.nrd0(x)
-    }
-    hdr <- hdr(x = x, prob = prob, h = bw, ...)
-  } else if (!is.null(x) & !is.null(y)) {
-    # both x and y supplied
-    hdr <- hdrcde::hdr.2d(x = x, y = y, prob = prob, ...)
+    hdr <- hdr(y = y, prob = prob, ...)
   } else {
-    stop("Must supply at least one of density, x and y")
+    # density supplied
+    hdr <- hdr(prob = prob, den = density, ...)
   }
   hdr_df <- as_tibble(hdr$hdr, .name_repair = "unique", rownames = "prob") |>
     suppressMessages()
@@ -60,101 +50,81 @@ hdr_table <- function(x = NULL, y = NULL, density = NULL,
     ) |>
     select(-names) |>
     filter(!is.na(ends)) |>
-    bind_rows(
-      tibble(
-        prob = c(0, 0),
-        type = c("lower", "upper"),
-        ends = rep(hdr$mode, 2),
-        density = rep(hdr$fmode, 2),
-      )
-    ) |>
     arrange(prob, ends) |>
     mutate(n = 1 + trunc((row_number() / 2.01))) |>
     pivot_wider(id_cols = c("n", "prob", "density"), names_from = type, values_from = ends)
+  hdr_df <- hdr_df
 
   hdr_df |>
     select(prob, lower, upper, density)
 }
 
-# Remaining functions adapted from hdrcde package
+# Compute HDRs
 
-hdr <- function(x = NULL, prob, den = NULL, h,
-                nn = 5000, all.modes = FALSE) {
-  if (!is.null(x)) {
-    r <- diff(range(x))
+hdr <- function(y = NULL, prob, den = NULL, ...) {
+  if (!is.null(y)) {
+    r <- diff(range(y))
     if (r == 0) {
       stop("Insufficient data")
     }
-  }
-  if (is.null(den)) {
-    den <- density(x, bw = h)
+    den <- ks::kde(y, ...)
+  } else if(!inherits(den, "kde")) {
+    # Convert den to class kde
+    den2 <- den
+    x <- sample(den2$x, size=2e5, replace = TRUE, prob = den2$y)
+    den <- ks::kde(x)
+    den$eval.points = den2$x
+    den$estimate = den2$y
   }
   alpha <- sort(1 - prob)
-  falpha <- calc.falpha(x, den, alpha, nn = nn)
-  hdr.store <- matrix(NA, length(alpha), 100)
+  falpha <- approx(seq(99), den$cont, xout = 100*(1-alpha))$y
+  hdr.store <- tibble(
+    prob = numeric(0),
+    lower = numeric(0),
+    upper = numeric(0),
+    mode = numeric(0)
+  )
   for (i in 1:length(alpha)){
-    junk <- hdr.ends(den, falpha$falpha[i])$hdr
-    if (length(junk) > 100) {
-      junk <- junk[1:100]
-      warning("Too many sub-intervals. Only the first 50 returned.")
+    junk <- hdr.ends(den, falpha[i])$hdr
+    n <- length(junk)/2
+    for(j in seq(n)) {
+      within <- den$eval.points >= junk[2*j-1] & den$eval.points <= junk[2*j]
+      subden <- cbind(x = den$eval.points[within], y=den$estimate[within])
+      hdr.store <- bind_rows(hdr.store,
+        tibble(prob=alpha[i], lower=junk[2*j-1], upper=junk[2*j],
+                             mode = subden$x[which.max(subden$y)])
+      )
     }
-    hdr.store[i, ] <- c(junk, rep(NA, 100 - length(junk)))
   }
-  cj <- colSums(is.na(hdr.store))
-  hdr.store <- matrix(hdr.store[, cj < nrow(hdr.store)], nrow = length(prob))
-  rownames(hdr.store) <- paste(100 * (1 - alpha), "%", sep = "")
-  if (all.modes) {
-    y <- c(0, den$y, 0)
-    n <- length(y)
-    idx <- ((y[2:(n - 1)] > y[1:(n - 2)]) & (y[2:(n - 1)] > y[3:n])) | (den$y == max(den$y))
-    mode <- den$x[idx]
-  } else {
-    mode <- falpha$mode
-  }
-  return(list(hdr = hdr.store, mode = mode, falpha = falpha$falpha, fmode = falpha$fmode))
+  return(list(hdr = hdr.store, falpha = falpha))
 }
 
-calc.falpha <- function(x = NULL, den, alpha, nn = 5000) {
-  # Calculates falpha needed to compute HDR of density den.
-  # Also finds approximate mode.
-  # Input: den = density on grid.
-  #          x = independent observations on den
-  #      alpha = level of HDR
-
-  if (is.null(x)) {
-    calc.falpha(x = sample(den$x, nn, replace = TRUE, prob = den$y), den, alpha)
-  } else {
-    fx <- approx(den$x, den$y, xout = x, rule = 2)$y
-    falpha <- quantile(fx, prob = alpha, type = 8)
-    mode <- den$x[den$y == max(den$y)]
-    return(list(falpha = falpha, mode = mode, fx = fx, fmode = max(den$y)))
-  }
-}
+# Remaining functions adapted from hdrcde package
 
 hdr.ends <- function(den, falpha) {
-  miss <- is.na(den$x) # | is.na(den$y)
-  den$x <- den$x[!miss]
-  den$y <- den$y[!miss]
-  n <- length(den$x)
+  miss <- is.na(den$eval.points) # | is.na(den$estimate)
+  den$eval.points <- den$eval.points[!miss]
+  den$estimate <- den$estimate[!miss]
+  n <- length(den$eval.points)
   # falpha is above the density, so the HDR does not exist
-  if (falpha > max(den$y)) {
+  if (falpha > max(den$estimate)) {
     return(list(falpha = falpha, hdr = NA))
   }
   f <- function(x, den, falpha) {
-    approx(den$x, den$y - falpha, xout = x)$y
+    approx(den$eval.points, den$estimate - falpha, xout = x)$y
   }
-  intercept <- all_roots(f, interval = range(den$x), den = den, falpha = falpha)
+  intercept <- all_roots(f, interval = range(den$eval.points), den = den, falpha = falpha)
   ni <- length(intercept)
   # No roots -- use the whole line
   if (ni == 0L) {
-    intercept <- c(den$x[1], den$x[n])
+    intercept <- c(den$eval.points[1], den$eval.points[n])
   } else {
     # Check behaviour outside the smallest and largest intercepts
-    if (f(0.5 * (head(intercept, 1) + den$x[1]), den, falpha) > 0) {
-      intercept <- c(den$x[1], intercept)
+    if (f(0.5 * (head(intercept, 1) + den$eval.points[1]), den, falpha) > 0) {
+      intercept <- c(den$eval.points[1], intercept)
     }
-    if (f(0.5 * (tail(intercept, 1) + den$x[n]), den, falpha) > 0) {
-      intercept <- c(intercept, den$x[n])
+    if (f(0.5 * (tail(intercept, 1) + den$eval.points[n]), den, falpha) > 0) {
+      intercept <- c(intercept, den$eval.points[n])
     }
   }
   # Check behaviour -- not sure if we need this now

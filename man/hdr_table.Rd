@@ -4,35 +4,35 @@
 \alias{hdr_table}
 \title{Table of Highest Density Regions}
 \usage{
-hdr_table(x = NULL, y = NULL, density = NULL, prob = c(50, 99), bw = NULL, ...)
+hdr_table(y = NULL, density = NULL, prob = c(0.5, 0.99), ...)
 }
 \arguments{
-\item{x}{Numerical vector of data}
+\item{y}{Numerical vector or matrix of data}
 
-\item{y}{Numerical vector of data}
-
-\item{density}{Density estimate}
+\item{density}{Probablity density function estimated by \code{ks::kde()}.}
 
 \item{prob}{Probability of the HDR}
 
-\item{bw}{Bandwidth for density estimate}
+\item{...}{If \code{y} is supplied, other arguments are passed to \code{\link[ks]{kde}}.
+Otherwise, additional arguments are ignored.}
 }
 \value{
-A tibble with columns prob, lower and upper
+A tibble
 }
 \description{
-Compute the highest density regions (HDR) for either a specified density function, or
-a kernel density estimate based on the data provided. Either 1 or 2 dimensional HDRs can be
-calculated. The HDRs are returned as a tibble with one row per interval and columns:
+Compute the highest density regions (HDR) for a kernel density estimate. The HDRs
+are returned as a tibble with one row per interval and columns:
 \code{prob} (giving the probability coverage),
-\code{lower} (the lower end of the interval),
-\code{upper} (the upper end of the interval), and
-\code{density} (the value of the density at the ends of the interval).
-The first row of the tibble has \code{prob} set to 0 and specifies the mode of the distribution.
+\code{density} (the value of the density at the boundary of the HDR),
+\code{mode} (the local mode equal to the highest density value within the corresponding HDR).
+For one dimensional density functions, the tibble also has columns
+\code{lower} (the lower ends of the intervals), and
+\code{upper} (the upper ends of the interval).
 }
 \examples{
-x <- c(rnorm(49), 5)
-hdr_table(x, prob = 0.95)
+hdr_table(density = dnorm, prob = c(0.9, 0.95))
+hdr_table(c(rnorm(50), rnorm(50, 3, 1)), prob = 0.95)
+hdr_table(c(rnorm(50), rnorm(50, 3, 1)), prob = 0.95)
 }
 \author{
 Rob J Hyndman

@@ -7,11 +7,10 @@
 #'  Generalized Pareto Distribution estimated from the kde scores and applied
 #'  to the leave-one-out kde scores. These give the probability of each observation
 #'  being an anomaly.
-#' @param y Numerical vector of data
-#' @param h Bandwidth. Default: \code{\link[stats]{bw.nrd}(y)}
-#' @param kernel A character string giving the kernel to be used.
-#' @param loo Should leave-one-scores be returned? Default: FALSE
-#' @return Numerical vector containing kde scores
+#' @param y Numerical vector or matrix of data (up to 6 dimensions).
+#' @param loo Should leave-one-scores be returned? Default: FALSE.
+#' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
+#' @return Numerical vector containing kde scores.
 #' @author Rob J Hyndman
 #' @examples
 #' y <- c(rnorm(49), 5)
@@ -24,14 +23,13 @@
 #'  \code{\link[ks]{kde}}
 #' @importFrom stats bw.nrd quantile density dnorm approx na.omit
 #' @importFrom evd fpot pgpd
-kde_scores <- function(y, h = stats::bw.nrd(y),
-                       kernel = c("gaussian", "epanechnikov"), loo = FALSE) {
-  kernel <- match.arg(kernel)
+kde_scores <- function(y, loo = FALSE, ...) {
   y <- na.omit(y)
   n <- length(y)
-  fi <- approx(stats::density(y, bw = h, kernel = kernel, n = 1e5), xout = y)$y
+  fy <- ks::kde(y, eval.points = y, ...)
+  fi <- fy$estimate
   if (loo) {
-    scores <- -log(pmax(0, (n * fi - K0(kernel, h)) / (n - 1)))
+    scores <- -log(pmax(0, (n * fi - dnorm(0, y$h)) / (n - 1)))
   } else {
     scores <- -log(pmax(0, fi))
   }
@@ -41,26 +39,14 @@ kde_scores <- function(y, h = stats::bw.nrd(y),
 #' @rdname kde_scores
 #' @export
 
-lookout_prob <- function(y, h = stats::bw.nrd(y),
-                         kernel = c("gaussian", "epanechnikov")) {
-  kernel <- match.arg(kernel)
+lookout_prob <- function(y, ...) {
   y <- na.omit(y)
   n <- length(y)
-  scores <- kde_scores(y, h, kernel)
-  loo_scores <- -log(pmax(0, (n * exp(-scores) - K0(kernel, h)) / (n - 1)))
+  scores <- kde_scores(y, ...)
+  loo_scores <- -log(pmax(0, (n * exp(-scores) - dnorm(0,h)) / (n - 1)))
   threshold <- quantile(scores, prob = 0.90, type = 8)
   gpd <- evd::fpot(scores, threshold = threshold, std.err = FALSE)$estimate
   evd::pgpd(loo_scores,
     loc = threshold,
     scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
-}
-
-K0 <- function(kernel, h) {
-  if (kernel == "gaussian") {
-    return(dnorm(0, sd = h))
-  } else if (kernel == "epanechnikov") {
-    return(0.75 / h / sqrt(5))
-  } else {
-    stop("Unknown kernel")
-  }
 }
