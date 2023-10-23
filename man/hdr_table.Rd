@@ -4,15 +4,23 @@
 \alias{hdr_table}
 \title{Table of Highest Density Regions}
 \usage{
-hdr_table(y = NULL, density = NULL, prob = c(0.5, 0.99), ...)
+hdr_table(
+  y = NULL,
+  density = NULL,
+  prob = c(0.5, 0.99),
+  h = stats::bw.nrd0(y),
+  ...
+)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data}
 
-\item{density}{Probablity density function, either estimated by \code{ks::kde()} or
+\item{density}{Probability density function, either estimated by \code{ks::kde()} or
 a list with components \code{x} and \code{y} defining the density function.}
 
 \item{prob}{Probability of the HDR}
+
+\item{h}{Bandwidth for kernel density estimate. Default is \code{\link[stats]{bw.nrd0}}.}
 
 \item{...}{If \code{y} is supplied, other arguments are passed to \code{\link[ks]{kde}}.
 Otherwise, additional arguments are ignored.}
@@ -31,7 +39,9 @@ For one dimensional density functions, the tibble also has columns
 \code{upper} (the upper ends of the interval).
 }
 \examples{
-hdr_table(c(rnorm(100), rnorm(100, 3, 1)))
+y <- c(rnorm(100), rnorm(100, 3, 1))
+hdr_table(y = y)
+hdr_table(density = ks::kde(y))
 x <- seq(-4, 4, by = 0.01)
 hdr_table(density = list(x = x, y = dnorm(x)), prob = 0.95)
 }

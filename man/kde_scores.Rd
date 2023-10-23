@@ -5,14 +5,17 @@
 \alias{lookout_prob}
 \title{Kernel density estimate scores and lookout probabilities}
 \usage{
-kde_scores(y, loo = FALSE, ...)
+kde_scores(y, loo = FALSE, h = stats::bw.nrd0(y), ...)
 
-lookout_prob(y, ...)
+lookout_prob(y, h = stats::bw.nrd0(y), ...)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data (up to 6 dimensions).}
 
 \item{loo}{Should leave-one-scores be returned? Default: FALSE.}
+
+\item{h}{Bandwidth for the kernel density estimate. Default: normal reference rule given
+by \code{\link[stats]{bw.nrd0}}.}
 
 \item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
 }

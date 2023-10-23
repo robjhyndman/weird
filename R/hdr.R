@@ -8,11 +8,11 @@
 #' For one dimensional density functions, the tibble also has columns
 #' `lower` (the lower ends of the intervals), and
 #' `upper` (the upper ends of the interval).
-#'
 #' @param y Numerical vector or matrix of data
-#' @param density Probablity density function, either estimated by `ks::kde()` or
+#' @param density Probability density function, either estimated by `ks::kde()` or
 #' a list with components `x` and `y` defining the density function.
 #' @param prob Probability of the HDR
+#' @param h Bandwidth for kernel density estimate. Default is \code{\link[stats]{bw.nrd0}}.
 #' @param ... If `y` is supplied, other arguments are passed to \code{\link[ks]{kde}}.
 #' Otherwise, additional arguments are ignored.
 #' @return A tibble
@@ -25,7 +25,7 @@
 #' hdr_table(density = list(x = x, y = dnorm(x)), prob = 0.95)
 #' @export
 hdr_table <- function(y = NULL, density = NULL,
-                      prob = c(0.50, 0.99), ...) {
+    prob = c(0.50, 0.99), h = stats::bw.nrd0(y), ...) {
   if (min(prob) < 0 | max(prob) > 1) {
     stop("prob must be between 0 and 1")
   }
@@ -39,7 +39,7 @@ hdr_table <- function(y = NULL, density = NULL,
     if (!is.null(density)) {
       warning("Ignoring density")
     }
-    density <- ks::kde(y, binned = length(y) > 1000, ...)
+    density <- ks::kde(y, h = h, binned = length(y) > 1000, ...)
     falpha <- approx(seq(99)/100, density$cont, xout = 1 - alpha)$y
   } else if (!inherits(density, "kde")) {
     # Interpolate density on finer grid

@@ -9,6 +9,8 @@
 #'  being an anomaly.
 #' @param y Numerical vector or matrix of data (up to 6 dimensions).
 #' @param loo Should leave-one-scores be returned? Default: FALSE.
+#' @param h Bandwidth for the kernel density estimate. Default: normal reference rule given
+#' by \code{\link[stats]{bw.nrd0}}.
 #' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
 #' @return Numerical vector containing kde scores.
 #' @author Rob J Hyndman
@@ -23,8 +25,8 @@
 #'  \code{\link[ks]{kde}}
 #' @importFrom stats bw.nrd quantile density dnorm approx na.omit
 #' @importFrom evd fpot pgpd
-kde_scores <- function(y, loo = FALSE, ...) {
-  tmp <- calc_kde_scores(y, ...)
+kde_scores <- function(y, loo = FALSE, h = stats::bw.nrd0(y), ...) {
+  tmp <- calc_kde_scores(y, h = h, ...)
   if (loo) {
     return(tmp$loo_scores)
   } else {
@@ -35,8 +37,8 @@ kde_scores <- function(y, loo = FALSE, ...) {
 #' @rdname kde_scores
 #' @export
 
-lookout_prob <- function(y, ...) {
-  tmp <- calc_kde_scores(y, ...)
+lookout_prob <- function(y, h = stats::bw.nrd0(y), ...) {
+  tmp <- calc_kde_scores(y, h = h, ...)
   loo_scores <- tmp$loo_scores
   threshold <- stats::quantile(tmp$scores, prob = 0.90, type = 8)
   gpd <- evd::fpot(tmp$scores, threshold = threshold, std.err = FALSE)$estimate
@@ -46,13 +48,13 @@ lookout_prob <- function(y, ...) {
   )
 }
 
-calc_kde_scores <- function(y, ...) {
+calc_kde_scores <- function(y, h, ...) {
   if (NCOL(y) > 1) {
     stop("Not yet implemented for multivariate data.")
   }
   y <- na.omit(y)
   n <- length(y)
-  fy <- ks::kde(y, eval.points = y, binned = n > 1000, ...)
+  fy <- ks::kde(y, h = h, eval.points = y, binned = n > 1000, ...)
   fi <- fy$estimate
   h <- fy$h
   loo_scores <- -log(pmax(0, (n * fi - dnorm(0, 0, h)) / (n - 1)))

@@ -38,7 +38,7 @@ showing the remaining observations other than outliers, and any outliers.
 }
 \examples{
 gg_bagplot(n01, v1, v2)
-gg_bagplot(n01, v1, v2, scatterplot=TRUE)
+gg_bagplot(n01, v1, v2, scatterplot = TRUE)
 }
 \references{
 Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999).
