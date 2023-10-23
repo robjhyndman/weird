@@ -9,7 +9,8 @@ hdr_table(y = NULL, density = NULL, prob = c(0.5, 0.99), ...)
 \arguments{
 \item{y}{Numerical vector or matrix of data}
 
-\item{density}{Probablity density function estimated by \code{ks::kde()}.}
+\item{density}{Probablity density function, either estimated by \code{ks::kde()} or
+a list with components \code{x} and \code{y} defining the density function.}
 
 \item{prob}{Probability of the HDR}
 
@@ -30,9 +31,9 @@ For one dimensional density functions, the tibble also has columns
 \code{upper} (the upper ends of the interval).
 }
 \examples{
-hdr_table(density = dnorm, prob = c(0.9, 0.95))
-hdr_table(c(rnorm(50), rnorm(50, 3, 1)), prob = 0.95)
-hdr_table(c(rnorm(50), rnorm(50, 3, 1)), prob = 0.95)
+hdr_table(c(rnorm(100), rnorm(100, 3, 1)))
+x <- seq(-4, 4, l=501)
+hdr_table(density = list(x=x, y=dnorm(x)), prob = 0.95)
 }
 \author{
 Rob J Hyndman
