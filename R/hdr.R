@@ -18,7 +18,9 @@
 #' @return A tibble
 #' @author Rob J Hyndman
 #' @examples
-#' hdr_table(c(rnorm(100), rnorm(100, 3, 1)))
+#' y <- c(rnorm(100), rnorm(100, 3, 1))
+#' hdr_table(y = y)
+#' hdr_table(density = ks::kde(y))
 #' x <- seq(-4, 4, by = 0.01)
 #' hdr_table(density = list(x = x, y = dnorm(x)), prob = 0.95)
 #' @export
@@ -38,14 +40,16 @@ hdr_table <- function(y = NULL, density = NULL,
       warning("Ignoring density")
     }
     density <- ks::kde(y, binned = length(y) > 1000, ...)
-    falpha <- approx(seq(99), density$cont, xout = 100 * (1 - alpha))$y
+    falpha <- approx(seq(99)/100, density$cont, xout = 1 - alpha)$y
   } else if (!inherits(density, "kde")) {
     # Interpolate density on finer grid
     density$eval.points <- seq(min(density$x), max(density$x), length = 10000)
     density$estimate <- approx(density$x, density$y, xout = density$eval.points)$y
     # Find falpha using quantile method
     samplex <- sample(density$estimate, size = 50000, replace = TRUE, prob = density$estimate)
-    falpha <- quantile(samplex, prob = 1 - prob, type = 8)
+    falpha <- quantile(samplex, prob = 1 - alpha, type = 8)
+  } else {
+    falpha <- approx(seq(99)/100, density$cont, xout = 1 - alpha)$y
   }
   hdr.store <- tibble(
     prob = numeric(0),
