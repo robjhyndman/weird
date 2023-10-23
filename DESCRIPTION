@@ -23,8 +23,7 @@ Imports:
   ks,
   purrr (>= 0.2.4),
   rstudioapi (>= 0.7),
-  tibble (>= 1.4.2),
-  tidyr (>= 0.8.3)
+  tibble (>= 1.4.2)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -32,7 +31,7 @@ LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1.0)
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
