@@ -28,8 +28,9 @@ peirce_anomalies <- function(y) {
 # and n=1 suspicious observations
 peirce_threshold <- function(n) {
   # Check we have enough observations
-  if ((n - 2) <= 0)
+  if ((n - 2) <= 0) {
     return(NaN)
+  }
   # Initialize
   x <- 1
   oldx <- Inf
@@ -37,9 +38,9 @@ peirce_threshold <- function(n) {
   # Eq (B) after taking logs
   LnQN <- (n - 1) * log(n - 1) - n * log(n)
   # Loop until convergence
-  while (abs(x - oldx) >= n*.Machine$double.eps) {
+  while (abs(x - oldx) >= n * .Machine$double.eps) {
     # Eq (D)
-    R1 <- 2 * exp(0.5*(x^2 - 1)) * stats::pnorm(x, lower.tail = FALSE)
+    R1 <- 2 * exp(0.5 * (x^2 - 1)) * stats::pnorm(x, lower.tail = FALSE)
     # Eq (A') after taking logs and solving for R (plug in lambda from top of page)
     R2 <- exp(LnQN - (n - 1) * 0.5 * log((n - 1 - x^2) / (n - 2)))
     # Find derivatives wrt x
@@ -57,5 +58,5 @@ peirce_threshold <- function(n) {
 
 chauvenet_anomalies <- function(y) {
   z <- (y - mean(y, na.rm = TRUE)) / stats::sd(y, na.rm = TRUE)
-  return(abs(z) > stats::qnorm(1-0.25/length(y)))
+  return(abs(z) > stats::qnorm(1 - 0.25 / length(y)))
 }

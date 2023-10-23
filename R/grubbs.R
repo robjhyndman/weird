@@ -105,10 +105,12 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
   } else {
     # Quadratic bivariate model to 16 points. 6 df
     dixonfit <- stats::lm(log(cv) ~ poly(loglogn, 2) + poly(logitalpha, 2) + I(logitalpha * loglogn),
-      data = cv_subset)
+      data = cv_subset
+    )
   }
   threshold <- exp(stats::predict(dixonfit,
-    newdata = data.frame(logitalpha = logit(alpha), loglogn = loglog(n))))
+    newdata = data.frame(logitalpha = logit(alpha), loglogn = loglog(n))
+  ))
   # Return logical vector showing where outliers are
   output <- rep(FALSE, n)
   if (Q > threshold) {
@@ -122,4 +124,3 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
 
 #' @importFrom stats lm predict qt
 #' @importFrom tibble tibble
-

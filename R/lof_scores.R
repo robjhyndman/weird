@@ -15,9 +15,9 @@
 #' @seealso
 #'  \code{dbscan::\link[dbscan]{lof}}
 #' @importFrom dbscan lof
-lof_scores <- function(y, k=10, ...) {
+lof_scores <- function(y, k = 10, ...) {
   y <- na.omit(y)
-  lof <- dbscan::lof(as.matrix(y), minPts=k, ...)
+  lof <- dbscan::lof(as.matrix(y), minPts = k, ...)
   lof[lof == Inf] <- 0
   return(lof)
 }
@@ -39,6 +39,6 @@ lof_scores <- function(y, k=10, ...) {
 #' @seealso
 #'  \code{dbscan::\link[dbscan]{glosh}}
 #' @importFrom dbscan hdbscan
-glosh_scores <- function(y, k=10, ...) {
+glosh_scores <- function(y, k = 10, ...) {
   dbscan::hdbscan(as.matrix(y), minPts = k, ...)$outlier_scores
 }

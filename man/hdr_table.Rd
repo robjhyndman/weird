@@ -32,8 +32,8 @@ For one dimensional density functions, the tibble also has columns
 }
 \examples{
 hdr_table(c(rnorm(100), rnorm(100, 3, 1)))
-x <- seq(-4, 4, l=501)
-hdr_table(density = list(x=x, y=dnorm(x)), prob = 0.95)
+x <- seq(-4, 4, by = 0.01)
+hdr_table(density = list(x = x, y = dnorm(x)), prob = 0.95)
 }
 \author{
 Rob J Hyndman

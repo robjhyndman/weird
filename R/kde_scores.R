@@ -25,10 +25,11 @@
 #' @importFrom evd fpot pgpd
 kde_scores <- function(y, loo = FALSE, ...) {
   tmp <- calc_kde_scores(y, ...)
-  if(loo)
+  if (loo) {
     return(tmp$loo_scores)
-  else
+  } else {
     return(tmp$scores)
+  }
 }
 
 #' @rdname kde_scores
@@ -41,12 +42,14 @@ lookout_prob <- function(y, ...) {
   gpd <- evd::fpot(tmp$scores, threshold = threshold, std.err = FALSE)$estimate
   evd::pgpd(loo_scores,
     loc = threshold,
-    scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
+    scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
+  )
 }
 
 calc_kde_scores <- function(y, ...) {
-  if(NCOL(y) > 1)
+  if (NCOL(y) > 1) {
     stop("Not yet implemented for multivariate data.")
+  }
   y <- na.omit(y)
   n <- length(y)
   fy <- ks::kde(y, eval.points = y, binned = n > 1000, ...)
@@ -54,5 +57,5 @@ calc_kde_scores <- function(y, ...) {
   h <- fy$h
   loo_scores <- -log(pmax(0, (n * fi - dnorm(0, 0, h)) / (n - 1)))
   scores <- -log(pmax(0, fi))
-  return(list(scores=scores, loo_scores = loo_scores, h=h))
+  return(list(scores = scores, loo_scores = loo_scores, h = h))
 }

@@ -45,7 +45,7 @@ hdr_table <- function(y = NULL, density = NULL,
     density$estimate <- approx(density$x, density$y, xout = density$eval.points)$y
     # Find falpha using quantile method
     samplex <- sample(density$estimate, size = 50000, replace = TRUE, prob = density$estimate)
-    falpha <- quantile(samplex, prob = 1-prob, type = 8)
+    falpha <- quantile(samplex, prob = 1 - prob, type = 8)
   }
   hdr.store <- tibble(
     prob = numeric(0),

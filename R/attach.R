@@ -2,7 +2,6 @@
 
 core <- c(
   "dplyr",
-  #"tidyr",
   "ggplot2"
 )
 
