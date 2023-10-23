@@ -24,29 +24,35 @@
 #' @importFrom stats bw.nrd quantile density dnorm approx na.omit
 #' @importFrom evd fpot pgpd
 kde_scores <- function(y, loo = FALSE, ...) {
-  y <- na.omit(y)
-  n <- length(y)
-  fy <- ks::kde(y, eval.points = y, ...)
-  fi <- fy$estimate
-  if (loo) {
-    scores <- -log(pmax(0, (n * fi - dnorm(0, y$h)) / (n - 1)))
-  } else {
-    scores <- -log(pmax(0, fi))
-  }
-  return(scores)
+  tmp <- calc_kde_scores(y, ...)
+  if(loo)
+    return(tmp$loo_scores)
+  else
+    return(tmp$scores)
 }
 
 #' @rdname kde_scores
 #' @export
 
 lookout_prob <- function(y, ...) {
-  y <- na.omit(y)
-  n <- length(y)
-  scores <- kde_scores(y, ...)
-  loo_scores <- -log(pmax(0, (n * exp(-scores) - dnorm(0,h)) / (n - 1)))
-  threshold <- quantile(scores, prob = 0.90, type = 8)
-  gpd <- evd::fpot(scores, threshold = threshold, std.err = FALSE)$estimate
+  tmp <- calc_kde_scores(y, ...)
+  loo_scores <- tmp$loo_scores
+  threshold <- stats::quantile(tmp$scores, prob = 0.90, type = 8)
+  gpd <- evd::fpot(tmp$scores, threshold = threshold, std.err = FALSE)$estimate
   evd::pgpd(loo_scores,
     loc = threshold,
     scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
+}
+
+calc_kde_scores <- function(y, ...) {
+  if(NCOL(y) > 1)
+    stop("Not yet implemented for multivariate data.")
+  y <- na.omit(y)
+  n <- length(y)
+  fy <- ks::kde(y, eval.points = y, binned = n > 1000, ...)
+  fi <- fy$estimate
+  h <- fy$h
+  loo_scores <- -log(pmax(0, (n * fi - dnorm(0, 0, h)) / (n - 1)))
+  scores <- -log(pmax(0, fi))
+  return(list(scores=scores, loo_scores = loo_scores, h=h))
 }
