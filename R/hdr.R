@@ -25,21 +25,27 @@
 #' hdr_table(density = list(x = x, y = dnorm(x)), prob = 0.95)
 #' @export
 hdr_table <- function(y = NULL, density = NULL,
-    prob = c(0.50, 0.99), h = stats::bw.nrd0(y), ...) {
+    prob = c(0.50, 0.99), h, H, ...) {
   if (min(prob) < 0 | max(prob) > 1) {
     stop("prob must be between 0 and 1")
   }
   alpha <- sort(1 - prob)
   # Data supplied
   if (!is.null(y)) {
-    r <- diff(range(y))
-    if (r == 0) {
+    y <- as.matrix(y)
+    r <- apply(apply(y, 2, range), 2, diff)
+    if (any(r == 0)) {
       stop("Insufficient data")
     }
     if (!is.null(density)) {
       warning("Ignoring density")
     }
-    density <- ks::kde(y, h = h, binned = length(y) > 1000, ...)
+    if(missing(h) & NCOL(y) == 1) {
+      h <- ks::hns(y[,1])
+    } else if(missing(H)) {
+      H <- ks::Hns.diag(y)
+    }
+    density <- ks::kde(y, h = h, H = H, binned = length(y) > 1000, ...)
     falpha <- approx(seq(99)/100, density$cont, xout = 1 - alpha)$y
   } else if (!inherits(density, "kde")) {
     # Interpolate density on finer grid
