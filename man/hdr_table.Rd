@@ -39,11 +39,15 @@ For one dimensional density functions, the tibble also has columns
 # Univariate HDRs
 y <- c(rnorm(100), rnorm(100, 3, 1))
 hdr_table(y = y)
-hdr_table(density = density(y))
 hdr_table(density = ks::kde(y))
+x <- seq(-4, 4, by = 0.01)
+hdr_table(density = list(x = x, y = dnorm(x)), prob = 0.95)
 # Bivariate HDRs
-y <- cbind(rnorm(100), rnorm(100, 3, 1))
+y <- cbind(rnorm(100), rnorm(100))
 hdr_table(y = y)
+grid <- seq(-4, 4, by=0.1)
+x <- expand.grid(grid, grid) |> as.matrix()
+hdr_table(density = list(x = x, y = dnorm(x[,1]) * dnorm(x[,2])))
 }
 \author{
 Rob J Hyndman
