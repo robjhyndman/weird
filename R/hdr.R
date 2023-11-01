@@ -29,6 +29,9 @@
 #' # Bivariate HDRs
 #' y <- cbind(rnorm(100), rnorm(100))
 #' hdr_table(y = y)
+#' grid <- seq(-4, 4, by=0.1)
+#' x <- expand.grid(grid, grid) |> as.matrix()
+#' hdr_table(density = list(x = x, y = dnorm(x[,1]) * dnorm(x[,2])))
 #' @export
 hdr_table <- function(y = NULL, density = NULL,
     prob = c(0.50, 0.99), h, H, ...) {
@@ -65,17 +68,24 @@ hdr_table <- function(y = NULL, density = NULL,
       density$x <- as.matrix(density$x)
       # Create grid of points
       density$eval.points <- list(
-        seq(min(density$x[,1]), max(density$x[,1]), length=500),
-        seq(min(density$x[,2]), max(density$x[,2]), length=500)
+        seq(min(density$x[,1]), max(density$x[,1]), length=50),
+        seq(min(density$x[,2]), max(density$x[,2]), length=50)
       )
       # Bivariate interpolation
-      density$estimate <- interp::bilinear(x = density$x[,1], y = density$x[,2],
-        z = density$y, x0 = density$eval.points[[1]], y0 = density$eval.points[[2]])
+      grid <- expand.grid(density$eval.points[[1]], density$eval.points[[2]])
+      density$estimate <- interp::interpp(
+          x = density$x[,1], y = density$x[,2], z = density$y,
+          xo =grid[,1], yo = grid[,2]
+        )$z |>
+        suppressWarnings() |>
+        matrix(nrow=50)
     } else {
       stop("Only univariate and bivariate densities are supported")
     }
     # Find falpha using quantile method
-    samplex <- sample(density$estimate, size = 50000, replace = TRUE, prob = density$estimate)
+    missing <- is.na(density$estimate)
+    samplex <- sample(density$estimate[!missing], size = 50000, replace = TRUE,
+                      prob = density$estimate[!missing])
     falpha <- quantile(samplex, prob = alpha, type = 8)
   } else {
     if(inherits(density$eval.points, "list")) {
