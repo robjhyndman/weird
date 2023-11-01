@@ -4,25 +4,31 @@
 #' are returned as a tibble with one row per interval and columns:
 #' `prob` (giving the probability coverage),
 #' `density` (the value of the density at the boundary of the HDR),
-#' `mode` (the local mode equal to the highest density value within the corresponding HDR).
 #' For one dimensional density functions, the tibble also has columns
 #' `lower` (the lower ends of the intervals), and
 #' `upper` (the upper ends of the interval).
 #' @param y Numerical vector or matrix of data
 #' @param density Probability density function, either estimated by `ks::kde()` or
 #' a list with components `x` and `y` defining the density function.
+#' (Here `x` can be a vector or a matrix, and `y` is a vector containing the density values
+#' for each row of `x`.)
 #' @param prob Probability of the HDR
-#' @param h Bandwidth for kernel density estimate. Default is \code{\link[stats]{bw.nrd0}}.
+#' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link[ks]{hns}}.
+#' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns.diag}}.
 #' @param ... If `y` is supplied, other arguments are passed to \code{\link[ks]{kde}}.
 #' Otherwise, additional arguments are ignored.
 #' @return A tibble
 #' @author Rob J Hyndman
 #' @examples
+#' # Univariate HDRs
 #' y <- c(rnorm(100), rnorm(100, 3, 1))
 #' hdr_table(y = y)
 #' hdr_table(density = ks::kde(y))
 #' x <- seq(-4, 4, by = 0.01)
 #' hdr_table(density = list(x = x, y = dnorm(x)), prob = 0.95)
+#' # Bivariate HDRs
+#' y <- cbind(rnorm(100), rnorm(100))
+#' hdr_table(y = y)
 #' @export
 hdr_table <- function(y = NULL, density = NULL,
     prob = c(0.50, 0.99), h, H, ...) {
@@ -33,6 +39,7 @@ hdr_table <- function(y = NULL, density = NULL,
   # Data supplied
   if (!is.null(y)) {
     y <- as.matrix(y)
+    d <- NCOL(y)
     r <- apply(apply(y, 2, range), 2, diff)
     if (any(r == 0)) {
       stop("Insufficient data")
@@ -48,37 +55,75 @@ hdr_table <- function(y = NULL, density = NULL,
     density <- ks::kde(y, h = h, H = H, binned = length(y) > 1000, ...)
     falpha <- approx(seq(99)/100, density$cont, xout = 1 - alpha)$y
   } else if (!inherits(density, "kde")) {
-    # Interpolate density on finer grid
-    density$eval.points <- seq(min(density$x), max(density$x), length = 10000)
-    density$estimate <- approx(density$x, density$y, xout = density$eval.points)$y
+    # Find the dimension
+    d <- NCOL(density$x)
+    if(d == 1L) {
+      # Interpolate density on finer grid
+      density$eval.points <- seq(min(density$x), max(density$x), length = 10000)
+      density$estimate <- approx(density$x, density$y, xout = density$eval.points)$y
+    } else if(d == 2L) {
+      density$x <- as.matrix(density$x)
+      # Create grid of points
+      density$eval.points <- list(
+        seq(min(density$x[,1]), max(density$x[,1]), length=500),
+        seq(min(density$x[,2]), max(density$x[,2]), length=500)
+      )
+      # Bivariate interpolation
+      density$estimate <- interp::bilinear(x = density$x[,1], y = density$x[,2],
+        z = density$y, x0 = density$eval.points[[1]], y0 = density$eval.points[[2]])
+    } else {
+      stop("Only univariate and bivariate densities are supported")
+    }
     # Find falpha using quantile method
     samplex <- sample(density$estimate, size = 50000, replace = TRUE, prob = density$estimate)
     falpha <- quantile(samplex, prob = alpha, type = 8)
   } else {
+    if(inherits(density$eval.points, "list")) {
+      d <- length(density$eval.points)
+    } else {
+      d <- 1L
+    }
     falpha <- approx(seq(99)/100, density$cont, xout = 1 - alpha)$y
   }
-  hdr.store <- tibble(
-    prob = numeric(0),
-    lower = numeric(0),
-    upper = numeric(0),
-    mode = numeric(0),
-    density = numeric(0),
-  )
-  for (i in 1:length(alpha)) {
-    junk <- hdr.ends(density, falpha[i])$hdr
-    n <- length(junk) / 2
-    for (j in seq(n)) {
-      within <- density$eval.points >= junk[2 * j - 1] & density$eval.points <= junk[2 * j]
-      subden <- list(x = density$eval.points[within], y = density$estimate[within])
-      hdr.store <- dplyr::bind_rows(
-        hdr.store,
-        tibble(
-          prob = 1 - alpha[i], lower = junk[2 * j - 1], upper = junk[2 * j],
-          mode = subden$x[which.max(subden$y)],
-          density = falpha[i]
+  if(d == 1L) {
+    # Find endpoints of each interval
+    hdr.store <- tibble(
+      prob = numeric(0),
+      lower = numeric(0),
+      upper = numeric(0),
+      #mode = numeric(0),
+      density = numeric(0),
+    )
+    for (i in seq_along(alpha)) {
+      junk <- hdr.ends(density, falpha[i])$hdr
+      n <- length(junk) / 2
+      for (j in seq(n)) {
+        #within <- density$eval.points >= junk[2 * j - 1] & density$eval.points <= junk[2 * j]
+        #subden <- list(x = density$eval.points[within], y = density$estimate[within])
+        hdr.store <- dplyr::bind_rows(
+          hdr.store,
+          tibble(
+            prob = 1 - alpha[i], lower = junk[2 * j - 1], upper = junk[2 * j],
+            #mode = subden$x[which.max(subden$y)],
+            density = falpha[i]
+          )
         )
-      )
+      }
     }
+  } else {
+    # Just return the density on the relevant contours
+    # Find mode
+    #j <- density$estimate == max(density$estimate)
+    #mode <- numeric(d)
+    #for(i in seq(d)) {
+    #  idx <- which(apply(j, seq(d)[-i], sum) == 1)
+    #  mode[i] <- density$eval.points[[i]][idx]
+    #}
+    hdr.store <- tibble(
+      prob = 1-alpha,
+      #mode = list(mode),
+      density = falpha
+    )
   }
   return(hdr.store)
 }

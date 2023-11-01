@@ -4,23 +4,21 @@
 \alias{hdr_table}
 \title{Table of Highest Density Regions}
 \usage{
-hdr_table(
-  y = NULL,
-  density = NULL,
-  prob = c(0.5, 0.99),
-  h = stats::bw.nrd0(y),
-  ...
-)
+hdr_table(y = NULL, density = NULL, prob = c(0.5, 0.99), h, H, ...)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data}
 
 \item{density}{Probability density function, either estimated by \code{ks::kde()} or
-a list with components \code{x} and \code{y} defining the density function.}
+a list with components \code{x} and \code{y} defining the density function.
+(Here \code{x} can be a vector or a matrix, and \code{y} is a vector containing the density values
+for each row of \code{x}.)}
 
 \item{prob}{Probability of the HDR}
 
-\item{h}{Bandwidth for kernel density estimate. Default is \code{\link[stats]{bw.nrd0}}.}
+\item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link[ks]{hns}}.}
+
+\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns.diag}}.}
 
 \item{...}{If \code{y} is supplied, other arguments are passed to \code{\link[ks]{kde}}.
 Otherwise, additional arguments are ignored.}
@@ -33,17 +31,19 @@ Compute the highest density regions (HDR) for a kernel density estimate. The HDR
 are returned as a tibble with one row per interval and columns:
 \code{prob} (giving the probability coverage),
 \code{density} (the value of the density at the boundary of the HDR),
-\code{mode} (the local mode equal to the highest density value within the corresponding HDR).
 For one dimensional density functions, the tibble also has columns
 \code{lower} (the lower ends of the intervals), and
 \code{upper} (the upper ends of the interval).
 }
 \examples{
+# Univariate HDRs
 y <- c(rnorm(100), rnorm(100, 3, 1))
 hdr_table(y = y)
+hdr_table(density = density(y))
 hdr_table(density = ks::kde(y))
-x <- seq(-4, 4, by = 0.01)
-hdr_table(density = list(x = x, y = dnorm(x)), prob = 0.95)
+# Bivariate HDRs
+y <- cbind(rnorm(100), rnorm(100, 3, 1))
+hdr_table(y = y)
 }
 \author{
 Rob J Hyndman
