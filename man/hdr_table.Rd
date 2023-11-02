@@ -10,9 +10,9 @@ hdr_table(y = NULL, density = NULL, prob = c(0.5, 0.99), h, H, ...)
 \item{y}{Numerical vector or matrix of data}
 
 \item{density}{Probability density function, either estimated by \code{ks::kde()} or
-a list with components \code{x} and \code{y} defining the density function.
-(Here \code{x} can be a vector or a matrix, and \code{y} is a vector containing the density values
-for each row of \code{x}.)}
+a list with components \code{y} and \code{density} defining the density function.
+(Here \code{y} can be a vector or a matrix, and \code{density} is a vector containing the density values
+for each row of \code{y}.)}
 
 \item{prob}{Probability of the HDR}
 
@@ -32,22 +32,23 @@ are returned as a tibble with one row per interval and columns:
 \code{prob} (giving the probability coverage),
 \code{density} (the value of the density at the boundary of the HDR),
 For one dimensional density functions, the tibble also has columns
-\code{lower} (the lower ends of the intervals), and
-\code{upper} (the upper ends of the interval).
+\code{lower} (the lower ends of the intervals),
+\code{upper} (the upper ends of the interval),
+\code{mode} (the point at which the density is maximized within each interval).
 }
 \examples{
 # Univariate HDRs
 y <- c(rnorm(100), rnorm(100, 3, 1))
 hdr_table(y = y)
 hdr_table(density = ks::kde(y))
-x <- seq(-4, 4, by = 0.01)
-hdr_table(density = list(x = x, y = dnorm(x)), prob = 0.95)
+y <- seq(-4, 4, by = 0.01)
+hdr_table(density = list(y = y, density = dnorm(y)), prob = 0.95)
 # Bivariate HDRs
 y <- cbind(rnorm(100), rnorm(100))
 hdr_table(y = y)
 grid <- seq(-4, 4, by=0.1)
-x <- expand.grid(grid, grid) |> as.matrix()
-hdr_table(density = list(x = x, y = dnorm(x[,1]) * dnorm(x[,2])))
+y <- expand.grid(grid, grid) |> as.matrix()
+hdr_table(density = list(y = y, density = dnorm(y[,1]) * dnorm(y[,2])))
 }
 \author{
 Rob J Hyndman
