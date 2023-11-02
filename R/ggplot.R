@@ -69,17 +69,19 @@ autoplot.kde <- function(object, prob = seq(9)/10, filled = FALSE,
   } else {
     # Plot the contours
     p <- density |>
-      ggplot(aes(x = y1, y = y2, z = density)) +
+      ggplot() +
       labs(x = object$names[1], y = object$names[2])
     if(filled) {
       p <- p +
-        geom_contour_filled(breaks = rev(c(hdr$density, 100))) +
+        geom_contour_filled(aes(x = y1, y = y2, z = density),
+                            breaks = rev(c(hdr$density, 100))) +
         scale_fill_manual(
           values = rev(palette(length(hdr$prob))),
           labels = rev(paste0(100 * hdr$prob, "%"))
         )
     } else {
-      p <- p + geom_contour(breaks = hdr$density)
+      p <- p + geom_contour(aes(x = y1, y = y2, z = density),
+                            breaks = hdr$density)
     }
     p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
   }
