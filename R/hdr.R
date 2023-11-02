@@ -45,35 +45,16 @@ hdr_table <- function(y = NULL, density = NULL,
     if (!is.null(density)) {
       warning("Ignoring density")
     }
-    d <- NCOL(y)
-    density <- calc_density(y, h, H, ...)
-    falpha <- approx(seq(99)/100, density$cont, xout = 1 - alpha)$y
+    density <- density(y, h, H, ...)
   } else if (!inherits(density, "kde")) {
     # Density given as list(y, density)
-    # Find the dimension
-    d <- NCOL(density$y)
-    if(d == 1L) {
-      # Interpolate density on finer grid
-      density$eval.points <- seq(min(density$y), max(density$y), length = 10001)
-      density$estimate <- approx(density$y, density$density, xout = density$eval.points)$y
-    } else if(d == 2L) {
-      density <- density_on_grid(as.matrix(density$y), density$density, 100)
-    } else {
-      stop("Only univariate and bivariate densities are supported")
-    }
-    # Find falpha using quantile method
-    missing <- is.na(density$estimate)
-    samplex <- sample(density$estimate[!missing], size = 50000, replace = TRUE,
-                      prob = density$estimate[!missing])
-    falpha <- quantile(samplex, prob = alpha, type = 8)
+    density <- as_kde(density)
+  }
+  falpha <- approx(seq(99)/100, density$cont, xout = 1 - alpha)$y
+  if(inherits(density$eval.points, "list")) {
+    d <- length(density$eval.points)
   } else {
-    # Density given as output from ks::kde
-    if(inherits(density$eval.points, "list")) {
-      d <- length(density$eval.points)
-    } else {
-      d <- 1L
-    }
-    falpha <- approx(seq(99)/100, density$cont, xout = 1 - alpha)$y
+    d <- 1L
   }
   if(d == 1L) {
     # Find endpoints of each interval

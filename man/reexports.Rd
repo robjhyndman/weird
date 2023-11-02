@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{autoplot}
+\alias{density}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -12,5 +13,7 @@ below to see their documentation.
 
 \describe{
   \item{ggplot2}{\code{\link[ggplot2]{autoplot}}}
+
+  \item{stats}{\code{\link[stats]{density}}}
 }}
 

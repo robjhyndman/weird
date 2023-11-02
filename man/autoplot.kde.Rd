@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggplot.R
 \name{autoplot.kde}
 \alias{autoplot.kde}
-\title{Produce ggplot of densities from kde() in 1 or 2 dimensions}
+\title{Produce ggplot of densities in 1 or 2 dimensions}
 \usage{
 \method{autoplot}{kde}(
   object,
@@ -14,7 +14,7 @@
 )
 }
 \arguments{
-\item{object}{Probability density function as estimated by \code{ks::kde()}.}
+\item{object}{Probability density function as estimated by \code{density()} or \code{ks::kde()}.}
 
 \item{prob}{Probability of the HDR contours to be drawn (for a bivariate plot only).}
 
@@ -27,15 +27,15 @@
 \item{...}{Additional arguments are ignored.}
 }
 \description{
-Produce ggplot of densities from kde() in 1 or 2 dimensions
+Produce ggplot of densities in 1 or 2 dimensions
 }
 \examples{
 # Univariate density
 c(rnorm(100), rnorm(100, 3, 1)) |>
-  ks::kde() |>
+  density() |>
   autoplot(show_hdr = TRUE, prob= c(0.5, 0.99)) +
   scale_fill_brewer(palette = "OrRd", direction = -1)
 tibble(y1 = rnorm(100), y2 = y1 + rnorm(100)) |>
-  ks::kde(H = 0.4*diag(2)) |>
+  density(H = 0.4*diag(2)) |>
   autoplot(filled = TRUE)
 }
