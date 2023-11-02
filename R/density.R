@@ -42,6 +42,10 @@ density.matrix <- function(x, h, H, ...) {
 #' @export
 #' @rdname density.matrix
 density.data.frame <- function(x, h, H, ...) {
+  # Check all columns are of class numeric
+  if (!all(unlist(lapply(x, is.numeric)))) {
+    stop("All columns must be numeric")
+  }
   density.matrix(as.matrix(x), h, H, ...)
 }
 
