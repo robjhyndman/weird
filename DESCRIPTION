@@ -24,7 +24,8 @@ Imports:
   ks,
   purrr (>= 0.2.4),
   rstudioapi (>= 0.7),
-  tibble (>= 1.4.2)
+  tibble (>= 1.4.2),
+  viridisLite
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
