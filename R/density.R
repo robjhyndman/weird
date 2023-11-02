@@ -65,7 +65,7 @@ print.kde <- function(x, ...) {
     cat("Density of: [",
         paste0(x$names, collapse = ", "), "]\n", sep = "")
   } else {
-    cat("Kernel density estimate of:",
+    cat("Kernel density estimate of: [",
         paste0(x$names, collapse = ", "), "]\n", sep = "")
   }
   ngrid <- lapply(x$eval.points, length)
