@@ -55,18 +55,29 @@ density.numeric <- function(x, h, ...) {
 
 #' @export
 print.kde <- function(x, ...) {
-  cat("Kernel density estimate of:", paste0(x$names, collapse = ", "), "\n")
+  kde <- !(is.null(x$h) & is.null(x$H))
   if (inherits(x$eval.points, "list")) {
     d <- length(x$eval.points)
   } else {
     d <- 1L
   }
-  cat("Bandwidth: ")
-  if (d == 1L) {
-    cat("h = ", format(x$h, digits = 4))
+  if(!kde) {
+    cat("Density of: [",
+        paste0(x$names, collapse = ", "), "]\n", sep = "")
   } else {
-    cat("H = \n")
-    print(format(x$H, digits = 4), quote=FALSE)
+    cat("Kernel density estimate of:",
+        paste0(x$names, collapse = ", "), "]\n", sep = "")
+  }
+  ngrid <- lapply(x$eval.points, length)
+  cat("Computed on a grid of size", paste(ngrid, collapse = " x "), "\n")
+  if(kde) {
+    cat("Bandwidth: ")
+    if (d == 1L) {
+      cat("h = ", format(x$h, digits = 4))
+    } else {
+      cat("H = \n")
+      print(format(x$H, digits = 4), quote=FALSE)
+    }
   }
   invisible(x)
 }
@@ -104,13 +115,11 @@ as_kde <- function(object, ngrid, ...) {
     prob = density$estimate[!missing]
   )
   density$cont <- quantile(samplex, prob = (99:1) / 100, type = 8)
-  density$gridtype <- "linear"
-  density$gridded <- TRUE
-  density$binned <- TRUE
+  # Set missing values to 0
+  density$estimate[is.na(density$estimate)] <- 0
+  # Add names
   density$names <- colnames(object$y)
-  density$w <- rep(1, NROW(object$y))
-  density$type <- "kde"
-  return(density)
+  structure(density, class = "kde")
 }
 
 density_on_grid <- function(y, fy, ngrid) {
@@ -130,6 +139,6 @@ density_on_grid <- function(y, fy, ngrid) {
     xo = grid[, 1], yo = grid[, 2]
   )$z |>
     suppressWarnings() |>
-    matrix(nrow = 50)
+    matrix(nrow = ngrid)
   return(density)
 }
