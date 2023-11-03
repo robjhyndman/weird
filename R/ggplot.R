@@ -1,9 +1,10 @@
 #' Produce ggplot of densities in 1 or 2 dimensions
 #' @param object Probability density function as estimated by `density()` or `ks::kde()`.
 #' @param prob Probability of the HDR contours to be drawn (for a bivariate plot only).
-#' @param filled If `TRUE`, the bivariate contours are shown as shaded regions rather than lines.
+#' @param fill If `TRUE`, the bivariate contours are shown as filled regions rather than lines.
 #' @param show_hdr If `TRUE`, the HDR regions specified by `prob` are shown as a ribbon below the density.
-#' @param palette Color palette to use for HDR regions.
+#' @param color Color to use for HDR contours (if `fill` is `FALSE`).
+#' @param palette Color palette to use for HDR filled regions (if `fill` is `TRUE`).
 #' @param ... Additional arguments are ignored.
 #' @examples
 #' # Univariate density
@@ -13,11 +14,11 @@
 #'   scale_fill_brewer(palette = "OrRd", direction = -1)
 #' tibble(y1 = rnorm(100), y2 = y1 + rnorm(100)) |>
 #'   kde() |>
-#'   autoplot(filled = TRUE)
+#'   autoplot(fill = TRUE)
 #' @export
 
-autoplot.kde <- function(object, prob = seq(9)/10, filled = FALSE,
-    show_hdr = FALSE, palette = viridisLite::viridis, ...) {
+autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
+    show_hdr = FALSE, color = "#0072B2", palette = viridisLite::viridis, ...) {
   if (min(prob) < 0 | max(prob) > 1) {
     stop("prob must be between 0 and 1")
   }
@@ -71,7 +72,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, filled = FALSE,
     p <- density |>
       ggplot() +
       labs(x = object$names[1], y = object$names[2])
-    if(filled) {
+    if(fill) {
       p <- p +
         geom_contour_filled(aes(x = y1, y = y2, z = density),
                             breaks = rev(c(hdr$density, 100))) +
@@ -81,7 +82,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, filled = FALSE,
         )
     } else {
       p <- p + geom_contour(aes(x = y1, y = y2, z = density),
-                            breaks = hdr$density)
+                            breaks = hdr$density, color = color)
     }
     p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
   }

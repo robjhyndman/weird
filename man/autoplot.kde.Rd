@@ -7,8 +7,9 @@
 \method{autoplot}{kde}(
   object,
   prob = seq(9)/10,
-  filled = FALSE,
+  fill = FALSE,
   show_hdr = FALSE,
+  color = "#0072B2",
   palette = viridisLite::viridis,
   ...
 )
@@ -18,11 +19,13 @@
 
 \item{prob}{Probability of the HDR contours to be drawn (for a bivariate plot only).}
 
-\item{filled}{If \code{TRUE}, the bivariate contours are shown as shaded regions rather than lines.}
+\item{fill}{If \code{TRUE}, the bivariate contours are shown as filled regions rather than lines.}
 
 \item{show_hdr}{If \code{TRUE}, the HDR regions specified by \code{prob} are shown as a ribbon below the density.}
 
-\item{palette}{Color palette to use for HDR regions.}
+\item{color}{Color to use for HDR contours (if \code{fill} is \code{FALSE}).}
+
+\item{palette}{Color palette to use for HDR filled regions (if \code{fill} is \code{TRUE}).}
 
 \item{...}{Additional arguments are ignored.}
 }
@@ -37,5 +40,5 @@ c(rnorm(100), rnorm(100, 3, 1)) |>
   scale_fill_brewer(palette = "OrRd", direction = -1)
 tibble(y1 = rnorm(100), y2 = y1 + rnorm(100)) |>
   kde() |>
-  autoplot(filled = TRUE)
+  autoplot(fill = TRUE)
 }
