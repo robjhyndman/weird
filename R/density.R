@@ -1,62 +1,3 @@
-#' Kernel density estimation
-#'
-#' Kernel density estimation for multivariate data up to 6 dimensions. The
-#' bandwidths are chosen to be suitable for tail estimation. The calculations
-#' are handled by the \code{\link[ks]{kde}} function, but using different default
-#' bandwidths.
-#'
-#' @param x A numeric vector or matrix of data values.
-#' @param h A numeric vector of bandwidths for univariate data. The default is
-#' obtained using \code{\link[ks]{hns}}.
-#' @param H A numeric matrix of bandwidths for multivariate data. The default is
-#' obtained using \code{\link[ks]{Hns}}.
-#' @param ... Additional arguments are passed to \code{\link[ks]{kde}}.
-#' @examples
-#' # Univariate density
-#' y <- c(rnorm(100), rnorm(100, 3, 1))
-#' density(y) |>
-#'   autoplot() +
-#'   geom_rug(data = tibble(y=y), aes(x=y))
-#' # Bivariate density
-#' tibble(y1 = rnorm(100), y2 = y1 + rnorm(100)) |>
-#'   density() |>
-#'   autoplot(filled = TRUE)
-#' @export
-density.matrix <- function(x, h, H, ...) {
-  y <- as.matrix(x)
-  d <- NCOL(y)
-  r <- apply(apply(y, 2, range), 2, diff)
-  if (any(r == 0)) {
-    stop("Insufficient data")
-  }
-  if (missing(h) & NCOL(y) == 1) {
-    h <- ks::hns(y[, 1])
-  } else if (missing(H)) {
-    H <- ks::Hns(y)
-  }
-  output <- ks::kde(y, h = h, H = H, binned = length(y) > 1000, ...)
-  output$names <- colnames(y)
-  return(output)
-}
-
-#' @export
-#' @rdname density.matrix
-density.data.frame <- function(x, h, H, ...) {
-  # Check all columns are of class numeric
-  if (!all(unlist(lapply(x, is.numeric)))) {
-    stop("All columns must be numeric")
-  }
-  density.matrix(as.matrix(x), h, H, ...)
-}
-
-#' @export
-#' @rdname density.matrix
-density.numeric <- function(x, h, ...) {
-  output <- density.matrix(as.matrix(x), h=h, ...)
-  output$names <- deparse(substitute(x))
-  return(output)
-}
-
 #' @export
 print.kde <- function(x, ...) {
   kde <- !(is.null(x$h) & is.null(x$H))
@@ -72,7 +13,11 @@ print.kde <- function(x, ...) {
     cat("Kernel density estimate of: [",
         paste0(x$names, collapse = ", "), "]\n", sep = "")
   }
-  ngrid <- lapply(x$eval.points, length)
+  if(d == 1L){
+    ngrid <- length(x$eval.points)
+  } else {
+    ngrid <- lapply(x$eval.points, length)
+  }
   cat("Computed on a grid of size", paste(ngrid, collapse = " x "), "\n")
   if(kde) {
     cat("Bandwidth: ")
@@ -94,6 +39,10 @@ print.kde <- function(x, ...) {
 #' 10001 for univariate densities and 101 for multivariate densities.
 #' @param ... Additional arguments are ignored.
 #' @return An object of class "kde"
+#' @author Rob J Hyndman
+#' @examples
+#' y <- seq(-4, 4, by = 0.01)
+#' as_kde(list(y = y, density = dnorm(y)))
 #' @export
 
 as_kde <- function(object, ngrid, ...) {
@@ -104,11 +53,17 @@ as_kde <- function(object, ngrid, ...) {
   # Find the dimension
   d <- NCOL(object$y)
   if (d == 1L) {
+    if(missing(ngrid)) {
+      ngrid <- 10001
+    }
     # Interpolate density on finer grid
-    density <- list(eval.points = seq(min(object$y), max(object$y), length = 10001))
+    density <- list(eval.points = seq(min(object$y), max(object$y), length = ngrid))
     density$estimate <- approx(object$y, object$density, xout = density$eval.points)$y
   } else if (d == 2L) {
-    density <- density_on_grid(as.matrix(object$y), object$density, 101)
+    if(missing(ngrid)) {
+      ngrid <- 101
+    }
+    density <- density_on_grid(as.matrix(object$y), object$density, ngrid)
   } else {
     stop("Only univariate and bivariate densities are supported")
   }
@@ -123,6 +78,13 @@ as_kde <- function(object, ngrid, ...) {
   density$estimate[is.na(density$estimate)] <- 0
   # Add names
   density$names <- colnames(object$y)
+  if(is.null(density$names)) {
+    if(d == 1) {
+      density$names <- "y"
+    } else {
+      density$names <- paste0("y", seq_len(d))
+    }
+  }
   structure(density, class = "kde")
 }
 

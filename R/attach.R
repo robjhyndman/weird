@@ -2,7 +2,8 @@
 
 core <- c(
   "dplyr",
-  "ggplot2"
+  "ggplot2",
+  "ks"
 )
 
 core_unloaded <- function() {

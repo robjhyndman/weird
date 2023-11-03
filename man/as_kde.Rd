@@ -21,3 +21,10 @@ An object of class "kde"
 \description{
 Convert list object to density class
 }
+\examples{
+y <- seq(-4, 4, by = 0.01)
+as_kde(list(y = y, density = dnorm(y)))
+}
+\author{
+Rob J Hyndman
+}
