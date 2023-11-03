@@ -4,7 +4,14 @@
 \alias{hdr_table}
 \title{Table of Highest Density Regions}
 \usage{
-hdr_table(y = NULL, density = NULL, prob = c(0.5, 0.99), h, H, ...)
+hdr_table(
+  y = NULL,
+  density = NULL,
+  prob = c(0.5, 0.99),
+  h = ks::hns(y),
+  H = ks::Hns(y),
+  ...
+)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data}
@@ -18,7 +25,7 @@ for each row of \code{y}.)}
 
 \item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link[ks]{hns}}.}
 
-\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns.diag}}.}
+\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns}}.}
 
 \item{...}{If \code{y} is supplied, other arguments are passed to \code{\link[ks]{kde}}.
 Otherwise, additional arguments are ignored.}

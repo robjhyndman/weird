@@ -15,7 +15,7 @@
 #' for each row of `y`.)
 #' @param prob Probability of the HDR
 #' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link[ks]{hns}}.
-#' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns.diag}}.
+#' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns}}.
 #' @param ... If `y` is supplied, other arguments are passed to \code{\link[ks]{kde}}.
 #' Otherwise, additional arguments are ignored.
 #' @return A tibble
@@ -35,7 +35,7 @@
 #' hdr_table(density = list(y = y, density = dnorm(y[,1]) * dnorm(y[,2])))
 #' @export
 hdr_table <- function(y = NULL, density = NULL,
-    prob = c(0.50, 0.99), h, H, ...) {
+    prob = c(0.50, 0.99), h = ks::hns(y), H = ks::Hns(y), ...) {
   if (min(prob) < 0 | max(prob) > 1) {
     stop("prob must be between 0 and 1")
   }
@@ -45,7 +45,16 @@ hdr_table <- function(y = NULL, density = NULL,
     if (!is.null(density)) {
       warning("Ignoring density")
     }
-    density <- density(y, h, H, ...)
+    n <- NROW(y)
+    if(NCOL(y) == 1L) {
+      density <- ks::kde(y, h = h,
+        gridsize = 10001, binned = n > 2000,
+        approx.cont = FALSE, ...)
+    } else {
+      density <- ks::kde(y, H = H,
+        gridsize = 101, binned = n > 2000,
+        approx.cont = FALSE, ...)
+    }
   } else if (!inherits(density, "kde")) {
     # Density given as list(y, density)
     density <- as_kde(density)
