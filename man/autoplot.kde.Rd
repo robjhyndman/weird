@@ -32,10 +32,10 @@ Produce ggplot of densities in 1 or 2 dimensions
 \examples{
 # Univariate density
 c(rnorm(100), rnorm(100, 3, 1)) |>
-  density() |>
+  kde() |>
   autoplot(show_hdr = TRUE, prob= c(0.5, 0.99)) +
   scale_fill_brewer(palette = "OrRd", direction = -1)
 tibble(y1 = rnorm(100), y2 = y1 + rnorm(100)) |>
-  density(H = 0.4*diag(2)) |>
+  kde() |>
   autoplot(filled = TRUE)
 }
