@@ -5,17 +5,18 @@
 \alias{lookout_prob}
 \title{Kernel density estimate scores and lookout probabilities}
 \usage{
-kde_scores(y, loo = FALSE, h = stats::bw.nrd0(y), ...)
+kde_scores(y, loo = FALSE, h = ks::hns(y), H = ks::Hns(y), ...)
 
-lookout_prob(y, h = stats::bw.nrd0(y), ...)
+lookout_prob(y, loo = FALSE, h = ks::hns(y), H = ks::Hns(y), ...)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data (up to 6 dimensions).}
 
 \item{loo}{Should leave-one-scores be returned? Default: FALSE.}
 
-\item{h}{Bandwidth for the kernel density estimate. Default: normal reference rule given
-by \code{\link[stats]{bw.nrd0}}.}
+\item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link[ks]{hns}}.}
+
+\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns}}.}
 
 \item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
 }
@@ -25,7 +26,7 @@ Numerical vector containing kde scores.
 \description{
 Compute kernel density estimate scores,
 defined as minus the log of the kernel density estimate at each observation.
-A Gaussian kernel is used, with default h given by a normal reference rule.
+A Gaussian kernel is used, with default bandwidth given by a normal reference rule.
 Leave-one-out scores are optionally computed.
 Lookout probabilities are returned by \code{lookout_prob} computed using a
 Generalized Pareto Distribution estimated from the kde scores and applied
@@ -33,7 +34,12 @@ to the leave-one-out kde scores. These give the probability of each observation
 being an anomaly.
 }
 \examples{
-y <- c(rnorm(49), 5)
+# Univariate data
+y <- c(5, rnorm(49))
+kde_scores(y)
+lookout_prob(y)
+# Bivariate data
+y <- cbind(rnorm(50), c(5, rnorm(49)))
 kde_scores(y)
 lookout_prob(y)
 }
