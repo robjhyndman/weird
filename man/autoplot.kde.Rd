@@ -9,25 +9,33 @@
   prob = seq(9)/10,
   fill = FALSE,
   show_hdr = FALSE,
+  show_points = NULL,
   color = "#0072B2",
-  palette = viridisLite::viridis,
+  palette = hdr_palette,
   ...
 )
 }
 \arguments{
-\item{object}{Probability density function as estimated by \code{density()} or \code{ks::kde()}.}
+\item{object}{Probability density function as estimated by \code{ks::kde()}.}
 
 \item{prob}{Probability of the HDR contours to be drawn (for a bivariate plot only).}
 
-\item{fill}{If \code{TRUE}, the bivariate contours are shown as filled regions rather than lines.}
+\item{fill}{If \code{TRUE}, and the density is bivariate, the bivariate contours
+are shown as filled regions rather than lines.}
 
-\item{show_hdr}{If \code{TRUE}, the HDR regions specified by \code{prob} are shown as a ribbon below the density.}
+\item{show_hdr}{If \code{TRUE}, and the density is univariate, then the HDR regions
+specified by \code{prob} are shown as a ribbon below the density.}
 
-\item{color}{Color to use for HDR contours (if \code{fill} is \code{FALSE}).}
+\item{show_points}{Numerical scalar giving probability threshold for points
+to be shown on the density plot. e.g., if \code{show_points} is 0.99,
+then the points outside the 99\% highest density region are shown.
+No points are shown if set to \code{NULL}.}
 
-\item{palette}{Color palette to use for HDR filled regions (if \code{fill} is \code{TRUE}).}
+\item{color}{Color to use for HDR contours (if \code{fill} is \code{FALSE}), or the central color in HDR regions}
 
-\item{...}{Additional arguments are ignored.}
+\item{palette}{Color palette function to use for HDR filled regions (if \code{fill} is \code{TRUE}).}
+
+\item{...}{Additional arguments are currently ignored.}
 }
 \description{
 Produce ggplot of densities in 1 or 2 dimensions
@@ -36,9 +44,9 @@ Produce ggplot of densities in 1 or 2 dimensions
 # Univariate density
 c(rnorm(100), rnorm(100, 3, 1)) |>
   kde() |>
-  autoplot(show_hdr = TRUE, prob= c(0.5, 0.99)) +
-  scale_fill_brewer(palette = "OrRd", direction = -1)
-tibble(y1 = rnorm(100), y2 = y1 + rnorm(100)) |>
-  kde() |>
-  autoplot(fill = TRUE)
+  autoplot(show_hdr = TRUE, prob= c(0.5, 0.99), color = "#c14b14")
+ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
+ymat |>
+  kde(H = Hns(ymat)) |>
+  autoplot(fill = TRUE, prob = c(0.5, 0.99), show_points = 0.99)
 }
