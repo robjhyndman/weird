@@ -14,19 +14,19 @@
 #' @param ... Additional arguments are currently ignored.
 #' @examples
 #' # Univariate density
-#' c(rnorm(100), rnorm(100, 3, 1)) |>
+#' c(rnorm(500), rnorm(500, 4, 1.5)) |>
 #'   kde() |>
-#'   autoplot(show_hdr = TRUE, prob= c(0.5, 0.99), color = "#c14b14")
+#'   autoplot(show_hdr = TRUE, prob= c(0.5, 0.95), color = "#c14b14")
 #' ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 #' ymat |>
 #'   kde(H = Hns(ymat)) |>
-#'   autoplot(fill = TRUE, prob = c(0.5, 0.99), show_points = 0.99)
+#'   autoplot(fill = TRUE, prob = c(0.5, 0.95), show_points = 0.95)
 #' @export
 
 autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
     show_hdr = FALSE, show_points = NULL, color = "#0072B2",
     palette = hdr_palette, ...) {
-  if (min(prob) < 0 | max(prob) > 1) {
+  if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
   if(inherits(object$eval.points, "list")) {
@@ -80,9 +80,9 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         scale_fill_manual(
           breaks = rev(prob),
           values = rev(palette(nhdr, color)),
-          labels = paste0(prob, "%")
+          labels = paste0(100*rev(prob), "%")
         ) +
-        ggplot2::guides(fill = "none")
+        ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
     }
   } else {
     # Plot the contours
