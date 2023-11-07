@@ -31,39 +31,58 @@ print.kde <- function(x, ...) {
   invisible(x)
 }
 
-#' Convert list object to density class
+#' Convert data frame or matrix object to kde class
 #'
-#' @param object List with components `y` (a matrix of points) and `density`
-#' (the value of the density at each row of `y`)
+#' A density specified as a data frame or matrix can be converted to a kde object.
+#' This is useful for plotting the density using \code{\link{autoplot.kde}}.
+#' As kde objects are defined on a grid, the density values are interpolated
+#' based on the points in the data frame or matrix.
+#'
+#' @param object Data frame or matrix with numerical columns, where one column
+#' (specified by `density_column`) contains the density values, and the
+#' remaining columns define the points at which the density is evaluated.
+#' @param density_column Name of the column containing the density values, specified
+#' as a character string. If missing, the last column is used.
 #' @param ngrid Number of points to use for the grid in each dimension. Default is
 #' 10001 for univariate densities and 101 for multivariate densities.
 #' @param ... Additional arguments are ignored.
 #' @return An object of class "kde"
 #' @author Rob J Hyndman
 #' @examples
-#' y <- seq(-4, 4, by = 0.01)
-#' as_kde(list(y = y, density = dnorm(y)))
+#' tibble(y = seq(-4, 4, by = 0.01), density = dnorm(y)) |>
+#'   as_kde()
 #' @export
 
-as_kde <- function(object, ngrid, ...) {
-  # Check object components
-  if (!all(c("y", "density") %in% names(object))) {
-    stop("object must be a list with components y and density")
+as_kde <- function(object, density_column, ngrid, ...) {
+  # Check columns of object are all numerical
+  object <- as.data.frame(object)
+  if(!all(sapply(object, is.numeric))) {
+    stop("All columns of object must be numeric")
   }
+  # Check density_column is in object
+  if(missing(density_column)) {
+    density_column <- tail(colnames(object), 1)
+  }
+  if(!(density_column %in% colnames(object))) {
+    stop(paste(density_column, "not found"))
+  }
+  # Separate points from density values
+  den <- object[[density_column]]
+  object[[density_column]] <- NULL
   # Find the dimension
-  d <- NCOL(object$y)
+  d <- NCOL(object)
   if (d == 1L) {
     if(missing(ngrid)) {
       ngrid <- 10001
     }
     # Interpolate density on finer grid
-    density <- list(eval.points = seq(min(object$y), max(object$y), length = ngrid))
-    density$estimate <- approx(object$y, object$density, xout = density$eval.points)$y
+    density <- list(eval.points = seq(min(object), max(object), length = ngrid))
+    density$estimate <- approx(object[[1]], den, xout = density$eval.points)$y
   } else if (d == 2L) {
     if(missing(ngrid)) {
       ngrid <- 101
     }
-    density <- density_on_grid(as.matrix(object$y), object$density, ngrid)
+    density <- density_on_grid(as.matrix(object), den, ngrid)
   } else {
     stop("Only univariate and bivariate densities are supported")
   }
@@ -77,7 +96,7 @@ as_kde <- function(object, ngrid, ...) {
   # Set missing values to 0
   density$estimate[is.na(density$estimate)] <- 0
   # Add names
-  density$names <- colnames(object$y)
+  density$names <- colnames(object)
   if(is.null(density$names)) {
     if(d == 1) {
       density$names <- "y"

@@ -17,9 +17,7 @@ hdr_table(
 \item{y}{Numerical vector or matrix of data}
 
 \item{density}{Probability density function, either estimated by \code{ks::kde()} or
-a list with components \code{y} and \code{density} defining the density function.
-(Here \code{y} can be a vector or a matrix, and \code{density} is a vector containing the density values
-for each row of \code{y}.)}
+a data frame or matrix with numerical columns that can be passed to \code{as_kde()}.}
 
 \item{prob}{Probability of the HDR}
 
@@ -28,7 +26,7 @@ for each row of \code{y}.)}
 \item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns}}.}
 
 \item{...}{If \code{y} is supplied, other arguments are passed to \code{\link[ks]{kde}}.
-Otherwise, additional arguments are ignored.}
+Otherwise, additional arguments are passed to \code{\link{as_kde}}.}
 }
 \value{
 A tibble
@@ -48,14 +46,15 @@ For one dimensional density functions, the tibble also has columns
 y <- c(rnorm(100), rnorm(100, 3, 1))
 hdr_table(y = y)
 hdr_table(density = ks::kde(y))
-y <- seq(-4, 4, by = 0.01)
-hdr_table(density = list(y = y, density = dnorm(y)), prob = 0.95)
+x <- seq(-4, 4, by = 0.01)
+hdr_table(density = data.frame(y = x, density = dnorm(x)), prob = 0.95)
 # Bivariate HDRs
 y <- cbind(rnorm(100), rnorm(100))
 hdr_table(y = y)
 grid <- seq(-4, 4, by=0.1)
-y <- expand.grid(grid, grid) |> as.matrix()
-hdr_table(density = list(y = y, density = dnorm(y[,1]) * dnorm(y[,2])))
+density <- expand.grid(grid, grid) |>
+  dplyr::mutate(density = dnorm(Var1) * dnorm(Var2))
+hdr_table(density = density)
 }
 \author{
 Rob J Hyndman

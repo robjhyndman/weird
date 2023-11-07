@@ -2,13 +2,17 @@
 % Please edit documentation in R/density.R
 \name{as_kde}
 \alias{as_kde}
-\title{Convert list object to density class}
+\title{Convert data frame or matrix object to kde class}
 \usage{
-as_kde(object, ngrid, ...)
+as_kde(object, density_column, ngrid, ...)
 }
 \arguments{
-\item{object}{List with components \code{y} (a matrix of points) and \code{density}
-(the value of the density at each row of \code{y})}
+\item{object}{Data frame or matrix with numerical columns, where one column
+(specified by \code{density_column}) contains the density values, and the
+remaining columns define the points at which the density is evaluated.}
+
+\item{density_column}{Name of the column containing the density values, specified
+as a character string. If missing, the last column is used.}
 
 \item{ngrid}{Number of points to use for the grid in each dimension. Default is
 10001 for univariate densities and 101 for multivariate densities.}
@@ -19,11 +23,14 @@ as_kde(object, ngrid, ...)
 An object of class "kde"
 }
 \description{
-Convert list object to density class
+A density specified as a data frame or matrix can be converted to a kde object.
+This is useful for plotting the density using \code{\link{autoplot.kde}}.
+As kde objects are defined on a grid, the density values are interpolated
+based on the points in the data frame or matrix.
 }
 \examples{
-y <- seq(-4, 4, by = 0.01)
-as_kde(list(y = y, density = dnorm(y)))
+tibble(y = seq(-4, 4, by = 0.01), density = dnorm(y)) |>
+  as_kde()
 }
 \author{
 Rob J Hyndman
