@@ -4,7 +4,7 @@
 \alias{hdr_palette}
 \title{Color palette designed for plotting Highest Density Regions}
 \usage{
-hdr_palette(n, color = "#0072B2")
+hdr_palette(n, color = "#00659e")
 }
 \arguments{
 \item{n}{Number of colors to generate}

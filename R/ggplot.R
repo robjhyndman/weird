@@ -24,7 +24,7 @@
 #' @export
 
 autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
-    show_hdr = FALSE, show_points = NULL, color = "#0072B2",
+    show_hdr = FALSE, show_points = NULL, color = "#00659e",
     palette = hdr_palette, ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
@@ -125,7 +125,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
 #' @param color First color of vector.
 #' @return A function that takes a number `n` and returns a vector of `n` colors
 #' @export
-hdr_palette <- function(n, color = "#0072B2") {
+hdr_palette <- function(n, color = "#00659e") {
   rev(grDevices::colorRampPalette(c(color, "white"))(n+2)[seq(n)])
 }
 

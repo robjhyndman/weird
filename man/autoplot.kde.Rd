@@ -10,7 +10,7 @@
   fill = FALSE,
   show_hdr = FALSE,
   show_points = NULL,
-  color = "#0072B2",
+  color = "#00659e",
   palette = hdr_palette,
   ...
 )
@@ -42,11 +42,11 @@ Produce ggplot of densities in 1 or 2 dimensions
 }
 \examples{
 # Univariate density
-c(rnorm(100), rnorm(100, 3, 1)) |>
+c(rnorm(500), rnorm(500, 4, 1.5)) |>
   kde() |>
-  autoplot(show_hdr = TRUE, prob= c(0.5, 0.99), color = "#c14b14")
+  autoplot(show_hdr = TRUE, prob= c(0.5, 0.95), color = "#c14b14")
 ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 ymat |>
   kde(H = Hns(ymat)) |>
-  autoplot(fill = TRUE, prob = c(0.5, 0.99), show_points = 0.99)
+  autoplot(fill = TRUE, prob = c(0.5, 0.95), show_points = 0.95)
 }
