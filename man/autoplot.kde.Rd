@@ -10,6 +10,7 @@
   fill = FALSE,
   show_hdr = FALSE,
   show_points = FALSE,
+  show_mode = FALSE,
   color = "#00659e",
   palette = hdr_palette,
   alpha = min(1, 1000/NROW(object$x)),
@@ -28,6 +29,8 @@ are shown as filled regions rather than lines.}
 specified by \code{prob} are shown as a ribbon below the density.}
 
 \item{show_points}{If \code{TRUE}, then individual points are plotted.}
+
+\item{show_mode}{If \code{TRUE}, then the mode of the distribution is shown.}
 
 \item{color}{Color to use for HDR contours (if \code{fill} is \code{FALSE}), or the central color in HDR regions}
 

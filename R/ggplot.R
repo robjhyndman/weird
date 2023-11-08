@@ -1,4 +1,17 @@
 #' Produce ggplot of densities in 1 or 2 dimensions
+#'
+#' @details
+#' This function produces a ggplot of the density estimate produced by `ks::kde()`.
+#' For univariate densities, it produces a line plot of the density function, with
+#' an optional ribbon showing some highest density regions (HDRs) and/or the observations.
+#' For bivariate densities, it produces a contour plot of the density function, with
+#' the observations optionally shown as points.
+#' The mode can also be drawn as a point with the HDRs.
+#' For bivariate densities, the combination of `fill = TRUE`, `show_points = TRUE`,
+#' `show_mode = TRUE`, and `prob = c(0.5, 0.99)` is equivalent to an HDR boxplot.
+#' For univariate densities,  the combination of `show_hdr = TRUE`, `show_points = TRUE`,
+#' `show_mode = TRUE`, and `prob = c(0.5, 0.99)` is equivalent to an HDR boxplot.
+#'
 #' @param object Probability density function as estimated by `ks::kde()`.
 #' @param prob Probability of the HDR contours to be drawn (for a bivariate plot only).
 #' @param fill If `TRUE`, and the density is bivariate, the bivariate contours
@@ -9,8 +22,11 @@
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown.
 #' @param color Color to use for HDR contours (if `fill` is `FALSE`), or the central color in HDR regions
 #' @param palette Color palette function to use for HDR filled regions (if `fill` is `TRUE`).
-#' @param alpha Transparency of points. Defaults to min(1, 1000/n), where n is the number of observations.
+#' @param alpha Transparency of points. When `fill` is `FALSE`, defaults to
+#' min(1, 1000/n), where n is the number of observations. Otherwise, set to 1.
 #' @param ... Additional arguments are currently ignored.
+#' @return A ggplot object.
+#' @author Rob J Hyndman
 #' @examples
 #' # Univariate density
 #' c(rnorm(500), rnorm(500, 4, 1.5)) |>
@@ -24,7 +40,8 @@
 
 autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
     show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, color = "#00659e",
-    palette = hdr_palette, alpha = min(1, 1000/NROW(object$x)), ...) {
+    palette = hdr_palette, alpha = ifelse(fill, 1, min(1, 1000/NROW(object$x))),
+    ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
