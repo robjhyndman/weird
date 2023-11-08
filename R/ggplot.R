@@ -106,7 +106,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
               fill = factor(prob))) +
         scale_fill_manual(
           breaks = rev(prob),
-          values = rev(palette(nhdr, color)),
+          values = rev(palette(color, prob)[-1]),
           labels = paste0(100*rev(prob), "%")
         ) +
         ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
@@ -116,7 +116,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         ggplot2::geom_line(
           data = expand.grid(mode = unique(hdr$mode), ends = c(0, -maxden/20)),
           mapping = aes(x = mode, y = ends, group = mode),
-          color = grDevices::colorRampPalette(c(color, "black"))(3)[2],
+          color = color,
           size = 1
         )
     }
@@ -147,7 +147,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         geom_contour_filled(aes(x = y1, y = y2, z = density),
                             breaks = rev(c(hdr$density, 100))) +
         scale_fill_manual(
-          values = rev(palette(length(hdr$prob), color)),
+          values = rev(palette(color, hdr$prob)[-1]),
           labels = rev(paste0(100 * hdr$prob, "%"))
         )
     } else {
@@ -159,7 +159,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         ggplot2::geom_point(
           data = density |> filter(density == max(density)),
           mapping = aes(x = y1, y = y2),
-          color = grDevices::colorRampPalette(c(color, "black"))(3)[2]
+          color = color
         )
     }
     p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
@@ -170,14 +170,20 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
 #' Color palette designed for plotting Highest Density Regions
 #'
 #' A sequential color palette is returned, with the first color being `color`, and the rest of the colors
-#' being a mix of `color` with increasing amounts of white.
+#' being a mix of `color` with increasing amounts of white, where the mixing
+#' proportions are determined by `prob`.
 #'
-#' @param n Number of colors to generate
 #' @param color First color of vector.
-#' @return A function that takes a number `n` and returns a vector of `n` colors
+#' @param prob Vector of probabilities between 0 and 1.
+#' @return A function that returns a vector of colors of length `length(prob) + 1`.
 #' @export
-hdr_palette <- function(n, color = "#00659e") {
-  rev(grDevices::colorRampPalette(c(color, "white"))(n+2)[seq(n)])
+hdr_palette <- function(color = "#00659e", prob = c(0.5, 0.99)) {
+  if (min(prob) <= 0 | max(prob) >= 1) {
+    stop("prob must be between 0 and 1")
+  }
+  pc_colors <- grDevices::colorRampPalette(c(color, "white"))(150)[2:100]
+  idx <- approx(seq(99)/100, seq(99), prob, rule=2)$y
+  c(color, pc_colors[idx])
 }
 
 utils::globalVariables(c("x","y","y1","y2"))
