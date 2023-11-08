@@ -42,7 +42,7 @@ print.kde <- function(x, ...) {
 #' (specified by `density_column`) contains the density values, and the
 #' remaining columns define the points at which the density is evaluated.
 #' @param density_column Name of the column containing the density values, specified
-#' as a character string. If missing, the last column is used.
+#' as a bare expression. If missing, the last column is used.
 #' @param ngrid Number of points to use for the grid in each dimension. Default is
 #' 10001 for univariate densities and 101 for multivariate densities.
 #' @param ... Additional arguments are ignored.
@@ -62,6 +62,8 @@ as_kde <- function(object, density_column, ngrid, ...) {
   # Check density_column is in object
   if(missing(density_column)) {
     density_column <- tail(colnames(object), 1)
+  } else {
+    density_column <- dplyr::as_label(dplyr::enquo(density_column))
   }
   if(!(density_column %in% colnames(object))) {
     stop(paste(density_column, "not found"))

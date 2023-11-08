@@ -17,6 +17,8 @@
 #' @param ... If `y` is supplied, other arguments are passed to \code{\link[ks]{kde}}.
 #' Otherwise, additional arguments are passed to \code{\link{as_kde}}.
 #' @return A tibble
+#' @references Hyndman, R J. (1996) Computing and Graphing Highest Density Regions,
+#' \emph{The American Statistician}, \bold{50}(2), 120–126.
 #' @author Rob J Hyndman
 #' @examples
 #' # Univariate HDRs
@@ -98,6 +100,99 @@ hdr_table <- function(y = NULL, density = NULL,
   }
   return(hdr.store)
 }
+
+#' @title HDR plot
+#' @description Produces a 1d or 2d plot of HDR regions.
+#'
+#' @param data A data frame or matrix containing the data.
+#' @param var1 The name of the first variable to plot (a bare expression).
+#' @param var2 Optionally, the name of the second variable to plot (a bare expression).
+#' @param scatterplot A logical argument indicating if a regular HDR plot is required
+#' (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).
+#' @param color The base color to use for the smallest highest density region.
+#' @param ... Other arguments passed to \code{\link[ks]{kde}}.
+#' @return A ggplot object showing an HDR plot or scatterplot of the data.
+#' @author Rob J Hyndman
+#' @references Hyndman, R J. (1996) Computing and Graphing Highest Density Regions,
+#' \emph{The American Statistician}, \bold{50}(2), 120–126.
+#' @examples
+#' gg_hdrplot(n01, v1)
+#' gg_hdrplot(n01, v1, v2, scatterplot = TRUE)
+#' @rdname hdrplot
+#' @export
+
+gg_hdrplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
+                       col = "#00659e", scatterplot = FALSE, ...) {
+  v2 <- dplyr::as_label(dplyr::enquo(var2))
+  if(v2 == "NULL") {
+    d <- 1L
+    data <- data |> select({{ var1 }})
+  } else {
+    d <- 2L
+    data <- data |> select({{ var1 }}, {{ var2 }})
+  }
+  # Use autoplot if possible
+  if(d == 2L & !scatterplot) {
+    fit <- ks::kde(data[,1:2], H = ks::Hns(data[,1:2]), binned = NROW(data) > 2000, ...)
+    return(autoplot(fit, prob = prob,
+      color = col, fill = TRUE, show_points = TRUE, show_mode = TRUE))
+  }
+  # Otherwise build the plot
+  # Find colors for each region
+  fi <- exp(-kde_scores(as.matrix(data),...))
+  thresholds <- quantile(fi, prob = 1 - prob)
+  data <- data |>
+    mutate(
+      density = fi,
+      group = cut(fi, breaks = c(0, thresholds, Inf), labels = FALSE),
+      group = factor(group,
+        levels = unique(group),
+        labels = c(paste0(sort(prob)*100, "%"), "Outside")
+      )
+    )
+  colors <- c("#000000", hdr_palette(length(prob), color = col))
+  if(d == 1L) {
+    p <- data |>
+      ggplot()
+    if(!scatterplot) {
+      hdr <- hdr_table(data[[1]], prob = prob, ...)
+      p <- p +
+        # Just show points outside largest HDR in black
+        geom_jitter(data = data |> filter(density < min(thresholds)),
+          mapping = aes(x = {{ var1 }}, y = 0), width = 0, height = 0.8) +
+        # add HDRs as shaded regions
+        geom_rect(data = hdr,
+          aes(xmin = lower, xmax = upper, ymin=-1, ymax=1, fill = paste0(prob*100,"%"))) +
+        scale_fill_manual(values = rev(colors[-1])) +
+        guides(fill = guide_legend(title = "HDR"))
+        # add modes
+        geom_line(
+          data = expand.grid(mode = unique(hdr$mode), ends = c(-1, 1)),
+          mapping = aes(x = mode, y = ends, group = mode),
+          color = grDevices::colorRampPalette(c(col, "black"))(3)[2],
+          size = 1
+        )
+    } else {
+      p <- p +
+        # Show all points in colors
+        geom_jitter(aes(x = {{ var1 }}, y = 0, col = group), width = 0, height = 0.8) +
+        scale_color_manual(values = rev(colors)) +
+        guides(col = guide_legend(title = "HDR"))
+    }
+    # Remove y-axis and guide
+    p <- p + scale_y_discrete() + labs(y = "")
+
+  } else {
+    # Show all points in colors
+    p <- data |>
+      ggplot(aes(x = {{ var1 }}, y = {{ var2 }})) +
+      geom_point(aes(col = group)) +
+      scale_color_manual(values = colors) +
+      guides(col = "none")
+  }
+  return(p)
+}
+
 
 # Remaining functions adapted from hdrcde package
 

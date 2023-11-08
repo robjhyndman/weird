@@ -12,7 +12,7 @@ as_kde(object, density_column, ngrid, ...)
 remaining columns define the points at which the density is evaluated.}
 
 \item{density_column}{Name of the column containing the density values, specified
-as a character string. If missing, the last column is used.}
+as a bare expression. If missing, the last column is used.}
 
 \item{ngrid}{Number of points to use for the grid in each dimension. Default is
 10001 for univariate densities and 101 for multivariate densities.}

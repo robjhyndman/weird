@@ -6,6 +6,7 @@
 #' @param show_hdr If `TRUE`, and the density is univariate, then the HDR regions
 #' specified by `prob` are shown as a ribbon below the density.
 #' @param show_points If `TRUE`, then individual points are plotted.
+#' @param show_mode If `TRUE`, then the mode of the distribution is shown.
 #' @param color Color to use for HDR contours (if `fill` is `FALSE`), or the central color in HDR regions
 #' @param palette Color palette function to use for HDR filled regions (if `fill` is `TRUE`).
 #' @param alpha Transparency of points. Defaults to min(1, 1000/n), where n is the number of observations.
@@ -22,7 +23,7 @@
 #' @export
 
 autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
-    show_hdr = FALSE, show_points = FALSE, color = "#00659e",
+    show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, color = "#00659e",
     palette = hdr_palette, alpha = min(1, 1000/NROW(object$x)), ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
@@ -93,6 +94,15 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         ) +
         ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
     }
+    if(show_mode) {
+      p <- p +
+        ggplot2::geom_line(
+          data = expand.grid(mode = unique(hdr$mode), ends = c(0, -maxden/20)),
+          mapping = aes(x = mode, y = ends, group = mode),
+          color = grDevices::colorRampPalette(c(color, "black"))(3)[2],
+          size = 1
+        )
+    }
   } else {
     # Plot the contours
     p <- density |>
@@ -126,6 +136,14 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
     } else {
       p <- p + geom_contour(aes(x = y1, y = y2, z = density),
                             breaks = hdr$density, color = color)
+    }
+    if(show_mode) {
+      p <- p +
+        ggplot2::geom_point(
+          data = density |> filter(density == max(density)),
+          mapping = aes(x = y1, y = y2),
+          color = grDevices::colorRampPalette(c(color, "black"))(3)[2]
+        )
     }
     p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
   }

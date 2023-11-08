@@ -14,7 +14,7 @@
 #' @return A ggplot object showing a bagplot or scatterplot of the data.
 #' @author Rob J Hyndman
 #' @references Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999).
-#'   The bagplot: A bivariate boxplot. The American Statistician, 52(4), 382–387.
+#'   The bagplot: A bivariate boxplot. \emph{The American Statistician}, \bold{52}(4), 382–387.
 #' @examples
 #' gg_bagplot(n01, v1, v2)
 #' gg_bagplot(n01, v1, v2, scatterplot = TRUE)
@@ -26,7 +26,7 @@
 #' @importFrom dplyr select filter
 #' @export
 
-gg_bagplot <- function(data, var1, var2, col = c("#0072B2", "#71abcd", "#bcd2df", "#000000"),
+gg_bagplot <- function(data, var1, var2, col = c("#00659e", "#66a2c4", "#b2d0e1", "#000000"),
                        scatterplot = FALSE, ...) {
   data <- data |> select({{ var1 }}, {{ var2 }})
   bp <- aplpack::compute.bagplot(as.matrix(data), na.rm = TRUE, approx.limit = 1000)

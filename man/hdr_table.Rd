@@ -56,6 +56,10 @@ density <- expand.grid(grid, grid) |>
   dplyr::mutate(density = dnorm(Var1) * dnorm(Var2))
 hdr_table(density = density)
 }
+\references{
+Hyndman, R J. (1996) Computing and Graphing Highest Density Regions,
+\emph{The American Statistician}, \bold{50}(2), 120–126.
+}
 \author{
 Rob J Hyndman
 }
