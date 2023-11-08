@@ -9,9 +9,10 @@
   prob = seq(9)/10,
   fill = FALSE,
   show_hdr = FALSE,
-  show_points = NULL,
+  show_points = FALSE,
   color = "#00659e",
   palette = hdr_palette,
+  alpha = min(1, 1000/NROW(object$x)),
   ...
 )
 }
@@ -26,14 +27,13 @@ are shown as filled regions rather than lines.}
 \item{show_hdr}{If \code{TRUE}, and the density is univariate, then the HDR regions
 specified by \code{prob} are shown as a ribbon below the density.}
 
-\item{show_points}{Numerical scalar giving probability threshold for points
-to be shown on the density plot. e.g., if \code{show_points} is 0.99,
-then the points outside the 99\% highest density region are shown.
-No points are shown if set to \code{NULL}.}
+\item{show_points}{If \code{TRUE}, then individual points are plotted.}
 
 \item{color}{Color to use for HDR contours (if \code{fill} is \code{FALSE}), or the central color in HDR regions}
 
 \item{palette}{Color palette function to use for HDR filled regions (if \code{fill} is \code{TRUE}).}
+
+\item{alpha}{Transparency of points. Defaults to min(1, 1000/n), where n is the number of observations.}
 
 \item{...}{Additional arguments are currently ignored.}
 }
@@ -48,5 +48,5 @@ c(rnorm(500), rnorm(500, 4, 1.5)) |>
 ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 ymat |>
   kde(H = Hns(ymat)) |>
-  autoplot(fill = TRUE, prob = c(0.5, 0.95), show_points = 0.95)
+  autoplot(fill = TRUE, prob = c(0.5, 0.95), show_points = TRUE)
 }

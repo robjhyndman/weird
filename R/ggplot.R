@@ -5,12 +5,10 @@
 #' are shown as filled regions rather than lines.
 #' @param show_hdr If `TRUE`, and the density is univariate, then the HDR regions
 #' specified by `prob` are shown as a ribbon below the density.
-#' @param show_points Numerical scalar giving probability threshold for points
-#' to be shown on the density plot. e.g., if `show_points` is 0.99,
-#' then the points outside the 99% highest density region are shown.
-#' No points are shown if set to `NULL`.
+#' @param show_points If `TRUE`, then individual points are plotted.
 #' @param color Color to use for HDR contours (if `fill` is `FALSE`), or the central color in HDR regions
 #' @param palette Color palette function to use for HDR filled regions (if `fill` is `TRUE`).
+#' @param alpha Transparency of points. Defaults to min(1, 1000/n), where n is the number of observations.
 #' @param ... Additional arguments are currently ignored.
 #' @examples
 #' # Univariate density
@@ -20,12 +18,12 @@
 #' ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 #' ymat |>
 #'   kde(H = Hns(ymat)) |>
-#'   autoplot(fill = TRUE, prob = c(0.5, 0.95), show_points = 0.95)
+#'   autoplot(fill = TRUE, prob = c(0.5, 0.95), show_points = TRUE)
 #' @export
 
 autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
-    show_hdr = FALSE, show_points = NULL, color = "#00659e",
-    palette = hdr_palette, ...) {
+    show_hdr = FALSE, show_points = FALSE, color = "#00659e",
+    palette = hdr_palette, alpha = min(1, 1000/NROW(object$x)), ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
@@ -36,6 +34,11 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
   }
   if(d > 2) {
     stop("Only univariate and bivariate densities are supported")
+  }
+  if(show_points) {
+    if(is.null(object$x)) {
+      warning("No observations found")
+    }
   }
   if(d == 1L) {
     density <- tibble(
@@ -61,13 +64,19 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
       geom_line(aes(x=y, y=density)) +
       labs(x = object$names[1])
     maxden <- max(density$density)
-    if(!is.null(show_points)) {
-      fi <- exp(-kde_scores(object$x, h = object$h))
-      threshold <- quantile(fi, prob = 1 - show_points)
-      show_x <- tibble::tibble(x = object$x[fi < threshold])
+    if(show_points) {
+      # Only show points outside largest HDR
+      if(show_hdr) {
+        fi <- exp(-kde_scores(object$x, h = object$h))
+        threshold <- quantile(fi, prob = 1 - max(hdr$prob))
+        show_x <- tibble::tibble(x = object$x[fi < threshold])
+      } else {
+        show_x <- tibble::tibble(x = object$x)
+      }
       p <- p + ggplot2::geom_point(
         data = show_x,
-        mapping = aes(x = x, y = -maxden/40)
+        mapping = aes(x = x, y = -maxden/40),
+        alpha = alpha
       )
     }
     if(show_hdr) {
@@ -89,14 +98,21 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
     p <- density |>
       ggplot() +
       labs(x = object$names[1], y = object$names[2])
-    if(!is.null(show_points)) {
-      ks <- kde_scores(object$x, H = object$H)
-      threshold <- quantile(ks, 1 - show_points)
-      show_x <- as.data.frame(x = object$x[ks > threshold,])
-      colnames(show_x)[1:2] <- c("x","y")
+    if(show_points) {
+      # If fill, only show points outside largest HDR
+      if(fill) {
+        ks <- kde_scores(object$x, H = object$H)
+        threshold <- quantile(ks, 1 - max(hdr$prob))
+        show_x <- as.data.frame(x = object$x[ks > threshold,])
+        colnames(show_x)[1:2] <- c("x","y")
+      } else {
+        show_x <- as.data.frame(x = object$x)
+        colnames(show_x)[1:2] <- c("x","y")
+      }
       p <- p + ggplot2::geom_point(
         data = show_x,
-        mapping = aes(x = x, y = y)
+        mapping = aes(x = x, y = y),
+        alpha = alpha
       )
     }
     if(fill) {
