@@ -20,8 +20,8 @@
 #' specified by `prob` are shown as a ribbon below the density.
 #' @param show_points If `TRUE`, then individual points are plotted.
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown.
-#' @param color Color used for HDR contours, or as the basis for HDR regions
-#' if `palette = hdr_palette`.
+#' @param color Color used for mode and HDR contours. If `palette = hdr_palette`,
+#' it is also used as the basis for HDR regions.
 #' @param palette Color palette function to use for HDR filled regions
 #' (if `fill` is `TRUE` or `show_hdr` is `TRUE`).
 #' @param alpha Transparency of points. When `fill` is `FALSE`, defaults to
@@ -37,7 +37,7 @@
 #' ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 #' ymat |>
 #'   kde(H = Hns(ymat)) |>
-#'   autoplot(fill = TRUE, prob = c(0.5, 0.95), show_points = TRUE)
+#'   autoplot(show_points = TRUE, alpha = 0.05)
 #' @export
 
 autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
