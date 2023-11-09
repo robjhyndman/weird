@@ -13,7 +13,7 @@
   show_mode = FALSE,
   color = "#00659e",
   palette = hdr_palette,
-  alpha = min(1, 1000/NROW(object$x)),
+  alpha = ifelse(fill, 1, min(1, 1000/NROW(object$x))),
   ...
 )
 }
@@ -32,16 +32,34 @@ specified by \code{prob} are shown as a ribbon below the density.}
 
 \item{show_mode}{If \code{TRUE}, then the mode of the distribution is shown.}
 
-\item{color}{Color to use for HDR contours (if \code{fill} is \code{FALSE}), or the central color in HDR regions}
+\item{color}{Color used for HDR contours, or as the basis for HDR regions
+if \code{palette = hdr_palette}.}
 
-\item{palette}{Color palette function to use for HDR filled regions (if \code{fill} is \code{TRUE}).}
+\item{palette}{Color palette function to use for HDR filled regions
+(if \code{fill} is \code{TRUE} or \code{show_hdr} is \code{TRUE}).}
 
-\item{alpha}{Transparency of points. Defaults to min(1, 1000/n), where n is the number of observations.}
+\item{alpha}{Transparency of points. When \code{fill} is \code{FALSE}, defaults to
+min(1, 1000/n), where n is the number of observations. Otherwise, set to 1.}
 
 \item{...}{Additional arguments are currently ignored.}
 }
+\value{
+A ggplot object.
+}
 \description{
 Produce ggplot of densities in 1 or 2 dimensions
+}
+\details{
+This function produces a ggplot of the density estimate produced by \code{ks::kde()}.
+For univariate densities, it produces a line plot of the density function, with
+an optional ribbon showing some highest density regions (HDRs) and/or the observations.
+For bivariate densities, it produces a contour plot of the density function, with
+the observations optionally shown as points.
+The mode can also be drawn as a point with the HDRs.
+For bivariate densities, the combination of \code{fill = TRUE}, \code{show_points = TRUE},
+\code{show_mode = TRUE}, and \code{prob = c(0.5, 0.99)} is equivalent to an HDR boxplot.
+For univariate densities,  the combination of \code{show_hdr = TRUE}, \code{show_points = TRUE},
+\code{show_mode = TRUE}, and \code{prob = c(0.5, 0.99)} is equivalent to an HDR boxplot.
 }
 \examples{
 # Univariate density
@@ -52,4 +70,7 @@ ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 ymat |>
   kde(H = Hns(ymat)) |>
   autoplot(fill = TRUE, prob = c(0.5, 0.95), show_points = TRUE)
+}
+\author{
+Rob J Hyndman
 }

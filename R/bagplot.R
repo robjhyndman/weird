@@ -26,8 +26,9 @@
 #' @importFrom dplyr select filter
 #' @export
 
-gg_bagplot <- function(data, var1, var2, col = c("#00659e", "#66a2c4", "#b2d0e1", "#000000"),
-                       scatterplot = FALSE, ...) {
+gg_bagplot <- function(data, var1, var2,
+  col = c(hdr_palette(color = "#00659e", prob = c(0.5, 0.99)), "#000000"),
+  scatterplot = FALSE, ...) {
   data <- data |> select({{ var1 }}, {{ var2 }})
   bp <- aplpack::compute.bagplot(as.matrix(data), na.rm = TRUE, approx.limit = 1000)
   cn <- colnames(data)

@@ -20,8 +20,10 @@
 #' specified by `prob` are shown as a ribbon below the density.
 #' @param show_points If `TRUE`, then individual points are plotted.
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown.
-#' @param color Color to use for HDR contours (if `fill` is `FALSE`), or the central color in HDR regions
-#' @param palette Color palette function to use for HDR filled regions (if `fill` is `TRUE`).
+#' @param color Color used for HDR contours, or as the basis for HDR regions
+#' if `palette = hdr_palette`.
+#' @param palette Color palette function to use for HDR filled regions
+#' (if `fill` is `TRUE` or `show_hdr` is `TRUE`).
 #' @param alpha Transparency of points. When `fill` is `FALSE`, defaults to
 #' min(1, 1000/n), where n is the number of observations. Otherwise, set to 1.
 #' @param ... Additional arguments are currently ignored.
@@ -44,6 +46,11 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
     ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
+  }
+  if(identical(palette, hdr_palette)) {
+    colors <- hdr_palette(color = color, prob=prob)
+  } else {
+    colors <- palette(n = length(prob)+1)
   }
   if(inherits(object$eval.points, "list")) {
     d <- length(object$eval.points)
@@ -106,7 +113,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
               fill = factor(prob))) +
         scale_fill_manual(
           breaks = rev(prob),
-          values = rev(palette(color, prob)[-1]),
+          values = colors[-1],
           labels = paste0(100*rev(prob), "%")
         ) +
         ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
@@ -128,9 +135,9 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
     if(show_points) {
       # If fill, only show points outside largest HDR
       if(fill) {
-        ks <- kde_scores(object$x, H = object$H)
-        threshold <- quantile(ks, 1 - max(hdr$prob))
-        show_x <- as.data.frame(x = object$x[ks > threshold,])
+        fi <- exp(-kde_scores(object$x, H = object$H))
+        threshold <- quantile(fi, prob = 1 - max(hdr$prob))
+        show_x <- as.data.frame(x = object$x[fi < threshold,])
         colnames(show_x)[1:2] <- c("x","y")
       } else {
         show_x <- as.data.frame(x = object$x)
@@ -147,7 +154,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         geom_contour_filled(aes(x = y1, y = y2, z = density),
                             breaks = rev(c(hdr$density, 100))) +
         scale_fill_manual(
-          values = rev(palette(color, hdr$prob)[-1]),
+          values = colors[-1],
           labels = rev(paste0(100 * hdr$prob, "%"))
         )
     } else {
@@ -169,16 +176,21 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
 
 #' Color palette designed for plotting Highest Density Regions
 #'
-#' A sequential color palette is returned, with the first color being `color`, and the rest of the colors
-#' being a mix of `color` with increasing amounts of white, where the mixing
-#' proportions are determined by `prob`.
+#' A sequential color palette is returned, with the first color being `color`,
+#' and the rest of the colors being a mix of `color` with increasing amounts of white.
+#' If `prob` is provided, then the mixing proportions are determined by `prob` (and
+#' n is ignored). Otherwise the mixing proportions are equally spaced between 0 and 1.
 #'
 #' @param color First color of vector.
 #' @param prob Vector of probabilities between 0 and 1.
 #' @return A function that returns a vector of colors of length `length(prob) + 1`.
+#' @examples
+#'
 #' @export
-hdr_palette <- function(color = "#00659e", prob = c(0.5, 0.99)) {
-  if (min(prob) <= 0 | max(prob) >= 1) {
+hdr_palette <- function(n, color = "#00659e", prob = NULL) {
+  if(missing(prob)) {
+    prob <- seq(n-1)/n
+  } else if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
   pc_colors <- grDevices::colorRampPalette(c(color, "white"))(150)[2:100]

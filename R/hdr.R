@@ -127,7 +127,7 @@ hdr_table <- function(y = NULL, density = NULL,
 #' @export
 
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
-                       col = "#00659e", scatterplot = FALSE, ...) {
+                       color = "#00659e", scatterplot = FALSE, ...) {
   v2 <- dplyr::as_label(dplyr::enquo(var2))
   if(v2 == "NULL") {
     d <- 1L
@@ -140,7 +140,8 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   if(d == 2L & !scatterplot) {
     fit <- ks::kde(data[,1:2], H = ks::Hns(data[,1:2]), binned = NROW(data) > 2000, ...)
     return(autoplot(fit, prob = prob,
-      color = col, fill = TRUE, show_points = TRUE, show_mode = TRUE))
+      color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE) +
+        guides(fill = "none", color = "none"))
   }
   # Otherwise build the plot
   # Find colors for each region
@@ -155,7 +156,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
         labels = c(paste0(sort(prob)*100, "%"),"Outside")
       )
     )
-  colors <- c(hdr_palette(col, prob), "#000000")
+  colors <- c(hdr_palette(color = color, prob = prob), "#000000")
   if(d == 1L) {
     p <- data |>
       ggplot()
@@ -169,7 +170,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
         geom_rect(data = hdr,
           aes(xmin = lower, xmax = upper, ymin=-1, ymax=1, fill = paste0(prob*100,"%"))) +
         scale_fill_manual(values = colors[-1]) +
-        guides(fill = guide_legend(title = "HDR")) +
+        guides(fill = "none") +
         # add modes
         geom_line(
           data = expand.grid(mode = unique(hdr$mode), ends = c(-1, 1)),
@@ -182,7 +183,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
         # Show all points in colors
         geom_jitter(aes(x = {{ var1 }}, y = 0, col = group), width = 0, height = 0.8) +
         scale_color_manual(values = colors[-1]) +
-        guides(col = guide_legend(title = "HDR"))
+        guides(col = "none")
     }
     # Remove y-axis and guide
     p <- p + scale_y_discrete() + labs(y = "")
@@ -195,7 +196,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       geom_point(aes(col = group)) +
       scale_color_manual(values = colors[-1]) +
       geom_point(data = mode, col = colors[1], size = 2) +
-      guides(fill = guide_legend(title = "HDR"))
+      guides(col = "none")
   }
   return(p)
 }

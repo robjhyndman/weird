@@ -4,17 +4,19 @@
 \alias{hdr_palette}
 \title{Color palette designed for plotting Highest Density Regions}
 \usage{
-hdr_palette(n, color = "#00659e")
+hdr_palette(n, color = "#00659e", prob = NULL)
 }
 \arguments{
-\item{n}{Number of colors to generate}
-
 \item{color}{First color of vector.}
+
+\item{prob}{Vector of probabilities between 0 and 1.}
 }
 \value{
-A function that takes a number \code{n} and returns a vector of \code{n} colors
+A function that returns a vector of colors of length \code{length(prob) + 1}.
 }
 \description{
-A sequential color palette is returned, with the first color being \code{color}, and the rest of the colors
-being a mix of \code{color} with increasing amounts of white.
+A sequential color palette is returned, with the first color being \code{color},
+and the rest of the colors being a mix of \code{color} with increasing amounts of white.
+If \code{prob} is provided, then the mixing proportions are determined by \code{prob} (and
+n is ignored). Otherwise the mixing proportions are equally spaced between 0 and 1.
 }
