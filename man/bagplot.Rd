@@ -8,7 +8,7 @@ gg_bagplot(
   data,
   var1,
   var2,
-  col = c("#00659e", "#66a2c4", "#b2d0e1", "#000000"),
+  col = c(hdr_palette(color = "#00659e", prob = c(0.5, 0.99)), "#000000"),
   scatterplot = FALSE,
   ...
 )

@@ -111,7 +111,7 @@ hdr_table <- function(y = NULL, density = NULL,
 #' @param prob A numeric vector specifying the coverage probabilities for the HDRs.
 #' @param scatterplot A logical argument indicating if a regular HDR plot is required
 #' (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).
-#' @param col The base color to use for the mode. Colors for the HDRs are generated
+#' @param color The base color to use for the mode. Colors for the HDRs are generated
 #' by whitening this color.
 #' @param ... Other arguments passed to \code{\link[ks]{kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
@@ -141,14 +141,14 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     fit <- ks::kde(data[,1:2], H = ks::Hns(data[,1:2]), binned = NROW(data) > 2000, ...)
     return(autoplot(fit, prob = prob,
       color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE) +
-        guides(fill = "none", color = "none"))
+        ggplot2::guides(fill = "none", color = "none"))
   }
   # Otherwise build the plot
   # Find colors for each region
   fi <- exp(-kde_scores(as.matrix(data),...))
   thresholds <- sort(quantile(fi, prob = 1 - prob))
   data <- data |>
-    mutate(
+    dplyr::mutate(
       density = fi,
       group = cut(fi, breaks = c(0, thresholds, Inf), labels = FALSE),
       group = factor(group,
@@ -164,13 +164,13 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       hdr <- hdr_table(data[[1]], prob = prob, ...)
       p <- p +
         # Just show points outside largest HDR in black
-        geom_jitter(data = data |> filter(density < min(thresholds)),
+        ggplot2::geom_jitter(data = data |> filter(density < min(thresholds)),
           mapping = aes(x = {{ var1 }}, y = 0), width = 0, height = 0.8) +
         # add HDRs as shaded regions
-        geom_rect(data = hdr,
+        ggplot2::geom_rect(data = hdr,
           aes(xmin = lower, xmax = upper, ymin=-1, ymax=1, fill = paste0(prob*100,"%"))) +
-        scale_fill_manual(values = colors[-1]) +
-        guides(fill = "none") +
+        ggplot2::scale_fill_manual(values = colors[-1]) +
+        ggplot2::guides(fill = "none") +
         # add modes
         geom_line(
           data = expand.grid(mode = unique(hdr$mode), ends = c(-1, 1)),
@@ -181,22 +181,22 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     } else {
       p <- p +
         # Show all points in colors
-        geom_jitter(aes(x = {{ var1 }}, y = 0, col = group), width = 0, height = 0.8) +
-        scale_color_manual(values = colors[-1]) +
-        guides(col = "none")
+        ggplot2::geom_jitter(aes(x = {{ var1 }}, y = 0, col = group), width = 0, height = 0.8) +
+        ggplot2::scale_color_manual(values = colors[-1]) +
+        ggplot2::guides(col = "none")
     }
     # Remove y-axis and guide
-    p <- p + scale_y_discrete() + labs(y = "")
+    p <- p + ggplot2::scale_y_discrete() + labs(y = "")
 
   } else {
     # Show all points in colors
     mode <- data |> dplyr::filter(density == max(density))
     p <- data |>
       ggplot(aes(x = {{ var1 }}, y = {{ var2 }})) +
-      geom_point(aes(col = group)) +
-      scale_color_manual(values = colors[-1]) +
-      geom_point(data = mode, col = colors[1], size = 2) +
-      guides(col = "none")
+      ggplot2::geom_point(aes(col = group)) +
+      ggplot2::scale_color_manual(values = colors[-1]) +
+      ggplot2::geom_point(data = mode, col = colors[1], size = 2) +
+      ggplot2::guides(col = "none")
   }
   return(p)
 }
@@ -258,4 +258,4 @@ all_roots <- function(
 
 #' @importFrom utils head tail
 #' @importFrom tibble tibble
-utils::globalVariables(c("ends", "type", "lower", "upper"))
+utils::globalVariables(c("ends", "type", "lower", "upper", "group"))

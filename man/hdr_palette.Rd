@@ -7,6 +7,8 @@
 hdr_palette(n, color = "#00659e", prob = NULL)
 }
 \arguments{
+\item{n}{Number of colors in palette.}
+
 \item{color}{First color of vector.}
 
 \item{prob}{Vector of probabilities between 0 and 1.}

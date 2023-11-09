@@ -181,6 +181,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
 #' If `prob` is provided, then the mixing proportions are determined by `prob` (and
 #' n is ignored). Otherwise the mixing proportions are equally spaced between 0 and 1.
 #'
+#' @param n Number of colors in palette.
 #' @param color First color of vector.
 #' @param prob Vector of probabilities between 0 and 1.
 #' @return A function that returns a vector of colors of length `length(prob) + 1`.

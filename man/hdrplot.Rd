@@ -9,7 +9,7 @@ gg_hdrboxplot(
   var1,
   var2 = NULL,
   prob = c(0.5, 0.99),
-  col = "#00659e",
+  color = "#00659e",
   scatterplot = FALSE,
   ...
 )
@@ -23,7 +23,7 @@ gg_hdrboxplot(
 
 \item{prob}{A numeric vector specifying the coverage probabilities for the HDRs.}
 
-\item{col}{The base color to use for the mode. Colors for the HDRs are generated
+\item{color}{The base color to use for the mode. Colors for the HDRs are generated
 by whitening this color.}
 
 \item{scatterplot}{A logical argument indicating if a regular HDR plot is required
