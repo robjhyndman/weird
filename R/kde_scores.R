@@ -8,8 +8,8 @@
 #'  to the leave-one-out kde scores. These give the probability of each observation
 #'  being an anomaly.
 #' @param y Numerical vector or matrix of data (up to 6 dimensions).
-#' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link[ks]{hns}}.
-#' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns}}.
+#' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
+#' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
 #' @param loo Should leave-one-scores be returned? Default: FALSE.
 #' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
 #' @return Numerical vector containing kde scores.
@@ -26,12 +26,11 @@
 #' @export
 #' @rdname kde_scores
 #' @seealso
-#'  \code{\link[stats]{bandwidth}}
+#'  \code{\link{kde_bandwidth}}
 #'  \code{\link[ks]{kde}}
 #' @importFrom stats quantile density dnorm approx na.omit
 #' @importFrom evd fpot pgpd
-#' @importFrom ks hns Hns
-kde_scores <- function(y, loo = FALSE, h = ks::hns(y), H = ks::Hns(y), ...) {
+kde_scores <- function(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...) {
   tmp <- calc_kde_scores(y, h, H, ...)
   if (loo) {
     return(tmp$loo_scores)
@@ -43,7 +42,7 @@ kde_scores <- function(y, loo = FALSE, h = ks::hns(y), H = ks::Hns(y), ...) {
 #' @rdname kde_scores
 #' @export
 
-lookout_prob <- function(y, loo = FALSE, h = ks::hns(y), H = ks::Hns(y), ...) {
+lookout_prob <- function(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...) {
   tmp <- calc_kde_scores(y, h, H, ...)
   loo_scores <- tmp$loo_scores
   threshold <- stats::quantile(tmp$scores, prob = 0.90, type = 8)
@@ -55,7 +54,7 @@ lookout_prob <- function(y, loo = FALSE, h = ks::hns(y), H = ks::Hns(y), ...) {
 }
 
 # Compute value of density at each observation using kde
-calc_kde_scores <- function(y, h = ks::hns(y), H = ks::Hns(y), ...) {
+calc_kde_scores <- function(y, h = kde_bandwidth(y), H = kde_bandwidth(y), ...) {
   n <- NROW(y)
   d <- NCOL(y)
   # Estimate density at each observation

@@ -36,7 +36,7 @@
 #'   autoplot(show_hdr = TRUE, prob= c(0.5, 0.95), color = "#c14b14")
 #' ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 #' ymat |>
-#'   kde(H = Hns(ymat)) |>
+#'   kde(H = kde_bandwidth(ymat)) |>
 #'   autoplot(show_points = TRUE, alpha = 0.05)
 #' @export
 
@@ -186,7 +186,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
 #' @param prob Vector of probabilities between 0 and 1.
 #' @return A function that returns a vector of colors of length `length(prob) + 1`.
 #' @examples
-#'
+#' hdr_palette(prob = c(0.5, 0.99))
 #' @export
 hdr_palette <- function(n, color = "#00659e", prob = NULL) {
   if(missing(prob)) {

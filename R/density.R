@@ -129,3 +129,19 @@ density_on_grid <- function(y, fy, ngrid) {
     matrix(nrow = ngrid)
   return(density)
 }
+
+#' Robust bandwidth estimation for kernel density estimation
+#'
+#' @param data A numeric matrix or data frame.
+#' @return A matrix of bandwidths (or scalar in the case of univariate data).
+#' @author Rob J Hyndman
+#' @export
+kde_bandwidth <- function(data) {
+  d <- NCOL(data)
+  n <- NROW(data)
+  if(d == 1L) {
+    return(1.06 * stats::mad(data) * n^(-0.2))
+  } else {
+    return((4/(n * (d + 2)))^(2/(d + 4)) * rrcov::CovOgk(data)$cov)
+  }
+}

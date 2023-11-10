@@ -22,3 +22,6 @@ and the rest of the colors being a mix of \code{color} with increasing amounts o
 If \code{prob} is provided, then the mixing proportions are determined by \code{prob} (and
 n is ignored). Otherwise the mixing proportions are equally spaced between 0 and 1.
 }
+\examples{
+hdr_palette(prob = c(0.5, 0.99))
+}

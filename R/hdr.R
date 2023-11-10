@@ -12,8 +12,8 @@
 #' @param density Probability density function, either estimated by `ks::kde()` or
 #' a data frame or matrix with numerical columns that can be passed to `as_kde()`.
 #' @param prob Probability of the HDR
-#' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link[ks]{hns}}.
-#' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns}}.
+#' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
+#' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
 #' @param ... If `y` is supplied, other arguments are passed to \code{\link[ks]{kde}}.
 #' Otherwise, additional arguments are passed to \code{\link{as_kde}}.
 #' @return A tibble
@@ -36,7 +36,7 @@
 #' hdr_table(density = density)
 #' @export
 hdr_table <- function(y = NULL, density = NULL,
-    prob = c(0.50, 0.99), h = ks::hns(y), H = ks::Hns(y), ...) {
+    prob = c(0.50, 0.99), h = kde_bandwidth(y), H = kde_bandwidth(y), ...) {
   if (min(prob) < 0 | max(prob) > 1) {
     stop("prob must be between 0 and 1")
   }
@@ -138,7 +138,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   }
   # Use autoplot if possible
   if(d == 2L & !scatterplot) {
-    fit <- ks::kde(data[,1:2], H = ks::Hns(data[,1:2]), binned = NROW(data) > 2000, ...)
+    fit <- ks::kde(data[,1:2], H = kde_bandwidth(data[,1:2]), binned = NROW(data) > 2000, ...)
     return(autoplot(fit, prob = prob,
       color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE) +
         ggplot2::guides(fill = "none", color = "none"))

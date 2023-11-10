@@ -5,18 +5,18 @@
 \alias{lookout_prob}
 \title{Kernel density estimate scores and lookout probabilities}
 \usage{
-kde_scores(y, loo = FALSE, h = ks::hns(y), H = ks::Hns(y), ...)
+kde_scores(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...)
 
-lookout_prob(y, loo = FALSE, h = ks::hns(y), H = ks::Hns(y), ...)
+lookout_prob(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data (up to 6 dimensions).}
 
 \item{loo}{Should leave-one-scores be returned? Default: FALSE.}
 
-\item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link[ks]{hns}}.}
+\item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
 
-\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns}}.}
+\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
 
 \item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
 }
@@ -44,7 +44,7 @@ kde_scores(y)
 lookout_prob(y)
 }
 \seealso{
-\code{\link[stats]{bandwidth}}
+\code{\link{kde_bandwidth}}
 \code{\link[ks]{kde}}
 }
 \author{

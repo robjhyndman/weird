@@ -32,8 +32,8 @@ specified by \code{prob} are shown as a ribbon below the density.}
 
 \item{show_mode}{If \code{TRUE}, then the mode of the distribution is shown.}
 
-\item{color}{Color used for HDR contours, or as the basis for HDR regions
-if \code{palette = hdr_palette}.}
+\item{color}{Color used for mode and HDR contours. If \code{palette = hdr_palette},
+it is also used as the basis for HDR regions.}
 
 \item{palette}{Color palette function to use for HDR filled regions
 (if \code{fill} is \code{TRUE} or \code{show_hdr} is \code{TRUE}).}
@@ -68,8 +68,8 @@ c(rnorm(500), rnorm(500, 4, 1.5)) |>
   autoplot(show_hdr = TRUE, prob= c(0.5, 0.95), color = "#c14b14")
 ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 ymat |>
-  kde(H = Hns(ymat)) |>
-  autoplot(fill = TRUE, prob = c(0.5, 0.95), show_points = TRUE)
+  kde(H = kde_bandwidth(ymat)) |>
+  autoplot(show_points = TRUE, alpha = 0.05)
 }
 \author{
 Rob J Hyndman

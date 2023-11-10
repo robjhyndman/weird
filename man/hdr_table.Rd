@@ -8,8 +8,8 @@ hdr_table(
   y = NULL,
   density = NULL,
   prob = c(0.5, 0.99),
-  h = ks::hns(y),
-  H = ks::Hns(y),
+  h = kde_bandwidth(y),
+  H = kde_bandwidth(y),
   ...
 )
 }
@@ -21,9 +21,9 @@ a data frame or matrix with numerical columns that can be passed to \code{as_kde
 
 \item{prob}{Probability of the HDR}
 
-\item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link[ks]{hns}}.}
+\item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
 
-\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link[ks]{Hns}}.}
+\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
 
 \item{...}{If \code{y} is supplied, other arguments are passed to \code{\link[ks]{kde}}.
 Otherwise, additional arguments are passed to \code{\link{as_kde}}.}
