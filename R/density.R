@@ -140,8 +140,9 @@ kde_bandwidth <- function(data) {
   d <- NCOL(data)
   n <- NROW(data)
   if(d == 1L) {
-    return(1.06 * stats::mad(data) * n^(-0.2))
+    return(1.06 * robustbase::s_IQR(data) * n^(-0.2))
   } else {
-    return((4/(n * (d + 2)))^(2/(d + 4)) * rrcov::CovOgk(data)$cov)
+    S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
+    return((4/(n * (d + 2)))^(2/(d + 4)) * S)
   }
 }
