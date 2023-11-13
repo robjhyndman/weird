@@ -11,6 +11,7 @@
   show_hdr = FALSE,
   show_points = FALSE,
   show_mode = FALSE,
+  show_lookout = FALSE,
   color = "#00659e",
   palette = hdr_palette,
   alpha = ifelse(fill, 1, min(1, 1000/NROW(object$x))),
@@ -31,6 +32,8 @@ specified by \code{prob} are shown as a ribbon below the density.}
 \item{show_points}{If \code{TRUE}, then individual points are plotted.}
 
 \item{show_mode}{If \code{TRUE}, then the mode of the distribution is shown.}
+
+\item{show_lookout}{If \code{TRUE}, then the observations with lookout probabilities less than 0.05 are shown in red.}
 
 \item{color}{Color used for mode and HDR contours. If \code{palette = hdr_palette},
 it is also used as the basis for HDR regions.}

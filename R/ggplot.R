@@ -20,6 +20,7 @@
 #' specified by `prob` are shown as a ribbon below the density.
 #' @param show_points If `TRUE`, then individual points are plotted.
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown.
+#' @param show_lookout If `TRUE`, then the observations with lookout probabilities less than 0.05 are shown in red.
 #' @param color Color used for mode and HDR contours. If `palette = hdr_palette`,
 #' it is also used as the basis for HDR regions.
 #' @param palette Color palette function to use for HDR filled regions
@@ -41,8 +42,8 @@
 #' @export
 
 autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
-    show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, color = "#00659e",
-    palette = hdr_palette, alpha = ifelse(fill, 1, min(1, 1000/NROW(object$x))),
+    show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_lookout = FALSE,
+    color = "#00659e", palette = hdr_palette, alpha = ifelse(fill, 1, min(1, 1000/NROW(object$x))),
     ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
@@ -92,8 +93,9 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
     if(show_points) {
       # Only show points outside largest HDR
       if(show_hdr) {
-        fi <- exp(-kde_scores(object$x, h = object$h))
-        threshold <- quantile(fi, prob = 1 - max(hdr$prob))
+        kscores <- calc_kde_scores(object$x, h = object$h,...)
+        fi <- exp(-kscores$scores)
+        threshold <- quantile(fi, prob = 1 - max(hdr$prob), type = 8)
         show_x <- tibble::tibble(x = object$x[fi < threshold])
       } else {
         show_x <- tibble::tibble(x = object$x)
@@ -103,6 +105,21 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         mapping = aes(x = x, y = -maxden/40),
         alpha = alpha
       )
+      if(show_lookout) {
+        if(!show_hdr) {
+          kscores <- calc_kde_scores(object$x, h = object$h,...)
+        }
+        fi_loo <- kscores$loo
+        loo_threshold <- stats::quantile(kscores$scores, prob = 0.95, type = 8)
+        gpd <- evd::fpot(kscores$scores, threshold = loo_threshold, std.err = FALSE)$estimate
+        lookout <- evd::pgpd(fi_loo, loc = loo_threshold,
+                             scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
+        lookout <- tibble(x = object$x[lookout < 0.05])
+        p <- p + ggplot2::geom_point(
+          data = lookout, mapping = aes(x = x, y = -maxden/40),
+          color = "#ff0000"
+        )
+      }
     }
     if(show_hdr) {
       prob <- unique(hdr$prob)
@@ -135,8 +152,9 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
     if(show_points) {
       # If fill, only show points outside largest HDR
       if(fill) {
-        fi <- exp(-kde_scores(object$x, H = object$H))
-        threshold <- quantile(fi, prob = 1 - max(hdr$prob))
+        kscores <- calc_kde_scores(object$x, H = object$H,...)
+        fi <- exp(-kscores$scores)
+        threshold <- quantile(fi, prob = 1 - max(hdr$prob), type = 8)
         show_x <- as.data.frame(x = object$x[fi < threshold,])
         colnames(show_x)[1:2] <- c("x","y")
       } else {
@@ -148,6 +166,22 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         mapping = aes(x = x, y = y),
         alpha = alpha
       )
+      if(show_lookout) {
+        if(!fill) {
+          kscores <- calc_kde_scores(object$x, H = object$H,...)
+        }
+        fi_loo <- kscores$loo
+        loo_threshold <- stats::quantile(kscores$scores, prob = 0.95, type = 8)
+        gpd <- evd::fpot(kscores$scores, threshold = loo_threshold, std.err = FALSE)$estimate
+        lookout <- evd::pgpd(fi_loo, loc = loo_threshold,
+                             scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
+        lookout <- as.data.frame(x = object$x[lookout < 0.05,])
+        colnames(lookout)[1:2] <- c("x","y")
+        p <- p + ggplot2::geom_point(
+          data = lookout, mapping = aes(x = x, y = y),
+          color = "#ff0000"
+        )
+      }
     }
     if(fill) {
       p <- p +

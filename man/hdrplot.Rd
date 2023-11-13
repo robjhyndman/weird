@@ -11,6 +11,7 @@ gg_hdrboxplot(
   prob = c(0.5, 0.99),
   color = "#00659e",
   scatterplot = FALSE,
+  show_lookout = TRUE,
   ...
 )
 }
@@ -28,6 +29,9 @@ by whitening this color.}
 
 \item{scatterplot}{A logical argument indicating if a regular HDR plot is required
 (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).}
+
+\item{show_lookout}{A logical argument indicating if the plot should highlight observations with "lookout"
+probabilities less than 0.05.}
 
 \item{...}{Other arguments passed to \code{\link[ks]{kde}}.}
 }

@@ -113,6 +113,8 @@ hdr_table <- function(y = NULL, density = NULL,
 #' (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).
 #' @param color The base color to use for the mode. Colors for the HDRs are generated
 #' by whitening this color.
+#' @param show_lookout A logical argument indicating if the plot should highlight observations with "lookout"
+#' probabilities less than 0.05.
 #' @param ... Other arguments passed to \code{\link[ks]{kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
 #' @author Rob J Hyndman
@@ -127,7 +129,7 @@ hdr_table <- function(y = NULL, density = NULL,
 #' @export
 
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
-                       color = "#00659e", scatterplot = FALSE, ...) {
+                       color = "#00659e", scatterplot = FALSE, show_lookout = TRUE, ...) {
   v2 <- dplyr::as_label(dplyr::enquo(var2))
   if(v2 == "NULL") {
     d <- 1L
@@ -140,32 +142,44 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   if(d == 2L & !scatterplot) {
     fit <- ks::kde(data[,1:2], H = kde_bandwidth(data[,1:2]), binned = NROW(data) > 2000, ...)
     return(autoplot(fit, prob = prob,
-      color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE) +
+      color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE, show_lookout = TRUE) +
         ggplot2::guides(fill = "none", color = "none"))
   }
   # Otherwise build the plot
   # Find colors for each region
-  fi <- exp(-kde_scores(as.matrix(data),...))
-  thresholds <- sort(quantile(fi, prob = 1 - prob))
+  kscores <- calc_kde_scores(as.matrix(data), ...)
+  fi <- exp(-kscores$scores)
+  if(show_lookout) {
+    fi_loo <- kscores$loo
+    threshold <- stats::quantile(kscores$scores, prob = 0.95, type = 8)
+    gpd <- evd::fpot(kscores$scores, threshold = threshold, std.err = FALSE)$estimate
+    lookout <- evd::pgpd(fi_loo, loc = threshold,
+                 scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
+    labels <- c(paste0(sort(prob)*100, "%"),"Outside","Lookout")
+  } else {
+    lookout <- 1
+    labels <- c(paste0(sort(prob)*100, "%"),"Outside")
+  }
+  thresholds <- sort(quantile(fi, prob = 1 - prob, type = 8))
   data <- data |>
     dplyr::mutate(
       density = fi,
-      group = cut(fi, breaks = c(0, thresholds, Inf), labels = FALSE),
-      group = factor(group,
-        levels = rev(sort(unique(group))),
-        labels = c(paste0(sort(prob)*100, "%"),"Outside")
-      )
+      lookout = lookout,
+      group = cut(fi * (lookout > 0.05), breaks = c(-1e-8, 1e-8, thresholds, Inf), labels = FALSE),
+      group = factor(group, levels = rev(sort(unique(group))), labels = labels)
     )
-  colors <- c(hdr_palette(color = color, prob = prob), "#000000")
+  colors <- c(hdr_palette(color = color, prob = prob), "#000000", "#ff0000")
   if(d == 1L) {
     p <- data |>
       ggplot()
     if(!scatterplot) {
       hdr <- hdr_table(data[[1]], prob = prob, ...)
       p <- p +
-        # Just show points outside largest HDR in black
+        # Just show points outside largest HDR in black and red
         ggplot2::geom_jitter(data = data |> filter(density < min(thresholds)),
-          mapping = aes(x = {{ var1 }}, y = 0), width = 0, height = 0.8) +
+          mapping = aes(x = {{ var1 }}, y = 0, col = group), width = 0, height = 0.8) +
+        ggplot2::scale_color_manual(values = c("#000000", "#ff0000")) +
+        ggplot2::guides(col = "none") +
         # add HDRs as shaded regions
         ggplot2::geom_rect(data = hdr,
           aes(xmin = lower, xmax = upper, ymin=-1, ymax=1, fill = paste0(prob*100,"%"))) +
