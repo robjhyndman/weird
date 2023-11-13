@@ -11,7 +11,7 @@ gg_hdrboxplot(
   prob = c(0.5, 0.99),
   color = "#00659e",
   scatterplot = FALSE,
-  show_lookout = TRUE,
+  show_lookout = FALSE,
   ...
 )
 }
