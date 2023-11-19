@@ -23,6 +23,7 @@ Imports:
   grDevices,
   interp,
   ks,
+  lookout,
   purrr (>= 0.2.4),
   robustbase,
   rstudioapi (>= 0.7),

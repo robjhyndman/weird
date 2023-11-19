@@ -133,16 +133,26 @@ density_on_grid <- function(y, fy, ngrid) {
 #' Robust bandwidth estimation for kernel density estimation
 #'
 #' @param data A numeric matrix or data frame.
+#' @param method Method to use for selecting the bandwidth.
+#' `robust_normal` uses a robust version of the normal reference rule.
+#' `lookout` uses the topological data analysis approach that is part of the lookout algorithm.
 #' @return A matrix of bandwidths (or scalar in the case of univariate data).
 #' @author Rob J Hyndman
 #' @export
-kde_bandwidth <- function(data) {
+
+kde_bandwidth <- function(data, method = c("robust_normal","lookout")) {
+  method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
-  if(d == 1L) {
-    return(1.06 * robustbase::s_IQR(data) * n^(-0.2))
+  if(method == "robust_normal") {
+    if(d == 1L) {
+      return(1.06 * robustbase::s_IQR(data) * n^(-0.2))
+    } else {
+      S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
+      return((4/(n * (d + 2)))^(2/(d + 4)) * S)
+    }
   } else {
-    S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
-    return((4/(n * (d + 2)))^(2/(d + 4)) * S)
+    return(lookout:::find_tda_bw(data, fast = (n > 1000)))
   }
 }
+
