@@ -7,7 +7,13 @@
 \usage{
 kde_scores(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...)
 
-lookout_prob(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...)
+lookout_prob(
+  y,
+  loo = FALSE,
+  h = kde_bandwidth(y, method = "lookout"),
+  H = kde_bandwidth(y, method = "lookout"),
+  ...
+)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data (up to 6 dimensions).}
