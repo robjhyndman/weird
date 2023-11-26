@@ -144,15 +144,23 @@ kde_bandwidth <- function(data, method = c("robust_normal","lookout")) {
   method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
-  if(method == "robust_normal") {
-    if(d == 1L) {
+  if(d == 1L) {
+    if(method == "robust_normal") {
       return(1.06 * robustbase::s_IQR(data) * n^(-0.2))
     } else {
-      S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
-      return((4/(n * (d + 2)))^(2/(d + 4)) * S)
+      stop("Not yet implemented")
     }
   } else {
-    return(lookout:::find_tda_bw(data, fast = (n > 1000)))
+    # Find robust covariance matrix of data
+    S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
+    if(method == "lookout") {
+      # Computer h* from normalized data
+      U <- chol(solve(S))
+      Ystar <- as_tibble(as.matrix(data) %*% t(U))
+      hstar <- lookout:::find_tda_bw(Ystar, fast = (n > 1000))
+      S <- hstar * S
+    }
+   return((4/(n * (d + 2)))^(2/(d + 4)) * S)
   }
 }
 
