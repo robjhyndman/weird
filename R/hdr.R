@@ -183,7 +183,10 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
         ggplot2::guides(fill = "none") +
         # add modes
         geom_line(
-          data = expand.grid(mode = unique(hdr$mode), ends = c(-1, 1)),
+          data = expand.grid(
+            mode = unique(hdr$mode[which.max(hdr$density)]),
+            ends = c(-1, 1)
+          ),
           mapping = aes(x = mode, y = ends, group = mode),
           color = color,
           size = 1
