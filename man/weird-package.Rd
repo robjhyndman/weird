@@ -6,7 +6,7 @@
 \alias{weird-package}
 \title{weird: Data sets for "That's Weird" by Rob J Hyndman}
 \description{
-All data sets required for the examples in the book "That's weird" by Rob J Hyndman \url{https://OTexts.com/weird/}. All packages required to run the examples are also loaded.
+"All data sets required for the examples in the book 'That's weird' by Rob J Hyndman \url{https://OTexts.com/weird/}. All packages required to run the examples are also loaded."
 }
 \author{
 \strong{Maintainer}: Rob Hyndman \email{Rob.Hyndman@monash.edu} (\href{https://orcid.org/0000-0002-2140-5352}{ORCID}) [copyright holder]

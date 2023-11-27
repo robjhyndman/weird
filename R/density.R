@@ -149,7 +149,7 @@ kde_bandwidth <- function(data, method = c("robust_normal","lookout")) {
     s <- robustbase::s_IQR(data)
     if(method == "lookout") {
       # Computer h* from normalized data
-      hstar <- lookout:::find_tda_bw(data / s, fast = (n > 1000))
+      hstar <- lookout::find_tda_bw(data / s, fast = (n > 1000))
       s <- hstar * s
     }
     return(1.06 * s * n^(-0.2))
@@ -159,8 +159,7 @@ kde_bandwidth <- function(data, method = c("robust_normal","lookout")) {
     if(method == "lookout") {
       # Computer h* from normalized data
       U <- chol(solve(S))
-      Ystar <- as_tibble(as.matrix(data) %*% t(U))
-      hstar <- lookout:::find_tda_bw(Ystar, fast = (n > 1000))
+      hstar <- lookout::find_tda_bw(as.matrix(data) %*% t(U), fast = (n > 1000))
       S <- hstar * S
     }
    return((4/(n * (d + 2)))^(2/(d + 4)) * S)

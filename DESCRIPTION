@@ -9,9 +9,9 @@ Authors@R:
            comment = c(ORCID = "0000-0002-2140-5352")),
     person(given = "RStudio",
            role = c("cph")))
-Description: All data sets required for the examples in the book
-    "That's weird" by Rob J Hyndman <https://OTexts.com/weird/>.  
-    All packages required to run the examples are also loaded.
+Description: "All data sets required for the examples in the book
+    'That's weird' by Rob J Hyndman <https://OTexts.com/weird/>.  
+    All packages required to run the examples are also loaded."
 Imports:
   aplpack,
   cli (>= 1.0.0),
@@ -27,6 +27,7 @@ Imports:
   purrr (>= 0.2.4),
   robustbase,
   rstudioapi (>= 0.7),
+  stray,
   tibble (>= 1.4.2)
 License: GPL-3
 Encoding: UTF-8
