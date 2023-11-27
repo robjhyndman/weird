@@ -40,13 +40,15 @@ kde_scores <- function(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y
 }
 
 #' @rdname kde_scores
+#' @param threshold_probability Probability threshold when computing the POT model for the KDE scores.
 #' @export
 
 lookout_prob <- function(y, loo = FALSE,
-    h = kde_bandwidth(y), H = kde_bandwidth(y), ...) {
+    h = kde_bandwidth(y), H = kde_bandwidth(y),
+    threshold_probability = 0.95, ...) {
   tmp <- calc_kde_scores(y, h, H, ...)
   loo_scores <- tmp$loo_scores
-  threshold <- stats::quantile(tmp$scores, prob = 0.90, type = 8)
+  threshold <- stats::quantile(tmp$scores, prob = threshold_probability, type = 8)
   gpd <- evd::fpot(tmp$scores, threshold = threshold, std.err = FALSE)$estimate
   evd::pgpd(loo_scores,
     loc = threshold,

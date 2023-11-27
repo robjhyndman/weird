@@ -7,7 +7,14 @@
 \usage{
 kde_scores(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...)
 
-lookout_prob(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...)
+lookout_prob(
+  y,
+  loo = FALSE,
+  h = kde_bandwidth(y),
+  H = kde_bandwidth(y),
+  threshold_probability = 0.95,
+  ...
+)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data (up to 6 dimensions).}
@@ -19,6 +26,8 @@ lookout_prob(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...)
 \item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
 
 \item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
+
+\item{threshold_probability}{Probability threshold when computing the POT model for the KDE scores.}
 }
 \value{
 Numerical vector containing kde scores.
