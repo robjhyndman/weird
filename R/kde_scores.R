@@ -43,8 +43,7 @@ kde_scores <- function(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y
 #' @export
 
 lookout_prob <- function(y, loo = FALSE,
-    h = kde_bandwidth(y, method = "lookout"),
-    H = kde_bandwidth(y, method = "lookout"), ...) {
+    h = kde_bandwidth(y), H = kde_bandwidth(y), ...) {
   tmp <- calc_kde_scores(y, h, H, ...)
   loo_scores <- tmp$loo_scores
   threshold <- stats::quantile(tmp$scores, prob = 0.90, type = 8)
