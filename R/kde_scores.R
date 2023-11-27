@@ -41,19 +41,30 @@ kde_scores <- function(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y
 
 #' @rdname kde_scores
 #' @param threshold_probability Probability threshold when computing the POT model for the KDE scores.
+#' If there are fewer than 25 observations, no POT model is computed and a warning is given.
+#' For between 25 and 100 observations, the threshold probability is set by default to
+#' \code{1 - 5/NROW(y)}. For more than 100 observations, the default is \code{0.95}.
 #' @export
 
 lookout_prob <- function(y, loo = FALSE,
     h = kde_bandwidth(y), H = kde_bandwidth(y),
-    threshold_probability = 0.95, ...) {
+    threshold_probability = min(0.95, 1 - 5/NROW(y)),
+    ...) {
   tmp <- calc_kde_scores(y, h, H, ...)
   loo_scores <- tmp$loo_scores
-  threshold <- stats::quantile(tmp$scores, prob = threshold_probability, type = 8)
-  gpd <- evd::fpot(tmp$scores, threshold = threshold, std.err = FALSE)$estimate
-  evd::pgpd(loo_scores,
-    loc = threshold,
-    scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
-  )
+  n <- NROW(y)
+  if(n < 25) {
+    warning("Insufficient data to compute lookout probabilities")
+    lookout_probabilities <- rep(1, n)
+  } else {
+    threshold <- stats::quantile(tmp$scores, prob = threshold_probability, type = 8)
+    gpd <- evd::fpot(tmp$scores, threshold = threshold, std.err = FALSE)$estimate
+    lookout_probabilities <- evd::pgpd(loo_scores,
+      loc = threshold,
+      scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
+    )
+  }
+  return(lookout_probabilities)
 }
 
 # Compute value of density at each observation using kde

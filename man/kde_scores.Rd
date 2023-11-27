@@ -12,7 +12,7 @@ lookout_prob(
   loo = FALSE,
   h = kde_bandwidth(y),
   H = kde_bandwidth(y),
-  threshold_probability = 0.95,
+  threshold_probability = min(0.95, 1 - 5/NROW(y)),
   ...
 )
 }
@@ -27,7 +27,10 @@ lookout_prob(
 
 \item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
 
-\item{threshold_probability}{Probability threshold when computing the POT model for the KDE scores.}
+\item{threshold_probability}{Probability threshold when computing the POT model for the KDE scores.
+If there are fewer than 25 observations, no POT model is computed and a warning is given.
+For between 25 and 100 observations, the threshold probability is set by default to
+\code{1 - 5/NROW(y)}. For more than 100 observations, the default is \code{0.95}.}
 }
 \value{
 Numerical vector containing kde scores.
