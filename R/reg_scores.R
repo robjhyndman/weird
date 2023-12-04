@@ -25,9 +25,9 @@ reg_scores <- function(object, loo = FALSE) {
   sigma2 <- sum(e^2, na.rm = TRUE)/object$df.residual
 
   if (loo) {
-    n <- length(e)
-    p <- length(object$coefficients)
-    sigma2 <- (sigma2 * (n-p-1) - e^2/(1-h)) / (n-p-2)
+    resdf <- object$df.residual
+    sigma2 <- (sigma2 * resdf - e^2/(1-h)) / (resdf - 1)
   }
-  return(log(2*pi)/2 + e^2/(1-h)/sigma2)
+  r2 <- e^2 / ((1-h) * sigma2)
+  return(0.5 * (log(2*pi) + r2))
 }
