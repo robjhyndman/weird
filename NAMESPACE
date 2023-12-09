@@ -2,6 +2,7 @@
 
 S3method(autoplot,kde)
 S3method(lookout,default)
+S3method(lookout,gam)
 S3method(lookout,lm)
 S3method(print,kde)
 S3method(print,weird_conflicts)

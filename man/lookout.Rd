@@ -4,6 +4,7 @@
 \alias{lookout}
 \alias{lookout.default}
 \alias{lookout.lm}
+\alias{lookout.gam}
 \title{Lookout probabilities}
 \usage{
 lookout(object, threshold_probability = 0.95, ...)
@@ -17,6 +18,8 @@ lookout(object, threshold_probability = 0.95, ...)
 )
 
 \method{lookout}{lm}(object, ...)
+
+\method{lookout}{gam}(object, ...)
 }
 \arguments{
 \item{object}{A model object or a numerical data set.}
@@ -49,6 +52,13 @@ of |>
   geom_point()
 shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
 fit_wine <- lm(log(price) ~ points, data = shiraz)
+shiraz |>
+  mutate(lookout_prob = lookout(fit_wine)) |>
+  ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
+  geom_jitter(height = 0, width = 0.2) +
+  scale_y_log10()
+shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
+fit_wine <- mgcv::gam(log(price) ~ s(points), data = shiraz)
 shiraz |>
   mutate(lookout_prob = lookout(fit_wine)) |>
   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +

@@ -75,3 +75,26 @@ lookout.lm <- function(object, ...) {
      scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
   return(pval)
 }
+
+#' @rdname lookout
+#' @examples
+#' shiraz <- wine_reviews |> filter(variety %in% c("Shiraz", "Syrah"))
+#' fit_wine <- mgcv::gam(log(price) ~ s(points), data = shiraz)
+#' shiraz |>
+#'   mutate(lookout_prob = lookout(fit_wine)) |>
+#'   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
+#'   geom_jitter(height = 0, width = 0.2) +
+#'   scale_y_log10()
+#' @export
+lookout.gam <- function(object, ...) {
+  fit_aug <- broom::augment(object) |>
+    dplyr::mutate(
+      .std.resid = .resid / .se.fit,
+      log_scores = -dnorm(.std.resid, log = TRUE),
+    )
+  threshold <- quantile(fit_aug$log_scores, prob = 0.95, type = 8)
+  gpd <- evd::fpot(fit_aug$log_scores, threshold = threshold)$estimate
+  pval <- evd::pgpd(fit_aug$log_scores, loc = threshold,
+                    scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
+  return(pval)
+}
