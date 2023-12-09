@@ -11,15 +11,15 @@ lookout(object, threshold_probability = 0.95, ...)
 
 \method{lookout}{default}(
   object,
-  threshold_probability = min(0.95, 1 - 5/NROW(y)),
-  h = kde_bandwidth(y),
-  H = kde_bandwidth(y),
+  threshold_probability = min(0.95, 1 - 5/NROW(object)),
+  h = kde_bandwidth(object),
+  H = kde_bandwidth(object),
   ...
 )
 
-\method{lookout}{lm}(object, ...)
+\method{lookout}{lm}(object, threshold_probability = 0.95, ...)
 
-\method{lookout}{gam}(object, ...)
+\method{lookout}{gam}(object, threshold_probability = 0.95, ...)
 }
 \arguments{
 \item{object}{A model object or a numerical data set.}
@@ -29,13 +29,20 @@ When \code{object} is a numerical data set, this value is only used if there are
 If there are fewer than 25 observations, no POT model is computed and a warning is given.
 For between 25 and 100 observations, the threshold probability is set to
 \code{1 - 5/NROW(y)}.}
+
+\item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
+
+\item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
+
+\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
 }
 \value{
 A numerical vector containing the lookout probabilities
 }
 \description{
 Compute leave-one-out log score probabilities using a
-Generalized Pareto distribution.
+Generalized Pareto distribution. These give the probability of each observation
+being an anomaly.
 }
 \details{
 If the first argument is a numerical vector or matrix, then

@@ -25,20 +25,16 @@ Compute kernel density estimate scores,
 defined as minus the log of the kernel density estimate at each observation.
 A Gaussian kernel is used, with default bandwidth given by a normal reference rule.
 Leave-one-out scores are optionally computed.
-Lookout probabilities are returned by \code{lookout_prob} computed using a
-Generalized Pareto Distribution estimated from the kde scores and applied
-to the leave-one-out kde scores. These give the probability of each observation
-being an anomaly.
 }
 \examples{
 # Univariate data
 y <- c(5, rnorm(49))
 kde_scores(y)
-lookout_prob(y)
+lookout(y)
 # Bivariate data
 y <- cbind(rnorm(50), c(5, rnorm(49)))
 kde_scores(y)
-lookout_prob(y)
+lookout(y)
 }
 \seealso{
 \code{\link{kde_bandwidth}}

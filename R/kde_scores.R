@@ -3,10 +3,6 @@
 #'  defined as minus the log of the kernel density estimate at each observation.
 #'  A Gaussian kernel is used, with default bandwidth given by a normal reference rule.
 #'  Leave-one-out scores are optionally computed.
-#'  Lookout probabilities are returned by \code{lookout_prob} computed using a
-#'  Generalized Pareto Distribution estimated from the kde scores and applied
-#'  to the leave-one-out kde scores. These give the probability of each observation
-#'  being an anomaly.
 #' @param y Numerical vector or matrix of data (up to 6 dimensions).
 #' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
 #' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
@@ -18,11 +14,11 @@
 #' # Univariate data
 #' y <- c(5, rnorm(49))
 #' kde_scores(y)
-#' lookout_prob(y)
+#' lookout(y)
 #' # Bivariate data
 #' y <- cbind(rnorm(50), c(5, rnorm(49)))
 #' kde_scores(y)
-#' lookout_prob(y)
+#' lookout(y)
 #' @export
 #' @rdname kde_scores
 #' @seealso
@@ -38,7 +34,6 @@ kde_scores <- function(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y
     return(tmp$scores)
   }
 }
-
 
 # Compute value of density at each observation using kde
 calc_kde_scores <- function(y, h = kde_bandwidth(y), H = kde_bandwidth(y), ...) {

@@ -1,6 +1,7 @@
 #' @title Lookout probabilities
 #' @description Compute leave-one-out log score probabilities using a
-#' Generalized Pareto distribution.
+#' Generalized Pareto distribution. These give the probability of each observation
+#' being an anomaly.
 #' @details If the first argument is a numerical vector or matrix, then
 #' a kernel density estimate is computed and the probabilities are computed
 #' from the leave-one-out kde scores. Otherwise the model is used to compute
@@ -19,6 +20,9 @@ lookout <- function(object, threshold_probability = 0.95, ...) {
 }
 
 #' @rdname lookout
+#' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
+#' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
+#' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
 #' @examples
 #' of <- oldfaithful |>
 #'   filter(duration < 7000, waiting < 7000) |>
@@ -28,12 +32,12 @@ lookout <- function(object, threshold_probability = 0.95, ...) {
 #'   geom_point()
 #' @export
 lookout.default <- function(object,
-    threshold_probability = min(0.95, 1 - 5/NROW(y)),
-    h = kde_bandwidth(y), H = kde_bandwidth(y),
+    threshold_probability = min(0.95, 1 - 5/NROW(object)),
+    h = kde_bandwidth(object), H = kde_bandwidth(object),
     ...) {
-  tmp <- calc_kde_scores(y, h, H, ...)
+  tmp <- calc_kde_scores(object, h, H, ...)
   loo_scores <- tmp$loo_scores
-  n <- NROW(y)
+  n <- NROW(object)
   if(n < 25) {
     warning("Insufficient data to compute lookout probabilities")
     lookout_probabilities <- rep(1, n)
@@ -62,7 +66,7 @@ lookout.default <- function(object,
 #'   geom_jitter(height = 0, width = 0.2) +
 #'   scale_y_log10()
 #' @export
-lookout.lm <- function(object, ...) {
+lookout.lm <- function(object, threshold_probability = 0.95, ...) {
   fit_aug <- broom::augment(object) |>
     dplyr::mutate(
       studentized_residuals = .resid / (.sigma * sqrt(1 - .hat)),
@@ -86,7 +90,7 @@ lookout.lm <- function(object, ...) {
 #'   geom_jitter(height = 0, width = 0.2) +
 #'   scale_y_log10()
 #' @export
-lookout.gam <- function(object, ...) {
+lookout.gam <- function(object, threshold_probability = 0.95, ...) {
   fit_aug <- broom::augment(object) |>
     dplyr::mutate(
       .std.resid = .resid / .se.fit,
@@ -98,3 +102,7 @@ lookout.gam <- function(object, ...) {
                     scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
   return(pval)
 }
+
+utils::globalVariables(c(".resid",".se.fit",".std.resid",".resid",".sigma",".hat",
+                         "studentized_residuals"))
+

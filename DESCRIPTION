@@ -39,5 +39,7 @@ RoxygenNote: 7.2.3
 Depends: 
     R (>= 4.1.0)
 Suggests: 
-    testthat (>= 3.0.0)
+    mgcv,
+    testthat (>= 3.0.0),
+    tidyr
 Config/testthat/edition: 3
