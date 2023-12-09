@@ -91,11 +91,13 @@ lookout.lm <- function(object, threshold_probability = 0.95, ...) {
 #'   scale_y_log10()
 #' @export
 lookout.gam <- function(object, threshold_probability = 0.95, ...) {
-  fit_aug <- broom::augment(object)
+  fit_aug <- broom::augment(object, type.predict = "response")
   if(object$family$family == "gaussian") {
-    log_scores <- -dnorm(fit_aug$.std.resid, log = TRUE)
+    std.resid <- c(scale(fit_aug$.resid / fit_aug$.se.fit))
+    log_scores <- -dnorm(std.resid, log = TRUE)
   } else if(object$family$family == "binomial") {
-    log_scores <- -dbinom(object$y, object$weights, prob = fit_aug$.fitted, log = TRUE)
+    log_scores <- -dbinom(x = object$y*object$prior.weights,
+      size = object$prior.weights, prob = fit_aug$.fitted, log = TRUE)
   } else if(object$family$family == "poisson") {
     log_scores <- -dpois(object$y, lambda = fit_aug$.fitted, log = TRUE)
   } else {
