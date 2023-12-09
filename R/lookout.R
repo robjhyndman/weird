@@ -91,14 +91,19 @@ lookout.lm <- function(object, threshold_probability = 0.95, ...) {
 #'   scale_y_log10()
 #' @export
 lookout.gam <- function(object, threshold_probability = 0.95, ...) {
-  fit_aug <- broom::augment(object) |>
-    dplyr::mutate(
-      .std.resid = .resid / .se.fit,
-      log_scores = -dnorm(.std.resid, log = TRUE),
-    )
-  threshold <- quantile(fit_aug$log_scores, prob = 0.95, type = 8)
-  gpd <- evd::fpot(fit_aug$log_scores, threshold = threshold)$estimate
-  pval <- evd::pgpd(fit_aug$log_scores, loc = threshold,
+  fit_aug <- broom::augment(object)
+  if(object$family$family == "gaussian") {
+    log_scores <- -dnorm(fit_aug$.std.resid, log = TRUE)
+  } else if(object$family$family == "binomial") {
+    log_scores <- -dbinom(object$y, object$weights, prob = fit_aug$.fitted, log = TRUE)
+  } else if(object$family$family == "poisson") {
+    log_scores <- -dpois(object$y, lambda = fit_aug$.fitted, log = TRUE)
+  } else {
+    stop("Unsupported family")
+  }
+  threshold <- quantile(log_scores, prob = 0.95, type = 8)
+  gpd <- evd::fpot(log_scores, threshold = threshold)$estimate
+  pval <- evd::pgpd(log_scores, loc = threshold,
                     scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
   return(pval)
 }
