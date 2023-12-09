@@ -19,6 +19,15 @@ Compute log scores and log-loo scores from a linear Gaussian regression model,
 defined as minus the log of the conditional density computed at each observation.
 Leave-one-out scores are optionally computed.
 }
+\examples{
+library(dplyr)
+library(tidyr)
+fit <- lm(log(price) ~ points, data = wine_reviews)
+wine_reviews |>
+  mutate(loo_scores = reg_scores(fit, loo = TRUE)) |>
+  ggplot(aes(x = points, y = loo_scores)) +
+  geom_jitter(width = 0.2, height = 0, alpha = 0.2)
+}
 \author{
 Rob J Hyndman
 }

@@ -2,19 +2,9 @@
 % Please edit documentation in R/kde_scores.R
 \name{kde_scores}
 \alias{kde_scores}
-\alias{lookout_prob}
 \title{Kernel density estimate scores and lookout probabilities}
 \usage{
 kde_scores(y, loo = FALSE, h = kde_bandwidth(y), H = kde_bandwidth(y), ...)
-
-lookout_prob(
-  y,
-  loo = FALSE,
-  h = kde_bandwidth(y),
-  H = kde_bandwidth(y),
-  threshold_probability = min(0.95, 1 - 5/NROW(y)),
-  ...
-)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data (up to 6 dimensions).}
@@ -26,11 +16,6 @@ lookout_prob(
 \item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
 
 \item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
-
-\item{threshold_probability}{Probability threshold when computing the POT model for the KDE scores.
-If there are fewer than 25 observations, no POT model is computed and a warning is given.
-For between 25 and 100 observations, the threshold probability is set by default to
-\code{1 - 5/NROW(y)}. For more than 100 observations, the default is \code{0.95}.}
 }
 \value{
 Numerical vector containing kde scores.
