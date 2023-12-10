@@ -4,10 +4,14 @@
 \alias{lookout}
 \title{Lookout probabilities}
 \usage{
-lookout(log_scores, log_loo_scores = log_scores, threshold_probability = 0.95)
+lookout(
+  density_scores,
+  log_loo_scores = density_scores,
+  threshold_probability = 0.95
+)
 }
 \arguments{
-\item{log_scores}{Numerical vector of log scores}
+\item{density_scores}{Numerical vector of log scores}
 
 \item{log_loo_scores}{Optional numerical vector of leave-one-out log scores}
 
@@ -29,26 +33,26 @@ to compute the anomaly probabilities.
 # Univariate data
 tibble(
   y = c(5, rnorm(49)),
-  logscores = log_scores(y),
-  loglooscores = log_scores(y, loo = TRUE),
-  lookout = lookout(logscores, loglooscores)
+  fscores = density_scores(y),
+  loo_fscores = density_scores(y, loo = TRUE),
+  lookout = lookout(fscores, loo_fscores)
 )
 # Bivariate data
 tibble(
   x = rnorm(50),
   y = c(5, rnorm(49)),
-  logscores = log_scores(y),
-  loglooscores = log_scores(y, loo = TRUE),
-  lookout = lookout(logscores, loglooscores)
+  fscores = density_scores(y),
+  loo_fscores = density_scores(y, loo = TRUE),
+  lookout = lookout(fscores, loo_fscores)
 )
 # Using a regression model
 shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
 fit_wine <- lm(log(price) ~ points, data = shiraz)
 shiraz |>
   mutate(
-    logscore = log_scores(fit_wine),
-    loglooscore = log_scores(fit_wine, loo = TRUE),
-    lookout_prob = lookout(logscore, loglooscore)
+    fscore = density_scores(fit_wine),
+    loo_fscore = density_scores(fit_wine, loo = TRUE),
+    lookout_prob = lookout(fscore, loo_fscore)
   ) |>
   arrange(lookout_prob)
 }
