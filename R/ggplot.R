@@ -109,7 +109,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         if(!show_hdr) {
           kscores <- calc_kde_scores(object$x, h = object$h,...)
         }
-        lookout_highlight <- lookout(kscores$scores, kscores$loo) < 0.05
+        lookout_highlight <- lookout(density_scores = kscores$scores, loo_scores = kscores$loo) < 0.05
         lookout <- tibble(x = object$x[lookout_highlight])
         p <- p + ggplot2::geom_point(
           data = lookout, mapping = aes(x = x, y = -maxden/40),
@@ -166,7 +166,7 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         if(!fill) {
           kscores <- calc_kde_scores(object$x, H = object$H,...)
         }
-        lookout_highlight <- lookout(kscores$scores, kscores$loo) < 0.05
+        lookout_highlight <- lookout(density_scores = kscores$scores, loo_scores = kscores$loo) < 0.05
         lookout <- as.data.frame(x = object$x[lookout_highlight,])
         colnames(lookout)[1:2] <- c("x","y")
         p <- p + ggplot2::geom_point(

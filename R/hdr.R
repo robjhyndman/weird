@@ -150,7 +150,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   kscores <- calc_kde_scores(as.matrix(data), ...)
   fi <- exp(-kscores$scores)
   if(show_lookout) {
-    lookout_highlight <- lookout(kscores$scores, kscores$loo) < 0.05
+    lookout_highlight <- lookout(density_scores = kscores$scores, loo_scores = kscores$loo) < 0.05
   } else {
     lookout_highlight <- rep(FALSE, length(fi))
   }
