@@ -2,39 +2,16 @@
 % Please edit documentation in R/lookout.R
 \name{lookout}
 \alias{lookout}
-\alias{lookout.default}
-\alias{lookout.lm}
-\alias{lookout.gam}
 \title{Lookout probabilities}
 \usage{
-lookout(object, threshold_probability = 0.95, ...)
-
-\method{lookout}{default}(
-  object,
-  threshold_probability = min(0.95, 1 - 5/NROW(object)),
-  h = kde_bandwidth(object),
-  H = kde_bandwidth(object),
-  ...
-)
-
-\method{lookout}{lm}(object, threshold_probability = 0.95, ...)
-
-\method{lookout}{gam}(object, threshold_probability = 0.95, ...)
+lookout(log_scores, log_loo_scores = log_scores, threshold_probability = 0.95)
 }
 \arguments{
-\item{object}{A model object or a numerical data set.}
+\item{log_scores}{Numerical vector of log scores}
 
-\item{threshold_probability}{Probability threshold when computing the POT model for the log scores.
-When \code{object} is a numerical data set, this value is only used if there are more than 100 observations.
-If there are fewer than 25 observations, no POT model is computed and a warning is given.
-For between 25 and 100 observations, the threshold probability is set to
-\code{1 - 5/NROW(y)}.}
+\item{log_loo_scores}{Optional numerical vector of leave-one-out log scores}
 
-\item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
-
-\item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
-
-\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
+\item{threshold_probability}{Probability threshold when computing the POT model for the log scores.}
 }
 \value{
 A numerical vector containing the lookout probabilities
@@ -45,30 +22,41 @@ Generalized Pareto distribution. These give the probability of each observation
 being an anomaly.
 }
 \details{
-If the first argument is a numerical vector or matrix, then
-a kernel density estimate is computed and the probabilities are computed
-from the leave-one-out kde scores. Otherwise the model is used to compute
-residuals, and the probabilities are computed from the leave-one-out residuals.
+If the log_loo_scores are not available, the log scores are used
+to compute the anomaly probabilities.
 }
 \examples{
-of <- oldfaithful |>
-  filter(duration < 7000, waiting < 7000) |>
-  mutate(lookout_prob = lookout(cbind(duration, waiting)))
-of |>
-  ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
-  geom_point()
+# Univariate data
+tibble(
+  y = c(5, rnorm(49)),
+  logscores = log_scores(y),
+  loglooscores = log_scores(y, loo = TRUE),
+  lookout = lookout(logscores, loglooscores)
+)
+# Bivariate data
+tibble(
+  x = rnorm(50),
+  y = c(5, rnorm(49)),
+  logscores = log_scores(y),
+  loglooscores = log_scores(y, loo = TRUE),
+  lookout = lookout(logscores, loglooscores)
+)
+# Using a regression model
 shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
 fit_wine <- lm(log(price) ~ points, data = shiraz)
 shiraz |>
-  mutate(lookout_prob = lookout(fit_wine)) |>
-  ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
-  geom_jitter(height = 0, width = 0.2) +
-  scale_y_log10()
-shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
-fit_wine <- mgcv::gam(log(price) ~ s(points), data = shiraz)
-shiraz |>
-  mutate(lookout_prob = lookout(fit_wine)) |>
-  ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
-  geom_jitter(height = 0, width = 0.2) +
-  scale_y_log10()
+  mutate(
+    logscore = log_scores(fit_wine),
+    loglooscore = log_scores(fit_wine, loo = TRUE),
+    lookout_prob = lookout(logscore, loglooscore)
+  ) |>
+  arrange(lookout_prob)
+}
+\references{
+Sevvandi Kandanaarachchi & Rob J Hyndman (2022) "Leave-one-out
+kernel density estimates for outlier detection", \emph{J Computational & Graphical
+Statistics}, \strong{31}(2), 586-599. \url{http://robjhyndman.com/publications/lookout}
+}
+\author{
+Rob J Hyndman
 }
