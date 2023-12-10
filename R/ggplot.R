@@ -109,12 +109,8 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         if(!show_hdr) {
           kscores <- calc_kde_scores(object$x, h = object$h,...)
         }
-        fi_loo <- kscores$loo
-        loo_threshold <- stats::quantile(kscores$scores, prob = 0.95, type = 8)
-        gpd <- evd::fpot(kscores$scores, threshold = loo_threshold, std.err = FALSE)$estimate
-        lookout <- evd::pgpd(fi_loo, loc = loo_threshold,
-                             scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
-        lookout <- tibble(x = object$x[lookout < 0.05])
+        lookout_highlight <- lookout(kscores$scores, kscores$loo) < 0.05
+        lookout <- tibble(x = object$x[lookout_highlight])
         p <- p + ggplot2::geom_point(
           data = lookout, mapping = aes(x = x, y = -maxden/40),
           color = "#ff0000"
@@ -170,12 +166,8 @@ autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,
         if(!fill) {
           kscores <- calc_kde_scores(object$x, H = object$H,...)
         }
-        fi_loo <- kscores$loo
-        loo_threshold <- stats::quantile(kscores$scores, prob = 0.95, type = 8)
-        gpd <- evd::fpot(kscores$scores, threshold = loo_threshold, std.err = FALSE)$estimate
-        lookout <- evd::pgpd(fi_loo, loc = loo_threshold,
-                             scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE)
-        lookout <- as.data.frame(x = object$x[lookout < 0.05,])
+        lookout_highlight <- lookout(kscores$scores, kscores$loo) < 0.05
+        lookout <- as.data.frame(x = object$x[lookout_highlight,])
         colnames(lookout)[1:2] <- c("x","y")
         p <- p + ggplot2::geom_point(
           data = lookout, mapping = aes(x = x, y = y),

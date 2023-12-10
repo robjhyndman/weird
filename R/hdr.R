@@ -150,13 +150,9 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   kscores <- calc_kde_scores(as.matrix(data), ...)
   fi <- exp(-kscores$scores)
   if(show_lookout) {
-    fi_loo <- kscores$loo
-    threshold <- stats::quantile(kscores$scores, prob = 0.95, type = 8)
-    gpd <- evd::fpot(kscores$scores, threshold = threshold, std.err = FALSE)$estimate
-    lookout <- evd::pgpd(fi_loo, loc = threshold,
-                 scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE) < 0.05
+    lookout_highlight <- lookout(kscores$scores, kscores$loo) < 0.05
   } else {
-    lookout <- rep(FALSE, length(fi))
+    lookout_highlight <- rep(FALSE, length(fi))
   }
   thresholds <- sort(quantile(fi, prob = 1 - prob, type = 8))
   data <- data |>
@@ -174,7 +170,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       p <- p +
         # Just show points outside largest HDR (but not lookout) in black
         ggplot2::geom_jitter(
-          data = data |> filter(density < min(thresholds), !lookout),
+          data = data |> filter(density < min(thresholds), !lookout_highlight),
           mapping = aes(x = {{ var1 }}, y = 0), width = 0, height = 0.8) +
         # add HDRs as shaded regions
         ggplot2::geom_rect(data = hdr,
@@ -194,7 +190,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     } else {
       p <- p +
         # Show all points in colors
-        ggplot2::geom_jitter(data = data |> filter(!lookout),
+        ggplot2::geom_jitter(data = data |> filter(!lookout_highlight),
           mapping = aes(x = {{ var1 }}, y = 0, col = group),
           width = 0, height = 0.8) +
         ggplot2::scale_color_manual(values = colors[-1]) +
@@ -203,7 +199,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     if(show_lookout) {
       p <- p +
         # add lookout points
-        ggplot2::geom_jitter(data = data |> filter(lookout),
+        ggplot2::geom_jitter(data = data |> filter(lookout_highlight),
           mapping = aes(x = {{ var1 }}, y = 0),
           width = 0, height = 0.8, color = "red")
     }
@@ -214,7 +210,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     # Show all points in colors
     mode <- data |> dplyr::filter(density == max(density))
     p <- ggplot() +
-      ggplot2::geom_point(data = data |> filter(!lookout),
+      ggplot2::geom_point(data = data |> filter(!lookout_highlight),
         mapping = aes(x = {{ var1 }}, y = {{ var2 }}, col = group)) +
       ggplot2::scale_color_manual(values = colors[-1]) +
       ggplot2::geom_point(data = mode,
@@ -224,7 +220,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     if(show_lookout) {
       p <- p +
         # add lookout points
-        ggplot2::geom_point(data = data |> filter(lookout),
+        ggplot2::geom_point(data = data |> filter(lookout_highlight),
           mapping = aes(x = {{ var1 }}, y = {{ var2 }}),
           color = "red")
     }
