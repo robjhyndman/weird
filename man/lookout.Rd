@@ -5,15 +5,18 @@
 \title{Lookout probabilities}
 \usage{
 lookout(
-  density_scores,
-  log_loo_scores = density_scores,
+  object = NULL,
+  density_scores = NULL,
+  loo_scores = density_scores,
   threshold_probability = 0.95
 )
 }
 \arguments{
+\item{object}{A model object or a numerical data set.}
+
 \item{density_scores}{Numerical vector of log scores}
 
-\item{log_loo_scores}{Optional numerical vector of leave-one-out log scores}
+\item{loo_scores}{Optional numerical vector of leave-one-out log scores}
 
 \item{threshold_probability}{Probability threshold when computing the POT model for the log scores.}
 }
@@ -26,34 +29,32 @@ Generalized Pareto distribution. These give the probability of each observation
 being an anomaly.
 }
 \details{
-If the log_loo_scores are not available, the log scores are used
-to compute the anomaly probabilities.
+This function can work with several object types.
+If \code{object} is not \code{NULL}, then the object is passed to \code{\link{density_scores}}
+to compute density scores (and possibly LOO density scores). Otherwise,
+the density scores are taken from the \code{density_scores} argument, and the
+LOO density scores are taken from the \code{loo_scores} argument. Then the Generalized
+Pareto distribution is fitted to the scores, to obtain the probability of each observation.
 }
 \examples{
 # Univariate data
 tibble(
   y = c(5, rnorm(49)),
-  fscores = density_scores(y),
-  loo_fscores = density_scores(y, loo = TRUE),
-  lookout = lookout(fscores, loo_fscores)
+  lookout = lookout(y)
 )
-# Bivariate data
+# Bivariate data with score calculation done outside the function
 tibble(
   x = rnorm(50),
   y = c(5, rnorm(49)),
   fscores = density_scores(y),
   loo_fscores = density_scores(y, loo = TRUE),
-  lookout = lookout(fscores, loo_fscores)
+  lookout = lookout(density_scores = fscores, loo_scores = loo_fscores)
 )
 # Using a regression model
 shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
 fit_wine <- lm(log(price) ~ points, data = shiraz)
 shiraz |>
-  mutate(
-    fscore = density_scores(fit_wine),
-    loo_fscore = density_scores(fit_wine, loo = TRUE),
-    lookout_prob = lookout(fscore, loo_fscore)
-  ) |>
+  mutate(lookout_prob = lookout(fit_wine)) |>
   arrange(lookout_prob)
 }
 \references{
