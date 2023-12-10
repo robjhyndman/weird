@@ -42,7 +42,9 @@
 
 #' @export
 
-lookout <- function(object = NULL, density_scores = NULL, loo_scores = density_scores, threshold_probability = 0.95) {
+lookout <- function(object = NULL,
+    density_scores = NULL, loo_scores = density_scores,
+    threshold_probability = 0.95) {
   if(!is.null(object)) {
     if(!is.null(density_scores) | !is.null(loo_scores)) {
       warning("Ignoring density_scores and loo_scores arguments and using object.")
@@ -51,8 +53,12 @@ lookout <- function(object = NULL, density_scores = NULL, loo_scores = density_s
     loo_scores <- density_scores(object, loo = TRUE) |> suppressWarnings()
   }
   threshold <- stats::quantile(density_scores, prob = threshold_probability, type = 8)
+  if(sum(density_scores > threshold) == 0L) {
+    warning("No scores above threshold.")
+    return(rep(1, length(density_scores)))
+  }
   gpd <- evd::fpot(density_scores, threshold = threshold, std.err = FALSE)$estimate
-  lookout_probabilities <- evd::pgpd(
+  evd::pgpd(
     loo_scores, loc = threshold,
     scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
   )
