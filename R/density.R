@@ -140,14 +140,16 @@ density_on_grid <- function(y, fy, ngrid) {
 #' @author Rob J Hyndman
 #' @export
 
-kde_bandwidth <- function(data, method = c("robust_normal", "lookout")) {
+kde_bandwidth <- function(data,
+      method = c("robust_normal", "lookout"),
+      multiplier = 2) {
   method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
   if(d == 1L) {
     # Find robust scale of data
     if(method == "robust_normal") {
-      return(1.06 * robustbase::s_IQR(data) * n^(-0.2))
+      return(multiplier * 1.06 * robustbase::s_IQR(data) * n^(-0.2))
     } else {
       return(lookout::find_tda_bw(data, fast = (n > 1000)))
     }
@@ -155,7 +157,7 @@ kde_bandwidth <- function(data, method = c("robust_normal", "lookout")) {
     # Find robust covariance matrix of data
     S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
     if(method == "robust_normal") {
-      return((4/(n * (d + 2)))^(2/(d + 4)) * S)
+      return(multiplier * (4/(n * (d + 2)))^(2/(d + 4)) * S)
     } else {
       # Computer h* from normalized data
       U <- chol(solve(S))
