@@ -33,7 +33,7 @@ density_scores <- function(object, loo = FALSE, ...) {
 #'   mutate(
 #'     fscores = density_scores(cbind(duration, waiting)),
 #'     loo_fscores = density_scores(cbind(duration, waiting), loo = TRUE),
-#'     lookout_prob = lookout(fscores, loo_fscores)
+#'     lookout_prob = lookout(density_scores = fscores, loo_scores = loo_fscores)
 #'   )
 #' of |>
 #'   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
@@ -62,11 +62,8 @@ density_scores.default <- function(object, loo = FALSE,
 #' of |>
 #'   mutate(
 #'     fscores = density_scores(f_kde),
-#'     loo_fscores = density_scores(f_kde, loo = TRUE),
-#'     lookout_prob = lookout(fscores, loo_fscores)
-#'   ) |>
-#'   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
-#'   geom_point()
+#'     loo_fscores = density_scores(f_kde, loo = TRUE)
+#'   )
 #' @seealso
 #'  \code{\link{kde_bandwidth}}
 #'  \code{\link[ks]{kde}}
@@ -74,27 +71,14 @@ density_scores.default <- function(object, loo = FALSE,
 density_scores.kde <- function(object, loo = FALSE, ...) {
   n <- NROW(object$x)
   d <- NCOL(object$x)
-  # Estimate density at each observation using interpolation
-  if(d == 1L) {
-    if(loo) {
-      K0 = 1/(object$h * sqrt(2 * pi))
-    }
-    fi <- approx(object$eval.points, object$estimate, object$x)$y
+  # kde on a grid, but we need it at observations, so we will re-estimate
+  # interpolation is probably quicker, but less accurate and
+  # this works ok.
+  output <- calc_kde_scores(object$x, object$h, object$H, ...)
+  if (loo) {
+    return(output$loo_scores)
   } else {
-    if(loo) {
-      K0 = det(object$H)^(-1/2) * (2*pi)^(-d/2)
-    }
-    xy <- expand.grid(object$eval.points[[1]], object$eval.points[[2]])
-    fi <- interp::interp(
-      x = xy[,1], y = xy[,2], z = object$estimate,
-      xo = object$x[[1]], yo = object$x[[2]],
-      output = "points"
-    )$z
-  }
-  if(loo) {
-    return(-log(pmax(0, (n * fi - K0) / (n - 1))))
-  } else {
-    return(-log(pmax(0, fi)))
+    return(output$scores)
   }
 }
 
@@ -106,7 +90,7 @@ density_scores.kde <- function(object, loo = FALSE, ...) {
 #'   mutate(
 #'     fscore = density_scores(fit_wine),
 #'     loo_fscore = density_scores(fit_wine, loo = TRUE),
-#'     lookout_prob = lookout(fscore, loo_fscore)
+#'     lookout_prob = lookout(density_scores = fscore, loo_scores = loo_fscore)
 #'   ) |>
 #'   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
 #'   geom_jitter(height = 0, width = 0.2) +
@@ -132,7 +116,7 @@ density_scores.lm <- function(object, loo = FALSE, ...) {
 #' shiraz |>
 #'   mutate(
 #'     fscore = density_scores(fit_wine),
-#'     lookout_prob = lookout(fscore)
+#'     lookout_prob = lookout(density_scores = fscore)
 #'   ) |>
 #'   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
 #'   geom_jitter(height = 0, width = 0.2) +

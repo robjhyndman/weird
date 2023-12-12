@@ -62,7 +62,7 @@ of <- oldfaithful |>
   mutate(
     fscores = density_scores(cbind(duration, waiting)),
     loo_fscores = density_scores(cbind(duration, waiting), loo = TRUE),
-    lookout_prob = lookout(fscores, loo_fscores)
+    lookout_prob = lookout(density_scores = fscores, loo_scores = loo_fscores)
   )
 of |>
   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
@@ -73,18 +73,15 @@ f_kde <- kde(of[,2:3], H = kde_bandwidth(of[,2:3]))
 of |>
   mutate(
     fscores = density_scores(f_kde),
-    loo_fscores = density_scores(f_kde, loo = TRUE),
-    lookout_prob = lookout(fscores, loo_fscores)
-  ) |>
-  ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
-  geom_point()
+    loo_fscores = density_scores(f_kde, loo = TRUE)
+  )
 shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
 fit_wine <- lm(log(price) ~ points, data = shiraz)
 shiraz |>
   mutate(
     fscore = density_scores(fit_wine),
     loo_fscore = density_scores(fit_wine, loo = TRUE),
-    lookout_prob = lookout(fscore, loo_fscore)
+    lookout_prob = lookout(density_scores = fscore, loo_scores = loo_fscore)
   ) |>
   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
   geom_jitter(height = 0, width = 0.2) +
@@ -94,7 +91,7 @@ fit_wine <- mgcv::gam(log(price) ~ s(points), data = shiraz)
 shiraz |>
   mutate(
     fscore = density_scores(fit_wine),
-    lookout_prob = lookout(fscore)
+    lookout_prob = lookout(density_scores = fscore)
   ) |>
   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
   geom_jitter(height = 0, width = 0.2) +
