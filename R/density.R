@@ -136,32 +136,31 @@ density_on_grid <- function(y, fy, ngrid) {
 #' @param method Method to use for selecting the bandwidth.
 #' `robust_normal` uses a robust version of the normal reference rule.
 #' `lookout` uses the topological data analysis approach that is part of the lookout algorithm.
-#' @param multiplier A multiplier to apply to the bandwidth.
 #' @return A matrix of bandwidths (or scalar in the case of univariate data).
 #' @author Rob J Hyndman
 #' @export
 
-kde_bandwidth <- function(data, method = c("robust_normal", "lookout"), multiplier = 1) {
+kde_bandwidth <- function(data, method = c("robust_normal", "lookout")) {
   method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
   if(d == 1L) {
     # Find robust scale of data
     if(method == "robust_normal") {
-      return(multiplier * 1.06 * robustbase::s_IQR(data) * n^(-0.2))
+      return(1.06 * robustbase::s_IQR(data) * n^(-0.2))
     } else {
-      return(multiplier * lookout::find_tda_bw(data, fast = (n > 1000)))
+      return(lookout::find_tda_bw(data, fast = (n > 1000)))
     }
   } else {
     # Find robust covariance matrix of data
     S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
     if(method == "robust_normal") {
-      return(multiplier * (4/(n * (d + 2)))^(2/(d + 4)) * S)
+      return((4/(n * (d + 2)))^(2/(d + 4)) * S)
     } else {
       # Computer h* from normalized data
       U <- chol(solve(S))
       hstar <- lookout::find_tda_bw(as.matrix(data) %*% t(U), fast = (n > 1000))
-      return(multiplier * hstar * S)
+      return(hstar * S)
     }
   }
 }
