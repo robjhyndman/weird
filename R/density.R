@@ -136,6 +136,7 @@ density_on_grid <- function(y, fy, ngrid) {
 #' @param method Method to use for selecting the bandwidth.
 #' `robust_normal` uses a robust version of the normal reference rule.
 #' `lookout` uses the topological data analysis approach that is part of the lookout algorithm.
+#' @param multiplier Multiplier to use for each dimension of the bandwidth. Default is 2.
 #' @return A matrix of bandwidths (or scalar in the case of univariate data).
 #' @author Rob J Hyndman
 #' @export
@@ -157,7 +158,7 @@ kde_bandwidth <- function(data,
     # Find robust covariance matrix of data
     S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
     if(method == "robust_normal") {
-      return(multiplier * (4/(n * (d + 2)))^(2/(d + 4)) * S)
+      return(multiplier^2 * (4/(n * (d + 2)))^(2/(d + 4)) * S)
     } else {
       # Computer h* from normalized data
       U <- chol(solve(S))

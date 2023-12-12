@@ -4,7 +4,7 @@
 \alias{kde_bandwidth}
 \title{Robust bandwidth estimation for kernel density estimation}
 \usage{
-kde_bandwidth(data, method = c("robust_normal", "lookout"))
+kde_bandwidth(data, method = c("robust_normal", "lookout"), multiplier = 2)
 }
 \arguments{
 \item{data}{A numeric matrix or data frame.}
