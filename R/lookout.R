@@ -42,25 +42,32 @@
 
 #' @export
 
-lookout <- function(object = NULL,
+lookout <- function(
+    object = NULL,
     density_scores = NULL, loo_scores = density_scores,
     threshold_probability = 0.95) {
-  if(!is.null(object)) {
-    if(!is.null(density_scores) | !is.null(loo_scores)) {
+  if (!is.null(object)) {
+    if (!is.null(density_scores) | !is.null(loo_scores)) {
       warning("Ignoring density_scores and loo_scores arguments and using object.")
     }
-    density_scores <- density_scores(object)
-    loo_scores <- density_scores(object, loo = TRUE) |> suppressWarnings()
+    if (is.data.frame(object) | inherits(object, "matrix") | inherits(object, "numeric")) {
+      tmp <- calc_kde_scores(as.matrix(object))
+      density_scores <- tmp$scores
+      loo_scores <- tmp$loo_scores
+    } else {
+      density_scores <- density_scores(object)
+      loo_scores <- density_scores(object, loo = TRUE) |> suppressWarnings()
+    }
   }
   threshold <- stats::quantile(density_scores, prob = threshold_probability, type = 8)
-  if(sum(density_scores > threshold) == 0L) {
+  if (sum(density_scores > threshold) == 0L) {
     warning("No scores above threshold.")
     return(rep(1, length(density_scores)))
   }
   gpd <- evd::fpot(density_scores, threshold = threshold, std.err = FALSE)$estimate
   evd::pgpd(
-    loo_scores, loc = threshold,
+    loo_scores,
+    loc = threshold,
     scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
   )
 }
-

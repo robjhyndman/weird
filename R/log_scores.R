@@ -42,8 +42,10 @@ density_scores <- function(object, loo = FALSE, ...) {
 #'  \code{\link{kde_bandwidth}}
 #'  \code{\link[ks]{kde}}
 #' @export
-density_scores.default <- function(object, loo = FALSE,
-   h = kde_bandwidth(object), H = kde_bandwidth(object), ...) {
+density_scores.default <- function(
+    object, loo = FALSE,
+    h = kde_bandwidth(object, method = "lookout"),
+    H = kde_bandwidth(object, method = "lookout"), ...) {
   object <- as.matrix(object)
   tmp <- calc_kde_scores(object, h, H, ...)
   if (loo) {
@@ -58,7 +60,7 @@ density_scores.default <- function(object, loo = FALSE,
 #' @examples
 #' of <- oldfaithful |>
 #'   filter(duration < 7000, waiting < 7000)
-#' f_kde <- kde(of[,2:3], H = kde_bandwidth(of[,2:3]))
+#' f_kde <- kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
 #' of |>
 #'   mutate(
 #'     fscores = density_scores(f_kde),
@@ -99,13 +101,13 @@ density_scores.kde <- function(object, loo = FALSE, ...) {
 density_scores.lm <- function(object, loo = FALSE, ...) {
   e <- stats::residuals(object, type = "response")
   h <- stats::hatvalues(object)
-  sigma2 <- sum(e^2, na.rm = TRUE)/object$df.residual
+  sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
   if (loo) {
     resdf <- object$df.residual
-    sigma2 <- (sigma2 * resdf - e^2/(1-h)) / (resdf - 1)
+    sigma2 <- (sigma2 * resdf - e^2 / (1 - h)) / (resdf - 1)
   }
-  r2 <- e^2 / ((1-h) * sigma2)
-  return(0.5 * (log(2*pi) + r2))
+  r2 <- e^2 / ((1 - h) * sigma2)
+  return(0.5 * (log(2 * pi) + r2))
 }
 
 
@@ -124,17 +126,19 @@ density_scores.lm <- function(object, loo = FALSE, ...) {
 #' @importFrom stats approx dbinom density dnorm dpois na.omit
 #' @export
 density_scores.gam <- function(object, loo = FALSE, ...) {
-  if(loo) {
+  if (loo) {
     warning("Leave-one-out log scores unavailable for GAM models. Returning log scores.")
   }
   fit_aug <- broom::augment(object, type.predict = "response")
-  if(object$family$family == "gaussian") {
+  if (object$family$family == "gaussian") {
     std.resid <- c(scale(fit_aug$.resid / fit_aug$.se.fit))
     density_scores <- -dnorm(std.resid, log = TRUE)
-  } else if(object$family$family == "binomial") {
-    density_scores <- -dbinom(x = object$y*object$prior.weights,
-                          size = object$prior.weights, prob = fit_aug$.fitted, log = TRUE)
-  } else if(object$family$family == "poisson") {
+  } else if (object$family$family == "binomial") {
+    density_scores <- -dbinom(
+      x = object$y * object$prior.weights,
+      size = object$prior.weights, prob = fit_aug$.fitted, log = TRUE
+    )
+  } else if (object$family$family == "poisson") {
     density_scores <- -dpois(object$y, lambda = fit_aug$.fitted, log = TRUE)
   } else {
     stop("Unsupported family")
@@ -143,26 +147,34 @@ density_scores.gam <- function(object, loo = FALSE, ...) {
 }
 
 # Compute value of density at each observation using kde
-calc_kde_scores <- function(y, h = kde_bandwidth(y), H = kde_bandwidth(y), ...) {
+calc_kde_scores <- function(
+    y,
+    h = kde_bandwidth(y, method = "lookout"),
+    H = kde_bandwidth(y, method = "lookout"), ...) {
   n <- NROW(y)
   d <- NCOL(y)
   # Estimate density at each observation
-  if(d == 1L) {
-    gridsize = 10001
-    K0 = 1/(h * sqrt(2 * pi))
-    fi <- ks::kde(y, h = h, gridsize = gridsize, binned = n > 2000,
-                  eval.points = y, compute.cont = FALSE, ...)$estimate
+  if (d == 1L) {
+    gridsize <- 10001
+    K0 <- 1 / (h * sqrt(2 * pi))
+    fi <- ks::kde(y,
+      h = h, gridsize = gridsize, binned = n > 2000,
+      eval.points = y, compute.cont = FALSE, ...
+    )$estimate
   } else {
-    gridsize = 101
-    K0 = det(H)^(-1/2) * (2*pi)^(-d/2)
-    fi <- ks::kde(y, H = H, gridsize = gridsize, binned = n > 2000,
-                  eval.points = y, compute.cont = FALSE, ...)$estimate
+    gridsize <- 101
+    K0 <- det(H)^(-1 / 2) * (2 * pi)^(-d / 2)
+    fi <- ks::kde(y,
+      H = H, gridsize = gridsize, binned = n > 2000,
+      eval.points = y, compute.cont = FALSE, ...
+    )$estimate
   }
   loo_scores <- -log(pmax(0, (n * fi - K0) / (n - 1)))
   scores <- -log(pmax(0, fi))
   return(list(scores = scores, loo_scores = loo_scores))
 }
 
-utils::globalVariables(c(".resid",".se.fit",".std.resid",".resid",".sigma",".hat",
-                         "studentized_residuals"))
-
+utils::globalVariables(c(
+  ".resid", ".se.fit", ".std.resid", ".resid", ".sigma", ".hat",
+  "studentized_residuals"
+))

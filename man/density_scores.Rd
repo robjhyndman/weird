@@ -13,8 +13,8 @@ density_scores(object, loo = FALSE, ...)
 \method{density_scores}{default}(
   object,
   loo = FALSE,
-  h = kde_bandwidth(object),
-  H = kde_bandwidth(object),
+  h = kde_bandwidth(object, method = "lookout"),
+  H = kde_bandwidth(object, method = "lookout"),
   ...
 )
 
@@ -69,7 +69,7 @@ of |>
   geom_point()
 of <- oldfaithful |>
   filter(duration < 7000, waiting < 7000)
-f_kde <- kde(of[,2:3], H = kde_bandwidth(of[,2:3]))
+f_kde <- kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
 of |>
   mutate(
     fscores = density_scores(f_kde),
