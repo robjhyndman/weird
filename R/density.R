@@ -143,7 +143,7 @@ density_on_grid <- function(y, fy, ngrid) {
 
 kde_bandwidth <- function(data,
       method = c("robust_normal", "lookout"),
-      multiplier = 2) {
+      multiplier = 3) {
   method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
@@ -158,7 +158,7 @@ kde_bandwidth <- function(data,
     # Find robust covariance matrix of data
     S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
     if(method == "robust_normal") {
-      return(multiplier^2 * (4/(n * (d + 2)))^(2/(d + 4)) * S)
+      return(multiplier^d * (4/(n * (d + 2)))^(2/(d + 4)) * S)
     } else {
       # Computer h* from normalized data
       U <- chol(solve(S))
