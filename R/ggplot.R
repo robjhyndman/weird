@@ -38,7 +38,7 @@
 #' ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 #' ymat |>
 #'   kde(H = kde_bandwidth(ymat)) |>
-#'   autoplot(show_points = TRUE, alpha = 0.05)
+#'   autoplot(show_points = TRUE, alpha = 0.1, fill = TRUE)
 #' @export
 
 autoplot.kde <- function(object, prob = seq(9)/10, fill = FALSE,

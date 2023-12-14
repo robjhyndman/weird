@@ -103,8 +103,13 @@ hdr_table <- function(y = NULL, density = NULL,
 }
 
 #' @title HDR plot
-#' @description Produces a 1d or 2d box plot of HDR regions.
-#'
+#' @description Produces a 1d or 2d box plot of HDR regions. The darker regions
+#' contain observations with higher probability, while the lighter regions contain
+#' points with lower probability. Points outside the largest HDR are shown as
+#' individual points. Points with lookout probabilities
+#' less than 0.05 are optionally shown in red.
+#' @details The original HDR boxplot proposed by Hyndman (1996), R can be produced with
+#' all arguments set to their defaults other than `lookout`.
 #' @param data A data frame or matrix containing the data.
 #' @param var1 The name of the first variable to plot (a bare expression).
 #' @param var2 Optionally, the name of the second variable to plot (a bare expression).
@@ -118,18 +123,27 @@ hdr_table <- function(y = NULL, density = NULL,
 #' @param ... Other arguments passed to \code{\link[ks]{kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
 #' @author Rob J Hyndman
-#' @references Hyndman, R J. (1996) Computing and Graphing Highest Density Regions,
-#' \emph{The American Statistician}, \bold{50}(2), 120–126.
+#' @references Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
+#' *The American Statistician*, **50**(2), 120–126. \url{http://robjhyndman.com/publications/hdr}
+#' Kandanaarachchi, S & Hyndman, R J (2022) "Leave-one-out kernel density estimates for outlier detection",
+#' *J Computational & Graphical Statistics*, **31**(2), 586-599. \url{http://robjhyndman.com/publications/lookout}
 #' @examples
-#' df <- data.frame(x = c(rnorm(1000), rnorm(1000, 4, 1)))
+#' df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
 #' df$y <- df$x + rnorm(200, sd=2)
 #' gg_hdrboxplot(df, x)
 #' gg_hdrboxplot(df, x, y, scatterplot = TRUE)
+#' oldfaithful |>
+#'   dplyr::filter(duration < 7000, waiting < 7000) |>
+#'   gg_hdrboxplot(duration, waiting, scatterplot = TRUE)
+#' cricket_batting |>
+#'   dplyr::filter(Innings > 20) |>
+#'   gg_hdrboxplot(Average)
+#'
 #' @rdname hdrplot
 #' @export
 
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
-                       color = "#00659e", scatterplot = FALSE, show_lookout = FALSE, ...) {
+                       color = "#00659e", scatterplot = FALSE, show_lookout = TRUE, ...) {
   v2 <- dplyr::as_label(dplyr::enquo(var2))
   if(v2 == "NULL") {
     d <- 1L
@@ -140,7 +154,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   }
   # Use autoplot if possible
   if(d == 2L & !scatterplot) {
-    fit <- ks::kde(data[,1:2], H = kde_bandwidth(data[,1:2]), binned = NROW(data) > 2000, ...)
+    fit <- ks::kde(data[,1:2], H = kde_bandwidth(data[,1:2], method = "lookout"), binned = NROW(data) > 2000, ...)
     return(autoplot(fit, prob = prob,
       color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE, show_lookout = show_lookout) +
         ggplot2::guides(fill = "none", color = "none"))

@@ -72,7 +72,7 @@ c(rnorm(500), rnorm(500, 4, 1.5)) |>
 ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 ymat |>
   kde(H = kde_bandwidth(ymat)) |>
-  autoplot(show_points = TRUE, alpha = 0.05)
+  autoplot(show_points = TRUE, alpha = 0.1, fill = TRUE)
 }
 \author{
 Rob J Hyndman

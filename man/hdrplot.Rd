@@ -11,7 +11,7 @@ gg_hdrboxplot(
   prob = c(0.5, 0.99),
   color = "#00659e",
   scatterplot = FALSE,
-  show_lookout = FALSE,
+  show_lookout = TRUE,
   ...
 )
 }
@@ -39,17 +39,34 @@ probabilities less than 0.05.}
 A ggplot object showing an HDR plot or scatterplot of the data.
 }
 \description{
-Produces a 1d or 2d box plot of HDR regions.
+Produces a 1d or 2d box plot of HDR regions. The darker regions
+contain observations with higher probability, while the lighter regions contain
+points with lower probability. Points outside the largest HDR are shown as
+individual points. Points with lookout probabilities
+less than 0.05 are optionally shown in red.
+}
+\details{
+The original HDR boxplot proposed by Hyndman (1996), R can be produced with
+all arguments set to their defaults other than \code{lookout}.
 }
 \examples{
-df <- data.frame(x = c(rnorm(1000), rnorm(1000, 4, 1)))
+df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
 df$y <- df$x + rnorm(200, sd=2)
 gg_hdrboxplot(df, x)
 gg_hdrboxplot(df, x, y, scatterplot = TRUE)
+oldfaithful |>
+  dplyr::filter(duration < 7000, waiting < 7000) |>
+  gg_hdrboxplot(duration, waiting, scatterplot = TRUE)
+cricket_batting |>
+  dplyr::filter(Innings > 20) |>
+  gg_hdrboxplot(Average)
+
 }
 \references{
-Hyndman, R J. (1996) Computing and Graphing Highest Density Regions,
-\emph{The American Statistician}, \bold{50}(2), 120–126.
+Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
+\emph{The American Statistician}, \strong{50}(2), 120–126. \url{http://robjhyndman.com/publications/hdr}
+Kandanaarachchi, S & Hyndman, R J (2022) "Leave-one-out kernel density estimates for outlier detection",
+\emph{J Computational & Graphical Statistics}, \strong{31}(2), 586-599. \url{http://robjhyndman.com/publications/lookout}
 }
 \author{
 Rob J Hyndman
