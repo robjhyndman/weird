@@ -167,7 +167,7 @@ kde_bandwidth <- function(data, method = c("robust_normal", "lookout"),
       U <- chol(solve(S))
       data <- as.matrix(data) %*% t(U)
     }
-    h <- qnorm(0.99)*lookout::find_tda_bw(data, fast = (n > 1000)) |>
+    h <- lookout::find_tda_bw(data, fast = (n > 1000)) |>
       suppressWarnings()
     iter <- 1
     oldh <- 0
@@ -179,7 +179,7 @@ kde_bandwidth <- function(data, method = c("robust_normal", "lookout"),
         suppressWarnings()
       data <- as.matrix(data)[p > 0.05,]
       # Refined estimate
-      h <- qnorm(0.99)*lookout::find_tda_bw(data, fast = (n > 1000))
+      h <- lookout::find_tda_bw(data, fast = (n > 1000))
     }
     return(h * S)
   }
