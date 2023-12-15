@@ -144,6 +144,14 @@ hdr_table <- function(y = NULL, density = NULL,
 
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
                        color = "#00659e", scatterplot = FALSE, show_lookout = TRUE, ...) {
+  if(missing(var1)) {
+    # Grab first variable
+    data <- as.data.frame(data)
+    var1 <- rlang::sym(names(data)[1])
+    if(NCOL(data) > 1L) {
+      message("No variable selected. Using ", rlang::as_name(var1))
+    }
+  }
   v2 <- dplyr::as_label(dplyr::enquo(var2))
   if(v2 == "NULL") {
     d <- 1L
