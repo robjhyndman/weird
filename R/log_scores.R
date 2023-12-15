@@ -44,8 +44,8 @@ density_scores <- function(object, loo = FALSE, ...) {
 #' @export
 density_scores.default <- function(
     object, loo = FALSE,
-    h = kde_bandwidth(object, method = "lookout"),
-    H = kde_bandwidth(object, method = "lookout"), ...) {
+    h = kde_bandwidth(object, method = "double"),
+    H = kde_bandwidth(object, method = "double"), ...) {
   object <- as.matrix(object)
   tmp <- calc_kde_scores(object, h, H, ...)
   if (loo) {
@@ -149,8 +149,8 @@ density_scores.gam <- function(object, loo = FALSE, ...) {
 # Compute value of density at each observation using kde
 calc_kde_scores <- function(
     y,
-    h = kde_bandwidth(y),
-    H = kde_bandwidth(y), ...) {
+    h = kde_bandwidth(y, method = "double"),
+    H = kde_bandwidth(y, method = "double"), ...) {
   n <- NROW(y)
   d <- NCOL(y)
   # Estimate density at each observation

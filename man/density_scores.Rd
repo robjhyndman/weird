@@ -13,8 +13,8 @@ density_scores(object, loo = FALSE, ...)
 \method{density_scores}{default}(
   object,
   loo = FALSE,
-  h = kde_bandwidth(object, method = "lookout"),
-  H = kde_bandwidth(object, method = "lookout"),
+  h = kde_bandwidth(object, method = "double"),
+  H = kde_bandwidth(object, method = "double"),
   ...
 )
 

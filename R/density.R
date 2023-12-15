@@ -136,14 +136,14 @@ density_on_grid <- function(y, fy, ngrid) {
 #' @param method Method to use for selecting the bandwidth.
 #' `robust_normal` uses a robust version of the normal reference rule.
 #' `lookout` uses the topological data analysis approach that is part of the lookout algorithm.
-#' @param iterate Should the `lookout` method be iterated. That is, outliers
+#' @param max.iter How many times should the `lookout` method be iterated. That is, outliers
 #' (probability < 0.05) are removed and the bandwidth is re-computed from the
-#' remaining observations. Ignored if `method="robust_normal"`.
+#' remaining observations.
 #' @return A matrix of bandwidths (or scalar in the case of univariate data).
 #' @author Rob J Hyndman
 #' @export
 
-kde_bandwidth <- function(data, method = c("robust_normal", "lookout"),
+kde_bandwidth <- function(data, method = c("robust_normal", "double", "lookout"),
                           max.iter = 2) {
   method <- match.arg(method)
   d <- NCOL(data)
@@ -152,11 +152,12 @@ kde_bandwidth <- function(data, method = c("robust_normal", "lookout"),
     # Find robust covariance matrix of data
     S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
   }
-  if(method == "robust_normal") {
+  if(method != "lookout") {
+    k <- ifelse(method == "double", 2, 1)
     if(d == 1L)
-      return(1.06 * robustbase::s_IQR(data) * n^(-0.2))
+      return(k * 1.06 * robustbase::s_IQR(data) * n^(-0.2))
     else {
-      return((4/(n * (d + 2)))^(2/(d + 4)) * S)
+      return((4/(n * (d + 2)))^(2/(d + 4)) * k^2 * S)
     }
   } else {
     # Initial estimate

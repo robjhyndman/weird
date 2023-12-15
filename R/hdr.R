@@ -162,7 +162,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   }
   # Use autoplot if possible
   if(d == 2L & !scatterplot) {
-    fit <- ks::kde(data[,1:2], H = kde_bandwidth(data[,1:2], method = "lookout"), binned = NROW(data) > 2000, ...)
+    fit <- ks::kde(data[,1:2], H = kde_bandwidth(data[,1:2], method = "double"), binned = NROW(data) > 2000, ...)
     return(autoplot(fit, prob = prob,
       color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE, show_lookout = show_lookout) +
         ggplot2::guides(fill = "none", color = "none"))

@@ -26,6 +26,7 @@ Imports:
   ks,
   lookout,
   purrr (>= 0.2.4),
+  rlang,
   robustbase,
   rstudioapi (>= 0.7),
   stray,
