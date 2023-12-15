@@ -149,8 +149,8 @@ density_scores.gam <- function(object, loo = FALSE, ...) {
 # Compute value of density at each observation using kde
 calc_kde_scores <- function(
     y,
-    h = kde_bandwidth(y, method = "lookout"),
-    H = kde_bandwidth(y, method = "lookout"), ...) {
+    h = kde_bandwidth(y),
+    H = kde_bandwidth(y), ...) {
   n <- NROW(y)
   d <- NCOL(y)
   # Estimate density at each observation
