@@ -36,7 +36,8 @@
 #' hdr_table(density = density)
 #' @export
 hdr_table <- function(y = NULL, density = NULL,
-    prob = c(0.50, 0.99), h = kde_bandwidth(y), H = kde_bandwidth(y), ...) {
+    prob = c(0.50, 0.99), h = kde_bandwidth(y, method = "double"),
+    H = kde_bandwidth(y, method = "double"), ...) {
   if (min(prob) < 0 | max(prob) > 1) {
     stop("prob must be between 0 and 1")
   }

@@ -8,8 +8,8 @@ hdr_table(
   y = NULL,
   density = NULL,
   prob = c(0.5, 0.99),
-  h = kde_bandwidth(y),
-  H = kde_bandwidth(y),
+  h = kde_bandwidth(y, method = "double"),
+  H = kde_bandwidth(y, method = "double"),
   ...
 )
 }
