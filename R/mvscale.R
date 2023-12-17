@@ -1,0 +1,93 @@
+#' Compute robust multivariate scaled data
+#'
+#' @description A multivariate version of `base::scale()`, that takes account
+#' of the covariance matrix of the data, and uses robust estimates
+#' of center, scale and covariance. The centers are removed using medians, the
+#' scale function is the IQR, and the covariance matrix is estimated using a
+#' robust OGK estimate. The data are scaled using the Cholesky decomposition of
+#' the inverse covariance. Then the scaled data are returned. This is useful for
+#' computing pairwise Mahalanobis distances.
+#'
+#' @param object A vector, matrix, or data frame containing some numerical data.
+#' @param center A function to compute the center of each numerical variable. Set
+#' to NULL if no centering is required.
+#' @param scale	 A function to scale each numerical variable. Only used when
+#' `cov = robustbase::covOGK`, when it is passed as the `sigmamu` argument.
+#' @param cov A function to compute the covariance matrix.
+#' @param warning Should a warning be issued if non-numeric columns are ignored?
+#' @return A vector, matrix or data frame of the same size and class as `object`,
+#' but with numerical variables replaced by scaled versions.
+#' @author Rob J Hyndman
+#' @examples
+#' # Non-robust scaling
+#' mvscale(oldfaithful, center = mean, cov = stats::cov, warning = FALSE)
+#' # Robust Mahalanobis distances
+#' oldfaithful |>
+#'   select(-time) |>
+#'   mvscale() |>
+#'   head(5) |>
+#'   dist()
+#' @export
+mvscale <- function(object, center = stats::median, scale = robustbase::s_IQR,
+                    cov = robustbase::covOGK, warning = TRUE) {
+  d <- NCOL(object)
+  vec <- FALSE # Indicator if object is a vector
+  # We find the numerical columns and convert to a matrix
+  # First deal with vector inputs
+  if (d == 1L & !inherits(object, "matrix") & !inherits(object, "data.frame")) {
+    numeric_col <- is.numeric(object)
+    if (!numeric_col) {
+      stop("Input must be numeric")
+    }
+    vec <- TRUE
+    mat <- as.matrix(object)
+  } else if (inherits(object, "matrix")) {
+    # It is already a matrix
+    if (!is.numeric(object)) {
+      stop("Input must be numeric")
+    }
+    numeric_col <- rep(TRUE, NCOL(object))
+    mat <- object
+  } else { # It must be a data frame. So let's find the numeric columns
+    numeric_col <- unlist(lapply(object, is.numeric))
+    if (any(!numeric_col) & warning) {
+      warning(
+        "Ignoring non-numeric columns: ",
+        paste(names(object)[!numeric_col], collapse = ", ")
+      )
+    }
+    mat <- as.matrix(object[, numeric_col])
+  }
+  # Remove centers
+  if (!is.null(center)) {
+    med <- apply(mat, 2, center)
+    mat <- sweep(mat, 2L, med)
+  }
+  # Scale
+  if (d == 1L) {
+    if(!is.null(scale)) {
+      z <- mat / scale(mat)
+    } else {
+      z <- mat
+    }
+    if (vec) {
+      return(c(z))
+    }
+  } else if(!is.null(cov)) {
+    if (identical(cov, robustbase::covOGK)) {
+      S <- cov(mat, sigmamu = scale)$cov
+    } else {
+      S <- cov(mat)
+    }
+    U <- chol(solve(S))
+    z <- mat %*% t(U)
+  } else {
+    z <- mat
+  }
+  # Convert back to matrix, data frame or tibble if necessary
+  idx <- which(numeric_col)
+  for (i in seq_along(idx)) {
+    object[, idx[i]] <- z[, i]
+  }
+  return(object)
+}
