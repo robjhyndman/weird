@@ -2,25 +2,35 @@
 #'
 #' @description A multivariate version of `base::scale()`, that takes account
 #' of the covariance matrix of the data, and uses robust estimates
-#' of center, scale and covariance. The centers are removed using medians, the
+#' of center, scale and covariance by default. The centers are removed using medians, the
 #' scale function is the IQR, and the covariance matrix is estimated using a
 #' robust OGK estimate. The data are scaled using the Cholesky decomposition of
 #' the inverse covariance. Then the scaled data are returned. This is useful for
 #' computing pairwise Mahalanobis distances.
 #'
+#' @details Optionally, the centering and scaling can be done for each variable
+#' separately, so there is no rotation of the data, by setting `cov = NULL`.
+#' Also optionally, non-robust methods can be used by specifying `center = mean`,
+#' scale = `stats::sd`, and `cov = stats::cov`. Any non-numeric columns are retained
+#' with a warning.
+#'
 #' @param object A vector, matrix, or data frame containing some numerical data.
 #' @param center A function to compute the center of each numerical variable. Set
 #' to NULL if no centering is required.
-#' @param scale	 A function to scale each numerical variable. Only used when
-#' `cov = robustbase::covOGK`, when it is passed as the `sigmamu` argument.
-#' @param cov A function to compute the covariance matrix.
+#' @param scale	 A function to scale each numerical variable. When
+#' `cov = robustbase::covOGK`, it is passed as the `sigmamu` argument.
+#' @param cov A function to compute the covariance matrix. Set to NULL if no rotation required.
 #' @param warning Should a warning be issued if non-numeric columns are ignored?
 #' @return A vector, matrix or data frame of the same size and class as `object`,
 #' but with numerical variables replaced by scaled versions.
 #' @author Rob J Hyndman
 #' @examples
-#' # Non-robust scaling
+#' # Univariate z-scores (no rotation)
+#' mvscale(oldfaithful, center = mean, scale = sd, cov = NULL, warning = FALSE)
+#' # Non-robust scaling with rotation
 #' mvscale(oldfaithful, center = mean, cov = stats::cov, warning = FALSE)
+#  # Robust scaling
+#' mvscale(oldfaithful, warning = FALSE)
 #' # Robust Mahalanobis distances
 #' oldfaithful |>
 #'   select(-time) |>
@@ -82,12 +92,17 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_IQR,
     U <- chol(solve(S))
     z <- mat %*% t(U)
   } else {
-    z <- mat
+    s <- apply(mat, 2, scale)
+    z <- sweep(mat, 2L, s, "/")
   }
   # Convert back to matrix, data frame or tibble if necessary
   idx <- which(numeric_col)
   for (i in seq_along(idx)) {
     object[, idx[i]] <- z[, i]
+  }
+  # Rename columns if there has been rotation
+  if(!is.null(cov)) {
+    names(object)[numeric_col] <- paste0("z", seq(sum(numeric_col)))
   }
   return(object)
 }

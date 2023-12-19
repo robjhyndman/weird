@@ -18,10 +18,10 @@ mvscale(
 \item{center}{A function to compute the center of each numerical variable. Set
 to NULL if no centering is required.}
 
-\item{scale}{A function to scale each numerical variable. Only used when
-\code{cov = robustbase::covOGK}, when it is passed as the \code{sigmamu} argument.}
+\item{scale}{A function to scale each numerical variable. When
+\code{cov = robustbase::covOGK}, it is passed as the \code{sigmamu} argument.}
 
-\item{cov}{A function to compute the covariance matrix.}
+\item{cov}{A function to compute the covariance matrix. Set to NULL if no rotation required.}
 
 \item{warning}{Should a warning be issued if non-numeric columns are ignored?}
 }
@@ -32,15 +32,25 @@ but with numerical variables replaced by scaled versions.
 \description{
 A multivariate version of \code{base::scale()}, that takes account
 of the covariance matrix of the data, and uses robust estimates
-of center, scale and covariance. The centers are removed using medians, the
+of center, scale and covariance by default. The centers are removed using medians, the
 scale function is the IQR, and the covariance matrix is estimated using a
 robust OGK estimate. The data are scaled using the Cholesky decomposition of
 the inverse covariance. Then the scaled data are returned. This is useful for
 computing pairwise Mahalanobis distances.
 }
+\details{
+Optionally, the centering and scaling can be done for each variable
+separately, so there is no rotation of the data, by setting \code{cov = NULL}.
+Also optionally, non-robust methods can be used by specifying \code{center = mean},
+scale = \code{stats::sd}, and \code{cov = stats::cov}. Any non-numeric columns are retained
+with a warning.
+}
 \examples{
-# Non-robust scaling
+# Univariate z-scores (no rotation)
+mvscale(oldfaithful, center = mean, scale = sd, cov = NULL, warning = FALSE)
+# Non-robust scaling with rotation
 mvscale(oldfaithful, center = mean, cov = stats::cov, warning = FALSE)
+mvscale(oldfaithful, warning = FALSE)
 # Robust Mahalanobis distances
 oldfaithful |>
   select(-time) |>
