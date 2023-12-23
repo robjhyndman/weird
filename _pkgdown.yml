@@ -18,3 +18,47 @@ authors:
 
 navbar:
   type: light
+
+reference:
+  - title: "Package"
+    contents:
+      - weird-package
+  - title: Data
+    desc: Data sets included in the package
+    contents:
+      - cricket_batting
+      - n01
+      - oldfaithful
+      - wine_reviews
+  - title: Functions for calculating anomaly scores
+    contents:
+      - density_scores
+      - glosh_scores
+      - lof_scores
+      - stray_scores
+      - lookout
+  - title: Functions for identifying anomalies
+    contents:
+      - chauvenet_anomalies
+      - dixon_anomalies
+      - grubbs_anomalies
+      - peirce_anomalies
+      - stray_anomalies
+  - title: Functions for robust scaling of multivariate data
+    contents:
+      - mvscale
+  - title: Functions for working with kernel density estimates
+    contents:
+      - as_kde
+      - autoplot.kde
+      - kde_bandwidth
+  - title: Functions for HDR calculations and graphics
+    contents:
+      - gg_hdrboxplot
+      - gg_bagplot
+      - hdr_palette
+      - hdr_table
+  - title: "Other Functions"
+    contents:
+      - weird_conflicts
+      - weird_packages
