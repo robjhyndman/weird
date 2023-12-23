@@ -165,29 +165,30 @@ kde_bandwidth <- function(data, method = c("robust_normal", "double", "lookout")
       return((4/(n * (d + 2)))^(2/(d + 4)) * k^2 * S)
     }
   } else {
-    # Initial estimate
-    if(d == 1L) {
-      S <- 1
-    } else {
-      # Normalize data
-      U <- chol(solve(S))
-      data <- as.matrix(data) %*% t(U)
-    }
-    h <- lookout::find_tda_bw(data, fast = (n > 1000)) |>
-      suppressWarnings()
-    iter <- 1
-    oldh <- 0
-    while(iter < max.iter & h != oldh) {
-      iter <- iter + 1
-      oldh <- h
-      scores <- calc_kde_scores(data, h=h, H=h*diag(d))
-      p <- lookout(density_scores = scores$scores, loo_scores = scores$loo) |>
-        suppressWarnings()
-      data <- as.matrix(data)[p > 0.05,]
-      # Refined estimate
-      h <- lookout::find_tda_bw(data, fast = (n > 1000))
-    }
-    return(h * S)
+    stop("Not yet implemented")
+    # # Initial estimate
+    # if(d == 1L) {
+    #   S <- 1
+    # } else {
+    #   # Normalize data
+    #   U <- chol(solve(S))
+    #   data <- as.matrix(data) %*% t(U)
+    # }
+    # h <- lookout::find_tda_bw(data, fast = (n > 1000)) |>
+    #   suppressWarnings()
+    # iter <- 1
+    # oldh <- 0
+    # while(iter < max.iter & h != oldh) {
+    #   iter <- iter + 1
+    #   oldh <- h
+    #   scores <- calc_kde_scores(data, h=h, H=h*diag(d))
+    #   p <- lookout(density_scores = scores$scores, loo_scores = scores$loo) |>
+    #     suppressWarnings()
+    #   data <- as.matrix(data)[p > 0.05,]
+    #   # Refined estimate
+    #   h <- lookout::find_tda_bw(data, fast = (n > 1000))
+    # }
+    # return(h * S)
   }
 }
 
