@@ -52,10 +52,10 @@ reference:
       - as_kde
       - autoplot.kde
       - kde_bandwidth
-  - title: Functions for HDR calculations and graphics
+  - title: Functions for Graphics and HDR calculations
     contents:
-      - gg_hdrboxplot
       - gg_bagplot
+      - gg_hdrboxplot
       - hdr_palette
       - hdr_table
   - title: "Other Functions"

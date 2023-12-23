@@ -21,6 +21,12 @@
 #'   \item{Ducks}{Total number of 0s scored}
 #'   \item{Gender}{"Men" or "Women"}
 #' }
+#' @return Data frame
+#' @examples
+#' cricket_batting |>
+#'   filter(Innings > 20) |>
+#'   select(Player, Country, Matches, Runs, Average, Hundreds, Fifties, Ducks) |>
+#'   arrange(desc(Average))
 #' @source \url{https://www.espncricinfo.com}
 "cricket_batting"
 
@@ -37,6 +43,12 @@
 #'   \item{duration}{Duration of eruption in seconds}
 #'   \item{waiting}{Time to the following eruption}
 #' }
+#' @return Data frame
+#' @examples
+#' oldfaithful |>
+#'  filter(duration < 7000, waiting < 7000) |>
+#'  ggplot(aes(x = duration, y = waiting)) +
+#'  geom_point()
 #' @source \url{https://geysertimes.org}
 "oldfaithful"
 
@@ -56,6 +68,12 @@
 #'   \item{price}{Price of a bottle of wine in $US}
 #'   \item{year}{Year of wine extracted from `title`}
 #' }
+#' @return Data frame
+#' @examples
+#' wine_reviews |>
+#'  ggplot(aes(x = points, y = price)) +
+#'  geom_jitter(height = 0, width = 0.2, alpha = 0.1) +
+#'  scale_y_log10()
 #' @source \url{https://kaggle.com}
 "wine_reviews"
 
@@ -65,4 +83,7 @@
 #' from independent standard normal distributions.
 #'
 #' @format A data frame with 1000 rows and 10 columns.
+#' @return Data frame
+#' @examples
+#' n01
 "n01"

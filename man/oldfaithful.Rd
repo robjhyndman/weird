@@ -18,10 +18,19 @@ A data frame with 2261 rows and 3 columns:
 \usage{
 oldfaithful
 }
+\value{
+Data frame
+}
 \description{
 A data set containing data on recorded eruptions of Old Faithful from
 1 January 2015 to 1 October 2021.
 Recordings are incomplete, especially during the winter months when observers
 may not be present.
+}
+\examples{
+oldfaithful |>
+ filter(duration < 7000, waiting < 7000) |>
+ ggplot(aes(x = duration, y = waiting)) +
+ geom_point()
 }
 \keyword{datasets}

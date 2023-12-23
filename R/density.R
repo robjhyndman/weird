@@ -141,6 +141,11 @@ density_on_grid <- function(y, fy, ngrid) {
 #' remaining observations.
 #' @return A matrix of bandwidths (or scalar in the case of univariate data).
 #' @author Rob J Hyndman
+#' @examples
+#' # Univariate bandwidth calculation
+#' kde_bandwidth(oldfaithful$duration)
+#' # Bivariate bandwidth calculation
+#' kde_bandwidth(oldfaithful[,2:3])
 #' @export
 
 kde_bandwidth <- function(data, method = c("robust_normal", "double", "lookout"),
@@ -148,7 +153,7 @@ kde_bandwidth <- function(data, method = c("robust_normal", "double", "lookout")
   method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
-  if(d == 2) {
+  if(d > 1) {
     # Find robust covariance matrix of data
     S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
   }

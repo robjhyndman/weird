@@ -18,6 +18,9 @@ dixon_anomalies(y, alpha = 0.05, two_sided = TRUE)
 only the maximum will be used. (Take negative values to consider only the minimum with
 \code{two_sided=FALSE}.)}
 }
+\value{
+A logical vector
+}
 \description{
 Grubbs' test (proposed in 1950) identifies possible anomalies in univariate
 data using z-scores assuming the data come from a normal distribution.

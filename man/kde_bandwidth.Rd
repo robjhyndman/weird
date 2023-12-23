@@ -27,6 +27,12 @@ A matrix of bandwidths (or scalar in the case of univariate data).
 \description{
 Robust bandwidth estimation for kernel density estimation
 }
+\examples{
+# Univariate bandwidth calculation
+kde_bandwidth(oldfaithful$duration)
+# Bivariate bandwidth calculation
+kde_bandwidth(oldfaithful[,2:3])
+}
 \author{
 Rob J Hyndman
 }

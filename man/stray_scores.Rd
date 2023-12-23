@@ -2,12 +2,9 @@
 % Please edit documentation in R/stray.R
 \name{stray_scores}
 \alias{stray_scores}
-\alias{stray_anomalies}
 \title{Stray scores}
 \usage{
 stray_scores(y, ...)
-
-stray_anomalies(y, ...)
 }
 \arguments{
 \item{y}{A vector, matrix, or data frame consisting of numerical variables.}
@@ -16,9 +13,6 @@ stray_anomalies(y, ...)
 }
 \value{
 Numerical vector containing stray scores.
-
-Numerical vector containing logical values indicating if the
-observation is identified as an anomaly using the stray algorithm.
 }
 \description{
 Compute stray scores indicating how anomalous each observation is.
@@ -27,12 +21,8 @@ Compute stray scores indicating how anomalous each observation is.
 # Univariate data
 y <- c(6, rnorm(49))
 scores <- stray_scores(y)
-threshold <- stray::find_threshold(scores, outtail = "max")
+threshold <- stray::find_threshold(scores, alpha = 0.01, outtail = "max", p = 0.5, tn = 50)
 which(scores > threshold)
-stray_anomalies(y)
-# Bivariate data
-y <- cbind(rnorm(50), c(5, rnorm(49)))
-stray_anomalies(y)
 }
 \author{
 Rob J Hyndman

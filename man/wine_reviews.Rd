@@ -23,8 +23,17 @@ A data frame with 110,203 rows and 8 columns:
 \usage{
 wine_reviews
 }
+\value{
+Data frame
+}
 \description{
 A data set containing data on wines from 44 countries, taken from \emph{Wine Enthusiast Magazine}
 during the week of 15 June 2017.
+}
+\examples{
+wine_reviews |>
+ ggplot(aes(x = points, y = price)) +
+ geom_jitter(height = 0, width = 0.2, alpha = 0.1) +
+ scale_y_log10()
 }
 \keyword{datasets}

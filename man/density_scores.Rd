@@ -57,6 +57,7 @@ density function at each observation, from which the density scores (or
 possibly the LOO density scores) are obtained.
 }
 \examples{
+# Density scores computed from bivariate data set
 of <- oldfaithful |>
   filter(duration < 7000, waiting < 7000) |>
   mutate(
@@ -67,30 +68,30 @@ of <- oldfaithful |>
 of |>
   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
   geom_point()
-of <- oldfaithful |>
-  filter(duration < 7000, waiting < 7000)
+# Density scores computed from bivariate KDE
 f_kde <- kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
 of |>
   mutate(
     fscores = density_scores(f_kde),
     loo_fscores = density_scores(f_kde, loo = TRUE)
   )
+# Density scores computed from linear model
 shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
-fit_wine <- lm(log(price) ~ points, data = shiraz)
+lm_wine <- lm(log(price) ~ points, data = shiraz)
 shiraz |>
   mutate(
-    fscore = density_scores(fit_wine),
-    loo_fscore = density_scores(fit_wine, loo = TRUE),
+    fscore = density_scores(lm_wine),
+    loo_fscore = density_scores(lm_wine, loo = TRUE),
     lookout_prob = lookout(density_scores = fscore, loo_scores = loo_fscore)
   ) |>
   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
   geom_jitter(height = 0, width = 0.2) +
   scale_y_log10()
-shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
-fit_wine <- mgcv::gam(log(price) ~ s(points), data = shiraz)
+# Density scores computed from GAM
+gam_wine <- mgcv::gam(log(price) ~ s(points), data = shiraz)
 shiraz |>
   mutate(
-    fscore = density_scores(fit_wine),
+    fscore = density_scores(gam_wine),
     lookout_prob = lookout(density_scores = fscore)
   ) |>
   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
@@ -98,9 +99,6 @@ shiraz |>
   scale_y_log10()
 }
 \seealso{
-\code{\link{kde_bandwidth}}
-\code{\link[ks]{kde}}
-
 \code{\link{kde_bandwidth}}
 \code{\link[ks]{kde}}
 }

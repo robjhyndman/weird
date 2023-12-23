@@ -10,7 +10,7 @@
 #' *The Astronomical Journal*, 2(21), 161–163.
 #' @references Chauvenet, W. (1863). 'Method of least squares'. Appendix to
 #' *Manual of Spherical and Practical Astronomy*, Vol.2, Lippincott, Philadelphia, pp.469-566.
-#'
+#' @return A logical vector
 #' @author Rob J Hyndman
 #' @param y numerical vector of observations
 #' @examples

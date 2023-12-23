@@ -12,6 +12,9 @@ chauvenet_anomalies(y)
 \arguments{
 \item{y}{numerical vector of observations}
 }
+\value{
+A logical vector
+}
 \description{
 Peirce's criterion and Chauvenet's criterion were both proposed in the 1800s
 as a way of determining what observations should be rejected in a univariate sample.

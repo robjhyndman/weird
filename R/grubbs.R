@@ -19,7 +19,7 @@
 #' *Annals of Mathematical Statistics*, 21(1), 27–58.
 #' Dixon, W. J. (1950). Analysis of extreme values.
 #' *Annals of Mathematical Statistics*, 21(4), 488–506.
-#'
+#' @return A logical vector
 #' @author Rob J Hyndman
 #' @param y numerical vector of observations
 #' @param alpha size of the test.

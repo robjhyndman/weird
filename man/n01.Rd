@@ -10,8 +10,14 @@ A data frame with 1000 rows and 10 columns.
 \usage{
 n01
 }
+\value{
+Data frame
+}
 \description{
 A synthetic data set containing 1000 observations on 10 variables generated
 from independent standard normal distributions.
+}
+\examples{
+n01
 }
 \keyword{datasets}

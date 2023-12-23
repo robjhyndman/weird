@@ -30,8 +30,17 @@ A data frame with 3754 rows and 15 variables:
 \usage{
 cricket_batting
 }
+\value{
+Data frame
+}
 \description{
 A dataset containing career batting statistics for all international test
 players (men and women) up to 6 October 2021.
+}
+\examples{
+cricket_batting |>
+  filter(Innings > 20) |>
+  select(Player, Country, Matches, Runs, Average, Hundreds, Fifties, Ducks) |>
+  arrange(desc(Average))
 }
 \keyword{datasets}
