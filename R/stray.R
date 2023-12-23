@@ -8,7 +8,7 @@
 #' # Univariate data
 #' y <- c(6, rnorm(49))
 #' scores <- stray_scores(y)
-#' threshold <- stray::find_threshold(scores)
+#' threshold <- stray::find_threshold(scores, outtail = "max")
 #' which(scores > threshold)
 #' stray_anomalies(y)
 #' # Bivariate data
