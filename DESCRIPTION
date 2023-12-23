@@ -24,7 +24,6 @@ Imports:
   grDevices,
   interp,
   ks,
-  lookout,
   purrr (>= 0.2.4),
   rlang,
   robustbase,
