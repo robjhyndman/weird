@@ -87,6 +87,18 @@ remaining observations.</p></dd>
     <p>Rob J Hyndman</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Univariate bandwidth calculation</span></span></span>
+<span class="r-in"><span><span class="fu">kde_bandwidth</span><span class="op">(</span><span class="va">oldfaithful</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.526927</span>
+<span class="r-in"><span><span class="co"># Bivariate bandwidth calculation</span></span></span>
+<span class="r-in"><span><span class="fu">kde_bandwidth</span><span class="op">(</span><span class="va">oldfaithful</span><span class="op">[</span>,<span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           [,1]      [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  32.85912   182.179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 182.17895 16357.846</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
