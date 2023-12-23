@@ -3,3 +3,8 @@
 ^data-raw$
 ^cran-comments\.md$
 ^README\.Rmd$
+^\.github$
+^docs$
+_pkgdown.yml
+^pkgdown$
+^CRAN-SUBMISSION$
