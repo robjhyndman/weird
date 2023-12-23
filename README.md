@@ -11,8 +11,8 @@ status](https://github.com/robjhyndman/weird-package/workflows/R-CMD-check/badge
 
 ## Overview
 
-The weird package contains functions and data used in the book [\*That’s
-Weird: Anomaly Detection Using R](https://OTexts.com/weird/) by Rob J
+The weird package contains functions and data used in the book [*That’s
+Weird: Anomaly Detection Using R*](https://OTexts.com/weird/) by Rob J
 Hyndman. It also loads several packages needed to do the analysis
 described in the book. These packages work with the
 [tidyverse](https://www.tidyverse.org/) set of packages, sharing common
