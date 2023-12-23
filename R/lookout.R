@@ -14,7 +14,7 @@
 #' @param threshold_probability Probability threshold when computing the POT model for the log scores.
 #' @references Sevvandi Kandanaarachchi & Rob J Hyndman (2022) "Leave-one-out
 #' kernel density estimates for outlier detection", *J Computational & Graphical
-#' Statistics*, **31**(2), 586-599. \url{http://robjhyndman.com/publications/lookout}
+#' Statistics*, **31**(2), 586-599. \url{https://robjhyndman.com/publications/lookout/}
 #' @return A numerical vector containing the lookout probabilities
 #' @author Rob J Hyndman
 #' @examples

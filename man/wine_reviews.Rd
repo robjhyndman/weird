@@ -18,7 +18,7 @@ A data frame with 110,203 rows and 8 columns:
 }
 }
 \source{
-\url{http://kaggle.com}
+\url{https://kaggle.com}
 }
 \usage{
 wine_reviews

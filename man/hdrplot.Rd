@@ -64,9 +64,9 @@ cricket_batting |>
 }
 \references{
 Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
-\emph{The American Statistician}, \strong{50}(2), 120–126. \url{http://robjhyndman.com/publications/hdr}
+\emph{The American Statistician}, \strong{50}(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
 Kandanaarachchi, S & Hyndman, R J (2022) "Leave-one-out kernel density estimates for outlier detection",
-\emph{J Computational & Graphical Statistics}, \strong{31}(2), 586-599. \url{http://robjhyndman.com/publications/lookout}
+\emph{J Computational & Graphical Statistics}, \strong{31}(2), 586-599. \url{https://robjhyndman.com/publications/lookout/}
 }
 \author{
 Rob J Hyndman

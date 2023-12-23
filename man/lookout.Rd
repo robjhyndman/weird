@@ -60,7 +60,7 @@ shiraz |>
 \references{
 Sevvandi Kandanaarachchi & Rob J Hyndman (2022) "Leave-one-out
 kernel density estimates for outlier detection", \emph{J Computational & Graphical
-Statistics}, \strong{31}(2), 586-599. \url{http://robjhyndman.com/publications/lookout}
+Statistics}, \strong{31}(2), 586-599. \url{https://robjhyndman.com/publications/lookout/}
 }
 \author{
 Rob J Hyndman

@@ -21,7 +21,7 @@
 #'   \item{Ducks}{Total number of 0s scored}
 #'   \item{Gender}{"Men" or "Women"}
 #' }
-#' @source \url{http://espncricinfo.com}
+#' @source \url{https://www.espncricinfo.com}
 "cricket_batting"
 
 #' Old faithful eruption data
@@ -37,7 +37,7 @@
 #'   \item{duration}{Duration of eruption in seconds}
 #'   \item{waiting}{Time to the following eruption}
 #' }
-#' @source \url{http://geysertimes.org}
+#' @source \url{https://geysertimes.org}
 "oldfaithful"
 
 #' Wine prices and points
@@ -56,7 +56,7 @@
 #'   \item{price}{Price of a bottle of wine in $US}
 #'   \item{year}{Year of wine extracted from `title`}
 #' }
-#' @source \url{http://kaggle.com}
+#' @source \url{https://kaggle.com}
 "wine_reviews"
 
 #' Multivariate standard normal data

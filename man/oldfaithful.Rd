@@ -13,7 +13,7 @@ A data frame with 2261 rows and 3 columns:
 }
 }
 \source{
-\url{http://geysertimes.org}
+\url{https://geysertimes.org}
 }
 \usage{
 oldfaithful

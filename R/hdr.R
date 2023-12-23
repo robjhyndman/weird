@@ -125,9 +125,9 @@ hdr_table <- function(y = NULL, density = NULL,
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
 #' @author Rob J Hyndman
 #' @references Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
-#' *The American Statistician*, **50**(2), 120–126. \url{http://robjhyndman.com/publications/hdr}
+#' *The American Statistician*, **50**(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
 #' Kandanaarachchi, S & Hyndman, R J (2022) "Leave-one-out kernel density estimates for outlier detection",
-#' *J Computational & Graphical Statistics*, **31**(2), 586-599. \url{http://robjhyndman.com/publications/lookout}
+#' *J Computational & Graphical Statistics*, **31**(2), 586-599. \url{https://robjhyndman.com/publications/lookout/}
 #' @examples
 #' df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
 #' df$y <- df$x + rnorm(200, sd=2)

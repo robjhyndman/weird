@@ -4,9 +4,18 @@
 \name{weird-package}
 \alias{weird}
 \alias{weird-package}
-\title{weird: Data sets for "That's Weird" by Rob J Hyndman}
+\title{weird: Functions and Data Sets for "That's Weird: Anomaly Detection Using R" by Rob J Hyndman}
 \description{
-"All data sets required for the examples in the book 'That's weird' by Rob J Hyndman \url{https://OTexts.com/weird/}. All packages required to run the examples are also loaded."
+"All functions and data sets required for the examples in the book 'That's weird' by Rob J Hyndman' \url{https://OTexts.com/weird/}. All packages required to run the examples are also loaded."
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://pkg.robjhyndman.com/weird-package/}
+  \item \url{https://github.com/robjhyndman/weird-package}
+  \item Report bugs at \url{https://github.com/robjhyndman/weird-package/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Rob Hyndman \email{Rob.Hyndman@monash.edu} (\href{https://orcid.org/0000-0002-2140-5352}{ORCID}) [copyright holder]

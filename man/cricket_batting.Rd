@@ -25,7 +25,7 @@ A data frame with 3754 rows and 15 variables:
 }
 }
 \source{
-\url{http://espncricinfo.com}
+\url{https://www.espncricinfo.com}
 }
 \usage{
 cricket_batting
