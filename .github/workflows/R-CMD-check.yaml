@@ -32,7 +32,7 @@ jobs:
       # don't treat missing suggested packages as error
       _R_CHECK_FORCE_SUGGESTS_: false
       # Some packages might unavailable on the older versions, so let's ignore xref warnings
-      _R_CHECK_RD_XREFS_: ${{ matrix.config.xref }}
+      _R_CHECK_RD_XREFS_: false
 
     steps:
       - uses: actions/checkout@v3
