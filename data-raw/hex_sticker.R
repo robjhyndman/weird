@@ -34,8 +34,8 @@ ggsave(hex_scatter, height = 6, width = 6)
 img_cropped <- hex_crop(
   images = hex_scatter,
   bg_fill = "#236d7a",
-  border_colour = "white",
-  border_size = 48
+  border_colour = "#44d6ec",
+  border_size = 72
 )
 
 ggplot() +
