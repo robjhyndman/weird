@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# weird
+# weird <img src="man/figures/weird-hex.png" align="right" />
 
 <!-- badges: start -->
 
