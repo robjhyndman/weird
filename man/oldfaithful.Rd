@@ -22,7 +22,8 @@ oldfaithful
 Data frame
 }
 \description{
-A data set containing data on recorded eruptions of Old Faithful from
+A data set containing data on recorded eruptions of the Old Faithful Geyser
+in Yellowstone National Park, Wyoming, USA, from
 1 January 2015 to 1 October 2021.
 Recordings are incomplete, especially during the winter months when observers
 may not be present.
