@@ -237,31 +237,103 @@ algorithm.
 ### Scoring functions
 
 Several functions are provided for providing anomaly scores for all
-observations. The `density_scores()` function uses either a fitted
-statistical model, or a kernel density estimate, to compute density
-scores. An alternative scoring method uses local outlier factors,
-implemented in the `lof_scores()` function. Here are the top 0.02% most
-anomalous observations identified by each method.
+observations.
+
+- The `density_scores()` function uses either a fitted statistical
+  model, or a kernel density estimate, to compute density scores.
+- The `stray_scores()` function uses the stray algorithm to compute
+  anomaly scores.
+- The `lof_scores()` function uses local outlier factors to compute
+  anomaly scores.
+- The `glosh_scores()` function uses the Global-Local Outlier Score from
+  Hierarchies algorithm to compute anomaly scores.
+- The `lookout()` function uses the lookout algorithm to compute anomaly
+  probabilities
+
+Here are the top 0.02% most anomalous observations identified by each of
+the first four methods, along with the observations having lookout
+probability less than 0.05.
 
 ``` r
 of |>
   mutate(
     denscore = density_scores(cbind(duration, waiting)),
-    lofscore = lof_scores(cbind(duration, waiting), k = 150)
+    strayscore = stray_scores(cbind(duration, waiting)),
+    lofscore = lof_scores(cbind(duration, waiting), k = 150),
+    gloshscore = glosh_scores(cbind(duration, waiting)),
+    lookout = lookout(cbind(duration, waiting))
   ) |> 
-  filter(denscore > quantile(denscore, prob=0.998) |
-         lofscore > quantile(lofscore, prob=0.998)) |> 
-  arrange(desc(denscore)) 
-#> # A tibble: 9 × 5
-#>   time                duration waiting denscore lofscore
-#>   <dttm>                 <dbl>   <dbl>    <dbl>    <dbl>
-#> 1 2020-06-01 21:04:00      120    6060     17.5     1.88
-#> 2 2018-04-25 19:08:00        1    5700     17.5     3.78
-#> 3 2021-01-22 18:35:00      170    3600     16.8     1.09
-#> 4 2020-08-31 09:56:00      170    3840     16.7     1.01
-#> 5 2015-11-21 20:27:00      150    3420     16.7     1.27
-#> 6 2020-10-15 17:11:00      220    7080     15.7     2.42
-#> 7 2017-09-22 18:51:00      281    7140     15.5     2.64
-#> 8 2020-05-18 21:21:00      272    7080     14.9     2.42
-#> 9 2018-09-22 16:37:00      253    7140     14.7     2.63
+  filter(
+    denscore > quantile(denscore, prob=0.998) |
+    strayscore > quantile(strayscore, prob=0.998) |
+    lofscore > quantile(lofscore, prob=0.998) |
+    gloshscore > quantile(gloshscore, prob=0.998) |
+    lookout < 0.05
+  ) |> 
+  arrange(lookout)
+#> # A tibble: 11 × 8
+#>    time                duration waiting denscore strayscore lofscore gloshscore
+#>    <dttm>                 <dbl>   <dbl>    <dbl>      <dbl>    <dbl>      <dbl>
+#>  1 2018-04-25 19:08:00        1    5700     17.5     0.380      3.78      1    
+#>  2 2020-06-01 21:04:00      120    6060     17.5     0.132      1.88      1    
+#>  3 2021-01-22 18:35:00      170    3600     16.8     0.0606     1.09      0.860
+#>  4 2020-08-31 09:56:00      170    3840     16.7     0.0606     1.01      0.816
+#>  5 2015-11-21 20:27:00      150    3420     16.7     0.0772     1.27      1    
+#>  6 2017-05-03 06:19:00       90    4740     16.4     0.0495     1.68      1    
+#>  7 2020-10-15 17:11:00      220    7080     15.7     0.0429     2.42      1    
+#>  8 2017-09-22 18:51:00      281    7140     15.5     0.0333     2.64      1    
+#>  9 2017-08-12 13:14:00      120    4920     15.2     0.0690     1.53      1    
+#> 10 2020-05-18 21:21:00      272    7080     14.9     0.0333     2.42      1    
+#> 11 2018-09-22 16:37:00      253    7140     14.7     0.0200     2.63      1    
+#> # ℹ 1 more variable: lookout <dbl>
+```
+
+### Robust multivariate scaling
+
+Some anomaly detection methods require the data to be scaled first, so
+all observations are on the same scale. However, many scaling methods
+are not robust to anomalies. The `mvscale()` function provides a
+multivariate robust scaling method, that optionally takes account of the
+relationships betwen variables, and uses robust estimates of center,
+scale and covariance by default. The centers are removed using medians,
+the scale function is the IQR, and the covariance matrix is estimated
+using a robust OGK estimate. The data are scaled using the Cholesky
+decomposition of the inverse covariance. Then the scaled data are
+returned. The scaled variables are rotated to be orthogonal, so are
+renamed as `z1`, `z2`, etc. Non-rotated scaling is possible by setting
+`cov = NULL`.
+
+``` r
+mvscale(of)
+#> Warning in mvscale(of): Ignoring non-numeric columns: time
+#> # A tibble: 2,197 × 3
+#>    time                    z1     z2
+#>    <dttm>               <dbl>  <dbl>
+#>  1 2015-01-02 14:53:00  2.06  -1.47 
+#>  2 2015-01-09 23:55:00  0.130  0.801
+#>  3 2015-02-07 00:49:00 -1.78  -0.534
+#>  4 2015-02-14 01:09:00 -2.04  -1.07 
+#>  5 2015-02-21 01:12:00 -1.38  -0.665
+#>  6 2015-02-28 01:11:00 -2.76  -0.401
+#>  7 2015-03-07 00:50:00 -3.92  -0.932
+#>  8 2015-03-13 21:57:00 -0.932  0.668
+#>  9 2015-03-13 23:37:00 -2.38  -0.799
+#> 10 2015-03-20 22:26:00 -6.09  -3.87 
+#> # ℹ 2,187 more rows
+mvscale(of, cov = NULL)
+#> Warning in mvscale(of, cov = NULL): Ignoring non-numeric columns: time
+#> # A tibble: 2,197 × 3
+#>    time                duration waiting
+#>    <dttm>                 <dbl>   <dbl>
+#>  1 2015-01-02 14:53:00    1.61   -1.48 
+#>  2 2015-01-09 23:55:00    0.363   0.809
+#>  3 2015-02-07 00:49:00   -1.92   -0.540
+#>  4 2015-02-14 01:09:00   -2.33   -1.08 
+#>  5 2015-02-21 01:12:00   -1.56   -0.672
+#>  6 2015-02-28 01:11:00   -2.85   -0.405
+#>  7 2015-03-07 00:50:00   -4.15   -0.942
+#>  8 2015-03-13 21:57:00   -0.726   0.674
+#>  9 2015-03-13 23:37:00   -2.59   -0.807
+#> 10 2015-03-20 22:26:00   -7.16   -3.91 
+#> # ℹ 2,187 more rows
 ```

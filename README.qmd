@@ -139,17 +139,40 @@ The latter two plots show likely outliers in red, using the lookout algorithm.
 
 ### Scoring functions
 
-Several functions are provided for providing anomaly scores for all observations. The `density_scores()` function uses either a fitted statistical model, or a kernel density estimate, to compute density scores.
-An alternative scoring method uses local outlier factors, implemented in the `lof_scores()` function. Here are the top 0.02% most anomalous observations identified by each method.
+Several functions are provided for providing anomaly scores for all observations. 
+
+* The `density_scores()` function uses either a fitted statistical model, or a kernel density estimate, to compute density scores.
+* The `stray_scores()` function uses the stray algorithm to compute anomaly scores.
+* The `lof_scores()` function uses local outlier factors to compute anomaly scores.
+* The `glosh_scores()` function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.
+* The `lookout()` function uses the lookout algorithm to compute anomaly probabilities
+
+Here are the top 0.02% most anomalous observations identified by each of the first four methods, along with the observations having lookout probability less than 0.05.
 
 ```{r of-scores}
 of |>
   mutate(
     denscore = density_scores(cbind(duration, waiting)),
-    lofscore = lof_scores(cbind(duration, waiting), k = 150)
+    strayscore = stray_scores(cbind(duration, waiting)),
+    lofscore = lof_scores(cbind(duration, waiting), k = 150),
+    gloshscore = glosh_scores(cbind(duration, waiting)),
+    lookout = lookout(cbind(duration, waiting))
   ) |> 
-  filter(denscore > quantile(denscore, prob=0.998) |
-         lofscore > quantile(lofscore, prob=0.998)) |> 
-  arrange(desc(denscore)) 
+  filter(
+    denscore > quantile(denscore, prob=0.998) |
+    strayscore > quantile(strayscore, prob=0.998) |
+    lofscore > quantile(lofscore, prob=0.998) |
+    gloshscore > quantile(gloshscore, prob=0.998) |
+    lookout < 0.05
+  ) |> 
+  arrange(lookout)
 ```
 
+### Robust multivariate scaling
+
+Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The `mvscale()` function provides a multivariate robust scaling method, that optionally takes account of the relationships betwen variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as `z1`, `z2`, etc. Non-rotated scaling is possible by setting `cov = NULL`.
+
+```{r of-mvscale}
+mvscale(of)
+mvscale(of, cov = NULL)
+```
