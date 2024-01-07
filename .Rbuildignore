@@ -2,7 +2,7 @@
 ^\.Rproj\.user$
 ^data-raw$
 ^cran-comments\.md$
-^README\.Rmd$
+^README\.qmd$
 ^\.github$
 ^docs$
 _pkgdown.yml
