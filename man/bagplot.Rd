@@ -25,7 +25,7 @@ gg_bagplot(
 \item{scatterplot}{A logical argument indicating if a regular bagplot is required
 (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).}
 
-\item{...}{Other arguments currently ignored.}
+\item{...}{Other arguments are passed to the \code{\link[aplpack]{compute.bagplot}} function.}
 }
 \value{
 A ggplot object showing a bagplot or scatterplot of the data.

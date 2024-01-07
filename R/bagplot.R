@@ -10,7 +10,7 @@
 #' @param scatterplot A logical argument indicating if a regular bagplot is required
 #' (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).
 #' @param col The colors to use in the order: median, bag, loop and outliers.
-#' @param ... Other arguments currently ignored.
+#' @param ... Other arguments are passed to the \code{\link[aplpack]{compute.bagplot}} function.
 #' @return A ggplot object showing a bagplot or scatterplot of the data.
 #' @author Rob J Hyndman
 #' @references Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999).
@@ -30,7 +30,7 @@ gg_bagplot <- function(data, var1, var2,
   col = c(hdr_palette(color = "#00659e", prob = c(0.5, 0.99)), "#000000"),
   scatterplot = FALSE, ...) {
   data <- data |> select({{ var1 }}, {{ var2 }})
-  bp <- aplpack::compute.bagplot(as.matrix(data), na.rm = TRUE, approx.limit = 1000)
+  bp <- aplpack::compute.bagplot(as.matrix(data), na.rm = TRUE, approx.limit = 1000, ...)
   cn <- colnames(data)
   p <- data |>
     ggplot(aes(x = {{ var1 }}, y = {{ var2 }}))
@@ -80,3 +80,4 @@ gg_bagplot <- function(data, var1, var2,
   }
   return(p)
 }
+
