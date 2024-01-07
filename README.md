@@ -83,7 +83,7 @@ oldfaithful
 #> # ℹ 2,251 more rows
 ```
 
-### Kernel density estimates
+## Kernel density estimates
 
 The package provides the `kde_bandwidth()` function for estimating the
 bandwidth of a kernel density estimate, and an `autoplot()` method for
@@ -121,7 +121,7 @@ of_density |>
 
 <img src="man/figures/README-of-density2-1.png" style="width:100.0%" />
 
-### Statistical tests
+## Statistical tests
 
 Some old methods of anomaly detection used statistical tests. While
 these are not recommended, they are still widely used, and are provided
@@ -155,7 +155,7 @@ almost certainly a recording error. An explanation of these tests is
 provided in [Chapter 4 of the
 book](https://otexts.com/weird/04-tests.html)
 
-### Boxplots
+## Boxplots
 
 Boxplots are widely used for anomaly detection. Here are three
 variations of boxplots applied to the `duration` variable.
@@ -234,7 +234,7 @@ of |>
 The latter two plots show likely outliers in red, using the lookout
 algorithm.
 
-### Scoring functions
+## Scoring functions
 
 Several functions are provided for providing anomaly scores for all
 observations.
@@ -288,7 +288,7 @@ of |>
 #> # ℹ 1 more variable: lookout <dbl>
 ```
 
-### Robust multivariate scaling
+## Robust multivariate scaling
 
 Some anomaly detection methods require the data to be scaled first, so
 all observations are on the same scale. However, many scaling methods
