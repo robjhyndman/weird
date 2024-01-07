@@ -126,9 +126,10 @@
 <span><span class="co">#&gt;  9 2015-03-13 23:37:00      190    5341</span></span>
 <span><span class="co">#&gt; 10 2015-03-20 22:26:00      102    3961</span></span>
 <span><span class="co">#&gt; # ℹ 2,251 more rows</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="kernel-density-estimates">Kernel density estimates<a class="anchor" aria-label="anchor" href="#kernel-density-estimates"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="kernel-density-estimates">Kernel density estimates<a class="anchor" aria-label="anchor" href="#kernel-density-estimates"></a>
+</h2>
 <p>The package provides the <code><a href="reference/kde_bandwidth.html">kde_bandwidth()</a></code> function for estimating the bandwidth of a kernel density estimate, and an <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> method for plotting the resulting density. The figure below shows the kernel density estimate of the <code>duration</code> variable obtained using these functions. The rug plot shows the actual data values.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">&lt;-</span> <span class="va">oldfaithful</span> <span class="op">|&gt;</span></span>
@@ -150,9 +151,9 @@
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-density2-1.png" style="width:100.0%"></p>
 </div>
-<div class="section level3">
-<h3 id="statistical-tests">Statistical tests<a class="anchor" aria-label="anchor" href="#statistical-tests"></a>
-</h3>
+<div class="section level2">
+<h2 id="statistical-tests">Statistical tests<a class="anchor" aria-label="anchor" href="#statistical-tests"></a>
+</h2>
 <p>Some old methods of anomaly detection used statistical tests. While these are not recommended, they are still widely used, and are provided in the package for comparison purposes.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="reference/peirce_anomalies.html">peirce_anomalies</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span></span>
@@ -177,9 +178,9 @@
 <span><span class="co">#&gt; 1 2018-04-25 19:08:00        1    5700</span></span></code></pre></div>
 <p>In this example, they only detect the tiny 1-second duration, which is almost certainly a recording error. An explanation of these tests is provided in <a href="https://otexts.com/weird/04-tests.html" class="external-link">Chapter 4 of the book</a></p>
 </div>
-<div class="section level3">
-<h3 id="boxplots">Boxplots<a class="anchor" aria-label="anchor" href="#boxplots"></a>
-</h3>
+<div class="section level2">
+<h2 id="boxplots">Boxplots<a class="anchor" aria-label="anchor" href="#boxplots"></a>
+</h2>
 <p>Boxplots are widely used for anomaly detection. Here are three variations of boxplots applied to the <code>duration</code> variable.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
@@ -221,9 +222,9 @@
 <p><img src="reference/figures/README-of-boxplot3-2.png" style="width:100.0%"></p>
 <p>The latter two plots show likely outliers in red, using the lookout algorithm.</p>
 </div>
-<div class="section level3">
-<h3 id="scoring-functions">Scoring functions<a class="anchor" aria-label="anchor" href="#scoring-functions"></a>
-</h3>
+<div class="section level2">
+<h2 id="scoring-functions">Scoring functions<a class="anchor" aria-label="anchor" href="#scoring-functions"></a>
+</h2>
 <p>Several functions are provided for providing anomaly scores for all observations.</p>
 <ul>
 <li>The <code><a href="reference/density_scores.html">density_scores()</a></code> function uses either a fitted statistical model, or a kernel density estimate, to compute density scores.</li>
@@ -266,9 +267,9 @@
 <span><span class="co">#&gt; 11 2018-09-22 16:37:00      253    7140     14.7     0.0200     2.63      1    </span></span>
 <span><span class="co">#&gt; # ℹ 1 more variable: lookout &lt;dbl&gt;</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="robust-multivariate-scaling">Robust multivariate scaling<a class="anchor" aria-label="anchor" href="#robust-multivariate-scaling"></a>
-</h3>
+<div class="section level2">
+<h2 id="robust-multivariate-scaling">Robust multivariate scaling<a class="anchor" aria-label="anchor" href="#robust-multivariate-scaling"></a>
+</h2>
 <p>Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The <code><a href="reference/mvscale.html">mvscale()</a></code> function provides a multivariate robust scaling method, that optionally takes account of the relationships betwen variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as <code>z1</code>, <code>z2</code>, etc. Non-rotated scaling is possible by setting <code>cov = NULL</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/mvscale.html">mvscale</a></span><span class="op">(</span><span class="va">of</span><span class="op">)</span></span>
@@ -303,7 +304,6 @@
 <span><span class="co">#&gt;  9 2015-03-13 23:37:00   -2.59   -0.807</span></span>
 <span><span class="co">#&gt; 10 2015-03-20 22:26:00   -7.16   -3.91 </span></span>
 <span><span class="co">#&gt; # ℹ 2,187 more rows</span></span></code></pre></div>
-</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
