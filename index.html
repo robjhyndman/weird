@@ -74,7 +74,7 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The weird package contains functions and data used in the book <a href="https://OTexts.com/weird/" class="external-link"><em>That’s Weird: Anomaly Detection Using R</em></a> by Rob J Hyndman. It also loads several packages needed to do the analysis described in the book. These packages work with the <a href="https://www.tidyverse.org/" class="external-link">tidyverse</a> set of packages, sharing common data representations and API design.</p>
+<p>The weird package contains functions and data used in the book <a href="https://OTexts.com/weird/" class="external-link"><em>That’s Weird: Anomaly Detection Using R</em></a> by Rob J Hyndman. It also loads several packages needed to do the analysis described in the book.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -107,10 +107,146 @@
 <span><span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="example-old-faithful-geyser-data">Example: Old Faithful Geyser data<a class="anchor" aria-label="anchor" href="#example-old-faithful-geyser-data"></a>
 </h2>
+<p>The <code>oldfaithful</code> data set contains eruption data from the Old Faithful Geyser in Yellowstone National Park, Wyoming, USA, from 1 January 2015 to 1 October 2021. The data were obtained from the <a href="https://geysertimes.org" class="external-link">geysertimes.org</a> website. Recordings are incomplete, especially during the winter months when observers may not be present. There also appear to be some recording errors. The data set contains 2261 observations of 3 variables: <code>time</code> giving the time at which each eruption began, <code>duration</code> giving the length of the eruption in seconds, and <code>waiting</code> giving the time to the next eruption in seconds. In the analysis below, we omit the eruption with <code>duration</code> greater than 1 hour as this is likely to be a recording error. Some of the long <code>waiting</code> values are probably due to omitted eruptions, and so we also omit eruptions with <code>waiting</code> greater than 2 hours.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># TBC</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">oldfaithful</span></span>
+<span><span class="co">#&gt; # A tibble: 2,261 × 3</span></span>
+<span><span class="co">#&gt;    time                duration waiting</span></span>
+<span><span class="co">#&gt;    &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2015-01-02 14:53:00      271    5040</span></span>
+<span><span class="co">#&gt;  2 2015-01-09 23:55:00      247    6060</span></span>
+<span><span class="co">#&gt;  3 2015-02-07 00:49:00      203    5460</span></span>
+<span><span class="co">#&gt;  4 2015-02-14 01:09:00      195    5221</span></span>
+<span><span class="co">#&gt;  5 2015-02-21 01:12:00      210    5401</span></span>
+<span><span class="co">#&gt;  6 2015-02-28 01:11:00      185    5520</span></span>
+<span><span class="co">#&gt;  7 2015-03-07 00:50:00      160    5281</span></span>
+<span><span class="co">#&gt;  8 2015-03-13 21:57:00      226    6000</span></span>
+<span><span class="co">#&gt;  9 2015-03-13 23:37:00      190    5341</span></span>
+<span><span class="co">#&gt; 10 2015-03-20 22:26:00      102    3961</span></span>
+<span><span class="co">#&gt; # ℹ 2,251 more rows</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="kernel-density-estimates">Kernel density estimates<a class="anchor" aria-label="anchor" href="#kernel-density-estimates"></a>
+</h3>
+<p>The package provides the <code><a href="reference/kde_bandwidth.html">kde_bandwidth()</a></code> function for estimating the bandwidth of a kernel density estimate, and an <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> method for plotting the resulting density. The figure below shows the kernel density estimate of the <code>duration</code> variable obtained using these functions. The rug plot shows the actual data values.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">&lt;-</span> <span class="va">oldfaithful</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">duration</span> <span class="op">&lt;</span> <span class="fl">3600</span>, <span class="va">waiting</span> <span class="op">&lt;</span> <span class="fl">7200</span><span class="op">)</span></span>
+<span><span class="va">of_density</span> <span class="op">&lt;-</span> <span class="fu">kde</span><span class="op">(</span><span class="va">of</span><span class="op">$</span><span class="va">duration</span>, h<span class="op">=</span><span class="fu"><a href="reference/kde_bandwidth.html">kde_bandwidth</a></span><span class="op">(</span><span class="va">of</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">of_density</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_rug</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">duration</span><span class="op">)</span>, <span class="va">of</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-of-density-1.png" style="width:100.0%"></p>
+<p>The <code><a href="reference/kde_bandwidth.html">kde_bandwidth()</a></code> function can also be used to estimate the bandwidth for a bivariate kernel density estimate. The figure below shows the kernel density estimate of the <code>duration</code> and <code>waiting</code> variables using the bandwidth selected by the <code><a href="reference/kde_bandwidth.html">kde_bandwidth()</a></code> function. The rug plot shows the actual data values.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of_density</span> <span class="op">&lt;-</span> <span class="va">of</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">kde</span><span class="op">(</span>H <span class="op">=</span> <span class="fu"><a href="reference/kde_bandwidth.html">kde_bandwidth</a></span><span class="op">(</span><span class="va">of</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"duration"</span>,<span class="st">"waiting"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">of_density</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">of</span>, alpha<span class="op">=</span><span class="fl">0.15</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-of-density2-1.png" style="width:100.0%"></p>
+</div>
+<div class="section level3">
+<h3 id="statistical-tests">Statistical tests<a class="anchor" aria-label="anchor" href="#statistical-tests"></a>
+</h3>
+<p>Some old methods of anomaly detection used statistical tests. While these are not recommended, they are still widely used, and are provided in the package for comparison purposes.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="reference/peirce_anomalies.html">peirce_anomalies</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 3</span></span>
+<span><span class="co">#&gt;   time                duration waiting</span></span>
+<span><span class="co">#&gt;   &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2018-04-25 19:08:00        1    5700</span></span>
+<span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="reference/peirce_anomalies.html">chauvenet_anomalies</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 3</span></span>
+<span><span class="co">#&gt;   time                duration waiting</span></span>
+<span><span class="co">#&gt;   &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2018-04-25 19:08:00        1    5700</span></span>
+<span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="reference/grubbs_anomalies.html">grubbs_anomalies</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 3</span></span>
+<span><span class="co">#&gt;   time                duration waiting</span></span>
+<span><span class="co">#&gt;   &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2018-04-25 19:08:00        1    5700</span></span>
+<span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="reference/grubbs_anomalies.html">dixon_anomalies</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 3</span></span>
+<span><span class="co">#&gt;   time                duration waiting</span></span>
+<span><span class="co">#&gt;   &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2018-04-25 19:08:00        1    5700</span></span></code></pre></div>
+<p>In this example, they only detect the tiny 1-second duration, which is almost certainly a recording error. An explanation of these tests is provided in <a href="https://otexts.com/weird/04-tests.html" class="external-link">Chapter 4 of the book</a></p>
+</div>
+<div class="section level3">
+<h3 id="boxplots">Boxplots<a class="anchor" aria-label="anchor" href="#boxplots"></a>
+</h3>
+<p>Boxplots are widely used for anomaly detection. Here are three variations of boxplots applied to the <code>duration</code> variable.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">duration</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_boxplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_y_discrete</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-of-boxplot-1.png" style="width:100.0%"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-of-boxplot-2.png" style="width:100.0%"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-of-boxplot-3.png" style="width:100.0%"></p>
+<p>The latter two plots are HDR boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers in red using the lookout algorithm (described in <a href="https://otexts.com/weird/06-density.html" class="external-link">Chapter 6 of the book</a>). An explanation of these plots is provided in <a href="https://otexts.com/weird/04-boxplots.html" class="external-link">Chapter 5 of the book</a>.</p>
+<p>It is also possible to produce bivariate boxplots. Several variations are provided in the package. Here are two types of bagplot.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/bagplot.html">gg_bagplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-of-boxplot2-1.png" style="width:100.0%"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/bagplot.html">gg_bagplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-of-boxplot2-2.png" style="width:100.0%"></p>
+<p>And here are two types of HDR boxplot</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span> </span></code></pre></div>
+<p><img src="reference/figures/README-of-boxplot3-1.png" style="width:100.0%"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span> </span></code></pre></div>
+<p><img src="reference/figures/README-of-boxplot3-2.png" style="width:100.0%"></p>
+<p>The latter two plots show likely outliers in red, using the lookout algorithm.</p>
+</div>
+<div class="section level3">
+<h3 id="scoring-functions">Scoring functions<a class="anchor" aria-label="anchor" href="#scoring-functions"></a>
+</h3>
+<p>Several functions are provided for providing anomaly scores for all observations. The <code><a href="reference/density_scores.html">density_scores()</a></code> function uses either a fitted statistical model, or a kernel density estimate, to compute density scores. An alternative scoring method uses local outlier factors, implemented in the <code><a href="reference/lof_scores.html">lof_scores()</a></code> function. Here are the top 0.02% most anomalous observations identified by each method.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    denscore <span class="op">=</span> <span class="fu"><a href="reference/density_scores.html">density_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    lofscore <span class="op">=</span> <span class="fu"><a href="reference/lof_scores.html">lof_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">150</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">denscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">denscore</span>, prob<span class="op">=</span><span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
+<span>         <span class="va">lofscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">lofscore</span>, prob<span class="op">=</span><span class="fl">0.998</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">denscore</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; # A tibble: 9 × 5</span></span>
+<span><span class="co">#&gt;   time                duration waiting denscore lofscore</span></span>
+<span><span class="co">#&gt;   &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2020-06-01 21:04:00      120    6060     17.5     1.88</span></span>
+<span><span class="co">#&gt; 2 2018-04-25 19:08:00        1    5700     17.5     3.78</span></span>
+<span><span class="co">#&gt; 3 2021-01-22 18:35:00      170    3600     16.8     1.09</span></span>
+<span><span class="co">#&gt; 4 2020-08-31 09:56:00      170    3840     16.7     1.01</span></span>
+<span><span class="co">#&gt; 5 2015-11-21 20:27:00      150    3420     16.7     1.27</span></span>
+<span><span class="co">#&gt; 6 2020-10-15 17:11:00      220    7080     15.7     2.42</span></span>
+<span><span class="co">#&gt; 7 2017-09-22 18:51:00      281    7140     15.5     2.64</span></span>
+<span><span class="co">#&gt; 8 2020-05-18 21:21:00      272    7080     14.9     2.42</span></span>
+<span><span class="co">#&gt; 9 2018-09-22 16:37:00      253    7140     14.7     2.63</span></span></code></pre></div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
