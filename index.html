@@ -224,28 +224,85 @@
 <div class="section level3">
 <h3 id="scoring-functions">Scoring functions<a class="anchor" aria-label="anchor" href="#scoring-functions"></a>
 </h3>
-<p>Several functions are provided for providing anomaly scores for all observations. The <code><a href="reference/density_scores.html">density_scores()</a></code> function uses either a fitted statistical model, or a kernel density estimate, to compute density scores. An alternative scoring method uses local outlier factors, implemented in the <code><a href="reference/lof_scores.html">lof_scores()</a></code> function. Here are the top 0.02% most anomalous observations identified by each method.</p>
+<p>Several functions are provided for providing anomaly scores for all observations.</p>
+<ul>
+<li>The <code><a href="reference/density_scores.html">density_scores()</a></code> function uses either a fitted statistical model, or a kernel density estimate, to compute density scores.</li>
+<li>The <code><a href="reference/stray_scores.html">stray_scores()</a></code> function uses the stray algorithm to compute anomaly scores.</li>
+<li>The <code><a href="reference/lof_scores.html">lof_scores()</a></code> function uses local outlier factors to compute anomaly scores.</li>
+<li>The <code><a href="reference/glosh_scores.html">glosh_scores()</a></code> function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.</li>
+<li>The <code><a href="reference/lookout.html">lookout()</a></code> function uses the lookout algorithm to compute anomaly probabilities</li>
+</ul>
+<p>Here are the top 0.02% most anomalous observations identified by each of the first four methods, along with the observations having lookout probability less than 0.05.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    denscore <span class="op">=</span> <span class="fu"><a href="reference/density_scores.html">density_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    lofscore <span class="op">=</span> <span class="fu"><a href="reference/lof_scores.html">lof_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">150</span><span class="op">)</span></span>
+<span>    strayscore <span class="op">=</span> <span class="fu"><a href="reference/stray_scores.html">stray_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    lofscore <span class="op">=</span> <span class="fu"><a href="reference/lof_scores.html">lof_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">150</span><span class="op">)</span>,</span>
+<span>    gloshscore <span class="op">=</span> <span class="fu"><a href="reference/glosh_scores.html">glosh_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    lookout <span class="op">=</span> <span class="fu"><a href="reference/lookout.html">lookout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">denscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">denscore</span>, prob<span class="op">=</span><span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
-<span>         <span class="va">lofscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">lofscore</span>, prob<span class="op">=</span><span class="fl">0.998</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">denscore</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="co">#&gt; # A tibble: 9 × 5</span></span>
-<span><span class="co">#&gt;   time                duration waiting denscore lofscore</span></span>
-<span><span class="co">#&gt;   &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2020-06-01 21:04:00      120    6060     17.5     1.88</span></span>
-<span><span class="co">#&gt; 2 2018-04-25 19:08:00        1    5700     17.5     3.78</span></span>
-<span><span class="co">#&gt; 3 2021-01-22 18:35:00      170    3600     16.8     1.09</span></span>
-<span><span class="co">#&gt; 4 2020-08-31 09:56:00      170    3840     16.7     1.01</span></span>
-<span><span class="co">#&gt; 5 2015-11-21 20:27:00      150    3420     16.7     1.27</span></span>
-<span><span class="co">#&gt; 6 2020-10-15 17:11:00      220    7080     15.7     2.42</span></span>
-<span><span class="co">#&gt; 7 2017-09-22 18:51:00      281    7140     15.5     2.64</span></span>
-<span><span class="co">#&gt; 8 2020-05-18 21:21:00      272    7080     14.9     2.42</span></span>
-<span><span class="co">#&gt; 9 2018-09-22 16:37:00      253    7140     14.7     2.63</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">denscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">denscore</span>, prob<span class="op">=</span><span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
+<span>    <span class="va">strayscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">strayscore</span>, prob<span class="op">=</span><span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
+<span>    <span class="va">lofscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">lofscore</span>, prob<span class="op">=</span><span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
+<span>    <span class="va">gloshscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">gloshscore</span>, prob<span class="op">=</span><span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
+<span>    <span class="va">lookout</span> <span class="op">&lt;</span> <span class="fl">0.05</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">lookout</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 11 × 8</span></span>
+<span><span class="co">#&gt;    time                duration waiting denscore strayscore lofscore gloshscore</span></span>
+<span><span class="co">#&gt;    &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2018-04-25 19:08:00        1    5700     17.5     0.380      3.78      1    </span></span>
+<span><span class="co">#&gt;  2 2020-06-01 21:04:00      120    6060     17.5     0.132      1.88      1    </span></span>
+<span><span class="co">#&gt;  3 2021-01-22 18:35:00      170    3600     16.8     0.0606     1.09      0.860</span></span>
+<span><span class="co">#&gt;  4 2020-08-31 09:56:00      170    3840     16.7     0.0606     1.01      0.816</span></span>
+<span><span class="co">#&gt;  5 2015-11-21 20:27:00      150    3420     16.7     0.0772     1.27      1    </span></span>
+<span><span class="co">#&gt;  6 2017-05-03 06:19:00       90    4740     16.4     0.0495     1.68      1    </span></span>
+<span><span class="co">#&gt;  7 2020-10-15 17:11:00      220    7080     15.7     0.0429     2.42      1    </span></span>
+<span><span class="co">#&gt;  8 2017-09-22 18:51:00      281    7140     15.5     0.0333     2.64      1    </span></span>
+<span><span class="co">#&gt;  9 2017-08-12 13:14:00      120    4920     15.2     0.0690     1.53      1    </span></span>
+<span><span class="co">#&gt; 10 2020-05-18 21:21:00      272    7080     14.9     0.0333     2.42      1    </span></span>
+<span><span class="co">#&gt; 11 2018-09-22 16:37:00      253    7140     14.7     0.0200     2.63      1    </span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: lookout &lt;dbl&gt;</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="robust-multivariate-scaling">Robust multivariate scaling<a class="anchor" aria-label="anchor" href="#robust-multivariate-scaling"></a>
+</h3>
+<p>Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The <code><a href="reference/mvscale.html">mvscale()</a></code> function provides a multivariate robust scaling method, that optionally takes account of the relationships betwen variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as <code>z1</code>, <code>z2</code>, etc. Non-rotated scaling is possible by setting <code>cov = NULL</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/mvscale.html">mvscale</a></span><span class="op">(</span><span class="va">of</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in mvscale(of): Ignoring non-numeric columns: time</span></span>
+<span><span class="co">#&gt; # A tibble: 2,197 × 3</span></span>
+<span><span class="co">#&gt;    time                    z1     z2</span></span>
+<span><span class="co">#&gt;    &lt;dttm&gt;               &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2015-01-02 14:53:00  2.06  -1.47 </span></span>
+<span><span class="co">#&gt;  2 2015-01-09 23:55:00  0.130  0.801</span></span>
+<span><span class="co">#&gt;  3 2015-02-07 00:49:00 -1.78  -0.534</span></span>
+<span><span class="co">#&gt;  4 2015-02-14 01:09:00 -2.04  -1.07 </span></span>
+<span><span class="co">#&gt;  5 2015-02-21 01:12:00 -1.38  -0.665</span></span>
+<span><span class="co">#&gt;  6 2015-02-28 01:11:00 -2.76  -0.401</span></span>
+<span><span class="co">#&gt;  7 2015-03-07 00:50:00 -3.92  -0.932</span></span>
+<span><span class="co">#&gt;  8 2015-03-13 21:57:00 -0.932  0.668</span></span>
+<span><span class="co">#&gt;  9 2015-03-13 23:37:00 -2.38  -0.799</span></span>
+<span><span class="co">#&gt; 10 2015-03-20 22:26:00 -6.09  -3.87 </span></span>
+<span><span class="co">#&gt; # ℹ 2,187 more rows</span></span>
+<span><span class="fu"><a href="reference/mvscale.html">mvscale</a></span><span class="op">(</span><span class="va">of</span>, cov <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in mvscale(of, cov = NULL): Ignoring non-numeric columns: time</span></span>
+<span><span class="co">#&gt; # A tibble: 2,197 × 3</span></span>
+<span><span class="co">#&gt;    time                duration waiting</span></span>
+<span><span class="co">#&gt;    &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2015-01-02 14:53:00    1.61   -1.48 </span></span>
+<span><span class="co">#&gt;  2 2015-01-09 23:55:00    0.363   0.809</span></span>
+<span><span class="co">#&gt;  3 2015-02-07 00:49:00   -1.92   -0.540</span></span>
+<span><span class="co">#&gt;  4 2015-02-14 01:09:00   -2.33   -1.08 </span></span>
+<span><span class="co">#&gt;  5 2015-02-21 01:12:00   -1.56   -0.672</span></span>
+<span><span class="co">#&gt;  6 2015-02-28 01:11:00   -2.85   -0.405</span></span>
+<span><span class="co">#&gt;  7 2015-03-07 00:50:00   -4.15   -0.942</span></span>
+<span><span class="co">#&gt;  8 2015-03-13 21:57:00   -0.726   0.674</span></span>
+<span><span class="co">#&gt;  9 2015-03-13 23:37:00   -2.59   -0.807</span></span>
+<span><span class="co">#&gt; 10 2015-03-20 22:26:00   -7.16   -3.91 </span></span>
+<span><span class="co">#&gt; # ℹ 2,187 more rows</span></span></code></pre></div>
 </div>
 </div>
 </div>
