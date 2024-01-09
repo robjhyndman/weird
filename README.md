@@ -192,7 +192,7 @@ and highlight potential outliers in red using the lookout algorithm
 (described in [Chapter 6 of the
 book](https://otexts.com/weird/06-density.html)). An explanation of
 these plots is provided in [Chapter 5 of the
-book](https://otexts.com/weird/04-boxplots.html).
+book](https://otexts.com/weird/05-boxplots.html).
 
 It is also possible to produce bivariate boxplots. Several variations
 are provided in the package. Here are two types of bagplot.
