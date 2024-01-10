@@ -25,7 +25,7 @@ print.kde <- function(x, ...) {
       cat("h = ", format(x$h, digits = 4))
     } else {
       cat("H = \n")
-      print(format(x$H, digits = 4), quote=FALSE)
+      cat(format(x$H, digits = 4), quote=FALSE)
     }
   }
   invisible(x)

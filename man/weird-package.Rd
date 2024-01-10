@@ -6,7 +6,7 @@
 \alias{weird-package}
 \title{weird: Functions and Data Sets for "That's Weird: Anomaly Detection Using R" by Rob J Hyndman}
 \description{
-"All functions and data sets required for the examples in the book 'That's weird' by Rob J Hyndman' \url{https://OTexts.com/weird/}. All packages required to run the examples are also loaded."
+All functions and data sets required for the examples in the book Hyndman (2024) "That's Weird: Anomaly Detection Using R" \url{https://OTexts.com/weird/}. All packages needed to run the examples are also loaded.
 }
 \seealso{
 Useful links:
