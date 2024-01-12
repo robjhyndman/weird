@@ -4,3 +4,4 @@
 
 * This is a new release.
 * URL fixed as requested
+* Description field fixed as requested

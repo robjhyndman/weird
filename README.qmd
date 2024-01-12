@@ -25,7 +25,13 @@ The weird package contains functions and data used in the book [*That's Weird: A
 
 ## Installation
 
-You can install the development version of weird from [GitHub](https://github.com/) with:
+You can install the **stable** version from [CRAN](https://cran.r-project.org/package=weird) with:
+
+``` r
+install.packages("weird")
+```
+
+You can install the **development** version of weird from [GitHub](https://github.com/robjhyndman/weird-package) with:
 
 ``` r
 # install.packages("devtools")
