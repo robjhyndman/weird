@@ -1,0 +1,27 @@
+year <- sub("-.*", "", meta$Date)
+if(!length(year))
+  year <- substr(Sys.Date(),1,4)
+vers <- meta$Version
+if(is.null(vers))
+  vers <- packageVersion("forecast")
+vers <- paste("R package version", vers)
+
+citHeader("To cite the weird package in publications, please use:")
+
+bibentry(bibtype = "Manual",
+  title  = '{weird: Functions and Data Sets for "That\'s Weird: Anomaly Detection Using R" by Rob J Hyndman}',
+  author = c(as.person("Rob J Hyndman")),
+  year   = year,
+  note   = vers,
+  url    = "https://pkg.robjhyndman.com/weird-package/"
+)
+
+bibentry(bibtype = "Book",
+  title  = "That's Weird: Anomaly Detection Using {R}",
+  author = c(as.person("Rob J Hyndman")),
+  year   = year,
+  note   = "In preparation",
+  publisher = "OTexts",
+  address = "Melbourne, Australia",
+  url    = "https://OTexts.com/weird/"
+)
