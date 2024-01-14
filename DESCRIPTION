@@ -40,6 +40,7 @@ Depends:
     R (>= 4.1.0)
 Suggests: 
     mgcv,
+    outliers,
     testthat (>= 3.0.0),
     tidyr
 Config/testthat/edition: 3
