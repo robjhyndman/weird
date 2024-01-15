@@ -35,7 +35,7 @@ Encoding: UTF-8
 LazyData: true
 LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Depends: 
     R (>= 4.1.0)
 Suggests: 
@@ -43,6 +43,7 @@ Suggests:
     outliers,
     testthat (>= 3.0.0),
     tidyr
+SystemRequirements: xquartz (for Mac OS X)
 Config/testthat/edition: 3
 URL: https://pkg.robjhyndman.com/weird-package/, https://github.com/robjhyndman/weird-package
 BugReports: https://github.com/robjhyndman/weird-package/issues
