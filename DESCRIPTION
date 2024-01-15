@@ -41,7 +41,7 @@ Depends:
 Suggests: 
     mgcv,
     outliers,
-    rgl,
+    tcltk,
     testthat (>= 3.0.0),
     tidyr
 Config/testthat/edition: 3
