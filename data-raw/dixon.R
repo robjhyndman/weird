@@ -30,8 +30,8 @@ alpha <- exp(-9:9) / (1 + exp(-9:9))
 dixon_cv <- bind_cols(
   n = n,
   qdixon(n, alpha = alpha, rep = 1e5)
-) %>%
-  pivot_longer(-n, names_to = "alpha", values_to = "cv") %>%
+) |>
+  pivot_longer(-n, names_to = "alpha", values_to = "cv") |>
   mutate(alpha = as.numeric(alpha))
 
 usethis::use_data(dixon_cv, overwrite = TRUE, internal = TRUE)
@@ -75,13 +75,13 @@ summary(dixonfit)
 pred <- exp(predict(dixonfit))
 
 # Check fits
-cv_subset %>%
+cv_subset |>
   ggplot(aes(x = logit(alpha), y = cv, group = n, col = as.factor(n))) +
   geom_point() +
   scale_y_log10() +
   geom_line(aes(y = pred))
 
-cv_subset %>%
+cv_subset |>
   ggplot(aes(x = loglog(n), y = cv, group = alpha, col = as.factor(alpha))) +
   geom_point() +
   geom_line(aes(y = pred)) +
