@@ -28,6 +28,9 @@
     <loc>https://pkg.robjhyndman.com/weird-package/reference/density_scores.html</loc>
   </url>
   <url>
+    <loc>https://pkg.robjhyndman.com/weird-package/reference/fetch_wine_reviews.html</loc>
+  </url>
+  <url>
     <loc>https://pkg.robjhyndman.com/weird-package/reference/glosh_scores.html</loc>
   </url>
   <url>
@@ -83,8 +86,5 @@
   </url>
   <url>
     <loc>https://pkg.robjhyndman.com/weird-package/reference/weird_packages.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/wine_reviews.html</loc>
   </url>
 </urlset>
