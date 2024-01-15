@@ -15,8 +15,8 @@
 #' @param y numerical vector of observations
 #' @examples
 #' y <- rnorm(1000)
-#' tibble(y = y) |> dplyr::filter(peirce_anomalies(y))
-#' tibble(y = y) |> dplyr::filter(chauvenet_anomalies(y))
+#' tibble(y = y) |> filter(peirce_anomalies(y))
+#' tibble(y = y) |> filter(chauvenet_anomalies(y))
 #' @export
 
 peirce_anomalies <- function(y) {

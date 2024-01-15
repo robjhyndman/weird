@@ -29,7 +29,7 @@ reference:
       - cricket_batting
       - n01
       - oldfaithful
-      - wine_reviews
+      - fetch_wine_reviews
   - title: Functions for calculating anomaly scores
     contents:
       - density_scores

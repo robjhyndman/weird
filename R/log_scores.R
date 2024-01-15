@@ -84,17 +84,17 @@ density_scores.kde <- function(object, loo = FALSE, ...) {
 #' @rdname density_scores
 #' @examples
 #' # Density scores computed from linear model
-#' shiraz <- wine_reviews |> filter(variety %in% c("Shiraz", "Syrah"))
-#' lm_wine <- lm(log(price) ~ points, data = shiraz)
-#' shiraz |>
+#' of <- oldfaithful |>
+#'   filter(duration < 7200, waiting < 7200)
+#' lm_of <- lm(waiting ~ duration, data = of)
+#' of |>
 #'   mutate(
-#'     fscore = density_scores(lm_wine),
-#'     loo_fscore = density_scores(lm_wine, loo = TRUE),
+#'     fscore = density_scores(lm_of),
+#'     loo_fscore = density_scores(lm_of, loo = TRUE),
 #'     lookout_prob = lookout(density_scores = fscore, loo_scores = loo_fscore)
 #'   ) |>
-#'   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
-#'   geom_jitter(height = 0, width = 0.2) +
-#'   scale_y_log10()
+#'   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.02)) +
+#'   geom_point()
 #' @export
 density_scores.lm <- function(object, loo = FALSE, ...) {
   e <- stats::residuals(object, type = "response")
@@ -112,15 +112,15 @@ density_scores.lm <- function(object, loo = FALSE, ...) {
 #' @rdname density_scores
 #' @examples
 #' # Density scores computed from GAM
-#' gam_wine <- mgcv::gam(log(price) ~ s(points), data = shiraz)
-#' shiraz |>
+#' of <- oldfaithful |>
+#'   filter(duration > 1, duration < 7200, waiting < 7200)
+#' gam_of <- mgcv::gam(waiting ~ s(duration), data = of)
+#' of |>
 #'   mutate(
-#'     fscore = density_scores(gam_wine),
+#'     fscore = density_scores(gam_of),
 #'     lookout_prob = lookout(density_scores = fscore)
 #'   ) |>
-#'   ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
-#'   geom_jitter(height = 0, width = 0.2) +
-#'   scale_y_log10()
+#'   filter(lookout_prob < 0.02)
 #' @importFrom stats approx dbinom density dnorm dpois na.omit
 #' @export
 density_scores.gam <- function(object, loo = FALSE, ...) {

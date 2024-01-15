@@ -40,7 +40,6 @@ are implemented in the \code{\link[outliers]{grubbs.test}} function.
 Dixon's test only considers the maximum (and possibly the minimum) as potential outliers.
 }
 \examples{
-library(dplyr)
 x <- c(rnorm(1000), 5:10)
 tibble(x = x) |> filter(grubbs_anomalies(x))
 tibble(x = x) |> filter(dixon_anomalies(x))

@@ -26,8 +26,8 @@ to either Peirce's criterion or Chauvenet's criterion.
 }
 \examples{
 y <- rnorm(1000)
-tibble(y = y) |> dplyr::filter(peirce_anomalies(y))
-tibble(y = y) |> dplyr::filter(chauvenet_anomalies(y))
+tibble(y = y) |> filter(peirce_anomalies(y))
+tibble(y = y) |> filter(chauvenet_anomalies(y))
 }
 \references{
 Peirce, B. (1852). Criterion for the rejection of doubtful observations.

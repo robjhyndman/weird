@@ -53,7 +53,7 @@ y <- cbind(rnorm(100), rnorm(100))
 hdr_table(y = y)
 grid <- seq(-4, 4, by=0.1)
 density <- expand.grid(grid, grid) |>
-  dplyr::mutate(density = dnorm(Var1) * dnorm(Var2))
+  mutate(density = dnorm(Var1) * dnorm(Var2))
 hdr_table(density = density)
 }
 \references{

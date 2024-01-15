@@ -76,27 +76,27 @@ of |>
     loo_fscores = density_scores(f_kde, loo = TRUE)
   )
 # Density scores computed from linear model
-shiraz <- wine_reviews |> filter(variety \%in\% c("Shiraz", "Syrah"))
-lm_wine <- lm(log(price) ~ points, data = shiraz)
-shiraz |>
+of <- oldfaithful |>
+  filter(duration < 7200, waiting < 7200)
+lm_of <- lm(waiting ~ duration, data = of)
+of |>
   mutate(
-    fscore = density_scores(lm_wine),
-    loo_fscore = density_scores(lm_wine, loo = TRUE),
+    fscore = density_scores(lm_of),
+    loo_fscore = density_scores(lm_of, loo = TRUE),
     lookout_prob = lookout(density_scores = fscore, loo_scores = loo_fscore)
   ) |>
-  ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
-  geom_jitter(height = 0, width = 0.2) +
-  scale_y_log10()
+  ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.02)) +
+  geom_point()
 # Density scores computed from GAM
-gam_wine <- mgcv::gam(log(price) ~ s(points), data = shiraz)
-shiraz |>
+of <- oldfaithful |>
+  filter(duration > 1, duration < 7200, waiting < 7200)
+gam_of <- mgcv::gam(waiting ~ s(duration), data = of)
+of |>
   mutate(
-    fscore = density_scores(gam_wine),
+    fscore = density_scores(gam_of),
     lookout_prob = lookout(density_scores = fscore)
   ) |>
-  ggplot(aes(x = points, y = price, color = lookout_prob < 0.02)) +
-  geom_jitter(height = 0, width = 0.2) +
-  scale_y_log10()
+  filter(lookout_prob < 0.02)
 }
 \seealso{
 \code{\link{kde_bandwidth}}

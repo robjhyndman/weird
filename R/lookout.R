@@ -32,10 +32,10 @@
 #'   lookout = lookout(density_scores = fscores, loo_scores = loo_fscores)
 #' )
 #' # Using a regression model
-#' shiraz <- wine_reviews |> filter(variety %in% c("Shiraz", "Syrah"))
-#' fit_wine <- lm(log(price) ~ points, data = shiraz)
-#' shiraz |>
-#'   mutate(lookout_prob = lookout(fit_wine)) |>
+#' of <- oldfaithful |> filter(duration < 7200, waiting < 7200)
+#' fit_of <- lm(waiting ~ duration, data = of)
+#' of |>
+#'   mutate(lookout_prob = lookout(fit_of)) |>
 #'   arrange(lookout_prob)
 #' @importFrom stats quantile
 #' @importFrom evd fpot pgpd

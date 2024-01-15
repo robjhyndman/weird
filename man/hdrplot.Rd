@@ -55,10 +55,10 @@ df$y <- df$x + rnorm(200, sd=2)
 gg_hdrboxplot(df, x)
 gg_hdrboxplot(df, x, y, scatterplot = TRUE)
 oldfaithful |>
-  dplyr::filter(duration < 7000, waiting < 7000) |>
+  filter(duration < 7000, waiting < 7000) |>
   gg_hdrboxplot(duration, waiting, scatterplot = TRUE)
 cricket_batting |>
-  dplyr::filter(Innings > 20) |>
+  filter(Innings > 20) |>
   gg_hdrboxplot(Average)
 
 }

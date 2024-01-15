@@ -25,7 +25,6 @@
 #' @param alpha size of the test.
 #' @seealso \code{\link[outliers]{grubbs.test}}, \code{\link[outliers]{dixon.test}}
 #' @examples
-#' library(dplyr)
 #' x <- c(rnorm(1000), 5:10)
 #' tibble(x = x) |> filter(grubbs_anomalies(x))
 #' tibble(x = x) |> filter(dixon_anomalies(x))
