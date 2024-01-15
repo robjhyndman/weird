@@ -53,30 +53,6 @@
 #' @source \url{https://geysertimes.org}
 "oldfaithful"
 
-#' Wine prices and points
-#'
-#' A data set containing data on wines from 44 countries, taken from *Wine Enthusiast Magazine*
-#' during the week of 15 June 2017.
-#'
-#' @format A data frame with 110,203 rows and 8 columns:
-#' \describe{
-#'   \item{country}{Country of origin}
-#'   \item{state}{State or province of origin}
-#'   \item{region}{Region of origin}
-#'   \item{winery}{Name of vineyard that made the wine}
-#'   \item{variety}{Variety of grape}
-#'   \item{points}{Points allocated by WineEnthusiast reviewer on a scale of 0-100}
-#'   \item{price}{Price of a bottle of wine in $US}
-#'   \item{year}{Year of wine extracted from `title`}
-#' }
-#' @return Data frame
-#' @examples
-#' wine_reviews |>
-#'  ggplot(aes(x = points, y = price)) +
-#'  geom_jitter(height = 0, width = 0.2, alpha = 0.1) +
-#'  scale_y_log10()
-#' @source \url{https://kaggle.com}
-"wine_reviews"
 
 #' Multivariate standard normal data
 #'
