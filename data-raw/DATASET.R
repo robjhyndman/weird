@@ -47,7 +47,10 @@ wine_reviews <- readr::read_csv(here::here("data-raw/winemag-data-130k-v2.csv"))
   select(country, state = province, region = region_1, winery, variety, points, price, year) %>%
   distinct()
 
-usethis::use_data(wine_reviews, overwrite = TRUE)
+# usethis::use_data(wine_reviews, overwrite = TRUE)
+# Save to data-raw folder for downloading at run time. This circumvents the
+## non-ASCII data rule of CRAN.
+saveRDS(wine_reviews, here::here("data-raw/wine_reviews.rds")
 
 # Synthetic data
 set.seed(1)
