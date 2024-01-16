@@ -2,6 +2,4 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
-* URL fixed as requested
-* Description field fixed as requested
+* Issues shown on CRAN check results fixed as requested
