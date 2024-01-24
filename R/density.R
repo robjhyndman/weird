@@ -121,11 +121,8 @@ density_on_grid <- function(y, fy, ngrid) {
   ))
   # Bivariate interpolation
   grid <- expand.grid(density$eval.points[[1]], density$eval.points[[2]])
-  density$estimate <- akima::interpp(
-    x = y[, 1], y = y[, 2], z = fy,
-    xo = grid[, 1], yo = grid[, 2]
-  )$z |>
-    suppressWarnings() |>
+  ifun <- interpolation::interpfun(x = y[, 1], y = y[, 2], z = fy)
+  density$estimate <- ifun(grid[,1], grid[,2]) |>
     matrix(nrow = ngrid)
   return(density)
 }

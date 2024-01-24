@@ -1,8 +1,7 @@
-# weird 1.0.1
+# weird 1.0.2
 
 * Removed wine_reviews dataset and created `fetch_wine_reviews()` function.
-* Switched from interp to akima for bivariate interpolation due to problems on M1.
-* Bug fix.
+* Bug fixes.
 
 # weird 1.0.0
 

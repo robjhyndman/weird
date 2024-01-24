@@ -1,4 +1,5 @@
 Corrected errors reported at <https://cran.r-project.org/web/checks/check_results_weird.html>.
+Corrected licensing issues with interpolation imports
 
 ## Test environments
 
