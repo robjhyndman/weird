@@ -1,3 +1,5 @@
+# weird (development version)
+
 # weird 1.0.2
 
 * Removed wine_reviews dataset and created `fetch_wine_reviews()` function.
