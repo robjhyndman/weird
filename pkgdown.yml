@@ -1,8 +1,8 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles: {}
-last_built: 2024-02-23T02:56Z
+last_built: 2024-06-12T05:30Z
 urls:
   reference: https://pkg.robjhyndman.com/weird-package/reference
   article: https://pkg.robjhyndman.com/weird-package/articles
