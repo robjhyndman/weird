@@ -1,7 +1,8 @@
 #' @title Lookout probabilities
 #' @description Compute leave-one-out log score probabilities using a
 #' Generalized Pareto distribution. These give the probability of each observation
-#' being an anomaly.
+#' being from the same distribution as the majority of observations. A low probability
+#' indicates a likely anomaly.
 #' @details This function can work with several object types.
 #' If `object` is not `NULL`, then the object is passed to \code{\link{density_scores}}
 #' to compute density scores (and possibly LOO density scores). Otherwise,
@@ -59,12 +60,19 @@ lookout <- function(
       loo_scores <- density_scores(object, loo = TRUE) |> suppressWarnings()
     }
   }
-  threshold <- stats::quantile(density_scores, prob = threshold_probability, type = 8)
-  if (sum(density_scores > threshold) == 0L) {
+  threshold <- stats::quantile(density_scores,
+    prob = threshold_probability,
+    type = 8, na.rm = TRUE
+  )
+  if (sum(density_scores > threshold, na.rm = TRUE) == 0L) {
     warning("No scores above threshold.")
     return(rep(1, length(density_scores)))
   }
-  gpd <- evd::fpot(density_scores, threshold = threshold, std.err = FALSE)$estimate
+  finite <- density_scores < Inf
+  if (any(!finite, na.rm = TRUE)) {
+    warning("Infinite density scores will be ignored in GPD.")
+  }
+  gpd <- evd::fpot(density_scores[finite], threshold = threshold, std.err = FALSE)$estimate
   evd::pgpd(
     loo_scores,
     loc = threshold,

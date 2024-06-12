@@ -26,7 +26,8 @@ A numerical vector containing the lookout probabilities
 \description{
 Compute leave-one-out log score probabilities using a
 Generalized Pareto distribution. These give the probability of each observation
-being an anomaly.
+being from the same distribution as the majority of observations. A low probability
+indicates a likely anomaly.
 }
 \details{
 This function can work with several object types.
