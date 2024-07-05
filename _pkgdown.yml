@@ -30,6 +30,7 @@ reference:
       - n01
       - oldfaithful
       - fetch_wine_reviews
+      - fr_mortality
   - title: Functions for calculating anomaly scores
     contents:
       - density_scores
