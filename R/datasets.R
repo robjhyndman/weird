@@ -64,3 +64,15 @@
 #' @examples
 #' n01
 "n01"
+
+#' French mortality rates by age and sex
+#'
+#' A data set containing French mortality rates between the years 1816 and 1999,
+#' by age and sex.
+#'
+#' @format A data frame with 31,648 rows and 4 columns.
+#' @source Human Mortality Database \url{https://www.mortality.org}
+#' @return Data frame
+#' @examples
+#' fr_mortality
+"fr_mortality"
