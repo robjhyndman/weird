@@ -45,9 +45,7 @@ reference:
       - grubbs_anomalies
       - peirce_anomalies
       - stray_anomalies
-  - title: Functions for replacing anomalies
-    contents:
-      - hampel
+      - hampel_anomalies
   - title: Functions for robust scaling of multivariate data
     contents:
       - mvscale
