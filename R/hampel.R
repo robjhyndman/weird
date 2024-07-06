@@ -17,14 +17,14 @@
 #' @author Rob J Hyndman
 #' @examples
 #' set.seed(1)
-#' tibble(
-#'   time = seq(41),
-#'   y = c(rnorm(20), 5, rnorm(20))
-#' ) |>
-#'   mutate(ystar = hampel(y, bandwidth = 3, k = 4)) |>
-#'   ggplot(aes(x = time, y = y)) +
-#'   geom_line(color = "red") +
-#'   geom_line(aes(y = ystar))
+#' df <- tibble(
+#'     time = seq(41),
+#'     y = c(rnorm(20), 5, rnorm(20))
+#'   ) |>
+#'   mutate(hampel = hampel_anomalies(y, bandwidth = 3, k = 4))
+#' df |> ggplot(aes(x = time, y = y)) +
+#'   geom_line() +
+#'   geom_point(data = df |> filter(hampel), col = "red")
 #' @export
 
 hampel_anomalies <- function(y, bandwidth, k = 3) {
@@ -40,7 +40,7 @@ hampel_anomalies <- function(y, bandwidth, k = 3) {
   mad <- rep(Inf, n)
   # Running MADs
   for (i in (bandwidth + 1):(n - bandwidth)) {
-    mad[i] <- median(abs(y[(i - bandwidth):(i + bandwidth)] - m[i]), na.rm = TRUE)
+    mad[i] <- stats::median(abs(y[(i - bandwidth):(i + bandwidth)] - m[i]), na.rm = TRUE)
   }
   # Find outliers
   return(diff > mad * k * 1.482602)

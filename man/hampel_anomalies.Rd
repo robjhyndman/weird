@@ -32,14 +32,14 @@ be declared anomalies.
 }
 \examples{
 set.seed(1)
-tibble(
-  time = seq(41),
-  y = c(rnorm(20), 5, rnorm(20))
-) |>
-  mutate(ystar = hampel(y, bandwidth = 3, k = 4)) |>
-  ggplot(aes(x = time, y = y)) +
-  geom_line(color = "red") +
-  geom_line(aes(y = ystar))
+df <- tibble(
+    time = seq(41),
+    y = c(rnorm(20), 5, rnorm(20))
+  ) |>
+  mutate(hampel = hampel_anomalies(y, bandwidth = 3, k = 4))
+df |> ggplot(aes(x = time, y = y)) +
+  geom_line() +
+  geom_point(data = df |> filter(hampel), col = "red")
 }
 \author{
 Rob J Hyndman
