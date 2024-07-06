@@ -1,14 +1,19 @@
-#' Hampel filter
+#' Identify anomalies using the Hampel filter
 #'
-#' The Hampel filter is designed to find outliers in time series data using
+#' The Hampel filter is designed to find anomalies in time series data using
 #' mean absolute deviations in the vicinity of each observation.
-#' @details The median absolute deviation is done in a window of times within
-#' `bandwidth` of each observation. A point is declared an outlier if its MAD
-#' value is more than k standard deviations
+#' @details First, a moving median is calculated using windows of size
+#' `2 * bandwidth + 1`. Then the median absolute deviations from
+#' this moving median are calculated in the same moving windows.
+#' A point is declared an anomaly if its MAD is value is more than `k` standard
+#' deviations. The MAD is converted to a standard deviation using MAD * 1.482602,
+#' which holds for normally distributed data.
+#' The first `bandwidth` and last `bandwidth` observations cannot
+#' be declared anomalies.
 #' @param y numeric vector containing time series
 #' @param bandwidth integer width of the window around each observation
 #' @param k numeric number of standard deviations to declare an outlier
-#' @return numeric vector with outliers replaced by the median of the window.
+#' @return logical vector identifying which observations are anomalies.
 #' @author Rob J Hyndman
 #' @examples
 #' set.seed(1)
@@ -22,7 +27,11 @@
 #'   geom_line(aes(y = ystar))
 #' @export
 
-hampel <- function(y, bandwidth, k = 3) {
+hampel_anomalies <- function(y, bandwidth, k = 3) {
+  if(abs(bandwidth - round(bandwidth)) > 1e-8) {
+    stop("Bandwidth must be an integer")
+  }
+  bandwidth <- as.integer(round(bandwidth))
   n <- length(y)
   # Running medians
   m <- stats::runmed(y, 2 * bandwidth + 1, endrule = "keep", na.action = "na.omit")
@@ -34,8 +43,5 @@ hampel <- function(y, bandwidth, k = 3) {
     mad[i] <- median(abs(y[(i - bandwidth):(i + bandwidth)] - m[i]), na.rm = TRUE)
   }
   # Find outliers
-  outliers <- diff > mad * k * 1.482602
-  # Replace outliers by medians
-  y[outliers] <- m[outliers]
-  return(y)
+  return(diff > mad * k * 1.482602)
 }
