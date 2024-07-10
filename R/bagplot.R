@@ -76,7 +76,10 @@ gg_bagplot <- function(data, var1, var2,
   }
   if (!scatterplot) {
     # Show median
-    p <- p + geom_point(aes(x = bp$center[1], y = bp$center[2]), col = col[1], size = 2)
+    p <- p + geom_point(
+      data = data.frame(x = bp$center[1], y = bp$center[2]),
+      aes(x = x, y=y), col = col[1], size = 2
+    )
   }
   return(p)
 }
