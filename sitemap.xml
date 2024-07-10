@@ -1,96 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/404.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/as_kde.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/autoplot.kde.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/bagplot.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/cricket_batting.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/density_scores.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/fetch_wine_reviews.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/fr_mortality.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/glosh_scores.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/grubbs_anomalies.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/hampel_anomalies.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/hdr_palette.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/hdr_table.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/hdrplot.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/kde_bandwidth.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/lof_scores.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/lookout.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/mvscale.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/n01.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/oldfaithful.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/peirce_anomalies.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/stray_anomalies.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/stray_scores.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/weird-package.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/weird_conflicts.html</loc>
-  </url>
-  <url>
-    <loc>https://pkg.robjhyndman.com/weird-package/reference/weird_packages.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://pkg.robjhyndman.com/weird-package/404.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/authors.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/index.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/news/index.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/as_kde.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/autoplot.kde.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/bagplot.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/cricket_batting.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/density_scores.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/fetch_wine_reviews.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/fr_mortality.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/glosh_scores.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/grubbs_anomalies.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/hampel_anomalies.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/hdr_palette.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/hdr_table.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/hdrplot.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/index.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/kde_bandwidth.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/lof_scores.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/lookout.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/mvscale.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/n01.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/oldfaithful.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/peirce_anomalies.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/reexports.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/stray_anomalies.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/stray_scores.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/weird-package.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/weird_conflicts.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/weird_packages.html</loc></url>
 </urlset>
+
