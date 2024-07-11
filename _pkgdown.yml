@@ -37,6 +37,7 @@ reference:
       - glosh_scores
       - lof_scores
       - stray_scores
+      - score_tail_prob
       - lookout
   - title: Functions for identifying anomalies
     contents:
