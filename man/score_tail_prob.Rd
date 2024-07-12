@@ -4,27 +4,36 @@
 \alias{score_tail_prob}
 \title{Density score tail probabilities}
 \usage{
-score_tail_prob(g, distribution = NULL, n = 1e+06)
+score_tail_prob(
+  g,
+  distribution = NULL,
+  smallest_prob = 1e-06,
+  gridsize = 100001
+)
 }
 \arguments{
 \item{g}{vector of density scores.}
 
-\item{distribution}{A distributional object specifying the distribution to
-use.}
+\item{distribution}{A distributional object specifying the probability
+distribution to use. If \code{distribution} is NULL, the empirical distribution
+of \code{g} is used.}
 
-\item{n}{Number of samples to generate for estimating the probabilities.}
+\item{smallest_prob}{Smallest detectable tail probability. If the score has
+lower probability than this, \code{smallest_prob} is returned.}
+
+\item{gridsize}{Size of grid used in estimating the tail probability. A}
 }
 \description{
 Compute the probability of a density score at least as extreme as \code{g} given
-a specified distribution. A density score is given by $g = -\log(f)$ where
-$f$ is the density or probability mass function of the distribution. The
-argument \code{distribution} specifies which distribution to use. The
-probabilities are estimate by simulation; \code{n} random values are generated
-from the specified \code{distribution}. Consequently, slightly different values
+a specified distribution. A density score is given by \eqn{g = -\log(f)}
+where \eqn{f} is the density or probability mass function of the
+distribution. The argument \code{distribution} specifies which distribution to
+use. The probabilities are estimated by simulating \code{n} random values from
+the specified \code{distribution}. Consequently, slightly different values
 will be returned each time unless a random seed is set using
-\link{\code[base]{set.seed}}.
+\code{\link[base]{set.seed}}. If \code{distribution} is not specified, the
+empirical distribution of \code{g} is used.
 }
 \examples{
-library(distributional)
-score_tail_prob(-log(dnorm(1:4)), dist_normal())
+score_tail_prob(-dnorm(1:3, log = TRUE), distributional::dist_normal())
 }
