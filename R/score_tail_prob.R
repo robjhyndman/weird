@@ -30,7 +30,7 @@ score_tail_prob <- function(g, distribution = NULL,
   } else if (family(distribution) == "normal") {
     # Fast computation for normal distribution
     mu <- mean(distribution)
-    sigma2 <- variance(distribution)
+    sigma2 <- distributional::variance(distribution)
     x <- sqrt(2 * g - log(2 * pi * sigma2))
     p <- 2 * (1 - pnorm(abs(x), mu, sqrt(sigma2)))
   } else {
