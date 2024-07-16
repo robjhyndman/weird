@@ -7,33 +7,55 @@
 score_tail_prob(
   g,
   distribution = NULL,
+  GPD = FALSE,
   smallest_prob = 1e-06,
-  gridsize = 100001
+  gridsize = 100001,
+  threshold_probability = 0.9
 )
 }
 \arguments{
 \item{g}{vector of density scores.}
 
 \item{distribution}{A distributional object specifying the probability
-distribution to use. If \code{distribution} is NULL, the empirical distribution
-of \code{g} is used.}
+distribution to use.}
 
-\item{smallest_prob}{Smallest detectable tail probability. If the score has
-lower probability than this, \code{smallest_prob} is returned.}
+\item{GPD}{Logical value specifying if a Generalized Pareto distribution
+should be used to estimate the tail probabilities.}
 
-\item{gridsize}{Size of grid used in estimating the tail probability. A}
+\item{smallest_prob}{Smallest detectable tail probability to be used
+if empirical tail proportions are used. If the score has lower probability
+than this, \code{smallest_prob} is returned.}
+
+\item{gridsize}{Size of grid used in estimating the empirical tail
+probabilities. A larger number gives more accurate estimates but takes
+more time.}
+
+\item{threshold_probability}{Probability threshold when computing the GPD
+distribution for the log scores.}
 }
 \description{
-Compute the probability of a density score at least as extreme as \code{g} given
-a specified distribution. A density score is given by \eqn{g = -\log(f)}
+Compute the probability of a density score at least as extreme as \code{g}.
+A density score is given by \eqn{g = -\log(f)}
 where \eqn{f} is the density or probability mass function of the
-distribution. The argument \code{distribution} specifies which distribution to
-use. The probabilities are estimated by simulating \code{n} random values from
-the specified \code{distribution}. Consequently, slightly different values
-will be returned each time unless a random seed is set using
-\code{\link[base]{set.seed}}. If \code{distribution} is not specified, the
-empirical distribution of \code{g} is used.
+distribution.
+These probabilities may be computed in three different ways.
+\enumerate{
+\item Given a specified \code{distribution}.
+\item Using a Generalized Pareto Distribution fitted to the most extreme
+values of \code{g} (those above the \code{threshold_probability} quantile). This
+option is used if \code{GPD = TRUE}.
+\item Empirically as the proportion of values above \code{g}.  This option is
+used when \code{GPD = FALSE} and \code{distribution = NULL}.
+}
 }
 \examples{
 score_tail_prob(-dnorm(1:3, log = TRUE), distributional::dist_normal())
+tibble(
+  y = n01$v1,
+  g = -dnorm(y, log = TRUE),
+  prob1 = score_tail_prob(g, distributional::dist_normal()),
+  prob2 = score_tail_prob(g, GPD = TRUE),
+  prob3 = score_tail_prob(g)
+) |>
+  filter(prob1 < 0.01 | prob2 < 0.01 | prob3 < 0.01)
 }

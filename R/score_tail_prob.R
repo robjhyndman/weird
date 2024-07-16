@@ -1,38 +1,77 @@
 #' Density score tail probabilities
 #'
-#' Compute the probability of a density score at least as extreme as `g` given
-#' a specified distribution. A density score is given by \eqn{g = -\log(f)}
+#' Compute the probability of a density score at least as extreme as `g`.
+#' A density score is given by \eqn{g = -\log(f)}
 #' where \eqn{f} is the density or probability mass function of the
-#' distribution. The argument `distribution` specifies which distribution to
-#' use. The probabilities are estimated by simulating `n` random values from
-#' the specified `distribution`. Consequently, slightly different values
-#' will be returned each time unless a random seed is set using
-#' \code{\link[base]{set.seed}}. If `distribution` is not specified, the
-#' empirical distribution of `g` is used.
+#' distribution.
+#' These probabilities may be computed in three different ways.
+#' 1. Given a specified `distribution`.
+#' 2. Using a Generalized Pareto Distribution fitted to the most extreme
+#' values of `g` (those above the `threshold_probability` quantile). This
+#' option is used if `GPD = TRUE`.
+#' 3. Empirically as the proportion of values above `g`.  This option is
+#' used when `GPD = FALSE` and `distribution = NULL`.
 #'
 #' @param g vector of density scores.
 #' @param distribution A distributional object specifying the probability
-#' distribution to use. If `distribution` is NULL, the empirical distribution
-#' of `g` is used.
-#' @param smallest_prob Smallest detectable tail probability. If the score has
-#' lower probability than this, `smallest_prob` is returned.
-#' @param gridsize Size of grid used in estimating the tail probability. A
-# ; larger number gives more accurate estimates but takes more time.
+#' distribution to use.
+#' @param GPD Logical value specifying if a Generalized Pareto distribution
+#' should be used to estimate the tail probabilities.
+#' @param smallest_prob Smallest detectable tail probability to be used
+#' if empirical tail proportions are used. If the score has lower probability
+#' than this, `smallest_prob` is returned.
+#' @param gridsize Size of grid used in estimating the empirical tail
+#' probabilities. A larger number gives more accurate estimates but takes
+#' more time.
+#' @param threshold_probability Probability threshold when computing the GPD
+#' distribution for the log scores.
 #' @examples
 #' score_tail_prob(-dnorm(1:3, log = TRUE), distributional::dist_normal())
+#' tibble(
+#'   y = n01$v1,
+#'   g = -dnorm(y, log = TRUE),
+#'   prob1 = score_tail_prob(g, distributional::dist_normal()),
+#'   prob2 = score_tail_prob(g, GPD = TRUE),
+#'   prob3 = score_tail_prob(g)
+#' ) |>
+#'   filter(prob1 < 0.01 | prob2 < 0.01 | prob3 < 0.01)
+
 #' @export
 
-score_tail_prob <- function(g, distribution = NULL,
-                            smallest_prob = 1e-6, gridsize = 100001) {
-  if (is.null(distribution)) {
+score_tail_prob <- function(g,
+  distribution = NULL, GPD = FALSE,
+  smallest_prob = 1e-6, gridsize = 100001,
+  threshold_probability = 0.90) {
+  n <- length(g)
+  if(GPD & !is.null(distribution)) {
+    warning("GPD is specified, so the distribution argument will be ignored.")
+  }
+  if(GPD) {
+    threshold <- stats::quantile(g, prob = threshold_probability,
+      type = 8, na.rm = TRUE)
+    if (!any(g > threshold, na.rm = TRUE)) {
+      warning("No scores above threshold.")
+      return(rep(1, n))
+    }
+    finite <- g < Inf
+    if (any(!finite, na.rm = TRUE)) {
+      warning("Infinite density scores will be ignored in GPD.")
+    }
+    gpd <- evd::fpot(g[finite], threshold = threshold, std.err = FALSE)$estimate
+    p <- (1 - threshold_probability) * evd::pgpd(
+      g,
+      loc = threshold,
+      scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
+    )
+  } else if (is.null(distribution)) {
     # Just use empirical cdf
-    p <- 1 - (rank(g) - 1) / length(g)
-  } else if (family(distribution) == "normal") {
+    p <- 1 - (rank(g) - 1) / n
+  } else if (stats::family(distribution) == "normal") {
     # Fast computation for normal distribution
     mu <- mean(distribution)
     sigma2 <- distributional::variance(distribution)
     x <- sqrt(2 * g - log(2 * pi * sigma2))
-    p <- 2 * (1 - pnorm(abs(x), mu, sqrt(sigma2)))
+    p <- 2 * (1 - stats::pnorm(abs(x), mu, sqrt(sigma2)))
   } else {
     # Slower computation, but more general (although approximate)
     dist_x <- quantile(
@@ -40,7 +79,7 @@ score_tail_prob <- function(g, distribution = NULL,
       seq(smallest_prob, 1 - smallest_prob, length.out = gridsize)
     )
     dist_x <- unique(unlist(dist_x))
-    dist_y <- -distributional:::density.distribution(
+    dist_y <- -density(
       distribution, dist_x,
       log = TRUE
     )[[1]]
