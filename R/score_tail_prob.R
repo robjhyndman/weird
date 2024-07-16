@@ -8,7 +8,9 @@
 #' 1. Given a specified `distribution`.
 #' 2. Using a Generalized Pareto Distribution fitted to the most extreme
 #' values of `g` (those above the `threshold_probability` quantile). This
-#' option is used if `GPD = TRUE`.
+#' option is used if `GPD = TRUE`. For `g` values with tail probability
+#' greater than `threshold_probability`, the value of `threshold_probability`
+#' is returned.
 #' 3. Empirically as the proportion of values above `g`.  This option is
 #' used when `GPD = FALSE` and `distribution = NULL`.
 #'
