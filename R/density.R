@@ -1,130 +1,90 @@
-#' @export
-print.kde <- function(x, ...) {
-  kde <- !(is.null(x$h) & is.null(x$H))
-  if (inherits(x$eval.points, "list")) {
-    d <- length(x$eval.points)
-  } else {
-    d <- 1L
-  }
-  if(!kde) {
-    cat("Density of: [",
-        paste0(x$names, collapse = ", "), "]\n", sep = "")
-  } else {
-    cat("Kernel density estimate of: [",
-        paste0(x$names, collapse = ", "), "]\n", sep = "")
-  }
-  if(d == 1L){
-    ngrid <- length(x$eval.points)
-  } else {
-    ngrid <- lapply(x$eval.points, length)
-  }
-  cat("Computed on a grid of size", paste(ngrid, collapse = " x "), "\n")
-  if(kde) {
-    cat("Bandwidth: ")
-    if (d == 1L) {
-      cat("h = ", format(x$h, digits = 4))
-    } else {
-      cat("H = \n")
-      cat(format(x$H, digits = 4), quote=FALSE)
-    }
-  }
-  invisible(x)
-}
-
-#' Convert data frame or matrix object to kde class
+#' Create kde distributional object
 #'
-#' A density specified as a data frame or matrix can be converted to a kde object.
-#' This is useful for plotting the density using \code{\link{autoplot.kde}}.
-#' As kde objects are defined on a grid, the density values are interpolated
-#' based on the points in the data frame or matrix.
-#'
-#' @param object Data frame or matrix with numerical columns, where one column
-#' (specified by `density_column`) contains the density values, and the
-#' remaining columns define the points at which the density is evaluated.
-#' @param density_column Name of the column containing the density values, specified
-#' as a bare expression. If missing, the last column is used.
-#' @param ngrid Number of points to use for the grid in each dimension. Default is
-#' 10001 for univariate densities and 101 for multivariate densities.
-#' @param ... Additional arguments are ignored.
-#' @return An object of class "kde"
-#' @author Rob J Hyndman
+#' Creates a distributional object from a kernel density estimate. The
+#' `ks::kde()` function is used to compute the density. The cdf and quantiles
+#' are consistent with the kde.
+#' @details This is a replacement for `distributional::dist_kde()` which also
+#' uses a kde when computing the density. However, it uses `stats::density()` on
+#' the univariate margins, rather than computing a potentially multivariate
+#' density using `ks::kde()`. Also, the quantiles and cdf of a `dist_kde`
+#' object are not consistent with the density estimate. (e.g., the cdf is not
+#' the integral of the density, and the quantiles are not the inverse of the
+#' cdf).
+#' @param y Numerical vector or matrix of data, or a list of such objects. If a
+#' list is provided, then all objects should be of the same dimension. e.g.,
+#' all vectors, or all matrices with the same number of columns.
+#' @param bandwidth Function to compute bandwidth.
+#' @param multiplier to be used for bandwidth. Set to 2 for anomaly detection, and 1 otherwise.
+#' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
 #' @examples
-#' tibble(y = seq(-4, 4, by = 0.01), density = dnorm(y)) |>
-#'   as_kde()
+#' dist_kde(c(rnorm(200), rnorm(100, 5)))
+#'
 #' @export
 
-as_kde <- function(object, density_column, ngrid, ...) {
-  # Check columns of object are all numerical
-  object <- as.data.frame(object)
-  if(!all(sapply(object, is.numeric))) {
-    stop("All columns of object must be numeric")
+dist_kde <- function(
+    y,
+    bandwidth = kde_bandwidth,
+    k = 1,
+    ...) {
+  if (!is.list(y)) {
+    y <- list(y)
   }
-  # Check density_column is in object
-  if(missing(density_column)) {
-    density_column <- tail(colnames(object), 1)
-  } else {
-    density_column <- dplyr::as_label(dplyr::enquo(density_column))
+  d <- unlist(lapply(y, function(u) NCOL(u)))
+  if (!all(d == d[1])) {
+    stop("All data sets must have the same dimension")
   }
-  if(!(density_column %in% colnames(object))) {
-    stop(paste(density_column, "not found"))
-  }
-  # Separate points from density values
-  den <- object[[density_column]]
-  object[[density_column]] <- NULL
-  # Find the dimension
-  d <- NCOL(object)
-  if (d == 1L) {
-    if(missing(ngrid)) {
-      ngrid <- 10001
+  y <- vctrs::as_list_of(y, .ptype = vctrs::vec_ptype(y[[1]]))
+  # Estimate density using ks::kde
+  density <- lapply(
+    y,
+    function(u) {
+      # browser()
+      if (NCOL(u) == 1L) {
+        ks::kde(u, h = kde_bandwidth(u, method = "double"), ...)
+      } else {
+        ks::kde(u, H = kde_bandwidth(u, method = "double"), ...)
+      }
     }
-    # Interpolate density on finer grid
-    density <- list(eval.points = seq(min(object), max(object), length = ngrid))
-    density$estimate <- approx(object[[1]], den, xout = density$eval.points)$y
-  } else if (d == 2L) {
-    if(missing(ngrid)) {
-      ngrid <- 101
-    }
-    density <- density_on_grid(as.matrix(object), den, ngrid)
-  } else {
-    stop("Only univariate and bivariate densities are supported")
-  }
-  # Find falpha using quantile method
-  missing <- is.na(density$estimate)
-  samplex <- sample(density$estimate[!missing],
-    size = 50000, replace = TRUE,
-    prob = density$estimate[!missing]
   )
-  density$cont <- quantile(samplex, prob = (99:1) / 100, type = 8)
-  # Set missing values to 0
-  density$estimate[is.na(density$estimate)] <- 0
-  # Add names
-  density$names <- colnames(object)
-  if(is.null(density$names)) {
-    if(d == 1) {
-      density$names <- "y"
-    } else {
-      density$names <- paste0("y", seq_len(d))
-    }
-  }
-  structure(density, class = "kde")
+  # Convert to distributional object
+  distributional::new_dist(kde = density, class = "dist_kde")
 }
 
-density_on_grid <- function(y, fy, ngrid) {
-  y <- as.matrix(y)
-  if (NCOL(y) != 2L) {
-    stop("y must be a matrix with 2 columns")
+#' @export
+format.dist_kde <- function(x, ...) {
+  d <- vapply(x, function(u) {
+    NCOL(u$x)
+  }, integer(1L))
+  ngrid <- vapply(x, function(u) {
+    length(u$eval.points)
+  }, integer(1L))
+  if (d == 1) {
+    # Find bandwidth and convert to string
+    h <- vapply(x, function(u) {
+      u$h
+    }, numeric(1L))
+    sprintf("kde[%sd, h=%.2g]", d, h)
+  } else {
+    # Create matrix as string
+    H <- c(vapply(x, function(u) {
+      u$H
+    }, numeric(d * d)))
+    Hstring <- "{"
+    for (i in seq(d)) {
+      Hstring <- paste0(
+        Hstring, "(",
+        paste0(sprintf("%.2g", H[(i - 1) * d + seq(d)]),
+          sep = "", collapse = ", "
+        ),
+        ")'"
+      )
+      if (i < d) {
+        Hstring <- paste0(Hstring, ", ")
+      }
+    }
+    Hstring <- paste0(Hstring, "}")
+    sprintf("kde[%sd, H=%s]", d, Hstring)
   }
-  # Create grid of points
-  density <- list(eval.points = list(
-    seq(min(y[, 1]), max(y[, 1]), length = ngrid),
-    seq(min(y[, 2]), max(y[, 2]), length = ngrid)
-  ))
-  # Bivariate interpolation
-  grid <- expand.grid(density$eval.points[[1]], density$eval.points[[2]])
-  ifun <- interpolation::interpfun(x = y[, 1], y = y[, 2], z = fy)
-  density$estimate <- ifun(grid[,1], grid[,2]) |>
-    matrix(nrow = ngrid)
-  return(density)
 }
 
 #' Robust bandwidth estimation for kernel density estimation
@@ -142,7 +102,7 @@ density_on_grid <- function(y, fy, ngrid) {
 #' # Univariate bandwidth calculation
 #' kde_bandwidth(oldfaithful$duration)
 #' # Bivariate bandwidth calculation
-#' kde_bandwidth(oldfaithful[,2:3])
+#' kde_bandwidth(oldfaithful[, 2:3])
 #' @export
 
 kde_bandwidth <- function(data, method = c("robust_normal", "double", "lookout"),
@@ -150,16 +110,16 @@ kde_bandwidth <- function(data, method = c("robust_normal", "double", "lookout")
   method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
-  if(d > 1) {
+  if (d > 1) {
     # Find robust covariance matrix of data
     S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
   }
-  if(method != "lookout") {
+  if (method != "lookout") {
     k <- ifelse(method == "double", 2, 1)
-    if(d == 1L)
+    if (d == 1L) {
       return(k * 1.06 * robustbase::s_IQR(data) * n^(-0.2))
-    else {
-      return((4/(n * (d + 2)))^(2/(d + 4)) * k^2 * S)
+    } else {
+      return((4 / (n * (d + 2)))^(2 / (d + 4)) * k^2 * S)
     }
   } else {
     stop("Not yet implemented")
@@ -189,3 +149,82 @@ kde_bandwidth <- function(data, method = c("robust_normal", "double", "lookout")
   }
 }
 
+#' @export
+density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
+  d <- NCOL(x$kde$x)
+  if (d == 1) {
+    d <- stats::approx(x$kde$eval.points, x$kde$estimate, xout = at)$y
+  } else {
+    stop("Not yet implemented")
+  }
+  d[is.na(d)] <- 0
+  return(d)
+}
+
+#' @exportS3Method distributional::cdf
+cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
+  # Apply independently over sample variates
+  if (is.matrix(x$x)) {
+    return(
+      apply(x$x, 2,
+        function(x, ...) cdf.dist_kde(list(x = x), ...),
+        q = q, ..., na.rm = TRUE
+      )
+    )
+  }
+  # Integrate density
+  delta <- x$kde$eval.points[2] - x$kde$eval.points[1]
+  F <- cumsum(x$kde$estimate) * delta
+  stats::approx(x$kde$eval.points, F, xout = q, yleft = 0, yright = 1, ..., na.rm = na.rm)$y
+}
+
+#' @exportS3Method distributional::generate
+generate.dist_kde <- function(x, times, ...) {
+  d <- NCOL(x$kde$x)
+  if (d == 1) {
+    h <- x$kde$h
+    sample(x$kde$x, size = times, replace = TRUE) + rnorm(times, sd = h)
+  } else {
+    stop("Not yet implemented")
+  }
+}
+
+#' @export
+mean.dist_kde <- function(x, ...) {
+  if (is.matrix(x$kde$x)) {
+    apply(x$kde$x, 2, mean, ...)
+  } else {
+    mean(x$kde$x, ...)
+  }
+}
+
+#' @export
+median.dist_kde <- function(x, na.rm = FALSE, ...) {
+  if (is.matrix(x$kde$x)) {
+    apply(x$kde$x, 2, median, na.rm = na.rm, ...)
+  } else {
+    median(x$kde$x, na.rm = na.rm, ...)
+  }
+}
+
+#' @exportS3Method distributional::covariance
+covariance.dist_kde <- function(x, ...) {
+  if (is.matrix(x$kde$x)) {
+    stats::cov(x$kde$x, ...)
+  } else {
+    stats::var(x$kde$x, ...) + x$kde$h^2
+  }
+}
+
+#' @exportS3Method distributional::skewness
+skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
+  if (is.matrix(x$kde$x)) {
+    abort("Multivariate sample skewness is not yet implemented.")
+  }
+  n <- lengths(x$kde$x, use.names = FALSE)
+  x <- lapply(x$kde$x, function(.) . - mean(., na.rm = na.rm))
+  sum_x2 <- vapply(x$kde$x, function(.) sum(.^2, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)
+  sum_x3 <- vapply(x$kde$x, function(.) sum(.^3, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)
+  y <- sqrt(n) * sum_x3 / (sum_x2^(3 / 2))
+  y * ((1 - 1 / n))^(3 / 2)
+}
