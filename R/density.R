@@ -13,19 +13,17 @@
 #' @param y Numerical vector or matrix of data, or a list of such objects. If a
 #' list is provided, then all objects should be of the same dimension. e.g.,
 #' all vectors, or all matrices with the same number of columns.
-#' @param bandwidth Function to compute bandwidth.
-#' @param multiplier to be used for bandwidth. Set to 2 for anomaly detection, and 1 otherwise.
-#' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
+#' @param bandwidth Either a function to compute bandwidths from data,
+#' or a numerical value (for univariate data), or a numerical matrix (for
+#' multivariate data).
+#' @param kde_options A named list containing arguments for \code{\link[ks]{kde}}.
+#' @param ... Other arguments are passed to the `bandwidth` function.
 #' @examples
-#' dist_kde(c(rnorm(200), rnorm(100, 5)))
+#' dist_kde(c(rnorm(200), rnorm(100, 5)), method = "double")
 #'
 #' @export
 
-dist_kde <- function(
-    y,
-    bandwidth = kde_bandwidth,
-    k = 1,
-    ...) {
+dist_kde <- function(y, bandwidth = kde_bandwidth, kde_options = NULL, ...) {
   if (!is.list(y)) {
     y <- list(y)
   }
@@ -38,11 +36,13 @@ dist_kde <- function(
   density <- lapply(
     y,
     function(u) {
-      # browser()
+      if(!is.numeric(bandwidth)) {
+        bandwidth <- bandwidth(u, ...)
+      }
       if (NCOL(u) == 1L) {
-        ks::kde(u, h = kde_bandwidth(u, method = "double"), ...)
+        do.call(ks::kde, c(list(x = u, h = bandwidth), kde_options))
       } else {
-        ks::kde(u, H = kde_bandwidth(u, method = "double"), ...)
+        do.call(ks::kde, c(list(x = u, H = bandwidth), kde_options))
       }
     }
   )
@@ -209,22 +209,24 @@ median.dist_kde <- function(x, na.rm = FALSE, ...) {
 
 #' @exportS3Method distributional::covariance
 covariance.dist_kde <- function(x, ...) {
+  n <- NROW(x$kde$x)
   if (is.matrix(x$kde$x)) {
-    stats::cov(x$kde$x, ...)
+    stop("Multivariate kde covariance is not yet implemented.")
+    stats::cov(x$kde$x, ...) # Needs adjustment
   } else {
-    stats::var(x$kde$x, ...) + x$kde$h^2
+    (n-1) / n * stats::var(x$kde$x, ...) + x$kde$h^2
   }
 }
 
 #' @exportS3Method distributional::skewness
 skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
+  n <- NROW(x$kde$x)
   if (is.matrix(x$kde$x)) {
-    abort("Multivariate sample skewness is not yet implemented.")
+    stop("Multivariate sample skewness is not yet implemented.")
+  } else {
+    m1 <- mean(x$kde$x) # E(X)
+    m2 <- x$kde$h^2 + mean(x$kde$x^2) # E(X^2)
+    m3 <- 3 * x$kde$h^2 * m1 - mean(x$kde$x^3) # E(X^3)
+    m3 - 3*m1*m2 + 2*m1^2
   }
-  n <- lengths(x$kde$x, use.names = FALSE)
-  x <- lapply(x$kde$x, function(.) . - mean(., na.rm = na.rm))
-  sum_x2 <- vapply(x$kde$x, function(.) sum(.^2, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)
-  sum_x3 <- vapply(x$kde$x, function(.) sum(.^3, na.rm = na.rm), numeric(1L), USE.NAMES = FALSE)
-  y <- sqrt(n) * sum_x3 / (sum_x2^(3 / 2))
-  y * ((1 - 1 / n))^(3 / 2)
 }
