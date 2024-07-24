@@ -221,13 +221,21 @@ covariance.dist_kde <- function(x, ...) {
 
 #' @exportS3Method distributional::skewness
 skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
-  n <- NROW(x$kde$x)
   if (is.matrix(x$kde$x)) {
-    stop("Multivariate sample skewness is not yet implemented.")
+    stop("Multivariate skewness is not yet implemented.")
   } else {
-    m1 <- mean(x$kde$x) # E(X)
-    m2 <- x$kde$h^2 + mean(x$kde$x^2) # E(X^2)
-    m3 <- 3 * x$kde$h^2 * m1 - mean(x$kde$x^3) # E(X^3)
-    m3 - 3*m1*m2 + 2*m1^2
+    mean((x$kde$x - mean(x$kde$x))^3) / variance(x)^1.5
+  }
+}
+
+#' @exportS3Method distributional::kurtosis
+# Excess kurtosis for consistency with distributional package
+kurtosis.dist_kde <- function(x, ..., na.rm = FALSE) {
+  if (is.matrix(x$kde$x)) {
+    stop("Multivariate kurtosis is not yet implemented.")
+  } else {
+    h <- x$kde$h
+    v <- variance(x)
+    (mean((x$kde$x - mean(x$kde$x))^4) + 6 * h^2 * v - 3 * h^4) / v^2 - 3
   }
 }

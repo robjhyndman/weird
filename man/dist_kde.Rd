@@ -4,30 +4,29 @@
 \alias{dist_kde}
 \title{Create kde distributional object}
 \usage{
-dist_kde(y, bandwidth = kde_bandwidth, k = 1, ...)
+dist_kde(y, h = NULL, H = NULL, kde_options = NULL, ...)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data, or a list of such objects. If a
 list is provided, then all objects should be of the same dimension. e.g.,
 all vectors, or all matrices with the same number of columns.}
 
-\item{bandwidth}{Function to compute bandwidth.}
+\item{h}{Bandwidth for univariate distribution. If \code{NULL}, the
+\code{\link{kde_bandwidth}} function is used.}
 
-\item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
+\item{H}{Bandwidth matrix for multivariate distribution. If \code{NULL}, the
+\code{\link{kde_bandwidth}} function is used.}
 
-\item{multiplier}{to be used for bandwidth. Set to 2 for anomaly detection, and 1 otherwise.}
+\item{kde_options}{A named list containing arguments for \code{\link[ks]{kde}}.}
+
+\item{...}{Other arguments are passed to the \code{\link{kde_bandwidth}} function.}
 }
 \description{
-Creates a distributional object from a kernel density estimate. The
+Creates a distributional object using a kernel density estimate. The
 \code{ks::kde()} function is used to compute the density. The cdf and quantiles
 are consistent with the kde.
 }
-\details{
-This is a replacement for \code{distributional::dist_kde()} which also
-uses a kde when computing the density. However, it uses \code{stats::density()} on
-the univariate margins, rather than computing a potentially multivariate
-density using \code{ks::kde()}. Also, the quantiles and cdf of a \code{dist_kde}
-object are not consistent with the density estimate. (e.g., the cdf is not
-the integral of the density, and the quantiles are not the inverse of the
-cdf).
+\examples{
+dist_kde(c(rnorm(200), rnorm(100, 5)), method = "double")
+
 }
