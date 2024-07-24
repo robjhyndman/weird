@@ -1,29 +1,24 @@
 #' Create kde distributional object
 #'
-#' Creates a distributional object from a kernel density estimate. The
+#' Creates a distributional object using a kernel density estimate. The
 #' `ks::kde()` function is used to compute the density. The cdf and quantiles
 #' are consistent with the kde.
-#' @details This is a replacement for `distributional::dist_kde()` which also
-#' uses a kde when computing the density. However, it uses `stats::density()` on
-#' the univariate margins, rather than computing a potentially multivariate
-#' density using `ks::kde()`. Also, the quantiles and cdf of a `dist_kde`
-#' object are not consistent with the density estimate. (e.g., the cdf is not
-#' the integral of the density, and the quantiles are not the inverse of the
-#' cdf).
+#'
 #' @param y Numerical vector or matrix of data, or a list of such objects. If a
 #' list is provided, then all objects should be of the same dimension. e.g.,
 #' all vectors, or all matrices with the same number of columns.
-#' @param bandwidth Either a function to compute bandwidths from data,
-#' or a numerical value (for univariate data), or a numerical matrix (for
-#' multivariate data).
+#' @param h Bandwidth for univariate distribution. If `NULL`, the
+#' \code{\link{kde_bandwidth}} function is used.
+#' @param H Bandwidth matrix for multivariate distribution. If `NULL`, the
+#' \code{\link{kde_bandwidth}} function is used.
 #' @param kde_options A named list containing arguments for \code{\link[ks]{kde}}.
-#' @param ... Other arguments are passed to the `bandwidth` function.
+#' @param ... Other arguments are passed to the \code{\link{kde_bandwidth}} function.
 #' @examples
 #' dist_kde(c(rnorm(200), rnorm(100, 5)), method = "double")
 #'
 #' @export
 
-dist_kde <- function(y, bandwidth = kde_bandwidth, kde_options = NULL, ...) {
+dist_kde <- function(y, h = NULL, H = NULL, kde_options = NULL, ...) {
   if (!is.list(y)) {
     y <- list(y)
   }
@@ -36,13 +31,20 @@ dist_kde <- function(y, bandwidth = kde_bandwidth, kde_options = NULL, ...) {
   density <- lapply(
     y,
     function(u) {
-      if(!is.numeric(bandwidth)) {
-        bandwidth <- bandwidth(u, ...)
-      }
       if (NCOL(u) == 1L) {
-        do.call(ks::kde, c(list(x = u, h = bandwidth), kde_options))
+        if (is.null(h)) {
+          if (!is.null(H)) {
+            h <- sqrt(H)
+          } else {
+            h <- kde_bandwidth(u, ...)
+          }
+        }
+        do.call(ks::kde, c(list(x = u, h = h), kde_options))
       } else {
-        do.call(ks::kde, c(list(x = u, H = bandwidth), kde_options))
+        if (is.null(H)) {
+          H <- kde_bandwidth(u, ...)
+        }
+        do.call(ks::kde, c(list(x = u, H = H), kde_options))
       }
     }
   )
