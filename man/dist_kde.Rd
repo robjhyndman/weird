@@ -23,8 +23,9 @@ all vectors, or all matrices with the same number of columns.}
 }
 \description{
 Creates a distributional object using a kernel density estimate. The
-\code{ks::kde()} function is used to compute the density. The cdf and quantiles
-are consistent with the kde.
+\code{ks::kde()} function is used to compute the density. The cdf, quantiles and
+moments are consistent with the kde. Generating random values from the kde
+is equivalent to a smoothed bootstrap.
 }
 \examples{
 dist_kde(c(rnorm(200), rnorm(100, 5)), method = "double")
