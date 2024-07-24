@@ -123,6 +123,13 @@ autoplot.distribution <- function(
   if (show_points) {
     if(show_hdr) {
       # Only show points outside largest HDR
+      thresh <- tibble(object = object, Distribution = dist_names) |>
+        left_join(hdr |> filter(level == max(level)), by = "Distribution") |>
+        dplyr::rowwise() |>
+        mutate(fi = density(object, at = lower)) |>
+        select(Distribution, fi)
+      threshold <- as.list(thresh$fi)
+      names(threshold) <- thresh$Distribution
       fi <- purrr::map2(object, x, function(u,x) {
         if(is.null(x)) {
           return(NULL)
@@ -130,18 +137,16 @@ autoplot.distribution <- function(
           density(u, at = x)[[1]]
         }
       })
-      threshold <- lapply(fi, quantile, prob = 1 - max(prob), type = 8)
       idx <- purrr::map2(fi, threshold, function(f,t){which(f < t)})
       x <- purrr::map2(x, idx, function(x,i) x[i])
     }
     # Drop distributions with no data
     some_data <- names(x)[lengths(x) > 0]
     x <- x[some_data]
-    show_x <- tibble::as_tibble(x) |>
-      tidyr::pivot_longer(
-        cols = everything(), names_to = "Distribution",
-        values_to = "x"
-      )
+    show_x <- tibble(
+      Distribution = rep(names(x), lengths(x)),
+      x = unlist(x)
+    )
     if (no_groups) {
       a <- aes(x = x, y = -maxden * as.numeric(factor(Distribution)) / 40)
     } else {
@@ -171,16 +176,16 @@ autoplot.distribution <- function(
           xmin = lower, xmax = upper,
           ymin = -maxden * as.numeric(factor(Distribution)) / 20,
           ymax = -maxden * (as.numeric(factor(Distribution))-1) / 20,
-          fill = factor(level, levels = sort(prob * 100)),
-          color = Distribution,
+          alpha = -level,
+          fill = Distribution,
         )
       ) +
-      scale_fill_manual(
-        breaks = rev(prob * 100),
-        values = colors[-1],
-        labels = paste0(100 * rev(prob), "%")
-      ) +
-      ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
+      scale_alpha(
+        name = "HDR coverage",
+        breaks = -100*prob,
+        labels = paste0(100 * prob, "%"),
+        range = c(0.2,1)
+      )
   }
   if (show_mode) {
     modes <- df |>
