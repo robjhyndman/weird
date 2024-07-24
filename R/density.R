@@ -180,6 +180,15 @@ cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
   stats::approx(x$kde$eval.points, F, xout = q, yleft = 0, yright = 1, ..., na.rm = na.rm)$y
 }
 
+#' @export
+quantile.dist_kde <- function (x, p, ..., na.rm = TRUE) {
+  # Integrate density
+  delta <- x$kde$eval.points[2] - x$kde$eval.points[1]
+  F <- cumsum(x$kde$estimate) * delta
+  stats::approx(F, x$kde$eval.points, xout = p, yleft = min(x$kde$eval.points),
+                yright = max(x$kde$eval.points), ties = mean, ..., na.rm = na.rm)$y
+}
+
 #' @exportS3Method distributional::generate
 generate.dist_kde <- function(x, times, ...) {
   d <- NCOL(x$kde$x)
