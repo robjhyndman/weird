@@ -165,7 +165,7 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
 
 #' @exportS3Method distributional::cdf
 cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
-  # Apply independently over sample variates
+  # Apply independently over margins
   if (is.matrix(x$x)) {
     return(
       apply(x$x, 2,
@@ -184,8 +184,7 @@ cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
 generate.dist_kde <- function(x, times, ...) {
   d <- NCOL(x$kde$x)
   if (d == 1) {
-    h <- x$kde$h
-    sample(x$kde$x, size = times, replace = TRUE) + rnorm(times, sd = h)
+    sample(x$kde$x, size = times, replace = TRUE) + rnorm(times, sd = x$kde$h)
   } else {
     stop("Not yet implemented")
   }
@@ -216,7 +215,7 @@ covariance.dist_kde <- function(x, ...) {
     stop("Multivariate kde covariance is not yet implemented.")
     stats::cov(x$kde$x, ...) # Needs adjustment
   } else {
-    (n-1) / n * stats::var(x$kde$x, ...) + x$kde$h^2
+    (n - 1) / n * stats::var(x$kde$x, ...) + x$kde$h^2
   }
 }
 
