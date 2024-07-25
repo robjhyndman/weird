@@ -13,7 +13,7 @@
 #' @return A ggplot layer
 #' @author Rob J Hyndman
 #' @examples
-#' # Univariate density
+#' library(distributional)
 #' dist_mixture(
 #'   dist_normal(-2, 1),
 #'   dist_normal(2, 1),

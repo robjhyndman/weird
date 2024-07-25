@@ -28,7 +28,7 @@ For univariate densities, it adds a line plot of the density function.
 For bivariate densities, it adds a contour plot of the density function.
 }
 \examples{
-# Univariate density
+library(distributional)
 dist_mixture(
   dist_normal(-2, 1),
   dist_normal(2, 1),
