@@ -36,9 +36,9 @@
 #' dist_kde(c(rnorm(500), rnorm(500, 4, 1.5))) |>
 #'   autoplot(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14")
 #' ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
-#' ymat |>
-#'   dist_kde(ymat) |>
-#'   autoplot(show_points = TRUE, alpha = 0.1, fill = TRUE)
+#' #ymat |>
+#' #  dist_kde(ymat) |>
+#' #  autoplot(show_points = TRUE, alpha = 0.1, fill = TRUE)
 #' @exportS3Method ggplot2::autoplot
 
 autoplot.distribution <- function(
@@ -54,7 +54,7 @@ autoplot.distribution <- function(
   } else {
     colors <- palette(n = length(prob) + 1)
   }
-  dist <- family(object)
+  dist <- stats::family(object)
   no_groups <- length(dist) == 1L
   # Names of distributions
   dist_names <- format(object)
@@ -108,7 +108,7 @@ autoplot.distribution <- function(
   if (show_hdr) {
     prob <- sort(unique(prob), decreasing = TRUE)
     hdr <- purrr::map_dfr(prob, function(u) {
-      hdri <- hdr(object, size = u * 100)
+      hdri <- distributional::hdr(object, size = u * 100)
       tibble(
         level = u*100,
         Distribution = dist_names,
@@ -117,6 +117,7 @@ autoplot.distribution <- function(
       ) |>
         tidyr::unnest(c(lower, upper))
     })
+    hdr$id <- seq(NROW(hdr))
   }
 
   # Show observations in bottom margin
@@ -124,10 +125,10 @@ autoplot.distribution <- function(
     if(show_hdr) {
       # Only show points outside largest HDR
       thresh <- tibble(object = object, Distribution = dist_names) |>
-        left_join(hdr |> filter(level == max(level)), by = "Distribution") |>
+        dplyr::left_join(hdr |> filter(level == max(level)), by = "Distribution") |>
         dplyr::rowwise() |>
-        mutate(fi = density(object, at = lower)) |>
-        select(Distribution, fi)
+        dplyr::mutate(fi = density(object, at = lower)) |>
+        dplyr::select(Distribution, fi)
       threshold <- as.list(thresh$fi)
       names(threshold) <- thresh$Distribution
       fi <- purrr::map2(object, x, function(u,x) {
@@ -171,7 +172,7 @@ autoplot.distribution <- function(
   if (show_hdr) {
     p <- p +
       ggplot2::geom_rect(
-        data = hdr |> mutate(id = row_number()),
+        data = hdr,
         aes(
           xmin = lower, xmax = upper,
           ymin = -maxden * as.numeric(factor(Distribution)) / 20,
@@ -180,7 +181,7 @@ autoplot.distribution <- function(
           fill = Distribution,
         )
       ) +
-      scale_alpha(
+      ggplot2::scale_alpha(
         name = "HDR coverage",
         breaks = -100*prob,
         labels = paste0(100 * prob, "%"),
@@ -203,3 +204,5 @@ autoplot.distribution <- function(
 
   return(p)
 }
+
+utils::globalVariables(c("Density","Distribution","level"))

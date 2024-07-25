@@ -70,9 +70,9 @@ For univariate densities,  the combination of \code{show_hdr = TRUE}, \code{show
 dist_kde(c(rnorm(500), rnorm(500, 4, 1.5))) |>
   autoplot(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14")
 ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
-ymat |>
-  dist_kde(ymat) |>
-  autoplot(show_points = TRUE, alpha = 0.1, fill = TRUE)
+#ymat |>
+#  dist_kde(ymat) |>
+#  autoplot(show_points = TRUE, alpha = 0.1, fill = TRUE)
 }
 \author{
 Rob J Hyndman

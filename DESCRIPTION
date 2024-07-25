@@ -23,14 +23,14 @@ Imports:
   evd,
   ggplot2 (>= 3.1.1),
   grDevices,
-  interpolation,
   ks,
   purrr (>= 0.2.4),
   rlang,
   robustbase,
   rstudioapi (>= 0.7),
   stray,
-  tibble (>= 1.4.2)
+  tibble (>= 1.4.2),
+  vctrs
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

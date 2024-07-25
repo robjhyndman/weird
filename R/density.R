@@ -22,6 +22,8 @@
 dist_kde <- function(y, h = NULL, H = NULL, kde_options = NULL, ...) {
   if (!is.list(y)) {
     y <- list(y)
+  } else if(is.data.frame(y)) {
+    y <- list(as.matrix(y))
   }
   d <- unlist(lapply(y, function(u) NCOL(u)))
   if (!all(d == d[1])) {
@@ -194,7 +196,7 @@ quantile.dist_kde <- function (x, p, ..., na.rm = TRUE) {
 generate.dist_kde <- function(x, times, ...) {
   d <- NCOL(x$kde$x)
   if (d == 1) {
-    sample(x$kde$x, size = times, replace = TRUE) + rnorm(times, sd = x$kde$h)
+    sample(x$kde$x, size = times, replace = TRUE) + stats::rnorm(times, sd = x$kde$h)
   } else {
     stop("Not yet implemented")
   }
@@ -209,12 +211,12 @@ mean.dist_kde <- function(x, ...) {
   }
 }
 
-#' @export
+#' @exportS3Method stats::median
 median.dist_kde <- function(x, na.rm = FALSE, ...) {
   if (is.matrix(x$kde$x)) {
-    apply(x$kde$x, 2, median, na.rm = na.rm, ...)
+    apply(x$kde$x, 2, stats::median, na.rm = na.rm, ...)
   } else {
-    median(x$kde$x, na.rm = na.rm, ...)
+    stats::median(x$kde$x, na.rm = na.rm, ...)
   }
 }
 
@@ -234,7 +236,7 @@ skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
   if (is.matrix(x$kde$x)) {
     stop("Multivariate skewness is not yet implemented.")
   } else {
-    mean((x$kde$x - mean(x$kde$x))^3) / variance(x)^1.5
+    mean((x$kde$x - mean(x$kde$x))^3) / distributional::variance(x)^1.5
   }
 }
 
@@ -245,7 +247,7 @@ kurtosis.dist_kde <- function(x, ..., na.rm = FALSE) {
     stop("Multivariate kurtosis is not yet implemented.")
   } else {
     h <- x$kde$h
-    v <- variance(x)
+    v <- distributional::variance(x)
     (mean((x$kde$x - mean(x$kde$x))^4) + 6 * h^2 * v - 3 * h^4) / v^2 - 3
   }
 }
