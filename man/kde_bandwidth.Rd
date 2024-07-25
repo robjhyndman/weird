@@ -31,7 +31,7 @@ Robust bandwidth estimation for kernel density estimation
 # Univariate bandwidth calculation
 kde_bandwidth(oldfaithful$duration)
 # Bivariate bandwidth calculation
-kde_bandwidth(oldfaithful[,2:3])
+kde_bandwidth(oldfaithful[, 2:3])
 }
 \author{
 Rob J Hyndman

@@ -1,4 +1,4 @@
-#' Produce ggplot of densities in 1 or 2 dimensions
+#' Produce ggplot of densities from kde objects in 1 or 2 dimensions
 #'
 #' @details
 #' This function produces a ggplot of the density estimate produced by `ks::kde()`.

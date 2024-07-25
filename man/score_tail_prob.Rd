@@ -43,7 +43,9 @@ These probabilities may be computed in three different ways.
 \item Given a specified \code{distribution}.
 \item Using a Generalized Pareto Distribution fitted to the most extreme
 values of \code{g} (those above the \code{threshold_probability} quantile). This
-option is used if \code{GPD = TRUE}.
+option is used if \code{GPD = TRUE}. For \code{g} values with tail probability
+greater than \code{threshold_probability}, the value of \code{threshold_probability}
+is returned.
 \item Empirically as the proportion of values above \code{g}.  This option is
 used when \code{GPD = FALSE} and \code{distribution = NULL}.
 }
