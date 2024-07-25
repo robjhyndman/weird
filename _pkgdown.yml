@@ -52,6 +52,7 @@ reference:
       - mvscale
   - title: Functions for working with kernel density estimates
     contents:
+      - as_kde
       - dist_kde
       - kde_bandwidth
   - title: Functions for graphics and HDR calculations
