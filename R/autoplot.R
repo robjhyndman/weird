@@ -87,10 +87,10 @@ autoplot.distribution <- function(
     range_x <- range(range_x, unlist(x))
   }
   # Expand to outside range if support is finite
-  if(is.finite(minx <- quantile(object, p=0))) {
+  if(is.finite(minx <- min(quantile(object, p=0)))) {
     range_x <- range(minx, range_x)
   }
-  if(is.finite(maxx <- quantile(object, p=1))) {
+  if(is.finite(maxx <- max(quantile(object, p=1)))) {
     range_x <- range(range_x, maxx)
   }
   support <- diff(range_x)
