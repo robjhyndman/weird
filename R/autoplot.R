@@ -86,7 +86,19 @@ autoplot.distribution <- function(
   if (show_points) {
     range_x <- range(range_x, unlist(x))
   }
-  y <- seq(min(range_x), max(range_x), length = 501)
+  # Expand to outside range if support is finite
+  if(is.finite(minx <- quantile(object, p=0))) {
+    range_x <- range(minx, range_x)
+  }
+  if(is.finite(maxx <- quantile(object, p=1))) {
+    range_x <- range(range_x, maxx)
+  }
+  support <- diff(range_x)
+  y <- c(
+    min(range_x) - 0.0001*support,
+    seq(min(range_x), max(range_x), length = 501),
+    max(range_x) + 0.0001*support
+  )
   df <- c(list(y), density(object, at = y))
   names(df) <- c("y", dist_names)
   df <- tibble::as_tibble(df) |>
