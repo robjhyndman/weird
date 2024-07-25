@@ -56,58 +56,13 @@ autoplot.distribution <- function(
   } else {
     colors <- palette(n = length(prob) + 1)
   }
+  # Names of distributions
+  dist_names <- make.unique(format(object))
   dist <- stats::family(object)
   no_groups <- length(dist) == 1L
-  # Names of distributions
-  dist_names <- format(object)
-  if(length(unique(dist_names)) != length(dist_names)) {
-    # Find duplicates
-    dup <- duplicated(dist_names)
-    dist_names[dup] <- paste0(dist_names[dup], "a")
-  }
 
-  # Extract data
-  x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
-  names(x) <- dist_names
-  # Check if multivariate
-  d <- unlist(lapply(x, NCOL))
-  d[dist != "kde"] <- 1
-  if (any(d > 2)) {
-    stop("Only univariate and bivariate densities are supported")
-  } else if (any(d == 2)) {
-    stop("Bivariate plotting not yet implemented")
-  }
-  if (show_points) {
-    if (all(lengths(x) == 0)) {
-      warning("No observations found")
-      show_points <- FALSE
-    }
-  }
   # Set up data frame for densities
-  range_x <- range(unlist(quantile(object, p = c(0.002, 0.998))))
-  if (show_points) {
-    range_x <- range(range_x, unlist(x))
-  }
-  # Expand to outside range if support is finite
-  if(is.finite(minx <- min(quantile(object, p=0)))) {
-    range_x <- range(minx, range_x)
-  }
-  if(is.finite(maxx <- max(quantile(object, p=1)))) {
-    range_x <- range(range_x, maxx)
-  }
-  support <- diff(range_x)
-  y <- c(
-    min(range_x) - 0.0001*support,
-    seq(min(range_x), max(range_x), length = ngrid-2),
-    max(range_x) + 0.0001*support
-  )
-  df <- c(list(y), density(object, at = y))
-  names(df) <- c("y", dist_names)
-  df <- tibble::as_tibble(df) |>
-    tidyr::pivot_longer(
-      cols = -y, names_to = "Distribution",
-      values_to = "Density"
-    )
+  df <- make_density_df(object, ngrid)
   maxden <- max(df$Density)
 
   # Add density lines to plot
@@ -136,8 +91,14 @@ autoplot.distribution <- function(
 
   # Show observations in bottom margin
   if (show_points) {
+    # Extract data
+    x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
+    names(x) <- dist_names
+    if (all(lengths(x) == 0)) {
+      stop("No observations found. Set show_points to FALSE")
+    }
     if(show_hdr) {
-      # Only show points outside largest HDR
+      # Drop points obscured by largest HDR
       thresh <- tibble(object = object, Distribution = dist_names) |>
         dplyr::left_join(hdr |> filter(level == max(level)), by = "Distribution") |>
         dplyr::rowwise() |>
