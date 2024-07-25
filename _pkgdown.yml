@@ -52,11 +52,12 @@ reference:
       - mvscale
   - title: Functions for working with kernel density estimates
     contents:
-      - as_kde
-      - autoplot.kde
+      - dist_kde
       - kde_bandwidth
   - title: Functions for graphics and HDR calculations
     contents:
+      - autoplot.distribution
+      - autoplot.kde
       - gg_bagplot
       - gg_hdrboxplot
       - hdr_palette
