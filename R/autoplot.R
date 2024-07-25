@@ -22,6 +22,7 @@
 #' @param show_points If `TRUE`, then individual points are plotted.
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown.
 #' @param show_lookout If `TRUE`, then the observations with lookout probabilities less than 0.05 are shown in red.
+#' @param ngrid Number of points at which to evaluate the density function.
 #' @param color Color used for mode and HDR contours. If `palette = hdr_palette`,
 #' it is also used as the basis for HDR regions.
 #' @param palette Color palette function to use for HDR filled regions
@@ -44,6 +45,7 @@
 autoplot.distribution <- function(
     object, prob = seq(9) / 10, fill = FALSE,
     show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_lookout = FALSE,
+    ngrid = 501,
     color = "#00659e", palette = hdr_palette, alpha = ifelse(fill, 1, min(1, 1000 / NROW(object$x))),
     ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
@@ -96,7 +98,7 @@ autoplot.distribution <- function(
   support <- diff(range_x)
   y <- c(
     min(range_x) - 0.0001*support,
-    seq(min(range_x), max(range_x), length = 501),
+    seq(min(range_x), max(range_x), length = ngrid-2),
     max(range_x) + 0.0001*support
   )
   df <- c(list(y), density(object, at = y))
