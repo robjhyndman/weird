@@ -4,13 +4,15 @@
 \alias{autolayer.distribution}
 \title{Add ggplot layer of densities from distributional objects in 1 dimension}
 \usage{
-\method{autolayer}{distribution}(object, ngrid = 501, ...)
+\method{autolayer}{distribution}(object, ngrid = 501, scale = 1, ...)
 }
 \arguments{
 \item{object}{distribution object from the distributional package or
 \code{\link{dist_kde}}()}
 
 \item{ngrid}{Number of points at which to evaluate the density function.}
+
+\item{scale}{Scaling factor for the density function.}
 
 \item{...}{Additional arguments are passed to \code{\link[ggplot2]{geom_line}}.}
 }
@@ -27,9 +29,14 @@ For bivariate densities, it adds a contour plot of the density function.
 }
 \examples{
 # Univariate density
-dist_kde(c(rnorm(500), rnorm(500, 4, 1.5))) |>
-  autoplot(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14") +
-  autolayer(distributional::dist_normal(), linetype = "dashed")
+dist_mixture(
+  dist_normal(-2, 1),
+  dist_normal(2, 1),
+  weights = c(1/3, 2/3)
+ ) |>
+ autoplot() +
+ autolayer(dist_normal(-2,1), linetype = "dashed", scale = 1/3) +
+ autolayer(dist_normal(2,1), linetype = "dashed", scale = 2/3)
 }
 \author{
 Rob J Hyndman

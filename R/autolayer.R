@@ -8,22 +8,28 @@
 #' @param object distribution object from the distributional package or
 #' \code{\link{dist_kde}}()
 #' @param ngrid Number of points at which to evaluate the density function.
+#' @param scale Scaling factor for the density function.
 #' @param ... Additional arguments are passed to \code{\link[ggplot2]{geom_line}}.
 #' @return A ggplot layer
 #' @author Rob J Hyndman
 #' @examples
 #' # Univariate density
-#' dist_kde(c(rnorm(500), rnorm(500, 4, 1.5))) |>
-#'   autoplot(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14") +
-#'   autolayer(distributional::dist_normal(), linetype = "dashed")
+#' dist_mixture(
+#'   dist_normal(-2, 1),
+#'   dist_normal(2, 1),
+#'   weights = c(1/3, 2/3)
+#'  ) |>
+#'  autoplot() +
+#'  autolayer(dist_normal(-2,1), linetype = "dashed", scale = 1/3) +
+#'  autolayer(dist_normal(2,1), linetype = "dashed", scale = 2/3)
 #' @exportS3Method ggplot2::autolayer
 
-autolayer.distribution <- function(object, ngrid = 501, ...) {
+autolayer.distribution <- function(object, ngrid = 501, scale = 1, ...) {
   df <- make_density_df(object, ngrid)
   if(length(object) == 1L) {
-    geom_line(data = df, aes(x = y, y = Density), ...)
+    geom_line(data = df, aes(x = y, y = scale*Density), ...)
   } else {
-    geom_line(data = df, aes(x = y, y = Density, color = Distribution), ...)
+    geom_line(data = df, aes(x = y, y = scale*Density, color = Distribution), ...)
   }
 }
 
