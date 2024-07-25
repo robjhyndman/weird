@@ -48,6 +48,7 @@
 <span>  show_points <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show_mode <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show_lookout <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ngrid <span class="op">=</span> <span class="fl">501</span>,</span>
 <span>  color <span class="op">=</span> <span class="st">"#00659e"</span>,</span>
 <span>  palette <span class="op">=</span> <span class="va">hdr_palette</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">fill</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1000</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">object</span><span class="op">$</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -88,6 +89,10 @@ specified by <code>prob</code> are shown as a ribbon below the density.</p></dd>
 
 <dt id="arg-show-lookout">show_lookout<a class="anchor" aria-label="anchor" href="#arg-show-lookout"></a></dt>
 <dd><p>If <code>TRUE</code>, then the observations with lookout probabilities less than 0.05 are shown in red.</p></dd>
+
+
+<dt id="arg-ngrid">ngrid<a class="anchor" aria-label="anchor" href="#arg-ngrid"></a></dt>
+<dd><p>Number of points at which to evaluate the density function.</p></dd>
 
 
 <dt id="arg-color">color<a class="anchor" aria-label="anchor" href="#arg-color"></a></dt>
