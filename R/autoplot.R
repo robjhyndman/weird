@@ -19,7 +19,7 @@
 #' are shown as filled regions rather than lines.
 #' @param show_hdr If `TRUE`, and the density is univariate, then the HDR regions
 #' specified by `prob` are shown as a ribbon below the density.
-#' @param show_points If `TRUE`, then individual points are plotted.
+#' @param show_points If `TRUE`, then individual observations are plotted.
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown.
 #' @param show_lookout If `TRUE`, then the observations with lookout probabilities less than 0.05 are shown in red.
 #' @param ngrid Number of points at which to evaluate the density function.
@@ -29,6 +29,8 @@
 #' (if `fill` is `TRUE` or `show_hdr` is `TRUE`).
 #' @param alpha Transparency of points. When `fill` is `FALSE`, defaults to
 #' min(1, 1000/n), where n is the number of observations. Otherwise, set to 1.
+#' @param jitter When TRUE and `show_points` is TRUE, a small amount of vertical
+#' jittering is applied to the observations.
 #' @param ... Additional arguments are currently ignored.
 #' @return A ggplot object.
 #' @author Rob J Hyndman
@@ -45,9 +47,8 @@
 autoplot.distribution <- function(
     object, prob = seq(9) / 10, fill = FALSE,
     show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_lookout = FALSE,
-    ngrid = 501,
-    color = "#00659e", palette = hdr_palette, alpha = ifelse(fill, 1, min(1, 1000 / NROW(object$x))),
-    ...) {
+    ngrid = 501, color = "#00659e", palette = hdr_palette, alpha = NULL,
+    jitter = FALSE, ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
@@ -129,7 +130,15 @@ autoplot.distribution <- function(
       a <- aes(x = x, y = -maxden * (as.numeric(factor(Distribution))- 0.5) / 20,
                color = Distribution)
     }
-    p <- p + ggplot2::geom_point(data = show_x, mapping = a, alpha = alpha)
+    if(is.null(alpha)) {
+      alpha <- ifelse(fill, 1, min(1, 1000 / max(lengths(x))))
+    }
+    if(jitter) {
+      p <- p + ggplot2::geom_jitter(data = show_x, mapping = a, alpha = alpha,
+                                    width = 0, height = maxden/100)
+    } else {
+      p <- p + ggplot2::geom_point(data = show_x, mapping = a, alpha = alpha)
+    }
   }
   if (show_lookout) {
     stop("Not yet implemented")
@@ -145,6 +154,7 @@ autoplot.distribution <- function(
   }
 
   if (show_hdr) {
+    if(no_groups) {
     p <- p +
       ggplot2::geom_rect(
         data = hdr,
@@ -152,10 +162,24 @@ autoplot.distribution <- function(
           xmin = lower, xmax = upper,
           ymin = -maxden * as.numeric(factor(Distribution)) / 20,
           ymax = -maxden * (as.numeric(factor(Distribution))-1) / 20,
-          alpha = -level,
-          fill = Distribution,
+          alpha = -level
+        ),
+        fill = color
+      )
+    } else {
+      p <- p +
+        ggplot2::geom_rect(
+          data = hdr,
+          aes(
+            xmin = lower, xmax = upper,
+            ymin = -maxden * as.numeric(factor(Distribution)) / 20,
+            ymax = -maxden * (as.numeric(factor(Distribution))-1) / 20,
+            alpha = -level,
+            fill = Distribution
+          )
         )
-      ) +
+    }
+    p <- p +
       ggplot2::scale_alpha(
         name = "HDR coverage",
         breaks = -100*prob,
