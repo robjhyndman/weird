@@ -7,7 +7,9 @@ These probabilities may be computed in three different ways.
 Given a specified distribution.
 Using a Generalized Pareto Distribution fitted to the most extreme
 values of g (those above the threshold_probability quantile). This
-option is used if GPD = TRUE.
+option is used if GPD = TRUE. For g values with tail probability
+greater than threshold_probability, the value of threshold_probability
+is returned.
 Empirically as the proportion of values above g.  This option is
 used when GPD = FALSE and distribution = NULL.
 
@@ -19,7 +21,9 @@ These probabilities may be computed in three different ways.
 Given a specified distribution.
 Using a Generalized Pareto Distribution fitted to the most extreme
 values of g (those above the threshold_probability quantile). This
-option is used if GPD = TRUE.
+option is used if GPD = TRUE. For g values with tail probability
+greater than threshold_probability, the value of threshold_probability
+is returned.
 Empirically as the proportion of values above g.  This option is
 used when GPD = FALSE and distribution = NULL.
 
@@ -65,7 +69,9 @@ distribution.
 These probabilities may be computed in three different ways.</p><ol><li><p>Given a specified <code>distribution</code>.</p></li>
 <li><p>Using a Generalized Pareto Distribution fitted to the most extreme
 values of <code>g</code> (those above the <code>threshold_probability</code> quantile). This
-option is used if <code>GPD = TRUE</code>.</p></li>
+option is used if <code>GPD = TRUE</code>. For <code>g</code> values with tail probability
+greater than <code>threshold_probability</code>, the value of <code>threshold_probability</code>
+is returned.</p></li>
 <li><p>Empirically as the proportion of values above <code>g</code>.  This option is
 used when <code>GPD = FALSE</code> and <code>distribution = NULL</code>.</p></li>
 </ol></div>
