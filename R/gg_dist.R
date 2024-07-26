@@ -37,14 +37,14 @@
 #' @examples
 #' # Univariate density
 #' dist_kde(c(rnorm(500), rnorm(500, 4, 1.5))) |>
-#'   autoplot(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14")
+#'   gg_dist(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14")
 #' ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
 #' #ymat |>
 #' #  dist_kde(ymat) |>
-#' #  autoplot(show_points = TRUE, alpha = 0.1, fill = TRUE)
-#' @exportS3Method ggplot2::autoplot
+#' #  gg_dist(show_points = TRUE, alpha = 0.1, fill = TRUE)
+#' @export
 
-autoplot.distribution <- function(
+gg_dist <- function(
     object, prob = seq(9) / 10, fill = FALSE,
     show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_lookout = FALSE,
     ngrid = 501, color = "#00659e", palette = hdr_palette, alpha = NULL,
