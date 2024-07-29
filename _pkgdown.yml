@@ -53,13 +53,14 @@ reference:
   - title: Functions for working with kernel density estimates
     contents:
       - as_kde
+      - dist_gev
       - dist_kde
       - kde_bandwidth
   - title: Functions for graphics and HDR calculations
     contents:
-      - autoplot.distribution
-      - autolayer.distribution
       - autoplot.kde
+      - gg_dist
+      - gg_dist_layer
       - gg_bagplot
       - gg_hdrboxplot
       - hdr_palette
