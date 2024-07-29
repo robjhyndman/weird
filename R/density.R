@@ -166,6 +166,12 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
   return(d)
 }
 
+
+#' @exportS3Method distributional::log_density
+log_density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
+  log(density.dist_kde(x, at = at, ..., na.rm = na.rm))
+}
+
 #' @exportS3Method distributional::cdf
 cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
   # Apply independently over margins
