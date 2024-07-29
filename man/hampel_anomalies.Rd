@@ -33,9 +33,9 @@ be declared anomalies.
 \examples{
 set.seed(1)
 df <- tibble(
-    time = seq(41),
-    y = c(rnorm(20), 5, rnorm(20))
-  ) |>
+  time = seq(41),
+  y = c(rnorm(20), 5, rnorm(20))
+) |>
   mutate(hampel = hampel_anomalies(y, bandwidth = 3, k = 4))
 df |> ggplot(aes(x = time, y = y)) +
   geom_line() +

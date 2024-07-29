@@ -75,7 +75,7 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_IQR,
   }
   # Scale
   if (d == 1L) {
-    if(!is.null(scale)) {
+    if (!is.null(scale)) {
       z <- mat / scale(mat)
     } else {
       z <- mat
@@ -83,7 +83,7 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_IQR,
     if (vec) {
       return(c(z))
     }
-  } else if(!is.null(cov)) {
+  } else if (!is.null(cov)) {
     if (identical(cov, robustbase::covOGK)) {
       S <- cov(mat, sigmamu = scale)$cov
     } else {
@@ -101,7 +101,7 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_IQR,
     object[, idx[i]] <- z[, i]
   }
   # Rename columns if there has been rotation
-  if(!is.null(cov)) {
+  if (!is.null(cov)) {
     names(object)[numeric_col] <- paste0("z", seq(sum(numeric_col)))
   }
   return(object)

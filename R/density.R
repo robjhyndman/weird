@@ -23,7 +23,7 @@
 dist_kde <- function(y, h = NULL, H = NULL, kde_options = NULL, ...) {
   if (!is.list(y)) {
     y <- list(y)
-  } else if(is.data.frame(y)) {
+  } else if (is.data.frame(y)) {
     y <- list(as.matrix(y))
   }
   d <- unlist(lapply(y, function(u) NCOL(u)))
@@ -130,12 +130,14 @@ cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
 }
 
 #' @export
-quantile.dist_kde <- function (x, p, ..., na.rm = TRUE) {
+quantile.dist_kde <- function(x, p, ..., na.rm = TRUE) {
   # Integrate density
   delta <- x$kde$eval.points[2] - x$kde$eval.points[1]
   F <- cumsum(x$kde$estimate) * delta
-  stats::approx(F, x$kde$eval.points, xout = p, yleft = min(x$kde$eval.points),
-                yright = max(x$kde$eval.points), ties = mean, ..., na.rm = na.rm)$y
+  stats::approx(F, x$kde$eval.points,
+    xout = p, yleft = min(x$kde$eval.points),
+    yright = max(x$kde$eval.points), ties = mean, ..., na.rm = na.rm
+  )$y
 }
 
 #' @exportS3Method distributional::generate

@@ -18,9 +18,9 @@
 #' @examples
 #' set.seed(1)
 #' df <- tibble(
-#'     time = seq(41),
-#'     y = c(rnorm(20), 5, rnorm(20))
-#'   ) |>
+#'   time = seq(41),
+#'   y = c(rnorm(20), 5, rnorm(20))
+#' ) |>
 #'   mutate(hampel = hampel_anomalies(y, bandwidth = 3, k = 4))
 #' df |> ggplot(aes(x = time, y = y)) +
 #'   geom_line() +
@@ -28,7 +28,7 @@
 #' @export
 
 hampel_anomalies <- function(y, bandwidth, k = 3) {
-  if(abs(bandwidth - round(bandwidth)) > 1e-8) {
+  if (abs(bandwidth - round(bandwidth)) > 1e-8) {
     stop("Bandwidth must be an integer")
   }
   bandwidth <- as.integer(round(bandwidth))

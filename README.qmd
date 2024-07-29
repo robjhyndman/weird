@@ -68,10 +68,10 @@ The package provides the `kde_bandwidth()` function for estimating the bandwidth
 ```{r of-density}
 of <- oldfaithful |>
   filter(duration < 3600, waiting < 7200)
-of_density <- kde(of$duration, h=kde_bandwidth(of$duration))
+of_density <- kde(of$duration, h = kde_bandwidth(of$duration))
 of_density |>
   autoplot() +
-  geom_rug(aes(x=duration), of) +
+  geom_rug(aes(x = duration), of) +
   labs(x = "Duration (seconds)")
 ```
 
@@ -79,11 +79,11 @@ The `kde_bandwidth()` function can also be used to estimate the bandwidth for a 
 
 ```{r of-density2}
 of_density <- of |>
-  select(duration, waiting) |> 
-  kde(H = kde_bandwidth(of[,c("duration","waiting")]))
+  select(duration, waiting) |>
+  kde(H = kde_bandwidth(of[, c("duration", "waiting")]))
 of_density |>
   autoplot() +
-  geom_point(aes(duration, waiting), data = of, alpha=0.15) +
+  geom_point(aes(duration, waiting), data = of, alpha = 0.15) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
@@ -133,12 +133,12 @@ of |>
 And here are two types of HDR boxplot
 
 ```{r of-boxplot3}
-of |> 
+of |>
   gg_hdrboxplot(duration, waiting) +
-  labs(x = "Duration (seconds)", y = "Waiting time (seconds)") 
-of |> 
+  labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
+of |>
   gg_hdrboxplot(duration, waiting, scatterplot = TRUE) +
-  labs(x = "Duration (seconds)", y = "Waiting time (seconds)") 
+  labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
 The latter two plots show likely outliers in red, using the lookout algorithm.
@@ -163,14 +163,14 @@ of |>
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting)),
     lookout = lookout(cbind(duration, waiting))
-  ) |> 
+  ) |>
   filter(
-    denscore > quantile(denscore, prob=0.998) |
-    strayscore > quantile(strayscore, prob=0.998) |
-    lofscore > quantile(lofscore, prob=0.998) |
-    gloshscore > quantile(gloshscore, prob=0.998) |
-    lookout < 0.05
-  ) |> 
+    denscore > quantile(denscore, prob = 0.998) |
+      strayscore > quantile(strayscore, prob = 0.998) |
+      lofscore > quantile(lofscore, prob = 0.998) |
+      gloshscore > quantile(gloshscore, prob = 0.998) |
+      lookout < 0.05
+  ) |>
   arrange(lookout)
 ```
 

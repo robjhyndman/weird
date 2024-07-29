@@ -34,8 +34,8 @@ during the week of 15 June 2017. The data are downloaded and returned.
 \dontrun{
 wine_reviews <- fetch_wine_reviews()
 wine_reviews |>
- ggplot(aes(x = points, y = price)) +
- geom_jitter(height = 0, width = 0.2, alpha = 0.1) +
- scale_y_log10()
+  ggplot(aes(x = points, y = price)) +
+  geom_jitter(height = 0, width = 0.2, alpha = 0.1) +
+  scale_y_log10()
 }
 }

@@ -72,16 +72,20 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
   sorty <- sort(y)
   n <- length(y)
   if (two_sided) {
-    Q <- max(sorty[2] - sorty[1], sorty[n] - sorty[n-1]) / (sorty[n] - sorty[1])
+    Q <- max(sorty[2] - sorty[1], sorty[n] - sorty[n - 1]) / (sorty[n] - sorty[1])
   } else {
-    Q <- (sorty[n] - sorty[n-1]) / (sorty[n] - sorty[1])
+    Q <- (sorty[n] - sorty[n - 1]) / (sorty[n] - sorty[1])
     alpha <- 2 * alpha
   }
 
   # Find critical value using linear model fitted to simulated critical values
   # Subset data to nearest alpha and n values
-  logit <- function(u) { log(u/(1-u)) }
-  loglog <- function(u) { log(log(u)) }
+  logit <- function(u) {
+    log(u / (1 - u))
+  }
+  loglog <- function(u) {
+    log(log(u))
+  }
   # Find four nearest alpha values
   alpha_grid <- sort(unique(dixon_cv$alpha))
   nearest_alpha <- (alpha_grid[order(abs(logit(alpha_grid) - logit(alpha)))])[1:4]

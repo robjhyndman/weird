@@ -6,26 +6,30 @@ print.kde <- function(x, ...) {
   } else {
     d <- 1L
   }
-  if(!kde) {
+  if (!kde) {
     cat("Density of: [",
-        paste0(x$names, collapse = ", "), "]\n", sep = "")
+      paste0(x$names, collapse = ", "), "]\n",
+      sep = ""
+    )
   } else {
     cat("Kernel density estimate of: [",
-        paste0(x$names, collapse = ", "), "]\n", sep = "")
+      paste0(x$names, collapse = ", "), "]\n",
+      sep = ""
+    )
   }
-  if(d == 1L){
+  if (d == 1L) {
     ngrid <- length(x$eval.points)
   } else {
     ngrid <- lapply(x$eval.points, length)
   }
   cat("Computed on a grid of size", paste(ngrid, collapse = " x "), "\n")
-  if(kde) {
+  if (kde) {
     cat("Bandwidth: ")
     if (d == 1L) {
       cat("h = ", format(x$h, digits = 4))
     } else {
       cat("H = \n")
-      cat(format(x$H, digits = 4), quote=FALSE)
+      cat(format(x$H, digits = 4), quote = FALSE)
     }
   }
   invisible(x)
@@ -56,16 +60,16 @@ print.kde <- function(x, ...) {
 as_kde <- function(object, density_column, ngrid, ...) {
   # Check columns of object are all numerical
   object <- as.data.frame(object)
-  if(!all(sapply(object, is.numeric))) {
+  if (!all(sapply(object, is.numeric))) {
     stop("All columns of object must be numeric")
   }
   # Check density_column is in object
-  if(missing(density_column)) {
+  if (missing(density_column)) {
     density_column <- tail(colnames(object), 1)
   } else {
     density_column <- dplyr::as_label(dplyr::enquo(density_column))
   }
-  if(!(density_column %in% colnames(object))) {
+  if (!(density_column %in% colnames(object))) {
     stop(paste(density_column, "not found"))
   }
   # Separate points from density values
@@ -74,14 +78,14 @@ as_kde <- function(object, density_column, ngrid, ...) {
   # Find the dimension
   d <- NCOL(object)
   if (d == 1L) {
-    if(missing(ngrid)) {
+    if (missing(ngrid)) {
       ngrid <- 10001
     }
     # Interpolate density on finer grid
     density <- list(eval.points = seq(min(object), max(object), length = ngrid))
     density$estimate <- approx(object[[1]], den, xout = density$eval.points)$y
   } else if (d == 2L) {
-    if(missing(ngrid)) {
+    if (missing(ngrid)) {
       ngrid <- 101
     }
     density <- density_on_grid(as.matrix(object), den, ngrid)
@@ -91,16 +95,16 @@ as_kde <- function(object, density_column, ngrid, ...) {
   # Find falpha using quantile method
   missing <- is.na(density$estimate)
   samplex <- sample(density$estimate[!missing],
-                    size = 50000, replace = TRUE,
-                    prob = density$estimate[!missing]
+    size = 50000, replace = TRUE,
+    prob = density$estimate[!missing]
   )
   density$cont <- quantile(samplex, prob = (99:1) / 100, type = 8)
   # Set missing values to 0
   density$estimate[is.na(density$estimate)] <- 0
   # Add names
   density$names <- colnames(object)
-  if(is.null(density$names)) {
-    if(d == 1) {
+  if (is.null(density$names)) {
+    if (d == 1) {
       density$names <- "y"
     } else {
       density$names <- paste0("y", seq_len(d))
@@ -122,7 +126,7 @@ density_on_grid <- function(y, fy, ngrid) {
   # Bivariate interpolation
   grid <- expand.grid(density$eval.points[[1]], density$eval.points[[2]])
   ifun <- interpolation::interpfun(x = y[, 1], y = y[, 2], z = fy)
-  density$estimate <- ifun(grid[,1], grid[,2]) |>
+  density$estimate <- ifun(grid[, 1], grid[, 2]) |>
     matrix(nrow = ngrid)
   return(density)
 }

@@ -32,11 +32,11 @@ library(distributional)
 dist_mixture(
   dist_normal(-2, 1),
   dist_normal(2, 1),
-  weights = c(1/3, 2/3)
- ) |>
- gg_dist() +
- gg_dist_layer(dist_normal(-2,1), linetype = "dashed", scale = 1/3) +
- gg_dist_layer(dist_normal(2,1), linetype = "dashed", scale = 2/3)
+  weights = c(1 / 3, 2 / 3)
+) |>
+  gg_dist() +
+  gg_dist_layer(dist_normal(-2, 1), linetype = "dashed", scale = 1 / 3) +
+  gg_dist_layer(dist_normal(2, 1), linetype = "dashed", scale = 2 / 3)
 }
 \author{
 Rob J Hyndman

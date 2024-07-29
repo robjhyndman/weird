@@ -40,17 +40,20 @@
 
 #' @export
 
-score_tail_prob <- function(g,
-  distribution = NULL, GPD = FALSE,
-  smallest_prob = 1e-6, gridsize = 100001,
-  threshold_probability = 0.90) {
+score_tail_prob <- function(
+    g,
+    distribution = NULL, GPD = FALSE,
+    smallest_prob = 1e-6, gridsize = 100001,
+    threshold_probability = 0.90) {
   n <- length(g)
-  if(GPD & !is.null(distribution)) {
+  if (GPD & !is.null(distribution)) {
     warning("GPD is specified, so the distribution argument will be ignored.")
   }
-  if(GPD) {
-    threshold <- stats::quantile(g, prob = threshold_probability,
-      type = 8, na.rm = TRUE)
+  if (GPD) {
+    threshold <- stats::quantile(g,
+      prob = threshold_probability,
+      type = 8, na.rm = TRUE
+    )
     if (!any(g > threshold, na.rm = TRUE)) {
       warning("No scores above threshold.")
       return(rep(1, n))

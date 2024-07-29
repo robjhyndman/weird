@@ -43,8 +43,12 @@ alpha <- 0.05
 n <- 55
 # Find critical value using linear model fitted to simulated critical values
 # Subset data to nearest alpha and n values
-logit <- function(u) { log(u/(1-u)) }
-loglog <- function(u) { log(log(u)) }
+logit <- function(u) {
+  log(u / (1 - u))
+}
+loglog <- function(u) {
+  log(log(u))
+}
 # Find four nearest alpha values
 alpha_grid <- sort(unique(dixon_cv$alpha))
 nearest_alpha <- (alpha_grid[order(abs(logit(alpha_grid) - logit(alpha)))])[1:4]

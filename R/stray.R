@@ -12,7 +12,7 @@
 #' which(scores > threshold)
 #' @export
 #' @rdname stray_scores
-stray_scores <- function(y,  ...) {
+stray_scores <- function(y, ...) {
   stray::find_HDoutliers(data = y, ...)$out_scores
 }
 
@@ -31,6 +31,6 @@ stray_scores <- function(y,  ...) {
 #' @return Numerical vector containing logical values indicating if the
 #' observation is identified as an anomaly using the stray algorithm.
 #' @export
-stray_anomalies <- function(y,  ...) {
+stray_anomalies <- function(y, ...) {
   stray::find_HDoutliers(data = y, ...)$type == "outlier"
 }

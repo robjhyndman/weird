@@ -51,7 +51,7 @@ all arguments set to their defaults other than \code{lookout}.
 }
 \examples{
 df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
-df$y <- df$x + rnorm(200, sd=2)
+df$y <- df$x + rnorm(200, sd = 2)
 gg_hdrboxplot(df, x)
 gg_hdrboxplot(df, x, y, scatterplot = TRUE)
 oldfaithful |>

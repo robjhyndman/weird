@@ -30,8 +30,8 @@ may not be present.
 }
 \examples{
 oldfaithful |>
- filter(duration < 7000, waiting < 7000) |>
- ggplot(aes(x = duration, y = waiting)) +
- geom_point()
+  filter(duration < 7000, waiting < 7000) |>
+  ggplot(aes(x = duration, y = waiting)) +
+  geom_point()
 }
 \keyword{datasets}

@@ -39,7 +39,7 @@
 #' dist_kde(c(rnorm(500), rnorm(500, 4, 1.5))) |>
 #'   gg_dist(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14")
 #' ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
-#' #ymat |>
+#' # ymat |>
 #' #  dist_kde(ymat) |>
 #' #  gg_dist(show_points = TRUE, alpha = 0.1, fill = TRUE)
 #' @export
@@ -80,7 +80,7 @@ gg_dist <- function(
     hdr <- purrr::map_dfr(prob, function(u) {
       hdri <- distributional::hdr(object, size = u * 100)
       tibble(
-        level = u*100,
+        level = u * 100,
         Distribution = dist_names,
         lower = vctrs::field(hdri, "lower"),
         upper = vctrs::field(hdri, "upper")
@@ -98,7 +98,7 @@ gg_dist <- function(
     if (all(lengths(x) == 0)) {
       stop("No observations found. Set show_points to FALSE")
     }
-    if(show_hdr) {
+    if (show_hdr) {
       # Drop points obscured by largest HDR
       thresh <- tibble(object = object, Distribution = dist_names) |>
         dplyr::left_join(hdr |> filter(level == max(level)), by = "Distribution") |>
@@ -107,15 +107,17 @@ gg_dist <- function(
         dplyr::select(Distribution, fi)
       threshold <- as.list(thresh$fi)
       names(threshold) <- thresh$Distribution
-      fi <- purrr::map2(object, x, function(u,x) {
-        if(is.null(x)) {
+      fi <- purrr::map2(object, x, function(u, x) {
+        if (is.null(x)) {
           return(NULL)
         } else {
           density(u, at = x)[[1]]
         }
       })
-      idx <- purrr::map2(fi, threshold, function(f,t){which(f < t)})
-      x <- purrr::map2(x, idx, function(x,i) x[i])
+      idx <- purrr::map2(fi, threshold, function(f, t) {
+        which(f < t)
+      })
+      x <- purrr::map2(x, idx, function(x, i) x[i])
     }
     # Drop distributions with no data
     some_data <- names(x)[lengths(x) > 0]
@@ -127,15 +129,19 @@ gg_dist <- function(
     if (no_groups) {
       a <- aes(x = x, y = -maxden * as.numeric(factor(Distribution)) / 40)
     } else {
-      a <- aes(x = x, y = -maxden * (as.numeric(factor(Distribution))- 0.5) / 20,
-               color = Distribution)
+      a <- aes(
+        x = x, y = -maxden * (as.numeric(factor(Distribution)) - 0.5) / 20,
+        color = Distribution
+      )
     }
-    if(is.null(alpha)) {
+    if (is.null(alpha)) {
       alpha <- ifelse(fill, 1, min(1, 1000 / max(lengths(x))))
     }
-    if(jitter) {
-      p <- p + ggplot2::geom_jitter(data = show_x, mapping = a, alpha = alpha,
-                                    width = 0, height = maxden/100)
+    if (jitter) {
+      p <- p + ggplot2::geom_jitter(
+        data = show_x, mapping = a, alpha = alpha,
+        width = 0, height = maxden / 100
+      )
     } else {
       p <- p + ggplot2::geom_point(data = show_x, mapping = a, alpha = alpha)
     }
@@ -154,18 +160,18 @@ gg_dist <- function(
   }
 
   if (show_hdr) {
-    if(no_groups) {
-    p <- p +
-      ggplot2::geom_rect(
-        data = hdr,
-        aes(
-          xmin = lower, xmax = upper,
-          ymin = -maxden * as.numeric(factor(Distribution)) / 20,
-          ymax = -maxden * (as.numeric(factor(Distribution))-1) / 20,
-          alpha = -level
-        ),
-        fill = color
-      )
+    if (no_groups) {
+      p <- p +
+        ggplot2::geom_rect(
+          data = hdr,
+          aes(
+            xmin = lower, xmax = upper,
+            ymin = -maxden * as.numeric(factor(Distribution)) / 20,
+            ymax = -maxden * (as.numeric(factor(Distribution)) - 1) / 20,
+            alpha = -level
+          ),
+          fill = color
+        )
     } else {
       p <- p +
         ggplot2::geom_rect(
@@ -173,7 +179,7 @@ gg_dist <- function(
           aes(
             xmin = lower, xmax = upper,
             ymin = -maxden * as.numeric(factor(Distribution)) / 20,
-            ymax = -maxden * (as.numeric(factor(Distribution))-1) / 20,
+            ymax = -maxden * (as.numeric(factor(Distribution)) - 1) / 20,
             alpha = -level,
             fill = Distribution
           )
@@ -182,9 +188,9 @@ gg_dist <- function(
     p <- p +
       ggplot2::scale_alpha(
         name = "HDR coverage",
-        breaks = -100*prob,
+        breaks = -100 * prob,
         labels = paste0(100 * prob, "%"),
-        range = c(0.2,1)
+        range = c(0.2, 1)
       )
   }
   if (show_mode) {
@@ -195,7 +201,7 @@ gg_dist <- function(
     if (no_groups) {
       a <- aes(x = mode, y = -maxden / 20)
     } else {
-      a <- aes(x = mode, y = -maxden * (as.numeric(factor(Distribution))- 0.5) / 20, color = Distribution)
+      a <- aes(x = mode, y = -maxden * (as.numeric(factor(Distribution)) - 0.5) / 20, color = Distribution)
     }
     p <- p +
       ggplot2::geom_point(data = modes, mapping = a, shape = 17, size = 3)
@@ -204,4 +210,4 @@ gg_dist <- function(
   return(p)
 }
 
-utils::globalVariables(c("Density","Distribution","level"))
+utils::globalVariables(c("Density", "Distribution", "level"))

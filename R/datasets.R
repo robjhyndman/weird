@@ -47,9 +47,9 @@
 #' @return Data frame
 #' @examples
 #' oldfaithful |>
-#'  filter(duration < 7000, waiting < 7000) |>
-#'  ggplot(aes(x = duration, y = waiting)) +
-#'  geom_point()
+#'   filter(duration < 7000, waiting < 7000) |>
+#'   ggplot(aes(x = duration, y = waiting)) +
+#'   geom_point()
 #' @source \url{https://geysertimes.org}
 "oldfaithful"
 
