@@ -3,12 +3,17 @@
 #' The GEV distribution function with parameters \eqn{\code{location} = a},
 #' \eqn{\code{scale} = b} and \eqn{\code{shape} = s} is
 #'
-#' \deqn{G(z) = \exp\left[-\{1+s(z-a)/b\}^{-1/s}\right]}
+#' \deqn{F(x) = \exp\left[-\{1+s(x-a)/b\}^{-1/s}\right]}
 #'
-#' for \eqn{1+s(z-a)/b > 0}, where \eqn{b > 0}. If \eqn{s = 0} the distribution
-#' is defined by continuity. If \eqn{1+s(z-a)/b \leq 0}, the value \eqn{z} is
-#' either greater than the upper end point (if \eqn{s < 0}), or less than the
-#' lower end point (if \eqn{s > 0}).
+#' for \eqn{1+s(x-a)/b > 0}, where \eqn{b > 0}. If \eqn{s = 0} the distribution
+#' is defined by continuity, giving
+#'
+#' \deqn{F(x) = \exp\left[-\exp\left(-\frac{x-a}{b}\right)\right]}
+#'
+#' The support of the distribution is the real line if \eqn{s = 0},
+#' \eqn{x \geq a - b/s} if \eqn{s \neq 0}, and
+#' \eqn{x \leq a - b/s} if \eqn{s < 0}.
+#'
 #' The parametric form of the GEV encompasses that of the Gumbel, Frechet and
 #' reverse Weibull distributions, which are obtained for \eqn{s = 0},
 #' \eqn{s > 0} and \eqn{s < 0} respectively. It was first introduced by
