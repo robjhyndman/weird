@@ -2,7 +2,7 @@
 % Please edit documentation in R/density.R
 \name{dist_kde}
 \alias{dist_kde}
-\title{Create kde distributional object}
+\title{Create distributional object based on a kernel density estimate}
 \usage{
 dist_kde(y, h = NULL, H = NULL, kde_options = NULL, ...)
 }
@@ -22,10 +22,11 @@ all vectors, or all matrices with the same number of columns.}
 \item{...}{Other arguments are passed to the \code{\link{kde_bandwidth}} function.}
 }
 \description{
-Creates a distributional object using a kernel density estimate. The
-\code{ks::kde()} function is used to compute the density. The cdf, quantiles and
-moments are consistent with the kde. Generating random values from the kde
-is equivalent to a smoothed bootstrap.
+Creates a distributional object using a kernel density estimate with a
+Gaussian kernel obtained from the \code{\link[ks]{kde}()} function. The bandwidth
+can be specified; otherwise the \code{\link{kde_bandwidth}()} function is used.
+The cdf, quantiles and moments are consistent with the kde. Generating
+random values from the kde is equivalent to a smoothed bootstrap.
 }
 \examples{
 dist_kde(c(rnorm(200), rnorm(100, 5)), method = "double")

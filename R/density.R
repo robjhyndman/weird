@@ -1,9 +1,10 @@
-#' Create kde distributional object
+#' Create distributional object based on a kernel density estimate
 #'
-#' Creates a distributional object using a kernel density estimate. The
-#' `ks::kde()` function is used to compute the density. The cdf, quantiles and
-#' moments are consistent with the kde. Generating random values from the kde
-#' is equivalent to a smoothed bootstrap.
+#' Creates a distributional object using a kernel density estimate with a
+#' Gaussian kernel obtained from the \code{\link[ks]{kde}()} function. The bandwidth
+#' can be specified; otherwise the \code{\link{kde_bandwidth}()} function is used.
+#' The cdf, quantiles and moments are consistent with the kde. Generating
+#' random values from the kde is equivalent to a smoothed bootstrap.
 #'
 #' @param y Numerical vector or matrix of data, or a list of such objects. If a
 #' list is provided, then all objects should be of the same dimension. e.g.,
