@@ -90,7 +90,7 @@ quantile.dist_gev <- function(x, p, ...) {
 
 #' @exportS3Method distributional::generate
 generate.dist_gev <- function(x, times, ...) {
-  z <- distributional::generate(distributional::dist_exponential(rate = 1), times = times)[[1]]
+  z <- rexp(times)
   if (x[["shape"]] == 0) {
     x[["location"]] - x[["scale"]] * log(z)
   } else {
