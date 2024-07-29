@@ -13,6 +13,7 @@ test_that("GEV", {
     0.5 + 2*(log(2)^(-0.1) - 1)/0.1, # location + scale*(log(2)^(-shape) - 1)/shape
     3 * (log(2)^(-1.1) - 1)/1.1 # location + scale*(log(2)^(-shape) - 1)/shape
   ), tolerance = 0.0001)
+  expect_equal(median(dist), quantile(dist, 0.5))
   # Variance
   expect_equal(distributional::variance(dist), c(
     pi^2 / 6,
