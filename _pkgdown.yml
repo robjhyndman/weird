@@ -53,9 +53,12 @@ reference:
   - title: Functions for working with kernel density estimates
     contents:
       - as_kde
-      - dist_gev
       - dist_kde
       - kde_bandwidth
+  - title: Functions for distributions
+    contents:
+      - dist_gev
+      - dist_gpd
   - title: Functions for graphics and HDR calculations
     contents:
       - autoplot.kde
