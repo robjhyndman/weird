@@ -63,12 +63,14 @@
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>$$G(z) = \exp\left[-\{1+s(z-a)/b\}^{-1/s}\right]$$</p>
-<p>for \(1+s(z-a)/b &gt; 0\), where \(b &gt; 0\). If \(s = 0\) the distribution
-is defined by continuity. If \(1+s(z-a)/b \leq 0\), the value \(z\) is
-either greater than the upper end point (if \(s &lt; 0\)), or less than the
-lower end point (if \(s &gt; 0\)).
-The parametric form of the GEV encompasses that of the Gumbel, Frechet and
+    <p>$$F(x) = \exp\left[-\{1+s(x-a)/b\}^{-1/s}\right]$$</p>
+<p>for \(1+s(x-a)/b &gt; 0\), where \(b &gt; 0\). If \(s = 0\) the distribution
+is defined by continuity, giving</p>
+<p>$$F(x) = \exp\left[-\exp\left(-\frac{x-a}{b}\right)\right]$$</p>
+<p>The support of the distribution is the real line if \(s = 0\),
+\(x \geq a - b/s\) if \(s \neq 0\), and
+\(x \leq a - b/s\) if \(s &lt; 0\).</p>
+<p>The parametric form of the GEV encompasses that of the Gumbel, Frechet and
 reverse Weibull distributions, which are obtained for \(s = 0\),
 \(s &gt; 0\) and \(s &lt; 0\) respectively. It was first introduced by
 Jenkinson (1955).</p>
