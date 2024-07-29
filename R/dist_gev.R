@@ -26,7 +26,7 @@
 #' @export
 
 dist_gev <- function(location, scale, shape) {
-  location <- vctrs::vec_cast(shape, double())
+  location <- vctrs::vec_cast(location, double())
   shape <- vctrs::vec_cast(shape, double())
   scale <- vctrs::vec_cast(scale, double())
   if (any(scale <= 0)) {
@@ -85,11 +85,11 @@ quantile.dist_gev <- function(x, p, ...) {
 
 #' @exportS3Method distributional::generate
 generate.dist_gev <- function(x, times, ...) {
-  z <- distributional::generate(distributional::dist_exponential(times = times))
+  z <- distributional::generate(distributional::dist_exponential(rate = 1), times = times)[[1]]
   if (x[["shape"]] == 0) {
     x[["location"]] - x[["scale"]] * log(z)
   } else {
-    x[["location"]] + x[["scale"]] * (log(z)^(-x[["shape"]]) - 1) / x[["shape"]]
+    x[["location"]] + x[["scale"]] * (z^(-x[["shape"]]) - 1) / x[["shape"]]
   }
 }
 
