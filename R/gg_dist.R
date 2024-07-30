@@ -197,14 +197,16 @@ gg_dist <- function(
     modes <- df |>
       dplyr::group_by(Distribution) |>
       dplyr::filter(Density == max(Density)) |>
-      select(mode = y, Distribution)
-    if (no_groups) {
-      a <- aes(x = mode, y = -maxden / 20)
-    } else {
-      a <- aes(x = mode, y = -maxden * (as.numeric(factor(Distribution)) - 0.5) / 20, color = Distribution)
-    }
-    p <- p +
-      ggplot2::geom_point(data = modes, mapping = a, shape = 17, size = 3)
+      ungroup() |>
+      select(mode = x, Distribution) |>
+      mutate(
+        i = as.numeric(factor(Distribution)),
+        lower = -maxden * i / 20,
+        upper = -maxden * (i - 1) / 20
+      ) |>
+      tidyr::pivot_longer(lower:upper, values_to = "y", names_to = "ypos")
+    p <- p + ggplot2::geom_line(data = modes,
+               mapping = aes(x = mode, y = y, group = Distribution))
   }
 
   return(p)
