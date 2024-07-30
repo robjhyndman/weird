@@ -58,7 +58,10 @@ gg_dist <- function(
     colors <- palette(n = length(prob) + 1)
   }
   # Names of distributions
+  object_names <- names(object)
   dist_names <- make.unique(format(object))
+  idx <- which(object_names != "")
+  dist_names[idx] <- object_names[idx]
   dist <- stats::family(object)
   no_groups <- length(dist) == 1L
 

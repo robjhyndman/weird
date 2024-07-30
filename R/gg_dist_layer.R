@@ -56,7 +56,11 @@ make_density_df <- function(object, ngrid) {
     max(range_x) + 0.0001 * support
   )
   df <- c(list(y), density(object, at = y))
-  names(df) <- c("y", make.unique(format(object)))
+  dist_names <- format(object)
+  object_names <- names(object)
+  idx <- which(object_names != "")
+  dist_names[idx] <- object_names[idx]
+  names(df) <- c("y", make.unique(dist_names))
   tibble::as_tibble(df) |>
     tidyr::pivot_longer(
       cols = -y, names_to = "Distribution",
