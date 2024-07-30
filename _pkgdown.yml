@@ -57,6 +57,7 @@ reference:
       - kde_bandwidth
   - title: Functions for distributions
     contents:
+      - dist_density
       - dist_gev
       - dist_gpd
   - title: Functions for graphics and HDR calculations
