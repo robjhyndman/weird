@@ -31,9 +31,9 @@
 #' @export
 
 dist_gev <- function(location, scale, shape) {
-  location <- vctrs::vec_cast(location, double())
-  shape <- vctrs::vec_cast(shape, double())
-  scale <- vctrs::vec_cast(scale, double())
+  location <- vctrs::vec_cast(unname(location), double())
+  shape <- vctrs::vec_cast(unname(shape), double())
+  scale <- vctrs::vec_cast(unname(scale), double())
   if (any(scale <= 0)) {
     stop("The scale parameter of a GEV distribution must be strictly positive.")
   }
