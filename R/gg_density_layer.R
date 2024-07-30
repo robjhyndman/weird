@@ -19,12 +19,12 @@
 #'   dist_normal(2, 1),
 #'   weights = c(1 / 3, 2 / 3)
 #' ) |>
-#'   gg_dist() +
-#'   gg_dist_layer(dist_normal(-2, 1), linetype = "dashed", scale = 1 / 3) +
-#'   gg_dist_layer(dist_normal(2, 1), linetype = "dashed", scale = 2 / 3)
+#'   gg_density() +
+#'   gg_density_layer(dist_normal(-2, 1), linetype = "dashed", scale = 1 / 3) +
+#'   gg_density_layer(dist_normal(2, 1), linetype = "dashed", scale = 2 / 3)
 #' @export
 
-gg_dist_layer <- function(object, ngrid = 501, scale = 1, ...) {
+gg_density_layer <- function(object, ngrid = 501, scale = 1, ...) {
   df <- make_density_df(object, ngrid)
   if (length(object) == 1L) {
     geom_line(data = df, aes(x = y, y = scale * Density), ...)

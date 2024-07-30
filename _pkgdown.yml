@@ -63,8 +63,8 @@ reference:
   - title: Functions for graphics and HDR calculations
     contents:
       - autoplot.kde
-      - gg_dist
-      - gg_dist_layer
+      - gg_density
+      - gg_density_layer
       - gg_bagplot
       - gg_hdrboxplot
       - hdr_palette

@@ -36,15 +36,15 @@
 #' @author Rob J Hyndman
 #' @examples
 #' # Univariate density
-#' dist_kde(c(rnorm(500), rnorm(500, 4, 1.5))) |>
-#'   gg_dist(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14")
-#' ymat <- tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000))
-#' # ymat |>
-#' #  dist_kde(ymat) |>
-#' #  gg_dist(show_points = TRUE, alpha = 0.1, fill = TRUE)
+#' dist_kde(c(rnorm(500), rnorm(500, 4, .5))) |>
+#'   gg_density(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14",
+#'   show_mode = TRUE, show_points = TRUE, jitter = TRUE)
+#' #tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000)) |>
+#' #  dist_kde() |>
+#' #  gg_density(show_points = TRUE, alpha = 0.1, fill = TRUE)
 #' @export
 
-gg_dist <- function(
+gg_density <- function(
     object, prob = seq(9) / 10, fill = FALSE,
     show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_lookout = FALSE,
     ngrid = 501, color = "#00659e", palette = hdr_palette, alpha = NULL,
