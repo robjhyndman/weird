@@ -41,8 +41,8 @@ make_density_df <- function(object, ngrid = 501) {
     stop("Only univariate and bivariate densities are supported")
   } else if(d == 1) {
     # Find range of x values to use
-    range_x <- range(unlist(quantile(object, p = c(0, 0.002, 0.998, 1))))
-    range_x <- range_x[is.finite(range_x)]
+    qq <- unlist(quantile(object, p = c(0, 0.002, 0.998, 1)))
+    range_x <- range(qq[is.finite(qq)])
     # Expand to include all data points if a kde
     if ("kde" %in% stats::family(object)) {
       x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
