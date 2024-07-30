@@ -58,10 +58,7 @@ gg_dist <- function(
     colors <- palette(n = length(prob) + 1)
   }
   # Names of distributions
-  object_names <- names(object)
-  dist_names <- make.unique(format(object))
-  idx <- which(object_names != "")
-  dist_names[idx] <- object_names[idx]
+  dist_names <- names_dist(object)
   dist <- stats::family(object)
   no_groups <- length(dist) == 1L
 
@@ -72,9 +69,9 @@ gg_dist <- function(
   # Add density lines to plot
   p <- ggplot(df)
   if (no_groups) {
-    p <- p + geom_line(aes(x = y, y = Density))
+    p <- p + geom_line(aes(x = x, y = Density))
   } else {
-    p <- p + geom_line(aes(x = y, y = Density, color = Distribution))
+    p <- p + geom_line(aes(x = x, y = Density, color = Distribution))
   }
 
   # Set up HDRs if needed

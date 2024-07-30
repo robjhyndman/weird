@@ -34,36 +34,84 @@ gg_dist_layer <- function(object, ngrid = 501, scale = 1, ...) {
 }
 
 # Make data frame containing densities from distributional object
-make_density_df <- function(object, ngrid) {
-  # Find range of x values to use
-  range_x <- range(unlist(quantile(object, p = c(0.002, 0.998))))
-  # Expand to edge of range if support is finite
-  if (is.finite(minx <- min(quantile(object, p = 0)))) {
-    range_x <- range(minx, range_x)
+make_density_df <- function(object, ngrid = 501) {
+  # Find dimension of distribution
+  d <- dimension_dist(object)
+  if(d > 2) {
+    stop("Only univariate and bivariate densities are supported")
+  } else if(d == 1) {
+    # Find range of x values to use
+    range_x <- range(unlist(quantile(object, p = c(0, 0.002, 0.998, 1))))
+    range_x <- range_x[is.finite(range_x)]
+    # Expand to include all data points if a kde
+    if ("kde" %in% stats::family(object)) {
+      x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
+      range_x <- range(range_x, unlist(x))
+    }
+    support <- diff(range_x)
+    y <- c(
+      min(range_x) - 0.0001 * support,
+      seq(min(range_x), max(range_x), length = ngrid - 2),
+      max(range_x) + 0.0001 * support
+    )
+    df <- c(x = list(y), density(object, at = y))
+  } else {
+    ngrid <- round(sqrt(ngrid))
+    # Find range of x values to use
+    qq <- quantile(object, p = c(0, 0.002, 0.998, 1))
+    range_xy <- cbind(range(unlist(lapply(qq, function(u) u[is.finite(u[,1]),1]))),
+                      range(unlist(lapply(qq, function(u) u[is.finite(u[,2]),2]))))
+    # Expand to include all data points if a kde
+    if ("kde" %in% stats::family(object)) {
+      x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
+      range_x <- range(range_x, unlist(x))
+    }
+    support <- apply(range_xy, 2, diff)
+    x <- c(
+      min(range_xy[,1]) - 0.0001 * support[1],
+      seq(min(range_xy[,1]), max(range_xy[,1]), length = ngrid - 2),
+      max(range_xy[,1]) + 0.0001 * support
+    )
+    y <- c(
+      min(range_xy[,2]) - 0.0001 * support[2],
+      seq(min(range_xy[,2]), max(range_xy[,2]), length = ngrid - 2),
+      max(range_xy[,2]) + 0.0001 * support
+    )
+    df <- expand.grid(x=x,y=y)
+    df <- c(as.list(df), density(object, at = as.matrix(df)))
   }
-  if (is.finite(maxx <- max(quantile(object, p = 1)))) {
-    range_x <- range(range_x, maxx)
+  names(df)[-seq(d)] <- names_dist(object, unique = TRUE)
+  tibble::as_tibble(df) |>
+    tidyr::pivot_longer(
+      cols = -seq(d), names_to = "Distribution",
+      values_to = "Density"
+    )
+}
+
+# Find dimension of distribution
+dimension_dist <- function(object) {
+  dist_names <- format(object)
+  if(any(grepl("MVN", dist_names))) {
+    mvn <- dist_names[grep("MVN", dist_names)[1]]
+    d <- readr::parse_number(mvn)
+  } else if("kde" %in% stats::family(object)) {
+    kde <- which(grepl("kde", dist_names))
+    d <- lapply(vctrs::vec_data(object[kde]), function(u) NCOL(u$kde$x)) |> unlist()
+    d <- d[1]
+  } else {
+    d <- 1
   }
-  # Expand to include all data points if a kde
-  if ("kde" %in% stats::family(object)) {
-    x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
-    range_x <- range(range_x, unlist(x))
-  }
-  support <- diff(range_x)
-  y <- c(
-    min(range_x) - 0.0001 * support,
-    seq(min(range_x), max(range_x), length = ngrid - 2),
-    max(range_x) + 0.0001 * support
-  )
-  df <- c(list(y), density(object, at = y))
+}
+
+# Get names of distributions
+names_dist <- function(object, unique = FALSE) {
   dist_names <- format(object)
   object_names <- names(object)
   idx <- which(object_names != "")
   dist_names[idx] <- object_names[idx]
-  names(df) <- c("y", make.unique(dist_names))
-  tibble::as_tibble(df) |>
-    tidyr::pivot_longer(
-      cols = -y, names_to = "Distribution",
-      values_to = "Density"
-    )
+  if(unique) {
+    make.unique(dist_names)
+  } else {
+    dist_names
+  }
 }
