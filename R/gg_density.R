@@ -191,7 +191,7 @@ gg_density1 <- function(
             xmin = lower, xmax = upper,
             ymin = -maxden * as.numeric(factor(Distribution)) / 20,
             ymax = -maxden * (as.numeric(factor(Distribution)) - 1) / 20,
-            alpha = -level
+            alpha = level
           ),
           fill = color
         )
@@ -203,7 +203,7 @@ gg_density1 <- function(
             xmin = lower, xmax = upper,
             ymin = -maxden * as.numeric(factor(Distribution)) / 20,
             ymax = -maxden * (as.numeric(factor(Distribution)) - 1) / 20,
-            alpha = -level,
+            alpha = level,
             fill = Distribution
           )
         )
@@ -211,9 +211,9 @@ gg_density1 <- function(
     p <- p +
       ggplot2::scale_alpha(
         name = "HDR coverage",
-        breaks = -100 * prob,
-        labels = paste0(100 * prob, "%"),
-        range = c(0.2, 1)
+        breaks = 100 * rev(prob),
+        labels = paste0(100 * rev(prob), "%"),
+        range = c(1, 0.2)
       )
   }
   if (show_mode) {
