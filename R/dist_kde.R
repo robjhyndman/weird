@@ -17,6 +17,7 @@
 #' @param ... Other arguments are passed to the \code{\link{kde_bandwidth}} function.
 #' @examples
 #' dist_kde(c(rnorm(200), rnorm(100, 5)), method = "double")
+#' dist_kde(cbind(rnorm(200), rnorm(200, 5)))
 #'
 #' @export
 
@@ -100,7 +101,16 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
   if (d == 1) {
     d <- stats::approx(x$kde$eval.points, x$kde$estimate, xout = at)$y
   } else {
-    stop("Not yet implemented")
+    # Bivariate interpolation
+    grid <- expand.grid(x$kde$eval.points[[1]], x$kde$eval.points[[2]])
+    ifun <- interpolation::interpfun(x = grid[,1], y = grid[,2], z = c(x$kde$estimate))
+    # Turn at into a matrix
+    if(is.list(at)) {
+      at <- do.call(rbind, at)
+    } else {
+      at <- matrix(at)
+    }
+    d <- ifun(at[,1], at[,2])
   }
   d[is.na(d)] <- 0
   return(d)
@@ -137,11 +147,13 @@ quantile.dist_kde <- function(x, p, ..., na.rm = TRUE) {
 #' @exportS3Method distributional::generate
 generate.dist_kde <- function(x, times, ...) {
   d <- NCOL(x$kde$x)
-  if (d == 1) {
-    sample(x$kde$x, size = times, replace = TRUE) + stats::rnorm(times, sd = x$kde$h)
+  i <- sample(NROW(x$kde$x), size = times, replace = TRUE)
+  noise <- if (d == 1) {
+    stats::rnorm(times, sd = x$kde$h)
   } else {
-    stop("Not yet implemented")
+    mvtnorm::rmvnorm(times, sigma = x$kde$H)
   }
+  x$kde$x[i,] + noise
 }
 
 #' @export

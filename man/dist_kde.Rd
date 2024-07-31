@@ -30,5 +30,6 @@ random values from the kde is equivalent to a smoothed bootstrap.
 }
 \examples{
 dist_kde(c(rnorm(200), rnorm(100, 5)), method = "double")
+dist_kde(cbind(rnorm(200), rnorm(200, 5)))
 
 }
