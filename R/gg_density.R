@@ -83,9 +83,17 @@ gg_density1 <- function(
   # Add density lines to plot
   p <- ggplot(df)
   if (no_groups) {
-    p <- p + geom_line(aes(x = x, y = Density))
+    if(NROW(df) < 20) {
+      p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density))
+    } else {
+      p <- p + geom_line(aes(x = x, y = Density))
+    }
   } else {
-    p <- p + geom_line(aes(x = x, y = Density, color = Distribution))
+    if(NROW(df) < 20) {
+      p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density, color = Distributions))
+    } else {
+      p <- p + geom_line(aes(x = x, y = Density, color = Distribution))
+    }
   }
 
   # Set up HDRs if needed
