@@ -90,9 +90,9 @@ quantile.dist_gpd <- function(x, p, ...) {
 #' @exportS3Method distributional::generate
 generate.dist_gpd <- function(x, times, ...) {
   if (x[["shape"]] == 0) {
-    x[["location"]] + x[["scale"]] * rexp(times)
+    x[["location"]] + x[["scale"]] * stats::rexp(times)
   } else {
-    quantile(x, runif(times))
+    quantile(x, stats::runif(times))
   }
 }
 

@@ -79,7 +79,7 @@ generate.dist_density <- function(x, times, ...) {
   xgrid <- seq(x$x[1] + delta/2, x$x[n] - delta/2, l=1000)
   ygrid <- stats::approx(x$x, x$f, xout = xgrid)$y
   sample(xgrid, size = times, replace = TRUE, prob = ygrid) +
-    runif(times, -delta / 2, delta / 2)
+    stats::runif(times, -delta / 2, delta / 2)
 }
 
 #' @export

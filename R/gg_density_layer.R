@@ -27,9 +27,9 @@
 gg_density_layer <- function(object, ngrid = 501, scale = 1, ...) {
   df <- make_density_df(object, ngrid)
   if (length(object) == 1L) {
-    geom_line(data = df, aes(x = y, y = scale * Density), ...)
+    geom_line(data = df, aes(x = x, y = scale * Density), ...)
   } else {
-    geom_line(data = df, aes(x = y, y = scale * Density, color = Distribution), ...)
+    geom_line(data = df, aes(x = x, y = scale * Density, color = Distribution), ...)
   }
 }
 
@@ -42,7 +42,7 @@ make_density_df <- function(object, ngrid = 501) {
   }
   if(d == 1) {
     # Find range of x values to use
-    qq <- quantile(object, p = c(0, 0.002, 0.998, 1))
+    qq <- quantile(object, p = c(0, 0.002, 0.998, 1)) |> unlist()
     range_x <- range(qq[is.finite(qq)])
     # Expand to include all data points if a kde
     if ("kde" %in% stats::family(object)) {
@@ -109,7 +109,7 @@ make_density_df <- function(object, ngrid = 501) {
       cols = -seq(d), names_to = "Distribution",
       values_to = "Density"
     ) |>
-    distinct()
+    dplyr::distinct()
 }
 
 # Find dimension of distribution
@@ -117,14 +117,14 @@ dimension_dist <- function(object) {
   dist_names <- format(object)
   if(any(grepl("MVN", dist_names))) {
     mvn <- dist_names[grep("MVN", dist_names)[1]]
-    d <- readr::parse_number(mvn)
+    d <- as.numeric(sub("MVN\\[(\\d+)\\]", "\\1", mvn))
   } else if("kde" %in% stats::family(object)) {
     kde <- which(grepl("kde", dist_names))
     d <- lapply(vctrs::vec_data(object[kde]), function(u) NCOL(u$kde$x)) |> unlist()
-    d <- d[1]
   } else {
     d <- 1
   }
+  d[1]
 }
 
 # Get names of distributions

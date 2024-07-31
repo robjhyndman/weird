@@ -211,9 +211,9 @@ gg_density1 <- function(
     modes <- df |>
       dplyr::group_by(Distribution) |>
       dplyr::filter(Density == max(Density)) |>
-      ungroup() |>
-      select(mode = x, Distribution) |>
-      mutate(
+      dplyr::ungroup() |>
+      dplyr::select(mode = x, Distribution) |>
+      dplyr::mutate(
         i = as.numeric(factor(Distribution)),
         lower = -maxden * i / 20,
         upper = -maxden * (i - 1) / 20
@@ -286,10 +286,10 @@ gg_density2 <- function(
     modes <- df |>
       dplyr::group_by(Distribution) |>
       dplyr::filter(Density == max(Density)) |>
-      ungroup()
+      dplyr::ungroup()
     p <- p + ggplot2::geom_point(data = modes, mapping = aes(x = x, y = y))
   }
   return(p)
 }
 
-utils::globalVariables(c("Density", "Distribution", "level"))
+utils::globalVariables(c("Density", "Distribution", "level","i"))

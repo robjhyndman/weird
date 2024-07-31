@@ -148,12 +148,11 @@ quantile.dist_kde <- function(x, p, ..., na.rm = TRUE) {
 generate.dist_kde <- function(x, times, ...) {
   d <- NCOL(x$kde$x)
   i <- sample(NROW(x$kde$x), size = times, replace = TRUE)
-  noise <- if (d == 1) {
-    stats::rnorm(times, sd = x$kde$h)
+  if (d == 1) {
+    x$kde$x[i] + stats::rnorm(times, sd = x$kde$h)
   } else {
-    mvtnorm::rmvnorm(times, sigma = x$kde$H)
+    x$kde$x[i,] + mvtnorm::rmvnorm(times, sigma = x$kde$H)
   }
-  x$kde$x[i,] + noise
 }
 
 #' @export
