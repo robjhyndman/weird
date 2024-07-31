@@ -5,7 +5,7 @@ test_that("dist_kde2", {
   y <- c(rnorm(100), rnorm(100,5))
   dist <- dist_kde(cbind(x, y))
   # Mean
-  expect_equal(mean(dist), c(x=mean(x), y=mean(y)))
+  expect_equal(mean(dist), matrix(c(x=mean(x), y=mean(y)), nrow=1))
   # Median
   expect_error(median(dist))
   # Variance
@@ -21,7 +21,7 @@ test_that("dist_kde2", {
   expect_error(quantile(dist, p))
   # Generate
   rand_dist <- distributional::generate(dist, times = 1e6)
-  expect_equal(lapply(rand_dist, colMeans) |> unlist(),
+  expect_equal(lapply(rand_dist, colMeans) |> unlist() |> matrix(nrow=1),
     mean(dist),
     tolerance = 0.005
   )

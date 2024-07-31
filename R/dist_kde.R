@@ -126,7 +126,7 @@ log_density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
 cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
   # Apply independently over margins
   if (is.matrix(x$kde$x)) {
-    stop("Multivariate cdf not implemented")
+    stop("Multivariate kde cdf not implemented")
   }
   # Integrate density
   F <- cumintegral(x$kde$eval.points, x$kde$estimate)
@@ -136,7 +136,7 @@ cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
 #' @export
 quantile.dist_kde <- function(x, p, ..., na.rm = TRUE) {
   if(is.matrix(x$kde$x)) {
-    stop("Multivariate quantiles not implemented")
+    stop("Multivariate kde quantiles not implemented")
   }
   # Compute CDF at density ordinates
   F <- cumintegral(x$kde$eval.points, x$kde$estimate)
@@ -158,7 +158,7 @@ generate.dist_kde <- function(x, times, ...) {
 #' @export
 mean.dist_kde <- function(x, ...) {
   if (is.matrix(x$kde$x)) {
-    apply(x$kde$x, 2, mean, ...)
+    matrix(apply(x$kde$x, 2, mean, ...), ncol = NCOL(x$kde$x))
   } else {
     mean(x$kde$x, ...)
   }
@@ -183,7 +183,7 @@ covariance.dist_kde <- function(x, ...) {
 #' @exportS3Method distributional::skewness
 skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
   if (is.matrix(x$kde$x)) {
-    stop("Multivariate skewness is not yet implemented.")
+    stop("Multivariate kde skewness is not yet implemented.")
   } else {
     mean((x$kde$x - mean(x$kde$x))^3) / distributional::variance(x)^1.5
   }
@@ -193,7 +193,7 @@ skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
 # Excess kurtosis for consistency with distributional package
 kurtosis.dist_kde <- function(x, ..., na.rm = FALSE) {
   if (is.matrix(x$kde$x)) {
-    stop("Multivariate kurtosis is not yet implemented.")
+    stop("Multivariate kde kurtosis is not yet implemented.")
   } else {
     h <- x$kde$h
     v <- distributional::variance(x)
