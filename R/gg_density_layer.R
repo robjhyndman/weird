@@ -42,12 +42,12 @@ make_density_df <- function(object, ngrid = 501) {
   }
   if (d == 1) {
     # Find range of x values to use
-    rand <- unlist(generate(object, times = 1e6))
+    rand <- unlist(distributional::generate(object, times = 1e6))
     if (is.logical(rand)) {
       y <- c(FALSE, TRUE)
     } else if (is.integer(rand)) {
-      qq <- round(quantile(rand, p = c(0.002, 0.998)))
-      y <- seq(qq[1], qq[2], by = 1)
+      qq <- as.integer(round(quantile(rand, p = c(0.002, 0.998))))
+      y <- seq(qq[1], qq[2], by = 1L)
     } else {
       # Appears to be continuous
       qq <- quantile(object, p = c(0, 0.002, 0.998, 1)) |> unlist()

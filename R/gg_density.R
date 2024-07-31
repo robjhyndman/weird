@@ -79,18 +79,19 @@ gg_density1 <- function(
   # Set up data frame for densities
   df <- make_density_df(object, ngrid)
   maxden <- max(df$Density)
+  discrete <- is.logical(df$x) | is.integer(df$x)
 
   # Add density lines to plot
   p <- ggplot(df)
   if (no_groups) {
-    if(NROW(df) < 20) {
+    if(discrete) {
       p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density))
     } else {
       p <- p + geom_line(aes(x = x, y = Density))
     }
   } else {
     if(NROW(df) < 20) {
-      p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density, color = Distributions))
+      p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density, color = Distribution))
     } else {
       p <- p + geom_line(aes(x = x, y = Density, color = Distribution))
     }
