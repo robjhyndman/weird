@@ -158,7 +158,7 @@ gg_density1 <- function(
       )
     }
     if (is.null(alpha)) {
-      alpha <- ifelse(fill, 1, min(1, 1000 / max(lengths(x))))
+      alpha <- ifelse(fill, 1, min(1, 1000 / NROW(show_x)))
     }
     if (jitter) {
       p <- p + ggplot2::geom_jitter(
@@ -261,7 +261,7 @@ gg_density2 <- function(
       show_x <- show_x[den < threshold[1],]
     }
     if (is.null(alpha)) {
-      alpha <- ifelse(fill, 1, min(1, 1000 / max(lengths(x))))
+      alpha <- ifelse(fill, 1, min(1, 1000 / NROW(show_x)))
     }
     p <- p + ggplot2::geom_point(
       data = show_x,
