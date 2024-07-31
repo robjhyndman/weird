@@ -115,29 +115,23 @@ log_density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
 #' @exportS3Method distributional::cdf
 cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
   # Apply independently over margins
-  if (is.matrix(x$x)) {
-    return(
-      apply(x$x, 2,
-        function(x, ...) cdf.dist_kde(list(x = x), ...),
-        q = q, ..., na.rm = TRUE
-      )
-    )
+  if (is.matrix(x$kde$x)) {
+    stop("Multivariate cdf not implemented")
   }
   # Integrate density
-  delta <- x$kde$eval.points[2] - x$kde$eval.points[1]
-  F <- cumsum(x$kde$estimate) * delta
-  stats::approx(x$kde$eval.points, F, xout = q, yleft = 0, yright = 1, ..., na.rm = na.rm)$y
+  F <- cumintegral(x$kde$eval.points, x$kde$estimate)
+  stats::approx(F$x, F$y, xout = q, yleft = 0, yright = 1, ..., na.rm = na.rm)$y
 }
 
 #' @export
 quantile.dist_kde <- function(x, p, ..., na.rm = TRUE) {
-  # Integrate density
-  delta <- x$kde$eval.points[2] - x$kde$eval.points[1]
-  F <- cumsum(x$kde$estimate) * delta
-  stats::approx(F, x$kde$eval.points,
-    xout = p, yleft = min(x$kde$eval.points),
-    yright = max(x$kde$eval.points), ties = mean, ..., na.rm = na.rm
-  )$y
+  if(is.matrix(x$kde$x)) {
+    stop("Multivariate quantiles not implemented")
+  }
+  # Compute CDF at density ordinates
+  F <- cumintegral(x$kde$eval.points, x$kde$estimate)
+  stats::approx(F$y, F$x, xout = p, yleft = min(F$x), yright = max(F$x),
+                ties = mean, ..., na.rm = na.rm)$y
 }
 
 #' @exportS3Method distributional::generate
@@ -161,11 +155,7 @@ mean.dist_kde <- function(x, ...) {
 
 #' @exportS3Method stats::median
 median.dist_kde <- function(x, na.rm = FALSE, ...) {
-  if (is.matrix(x$kde$x)) {
-    apply(x$kde$x, 2, stats::median, na.rm = na.rm, ...)
-  } else {
-    stats::median(x$kde$x, na.rm = na.rm, ...)
-  }
+  quantile(x, 0.5, na.rm = na.rm, ...)
 }
 
 #' @exportS3Method distributional::covariance
