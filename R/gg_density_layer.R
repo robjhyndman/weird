@@ -39,53 +39,77 @@ make_density_df <- function(object, ngrid = 501) {
   d <- dimension_dist(object)
   if(d > 2) {
     stop("Only univariate and bivariate densities are supported")
-  } else if(d == 1) {
+  }
+  if(d == 1) {
     # Find range of x values to use
-    qq <- unlist(quantile(object, p = c(0, 0.002, 0.998, 1)))
+    qq <- quantile(object, p = c(0, 0.002, 0.998, 1))
     range_x <- range(qq[is.finite(qq)])
     # Expand to include all data points if a kde
     if ("kde" %in% stats::family(object)) {
       x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
       range_x <- range(range_x, unlist(x))
     }
+    # Create grid
     support <- diff(range_x)
     y <- c(
       min(range_x) - 0.0001 * support,
       seq(min(range_x), max(range_x), length = ngrid - 2),
       max(range_x) + 0.0001 * support
     )
+    # Density on grid
     df <- c(x = list(y), density(object, at = y))
   } else {
-    ngrid <- round(sqrt(ngrid))
-    # Find range of x values to use
-    qq <- quantile(object, p = c(0, 0.002, 0.998, 1))
-    range_xy <- cbind(range(unlist(lapply(qq, function(u) u[is.finite(u[,1]),1]))),
-                      range(unlist(lapply(qq, function(u) u[is.finite(u[,2]),2]))))
-    # Expand to include all data points if a kde
-    if ("kde" %in% stats::family(object)) {
-      x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
-      range_x <- range(range_x, unlist(x))
+    if(length(object) > 1) {
+      stop("Currently only supporting one bivariate density")
     }
-    support <- apply(range_xy, 2, diff)
-    x <- c(
-      min(range_xy[,1]) - 0.0001 * support[1],
-      seq(min(range_xy[,1]), max(range_xy[,1]), length = ngrid - 2),
-      max(range_xy[,1]) + 0.0001 * support
-    )
-    y <- c(
-      min(range_xy[,2]) - 0.0001 * support[2],
-      seq(min(range_xy[,2]), max(range_xy[,2]), length = ngrid - 2),
-      max(range_xy[,2]) + 0.0001 * support
-    )
-    df <- expand.grid(x=x,y=y)
-    df <- c(as.list(df), density(object, at = as.matrix(df)))
+    # For kde, use saved grid
+    if("kde" %in% stats::family(object)) {
+      kde <- vctrs::vec_data(object)[[1]]$kde
+      df <- expand.grid(x = kde$eval.points[[1]], y = kde$eval.points[[2]])
+      df$Density <- as.vector(kde$estimate)
+    } else {
+      # Find range of x values to use
+      rand <- distributional::generate(object, times = 1e6)
+      support <- lapply(rand, function(u) { apply(u, 2, range, na.rm=TRUE) })
+      range_xy <- apply(do.call(rbind, support), 2, range)
+      # Expand to include all data points if a kde
+      if ("kde" %in% stats::family(object)) {
+        x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
+        support <- lapply(x, function(u) { apply(u, 2, range, na.rm=TRUE) })
+        range_xy <- apply(do.call(rbind, c(list(range_xy), support)), 2, range)
+      }
+      support <- apply(range_xy, 2, diff)
+      #ngrid <- round(sqrt(ngrid))
+      x <- c(
+        min(range_xy[,1]) - 0.0001 * support[1],
+        seq(min(range_xy[,1]), max(range_xy[,1]), length = ngrid - 2),
+        max(range_xy[,1]) + 0.0001 * support
+      )
+      y <- c(
+        min(range_xy[,2]) - 0.0001 * support[2],
+        seq(min(range_xy[,2]), max(range_xy[,2]), length = ngrid - 2),
+        max(range_xy[,2]) + 0.0001 * support
+      )
+      df <- as.data.frame(expand.grid(x=x,y=y))
+      if("mvnorm" %in% stats::family(object)) {
+        # Use faster mvtnorm package
+        params <- vctrs::vec_data(object)[[1]]
+        mu <- vctrs::field(params, "mu")
+        sigma <- vctrs::field(params, "sigma")
+        df$Density <- mvtnorm::dmvnorm(df, mean = mu, sigma = sigma)
+      } else {
+        # Use slower distributional package
+        df$Density <- density(object, at = as.matrix(df))
+      }
+    }
   }
   names(df)[-seq(d)] <- names_dist(object, unique = TRUE)
   tibble::as_tibble(df) |>
     tidyr::pivot_longer(
       cols = -seq(d), names_to = "Distribution",
       values_to = "Density"
-    )
+    ) |>
+    distinct()
 }
 
 # Find dimension of distribution

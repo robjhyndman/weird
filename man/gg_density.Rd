@@ -75,11 +75,13 @@ For univariate densities,  the combination of \code{show_hdr = TRUE}, \code{show
 \examples{
 # Univariate density
 dist_kde(c(rnorm(500), rnorm(500, 4, .5))) |>
-  gg_density(show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14",
-  show_mode = TRUE, show_points = TRUE, jitter = TRUE)
-#tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000)) |>
-#  dist_kde() |>
-#  gg_density(show_points = TRUE, alpha = 0.1, fill = TRUE)
+  gg_density(
+    show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14",
+    show_mode = TRUE, show_points = TRUE, jitter = TRUE
+  )
+tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000)) |>
+  dist_kde() |>
+  gg_density(show_points = TRUE, alpha = 0.1, fill = TRUE)
 }
 \author{
 Rob J Hyndman
