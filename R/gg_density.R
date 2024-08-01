@@ -266,18 +266,19 @@ gg_density2 <- function(
     show_x <- vctrs::vec_data(object)[[1]]$kde$x
     colnames(show_x) <- c("x", "y")
     if(fill | scatterplot) {
-      show_x <- cbind(show_x, den = density(object, at = show_x)[[1]])
+      show_x <- cbind(show_x, den = density(object, at = show_x)[[1]]) |>
+        as.data.frame()
     }
     # If fill, only show points outside largest HDR
     if (fill) {
       show_x <- show_x[show_x$den < min(threshold), , drop = FALSE]
     }
     if(scatterplot) {
-      show_x <- as.data.frame(show_x) |>
-        mutate(
+      show_x <- show_x |>
+        dplyr::mutate(
           group = cut(den, breaks = c(0, threshold, Inf), labels = FALSE),
           group = factor(group,
-                     levels = rev(sort(unique(group))),
+                     levels = rev(seq(length(prob)+1)),
                      labels = c(paste0(sort(prob) * 100, "%"), "Outside")
           )
         )
@@ -338,4 +339,4 @@ gg_density2 <- function(
   return(p)
 }
 
-utils::globalVariables(c("Density", "Distribution", "level", "i"))
+utils::globalVariables(c("Density", "Distribution", "level", "i", "den"))

@@ -45,7 +45,7 @@ specified by \code{prob} are shown as a ribbon below the density.}
 the number of observations plotted. Otherwise, set to 1.}
 
 \item{jitter}{When TRUE and \code{show_points} is TRUE, a small amount of vertical
-jittering is applied to the observations.}
+jittering is applied to the observations for a univariate distribution.}
 
 \item{...}{Additional arguments are currently ignored.}
 }
