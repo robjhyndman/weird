@@ -27,7 +27,7 @@
 #' @param alpha Transparency of points. Defaults to min(1, 500/n), where n is
 #' the number of observations plotted. Otherwise, set to 1.
 #' @param jitter When TRUE and `show_points` is TRUE, a small amount of vertical
-#' jittering is applied to the observations.
+#' jittering is applied to the observations for a univariate distribution.
 #' @param ... Additional arguments are currently ignored.
 #' @return A ggplot object.
 #' @author Rob J Hyndman
@@ -54,7 +54,7 @@ gg_density <- function(
   if (d == 1) {
     gg_density1(object, prob, fill, TRUE, show_hdr, show_points, show_lookout, show_mode, ngrid, color, alpha, jitter, ...)
   } else if (d == 2) {
-    gg_density2(object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, alpha, jitter, ...)
+    gg_density2(object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, alpha, scatterplot = FALSE, ...)
   } else {
     stop("Only univariate and bivariate densities are supported")
   }
@@ -239,9 +239,12 @@ gg_density1 <- function(
 }
 
 gg_density2 <- function(
-    object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, alpha, jitter, ...) {
+    object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, alpha, scatterplot, ...) {
   if(length(object) > 1) {
     stop("I can only handle one bivariate density in a plot")
+  }
+  if(fill & scatterplot) {
+    stop("Cannot have both fill and scatterplot")
   }
   # Names of distributions
   dist_names <- names_dist(object)
@@ -255,23 +258,46 @@ gg_density2 <- function(
   random_sample <- distributional::generate(object, times = 5000)[[1]]
   fi <- density(object, at = random_sample)[[1]]
   threshold <- quantile(fi, prob = 1-prob, type = 8)
-  if (show_points) {
+  colors <- unlist(lapply(
+    rev(0.5*(prob - min(prob)) / (max(prob) - min(prob)) + 0.2),
+    function(u) {grDevices::adjustcolor(color, u)}
+  ))
+  if (show_points | scatterplot) {
     show_x <- vctrs::vec_data(object)[[1]]$kde$x
     colnames(show_x) <- c("x", "y")
+    if(fill | scatterplot) {
+      show_x <- cbind(show_x, den = density(object, at = show_x)[[1]])
+    }
     # If fill, only show points outside largest HDR
     if (fill) {
-      den <- density(object, at = show_x)[[1]]
-      show_x <- show_x[den < min(threshold), , drop = FALSE]
+      show_x <- show_x[show_x$den < min(threshold), , drop = FALSE]
     }
-    if (is.null(alpha)) {
-      alpha <- min(1, 500 / NROW(show_x))
-    }
-    if(NROW(show_x) > 0) {
-      p <- p + ggplot2::geom_point(
-        data = as.data.frame(show_x),
-        mapping = aes(x = x, y = y),
-        alpha = alpha
-      )
+    if(scatterplot) {
+      show_x <- as.data.frame(show_x) |>
+        mutate(
+          group = cut(den, breaks = c(0, threshold, Inf), labels = FALSE),
+          group = factor(group,
+                     levels = rev(sort(unique(group))),
+                     labels = c(paste0(sort(prob) * 100, "%"), "Outside")
+          )
+        )
+      p <- p +
+        ggplot2::geom_point(
+          data = as.data.frame(show_x),
+          mapping = aes(x = x, y = y, col = group)
+        ) +
+        ggplot2::scale_color_manual(values = c(colors, "#000"))
+    } else{
+      if (is.null(alpha)) {
+        alpha <- min(1, 500 / NROW(show_x))
+      }
+      if(NROW(show_x) > 0) {
+        p <- p + ggplot2::geom_point(
+          data = as.data.frame(show_x),
+          mapping = aes(x = x, y = y),
+          alpha = alpha
+        )
+      }
     }
     if (show_lookout) {
       warning("lookout not yet implemented")
@@ -296,7 +322,7 @@ gg_density2 <- function(
         labels = paste0(100 * prob, "%")
       ) +
       ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
-  } else {
+  } else if(!scatterplot) {
     p <- p + geom_contour(aes(x = x, y = y, z = Density),
       breaks = threshold, color = color
     )

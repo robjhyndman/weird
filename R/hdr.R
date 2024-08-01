@@ -172,17 +172,18 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   if (d == 2L) {
     gg_density2(dist,
       prob = prob,
-      colors = NULL, color = color, fill = TRUE, alpha = NULL,
-      show_points = TRUE, show_mode = TRUE, show_lookout = show_lookout
+      colors = NULL, color = color, fill = !scatterplot, alpha = NULL,
+      show_points = TRUE, show_mode = TRUE, scatterplot = scatterplot,
+      show_lookout = show_lookout
     ) +
-    ggplot2::guides(fill = "none")
+    ggplot2::guides(fill = "none", color = "none")
 
   } else {
     gg_density1(dist,
       show_hdr = TRUE, show_density = FALSE, ngrid = 501,
       prob = prob, alpha = NULL, jitter = TRUE,
       color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE,
-      show_lookout = show_lookout, scatterplot = scatterplot, ...
+      show_lookout = show_lookout, ...
     ) +
       ggplot2::guides(alpha = "none") +
       ggplot2::scale_y_continuous(breaks = NULL) +
