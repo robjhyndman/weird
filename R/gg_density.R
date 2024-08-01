@@ -163,16 +163,16 @@ gg_density1 <- function(
     }
   }
   if (show_lookout) {
-    stop("Not yet implemented")
-    if (!show_hdr) {
-      kscores <- calc_kde_scores(object$x, h = object$h, ...)
-    }
-    lookout_highlight <- lookout(density_scores = kscores$scores, loo_scores = kscores$loo) < 0.05
-    lookout <- tibble(x = object$x[lookout_highlight])
-    p <- p + ggplot2::geom_point(
-      data = lookout, mapping = aes(x = x, y = -maxden / 40),
-      color = "#ff0000"
-    )
+    warning("lookout not yet implemented")
+    # if (!show_hdr) {
+    #   kscores <- calc_kde_scores(object$x, h = object$h, ...)
+    # }
+    # lookout_highlight <- lookout(density_scores = kscores$scores, loo_scores = kscores$loo) < 0.05
+    # lookout <- tibble(x = object$x[lookout_highlight])
+    # p <- p + ggplot2::geom_point(
+    #   data = lookout, mapping = aes(x = x, y = -maxden / 40),
+    #   color = "#ff0000"
+    # )
   }
 
   if (show_hdr) {
@@ -274,11 +274,11 @@ gg_density2 <- function(
       )
     }
     if (show_lookout) {
-      stop("Not yet implemented")
-      p <- p + ggplot2::geom_point(
-        data = lookout, mapping = aes(x = x, y = y),
-        color = "#ff0000"
-      )
+      warning("lookout not yet implemented")
+      # p <- p + ggplot2::geom_point(
+      #  data = lookout, mapping = aes(x = x, y = y),
+      #  color = "#ff0000"
+      # )
     }
   }
   if (fill) {
