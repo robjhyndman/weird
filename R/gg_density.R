@@ -61,7 +61,7 @@ gg_density <- function(
   }
   d <- dimension_dist(object)
   if (d == 1) {
-    gg_density1(object, prob, fill, show_hdr, show_points, show_lookout, show_mode, ngrid, color, colors, alpha, jitter, ...)
+    gg_density1(object, prob, fill, TRUE, show_hdr, show_points, show_lookout, show_mode, ngrid, color, colors, alpha, jitter, ...)
   } else if (d == 2) {
     gg_density2(object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, colors, alpha, jitter, ...)
   } else {
@@ -70,7 +70,7 @@ gg_density <- function(
 }
 
 gg_density1 <- function(
-    object, prob, fill, show_hdr, show_points, show_lookout, show_mode, ngrid, color, colors, alpha, jitter, ...) {
+    object, prob, fill, show_density, show_hdr, show_points, show_lookout, show_mode, ngrid, color, colors, alpha, jitter, ...) {
   # Names of distributions
   dist_names <- names_dist(object)
   dist <- stats::family(object)
@@ -83,17 +83,19 @@ gg_density1 <- function(
 
   # Add density lines to plot
   p <- ggplot(df)
-  if (no_groups) {
-    if(discrete) {
-      p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density))
+  if (show_density) {
+    if (no_groups) {
+      if (discrete) {
+        p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density))
+      } else {
+        p <- p + geom_line(aes(x = x, y = Density))
+      }
     } else {
-      p <- p + geom_line(aes(x = x, y = Density))
-    }
-  } else {
-    if(NROW(df) < 20) {
-      p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density, color = Distribution))
-    } else {
-      p <- p + geom_line(aes(x = x, y = Density, color = Distribution))
+      if (NROW(df) < 20) {
+        p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density, color = Distribution))
+      } else {
+        p <- p + geom_line(aes(x = x, y = Density, color = Distribution))
+      }
     }
   }
 
@@ -254,11 +256,11 @@ gg_density2 <- function(
   threshold <- quantile(fi, prob = prob, type = 8)
   if (show_points) {
     show_x <- vctrs::vec_data(object)[[1]]$kde$x
-    colnames(show_x) <- c("x","y")
+    colnames(show_x) <- c("x", "y")
     # If fill, only show points outside largest HDR
     if (fill) {
       den <- density(object, at = show_x)[[1]]
-      show_x <- show_x[den < threshold[1],]
+      show_x <- show_x[den < threshold[1], ]
     }
     if (is.null(alpha)) {
       alpha <- ifelse(fill, 1, min(1, 500 / NROW(show_x)))
@@ -301,4 +303,4 @@ gg_density2 <- function(
   return(p)
 }
 
-utils::globalVariables(c("Density", "Distribution", "level","i"))
+utils::globalVariables(c("Density", "Distribution", "level", "i"))
