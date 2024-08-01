@@ -14,7 +14,6 @@ gg_density(
   show_lookout = FALSE,
   ngrid = 501,
   color = "#00659e",
-  palette = hdr_palette,
   alpha = NULL,
   jitter = FALSE,
   ...
@@ -40,14 +39,10 @@ specified by \code{prob} are shown as a ribbon below the density.}
 
 \item{ngrid}{Number of points at which to evaluate the density function.}
 
-\item{color}{Color used for mode and HDR contours. If \code{palette = hdr_palette},
-it is also used as the basis for HDR regions.}
+\item{color}{Color used for mode and HDR contours/regions.}
 
-\item{palette}{Color palette function to use for HDR filled regions
-(if \code{fill} is \code{TRUE} or \code{show_hdr} is \code{TRUE}).}
-
-\item{alpha}{Transparency of points. When \code{fill} is \code{FALSE}, defaults to
-min(1, 1000/n), where n is the number of observations. Otherwise, set to 1.}
+\item{alpha}{Transparency of points. Defaults to min(1, 500/n), where n is
+the number of observations plotted. Otherwise, set to 1.}
 
 \item{jitter}{When TRUE and \code{show_points} is TRUE, a small amount of vertical
 jittering is applied to the observations.}

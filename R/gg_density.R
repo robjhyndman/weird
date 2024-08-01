@@ -23,12 +23,9 @@
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown.
 #' @param show_lookout If `TRUE`, then the observations with lookout probabilities less than 0.05 are shown in red.
 #' @param ngrid Number of points at which to evaluate the density function.
-#' @param color Color used for mode and HDR contours. If `palette = hdr_palette`,
-#' it is also used as the basis for HDR regions.
-#' @param palette Color palette function to use for HDR filled regions
-#' (if `fill` is `TRUE` or `show_hdr` is `TRUE`).
-#' @param alpha Transparency of points. When `fill` is `FALSE`, defaults to
-#' min(1, 1000/n), where n is the number of observations. Otherwise, set to 1.
+#' @param color Color used for mode and HDR contours/regions.
+#' @param alpha Transparency of points. Defaults to min(1, 500/n), where n is
+#' the number of observations plotted. Otherwise, set to 1.
 #' @param jitter When TRUE and `show_points` is TRUE, a small amount of vertical
 #' jittering is applied to the observations.
 #' @param ... Additional arguments are currently ignored.
@@ -49,28 +46,22 @@
 gg_density <- function(
     object, prob = seq(9) / 10, fill = FALSE,
     show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_lookout = FALSE,
-    ngrid = 501, color = "#00659e", palette = hdr_palette, alpha = NULL,
-    jitter = FALSE, ...) {
+    ngrid = 501, color = "#00659e", alpha = NULL, jitter = FALSE, ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
-  if (identical(palette, hdr_palette)) {
-    colors <- hdr_palette(color = color, prob = prob)
-  } else {
-    colors <- palette(n = length(prob) + 1)
-  }
   d <- dimension_dist(object)
   if (d == 1) {
-    gg_density1(object, prob, fill, TRUE, show_hdr, show_points, show_lookout, show_mode, ngrid, color, colors, alpha, jitter, ...)
+    gg_density1(object, prob, fill, TRUE, show_hdr, show_points, show_lookout, show_mode, ngrid, color, alpha, jitter, ...)
   } else if (d == 2) {
-    gg_density2(object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, colors, alpha, jitter, ...)
+    gg_density2(object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, alpha, jitter, ...)
   } else {
     stop("Only univariate and bivariate densities are supported")
   }
 }
 
 gg_density1 <- function(
-    object, prob, fill, show_density, show_hdr, show_points, show_lookout, show_mode, ngrid, color, colors, alpha, jitter, ...) {
+    object, prob, fill, show_density, show_hdr, show_points, show_lookout, show_mode, ngrid, color,  alpha, jitter, ...) {
   # Names of distributions
   dist_names <- names_dist(object)
   dist <- stats::family(object)
@@ -215,7 +206,7 @@ gg_density1 <- function(
         name = "HDR coverage",
         breaks = 100 * rev(prob),
         labels = paste0(100 * rev(prob), "%"),
-        range = c(1, 0.2)
+        range = c(0.7, 0.2)
       )
   }
   if (show_mode) {
@@ -230,17 +221,28 @@ gg_density1 <- function(
         upper = -maxden * (i - 1) / 20
       ) |>
       tidyr::pivot_longer(lower:upper, values_to = "y", names_to = "ypos")
-    p <- p + ggplot2::geom_line(
-      data = modes,
-      mapping = aes(x = mode, y = y, group = Distribution)
-    )
+    if(no_groups) {
+      p <- p + ggplot2::geom_line(
+        data = modes,
+        mapping = aes(x = mode, y = y, group = Distribution),
+        color = color
+      )
+    } else {
+      p <- p + ggplot2::geom_line(
+        data = modes,
+        mapping = aes(x = mode, y = y, group = Distribution, color = Distribution)
+      )
+    }
   }
 
   return(p)
 }
 
 gg_density2 <- function(
-    object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, colors, alpha, jitter, ...) {
+    object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, alpha, jitter, ...) {
+  if(length(object) > 1) {
+    stop("I can only handle one bivariate density in a plot")
+  }
   # Names of distributions
   dist_names <- names_dist(object)
   dist <- stats::family(object)
@@ -248,28 +250,29 @@ gg_density2 <- function(
 
   # Set up data frame for densities
   df <- make_density_df(object, ngrid)
-
   p <- ggplot(df)
   # Find HDR cut points. Note that distributional::hdr applied to mvnorm object is wrong
-  random_sample <- distributional::generate(object, times = 5000)
-  fi <- density(object, at = random_sample[[1]])[[1]]
-  threshold <- quantile(fi, prob = prob, type = 8)
+  random_sample <- distributional::generate(object, times = 5000)[[1]]
+  fi <- density(object, at = random_sample)[[1]]
+  threshold <- quantile(fi, prob = 1-prob, type = 8)
   if (show_points) {
     show_x <- vctrs::vec_data(object)[[1]]$kde$x
     colnames(show_x) <- c("x", "y")
     # If fill, only show points outside largest HDR
     if (fill) {
       den <- density(object, at = show_x)[[1]]
-      show_x <- show_x[den < threshold[1], ]
+      show_x <- show_x[den < min(threshold), , drop = FALSE]
     }
     if (is.null(alpha)) {
-      alpha <- ifelse(fill, 1, min(1, 500 / NROW(show_x)))
+      alpha <- min(1, 500 / NROW(show_x))
     }
-    p <- p + ggplot2::geom_point(
-      data = show_x,
-      mapping = aes(x = x, y = y),
-      alpha = alpha
-    )
+    if(NROW(show_x) > 0) {
+      p <- p + ggplot2::geom_point(
+        data = as.data.frame(show_x),
+        mapping = aes(x = x, y = y),
+        alpha = alpha
+      )
+    }
     if (show_lookout) {
       stop("Not yet implemented")
       p <- p + ggplot2::geom_point(
@@ -279,13 +282,18 @@ gg_density2 <- function(
     }
   }
   if (fill) {
+    colors <- unlist(lapply(
+      rev(0.5*(prob - min(prob)) / (max(prob) - min(prob)) + 0.2),
+      function(u) {grDevices::adjustcolor(color, u)}
+    ))
     p <- p +
-      geom_contour_filled(aes(x = x, y = y, z = Density),
-        breaks = rev(c(threshold, 100))
+      geom_contour_filled(
+        aes(x = x, y = y, z = Density),
+        breaks = c(Inf, threshold)
       ) +
       scale_fill_manual(
-        values = colors[-1],
-        labels = rev(paste0(100 * rev(prob), "%"))
+        values = colors,
+        labels = paste0(100 * prob, "%")
       ) +
       ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
   } else {
@@ -295,10 +303,11 @@ gg_density2 <- function(
   }
   if (show_mode) {
     modes <- df |>
-      dplyr::group_by(Distribution) |>
-      dplyr::filter(Density == max(Density)) |>
-      dplyr::ungroup()
-    p <- p + ggplot2::geom_point(data = modes, mapping = aes(x = x, y = y))
+      dplyr::filter(Density == max(Density))
+    p <- p + ggplot2::geom_point(
+      data = modes, mapping = aes(x = x, y = y),
+      color = color
+    )
   }
   return(p)
 }

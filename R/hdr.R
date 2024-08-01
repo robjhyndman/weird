@@ -149,7 +149,8 @@ hdr_table <- function(
 #' @export
 
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
-                          color = "#00659e", scatterplot = FALSE, show_lookout = TRUE, ...) {
+                          color = "#00659e", scatterplot = FALSE,
+                          show_lookout = FALSE, ...) {
   if (missing(var1)) {
     # Grab first variable
     data <- as.data.frame(data)
@@ -166,110 +167,27 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     d <- 2L
     data <- data |> select({{ var1 }}, {{ var2 }})
   }
-  # Use autoplot if possible
-  if (d == 2L & !scatterplot) {
-    fit <- ks::kde(data[, 1:2], H = kde_bandwidth(data[, 1:2], method = "double"), binned = NROW(data) > 2000, ...)
-    return(autoplot(fit,
+  dist <- dist_kde(data[,seq(d)], method = "double")
+
+  if (d == 2L) {
+    gg_density2(dist,
       prob = prob,
-      color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE, show_lookout = show_lookout
+      colors = NULL, color = color, fill = TRUE, alpha = NULL,
+      show_points = TRUE, show_mode = TRUE, show_lookout = show_lookout
     ) +
-      ggplot2::guides(fill = "none", color = "none"))
-  }
-  # Otherwise build the plot
-  # Find colors for each region
-  kscores <- calc_kde_scores(as.matrix(data), ...)
-  fi <- exp(-kscores$scores)
-  if (show_lookout) {
-    lookout_highlight <- lookout(density_scores = kscores$scores, loo_scores = kscores$loo) < 0.05
+    ggplot2::guides(fill = "none")
+
   } else {
-    lookout_highlight <- rep(FALSE, length(fi))
+    gg_density1(dist,
+      show_hdr = TRUE, show_density = FALSE, ngrid = 501,
+      prob = prob, alpha = NULL, jitter = TRUE,
+      color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE,
+      show_lookout = show_lookout, scatterplot = scatterplot, ...
+    ) +
+      ggplot2::guides(alpha = "none") +
+      ggplot2::scale_y_continuous(breaks = NULL) +
+      labs(y = "", x = names(data)[1])
   }
-  thresholds <- sort(quantile(fi, prob = 1 - prob, type = 8))
-  data <- data |>
-    dplyr::mutate(
-      density = fi,
-      group = cut(fi, breaks = c(0, thresholds, Inf), labels = FALSE),
-      group = factor(group,
-        levels = rev(sort(unique(group))),
-        labels = c(paste0(sort(prob) * 100, "%"), "Outside")
-      )
-    )
-  colors <- c(hdr_palette(color = color, prob = prob), "#000000")
-  if (d == 1L) {
-    p <- ggplot()
-    if (!scatterplot) {
-      hdr <- hdr_table(data[[1]], prob = prob, ...)
-      p <- p +
-        # Just show points outside largest HDR (but not lookout) in black
-        ggplot2::geom_jitter(
-          data = data |> filter(density < min(thresholds), !lookout_highlight),
-          mapping = aes(x = {{ var1 }}, y = 0), width = 0, height = 0.8
-        ) +
-        # add HDRs as shaded regions
-        ggplot2::geom_rect(
-          data = hdr,
-          aes(xmin = lower, xmax = upper, ymin = -1, ymax = 1, fill = paste0(prob * 100, "%"))
-        ) +
-        ggplot2::scale_fill_manual(values = colors[-1]) +
-        ggplot2::guides(fill = "none") +
-        # add modes
-        geom_line(
-          data = expand.grid(
-            mode = unique(hdr$mode[which.max(hdr$density)]),
-            ends = c(-1, 1)
-          ),
-          mapping = aes(x = mode, y = ends, group = mode),
-          color = color,
-          size = 1
-        )
-    } else {
-      p <- p +
-        # Show all points in colors
-        ggplot2::geom_jitter(
-          data = data |> filter(!lookout_highlight),
-          mapping = aes(x = {{ var1 }}, y = 0, col = group),
-          width = 0, height = 0.8
-        ) +
-        ggplot2::scale_color_manual(values = colors[-1]) +
-        ggplot2::guides(col = "none")
-    }
-    if (show_lookout) {
-      p <- p +
-        # add lookout points
-        ggplot2::geom_jitter(
-          data = data |> filter(lookout_highlight),
-          mapping = aes(x = {{ var1 }}, y = 0),
-          width = 0, height = 0.8, color = "red"
-        )
-    }
-    # Remove y-axis and guide
-    p <- p + ggplot2::scale_y_discrete() + labs(y = "")
-  } else {
-    # Show all points in colors
-    mode <- data |> dplyr::filter(density == max(density))
-    p <- ggplot() +
-      ggplot2::geom_point(
-        data = data |> filter(!lookout_highlight),
-        mapping = aes(x = {{ var1 }}, y = {{ var2 }}, col = group)
-      ) +
-      ggplot2::scale_color_manual(values = colors[-1]) +
-      ggplot2::geom_point(
-        data = mode,
-        mapping = aes(x = {{ var1 }}, y = {{ var2 }}),
-        col = colors[1], size = 2
-      ) +
-      ggplot2::guides(col = "none")
-    if (show_lookout) {
-      p <- p +
-        # add lookout points
-        ggplot2::geom_point(
-          data = data |> filter(lookout_highlight),
-          mapping = aes(x = {{ var1 }}, y = {{ var2 }}),
-          color = "red"
-        )
-    }
-  }
-  return(p)
 }
 
 # Remaining functions adapted from hdrcde package
