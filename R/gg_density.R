@@ -177,6 +177,8 @@ gg_density1 <- function(
 
   if (show_hdr) {
     if (no_groups) {
+      # Use solid colors
+      colors <- hdr_palette(color = color, prob = prob)
       p <- p +
         ggplot2::geom_rect(
           data = hdr,
@@ -184,11 +186,13 @@ gg_density1 <- function(
             xmin = lower, xmax = upper,
             ymin = -maxden * as.numeric(factor(Distribution)) / 20,
             ymax = -maxden * (as.numeric(factor(Distribution)) - 1) / 20,
-            alpha = level
-          ),
-          fill = color
-        )
+            fill = as.factor(level)
+          )
+        ) +
+        ggplot2::scale_fill_manual(values = colors, labels = paste0(100 * rev(prob), "%")) +
+        ggplot2::guides(fill = "none")
     } else {
+      # Use transparent colors
       p <- p +
         ggplot2::geom_rect(
           data = hdr,
@@ -199,15 +203,14 @@ gg_density1 <- function(
             alpha = level,
             fill = Distribution
           )
-        )
-    }
-    p <- p +
+        ) +
       ggplot2::scale_alpha(
         name = "HDR coverage",
         breaks = 100 * rev(prob),
         labels = paste0(100 * rev(prob), "%"),
         range = c(0.7, 0.2)
       )
+    }
   }
   if (show_mode) {
     modes <- df |>
@@ -258,10 +261,11 @@ gg_density2 <- function(
   random_sample <- distributional::generate(object, times = 5000)[[1]]
   fi <- density(object, at = random_sample)[[1]]
   threshold <- quantile(fi, prob = 1-prob, type = 8)
-  colors <- unlist(lapply(
-    rev(0.5*(prob - min(prob)) / (max(prob) - min(prob)) + 0.2),
-    function(u) {grDevices::adjustcolor(color, u)}
-  ))
+  colors <- hdr_palette(prob = prob)
+  #unlist(lapply(
+  #  rev(0.5*(prob - min(prob)) / (max(prob) - min(prob)) + 0.2),
+  #  function(u) {grDevices::adjustcolor(color, u)}
+  #))
   if (show_points | scatterplot) {
     show_x <- vctrs::vec_data(object)[[1]]$kde$x
     colnames(show_x) <- c("x", "y")
