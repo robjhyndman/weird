@@ -127,7 +127,7 @@ make_density_df <- function(object, ngrid = 501) {
 
 # Find dimension of distribution
 dimension_dist <- function(object) {
-  NCOL(mean(object))
+  NCOL(distributional::generate(object, times = 1)[[1]])
 }
 
 # Get names of distributions
