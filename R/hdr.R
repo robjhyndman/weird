@@ -83,7 +83,7 @@ hdr_table <- function(
       density = numeric(0),
     )
     for (i in seq_along(alpha)) {
-      junk <- hdr.ends(density, falpha[i])$hdr
+      junk <- hdr_ends(density, falpha[i])$hdr
       n <- length(junk) / 2
       for (j in seq(n)) {
         within <- density$eval.points >= junk[2 * j - 1] & density$eval.points <= junk[2 * j]
@@ -193,7 +193,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
 
 # Remaining functions adapted from hdrcde package
 
-hdr.ends <- function(den, falpha) {
+hdr_ends <- function(den, falpha) {
   # falpha is above the density, so the HDR does not exist
   if (falpha > max(den$estimate)) {
     return(list(falpha = falpha, hdr = NA))

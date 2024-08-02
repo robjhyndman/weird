@@ -3,7 +3,7 @@
 core <- c(
   "dplyr",
   "ggplot2",
-  "ks"
+  "distributional"
 )
 
 core_unloaded <- function() {
