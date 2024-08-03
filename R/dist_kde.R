@@ -108,7 +108,7 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
     if(is.list(at)) {
       at <- do.call(rbind, at)
     } else {
-      at <- matrix(at)
+      at <- matrix(at, ncol = d)
     }
     d <- ifun(at[,1], at[,2])
   }

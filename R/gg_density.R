@@ -259,7 +259,7 @@ gg_density2 <- function(
   p <- ggplot(df)
   # Find HDR cut points. Note that distributional::hdr applied to mvnorm object is wrong
   random_sample <- distributional::generate(object, times = 5000)[[1]]
-  fi <- density(object, at = random_sample)[[1]]
+  fi <- density(object, at = as.matrix(random_sample))[[1]]
   threshold <- quantile(fi, prob = 1-prob, type = 8)
   colors <- hdr_palette(prob = prob)
   #unlist(lapply(
@@ -270,7 +270,7 @@ gg_density2 <- function(
     show_x <- vctrs::vec_data(object)[[1]]$kde$x
     colnames(show_x) <- c("x", "y")
     if(fill | scatterplot) {
-      show_x <- cbind(show_x, den = density(object, at = show_x)[[1]]) |>
+      show_x <- cbind(show_x, den = density(object, at = as.matrix(show_x))[[1]]) |>
         as.data.frame()
     }
     # If fill, only show points outside largest HDR
