@@ -85,7 +85,13 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_IQR,
     }
   } else if (!is.null(cov)) {
     if (identical(cov, robustbase::covOGK)) {
-      S <- cov(mat, sigmamu = scale)$cov
+      # Create more resilient version of scale function
+      my_scale <- function(x, mu.too = FALSE, na.rm = TRUE) {
+        s <- scale(x, mu.too = mu.too, na.rm = na.rm)
+        s[s == 0] <- 1 # Avoid division by zero
+        return(s)
+      }
+      S <- cov(mat, sigmamu = my_scale)$cov
     } else {
       S <- cov(mat)
     }
