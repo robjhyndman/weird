@@ -60,7 +60,7 @@ density_scores.default <- function(
 #' @param ... Other arguments are ignored.
 #' @examples
 #' # Density scores computed from bivariate KDE
-#' f_kde <- kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
+#' f_kde <- ks::kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
 #' of |>
 #'   mutate(
 #'     fscores = density_scores(f_kde),

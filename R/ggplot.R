@@ -21,10 +21,8 @@
 #' @param show_points If `TRUE`, then individual points are plotted.
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown.
 #' @param show_lookout If `TRUE`, then the observations with lookout probabilities less than 0.05 are shown in red.
-#' @param color Color used for mode and HDR contours. If `palette = hdr_palette`,
-#' it is also used as the basis for HDR regions.
-#' @param palette Color palette function to use for HDR filled regions
-#' (if `fill` is `TRUE` or `show_hdr` is `TRUE`).
+#' @param color Color used for mode and HDR contours. If `fill`, this is the
+#' base color used in constructing the palette.
 #' @param alpha Transparency of points. When `fill` is `FALSE`, defaults to
 #' min(1, 1000/n), where n is the number of observations. Otherwise, set to 1.
 #' @param ... Additional arguments are currently ignored.
@@ -44,7 +42,7 @@
 autoplot.kde <- function(
     object, prob = seq(9) / 10, fill = FALSE,
     show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_lookout = FALSE,
-    color = "#00659e", palette = hdr_palette, alpha = ifelse(fill, 1, min(1, 1000 / NROW(object$x))),
+    color = "#00659e", alpha = ifelse(fill, 1, min(1, 1000 / NROW(object$x))),
     ...) {
   dist <- distributional::new_dist(kde = list(object), class = "dist_kde")
   gg_density(dist,
@@ -54,20 +52,20 @@ autoplot.kde <- function(
   )
 }
 
-#' Color palette designed for plotting Highest Density Regions
-#'
-#' A sequential color palette is returned, with the first color being `color`,
-#' and the rest of the colors being a mix of `color` with increasing amounts of white.
-#' If `prob` is provided, then the mixing proportions are determined by `prob` (and
-#' n is ignored). Otherwise the mixing proportions are equally spaced between 0 and 1.
-#'
-#' @param n Number of colors in palette.
-#' @param color First color of vector.
-#' @param prob Vector of probabilities between 0 and 1.
-#' @return A function that returns a vector of colors of length `length(prob) + 1`.
-#' @examples
-#' hdr_palette(prob = c(0.5, 0.99))
-#' @export
+# Color palette designed for plotting Highest Density Regions
+#
+# A sequential color palette is returned, with the first color being `color`,
+# and the rest of the colors being a mix of `color` with increasing amounts of white.
+# If `prob` is provided, then the mixing proportions are determined by `prob` (and
+# n is ignored). Otherwise the mixing proportions are equally spaced between 0 and 1.
+#
+# @param n Number of colors in palette.
+# @param color First color of vector.
+# @param prob Vector of probabilities between 0 and 1.
+# @return A function that returns a vector of colors of length `length(prob) + 1`.
+# @examples
+# hdr_palette(prob = c(0.5, 0.99))
+
 hdr_palette <- function(n, color = "#00659e", prob = NULL) {
   if (missing(prob)) {
     prob <- seq(n - 1) / n

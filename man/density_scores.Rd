@@ -69,7 +69,7 @@ of |>
   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
   geom_point()
 # Density scores computed from bivariate KDE
-f_kde <- kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
+f_kde <- ks::kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
 of |>
   mutate(
     fscores = density_scores(f_kde),

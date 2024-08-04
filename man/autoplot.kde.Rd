@@ -13,7 +13,6 @@
   show_mode = FALSE,
   show_lookout = FALSE,
   color = "#00659e",
-  palette = hdr_palette,
   alpha = ifelse(fill, 1, min(1, 1000/NROW(object$x))),
   ...
 )
@@ -35,11 +34,8 @@ specified by \code{prob} are shown as a ribbon below the density.}
 
 \item{show_lookout}{If \code{TRUE}, then the observations with lookout probabilities less than 0.05 are shown in red.}
 
-\item{color}{Color used for mode and HDR contours. If \code{palette = hdr_palette},
-it is also used as the basis for HDR regions.}
-
-\item{palette}{Color palette function to use for HDR filled regions
-(if \code{fill} is \code{TRUE} or \code{show_hdr} is \code{TRUE}).}
+\item{color}{Color used for mode and HDR contours. If \code{fill}, this is the
+base color used in constructing the palette.}
 
 \item{alpha}{Transparency of points. When \code{fill} is \code{FALSE}, defaults to
 min(1, 1000/n), where n is the number of observations. Otherwise, set to 1.}

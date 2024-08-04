@@ -67,8 +67,6 @@ reference:
       - gg_density_layer
       - gg_bagplot
       - gg_hdrboxplot
-      - hdr_palette
-      - hdr_table
   - title: "Other Functions"
     contents:
       - weird_conflicts

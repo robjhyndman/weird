@@ -4,14 +4,7 @@
 \alias{gg_bagplot}
 \title{Bagplot}
 \usage{
-gg_bagplot(
-  data,
-  var1,
-  var2,
-  col = c(hdr_palette(color = "#00659e", prob = c(0.5, 0.99)), "#000000"),
-  scatterplot = FALSE,
-  ...
-)
+gg_bagplot(data, var1, var2, color = "#00659e", scatterplot = FALSE, ...)
 }
 \arguments{
 \item{data}{A data frame or matrix containing the data.}
@@ -20,7 +13,8 @@ gg_bagplot(
 
 \item{var2}{The name of the second variable to plot (a bare expression).}
 
-\item{col}{The colors to use in the order: median, bag, loop and outliers.}
+\item{color}{The base color to use for the median. Other colors are generated
+as a mixture of \code{color} with white.}
 
 \item{scatterplot}{A logical argument indicating if a regular bagplot is required
 (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).}
