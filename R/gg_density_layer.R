@@ -78,7 +78,7 @@ make_density_df <- function(object, ngrid = 501) {
       df$Density <- as.vector(kde$estimate)
     } else {
       # Find range of x values to use
-      rand <- distributional::generate(object, times = 1e6)
+      rand <- distributional::generate(object, times = 1e5)
       support <- lapply(rand, function(u) {
         apply(u, 2, range, na.rm = TRUE)
       })
@@ -92,7 +92,7 @@ make_density_df <- function(object, ngrid = 501) {
         range_xy <- apply(do.call(rbind, c(list(range_xy), support)), 2, range)
       }
       support <- apply(range_xy, 2, diff)
-      # ngrid <- round(sqrt(ngrid))
+      ngrid <- min(ngrid, 101)
       x <- c(
         min(range_xy[, 1]) - 0.0001 * support[1],
         seq(min(range_xy[, 1]), max(range_xy[, 1]), length = ngrid - 2),
@@ -112,7 +112,7 @@ make_density_df <- function(object, ngrid = 501) {
         df$Density <- mvtnorm::dmvnorm(df, mean = mu, sigma = sigma)
       } else {
         # Use slower distributional package
-        df$Density <- density(object, at = as.matrix(df))
+        df$Density <- density(object, at = as.matrix(df))[[1]]
       }
     }
   }
