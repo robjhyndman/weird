@@ -72,7 +72,7 @@ hdr_palette <- function(n, color = "#00659e", prob = NULL) {
   } else if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
-  pc_colors <- grDevices::colorRampPalette(c(color, "white"))(150)[2:100]
+  pc_colors <- grDevices::colorRampPalette(c(color, "white"))(180)[32:130]
   idx <- approx(seq(99) / 100, seq(99), prob, rule = 2)$y
   c(color, pc_colors[idx])
 }

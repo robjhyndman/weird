@@ -23,7 +23,7 @@ gg_density(
 \item{object}{distribution object from the distributional package or
 \code{\link{dist_kde}}()}
 
-\item{prob}{Probability of the HDR contours to be drawn (for a bivariate plot only).}
+\item{prob}{Probability of the HDR regions to be drawn.}
 
 \item{fill}{If \code{TRUE}, and the density is bivariate, the bivariate contours
 are shown as filled regions rather than lines.}
@@ -33,16 +33,18 @@ specified by \code{prob} are shown as a ribbon below the density.}
 
 \item{show_points}{If \code{TRUE}, then individual observations are plotted.}
 
-\item{show_mode}{If \code{TRUE}, then the mode of the distribution is shown.}
+\item{show_mode}{If \code{TRUE}, then the mode of the distribution is shown as a
+point.}
 
 \item{show_lookout}{If \code{TRUE}, then the observations with lookout probabilities less than 0.05 are shown in red.}
 
 \item{ngrid}{Number of points at which to evaluate the density function.}
 
-\item{color}{Color used for mode and HDR contours/regions.}
+\item{color}{Color used for mode and HDR contours/regions when there is only
+one distribution. Otherwise a ggplot color scale is used.}
 
-\item{alpha}{Transparency of points. Defaults to min(1, 500/n), where n is
-the number of observations plotted. Otherwise, set to 1.}
+\item{alpha}{Transparency of points. Ignored if \code{show_points} is \code{FALSE}.
+Defaults to min(1, 500/n), where n is the number of observations plotted.}
 
 \item{jitter}{When TRUE and \code{show_points} is TRUE, a small amount of vertical
 jittering is applied to the observations for a univariate distribution.}
@@ -61,19 +63,18 @@ For univariate densities, it produces a line plot of the density function, with
 an optional ribbon showing some highest density regions (HDRs) and/or the observations.
 For bivariate densities, it produces a contour plot of the density function, with
 the observations optionally shown as points.
-The mode can also be drawn as a point with the HDRs.
-For bivariate densities, the combination of \code{fill = TRUE}, \code{show_points = TRUE},
-\code{show_mode = TRUE}, and \code{prob = c(0.5, 0.99)} is equivalent to an HDR boxplot.
-For univariate densities,  the combination of \code{show_hdr = TRUE}, \code{show_points = TRUE},
-\code{show_mode = TRUE}, and \code{prob = c(0.5, 0.99)} is equivalent to an HDR boxplot.
+The mode can also be drawn as a point.
+For bivariate densities, the combination of fill = TRUE\verb{, }show_points = TRUE\verb{, }show_mode = TRUE\verb{, and }prob = c(0.5, 0.99)\verb{is equivalent to showing an HDR boxplot beneath the density plot. For univariate densities,  the combination of}show_hdr = TRUE\verb{, }show_points = TRUE\verb{, }show_mode = TRUE\verb{, and }prob = c(0.5, 0.99)` is equivalent to an HDR boxplot.
 }
 \examples{
 # Univariate density
-dist_kde(c(rnorm(500), rnorm(500, 4, .5))) |>
-  gg_density(
-    show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14",
-    show_mode = TRUE, show_points = TRUE, jitter = TRUE
-  )
+kde <- dist_kde(c(rnorm(500), rnorm(500, 4, .5)))
+gg_density(kde,
+  show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14",
+  show_mode = TRUE, show_points = TRUE, jitter = TRUE
+)
+c(dist_normal(), kde) |>
+  gg_density(show_hdr = TRUE, prob = c(0.5, 0.95))
 tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000)) |>
   dist_kde() |>
   gg_density(show_points = TRUE, alpha = 0.1, fill = TRUE)
