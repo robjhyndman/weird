@@ -41,8 +41,8 @@ make_density_df <- function(object, ngrid = 501) {
     stop("Only univariate and bivariate densities are supported")
   }
   if (d == 1) {
-    # Find range of x values to use
-    rand <- unlist(distributional::generate(object, times = 1e6))
+    # Find range of support values to use
+    rand <- unlist(distributional::generate(object, times = 1e5))
     if (is.logical(rand)) {
       y <- c(FALSE, TRUE)
     } else if (is.integer(rand)) {
@@ -77,7 +77,7 @@ make_density_df <- function(object, ngrid = 501) {
       df <- expand.grid(x = kde$eval.points[[1]], y = kde$eval.points[[2]])
       df$Density <- as.vector(kde$estimate)
     } else {
-      # Find range of x values to use
+      # Find range of support values to use
       rand <- distributional::generate(object, times = 1e5)
       support <- lapply(rand, function(u) {
         apply(u, 2, range, na.rm = TRUE)
@@ -91,6 +91,7 @@ make_density_df <- function(object, ngrid = 501) {
         })
         range_xy <- apply(do.call(rbind, c(list(range_xy), support)), 2, range)
       }
+      # Create grid
       support <- apply(range_xy, 2, diff)
       ngrid <- min(ngrid, 101)
       x <- c(
@@ -104,18 +105,11 @@ make_density_df <- function(object, ngrid = 501) {
         max(range_xy[, 2]) + 0.0001 * support
       )
       df <- as.data.frame(expand.grid(x = x, y = y))
-      if ("mvnorm" %in% stats::family(object)) {
-        # Use faster mvtnorm package
-        params <- vctrs::vec_data(object)[[1]]
-        mu <- vctrs::field(params, "mu")
-        sigma <- vctrs::field(params, "sigma")
-        df$Density <- mvtnorm::dmvnorm(df, mean = mu, sigma = sigma)
-      } else {
-        # Use slower distributional package
-        df$Density <- density(object, at = as.matrix(df))[[1]]
-      }
+      # Density on grid
+      df$Density <- density(object, at = as.matrix(df))[[1]]
     }
   }
+  # Convert to long form
   names(df)[-seq(d)] <- names_dist(object, unique = TRUE)
   tibble::as_tibble(df) |>
     tidyr::pivot_longer(
