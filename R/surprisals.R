@@ -1,89 +1,74 @@
-#' @title Density scores
-#' @description Compute density scores or leave-one-out density scores from a
-#' model or a kernel density estimate of a data set.
-#' The density scores are defined as minus the log of the conditional density,
-#' or kernel density estimate, at each observation.
-#' The leave-one-out density scores (or LOO density scores) are obtained by
-#' estimating the conditional density or kernel density estimate using all
-#' other observations.
-#' @details If the first argument is a numerical vector or matrix, then
-#' a kernel density estimate is computed, using a Gaussian kernel,
-#' with default bandwidth given by a robust normal reference rule.
-#' Otherwise the model is used to compute the conditional
-#' density function at each observation, from which the density scores (or
-#' possibly the LOO density scores) are obtained.
-#' @param object A model object or a numerical data set.
-#' @param loo Should leave-one-out density scores be computed?
-#' @author Rob J Hyndman
-#' @return A numerical vector containing either the density scores, or the LOO
-#' density scores.
-#' @seealso
-#'  \code{\link{kde_bandwidth}}
-#'  \code{\link[ks]{kde}}
+#' @title Surprisals
+
+#' @description Compute surprisals from a model or a data set given a
+#' probability distribution. The surprisals are defined as minus the log of the
+#' density at each observation.
+#' @param object A model or numerical data set
+#' @param ... Other arguments are passed to the appropriate method.
 #' @export
 
-surprisals <- function(object, loo = FALSE, ...) {
+surprisals <- function(object, ...) {
   UseMethod("surprisals")
 }
 
-#' @rdname surprisals
-#' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
-#' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
-#' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
+#' @title Surprisals computed from a data set
+#'
+#' @description Compute surprisals from a data set given a probability
+#' distribution. The surprisals are defined as minus the log of the density at
+#' each observation.
+#'
+#' @details If no distribution is provided, a kernel density estimate is
+#' computed. The leave-one-out surprisals (or LOO surprisals) are obtained by
+#' estimating the kernel density estimate using all other observations.
+#'
+#' @param object A numerical data  set, either a vector, matrix or data frame.
+#' @param distribution A probability distribution stored as a distributional
+#' object.
+#' @param loo Should leave-one-out surprisals be computed?
+#' @param ... Other arguments are passed to \code{\link{dist_kde}}.
+#' @author Rob J Hyndman
+#' @return A numerical vector containing the surprisals.
+#' @seealso \code{\link{dist_kde}}
 #' @examples
-#' # Density scores computed from bivariate data set
-#' of <- oldfaithful |>
+#' # surprisals computed from bivariate data set
+#' oldfaithful |>
 #'   filter(duration < 7000, waiting < 7000) |>
 #'   mutate(
-#'     fscores = surprisals(cbind(duration, waiting)),
-#'     loo_fscores = surprisals(cbind(duration, waiting), loo = TRUE),
-#'     lookout_prob = lookout(surprisals = fscores, loo_scores = loo_fscores)
+#'     loo_fscores = surprisals(cbind(duration, waiting), loo = TRUE)
 #'   )
-#' of |>
-#'   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
-#'   geom_point()
 #' @export
 surprisals.default <- function(
-    object, loo = FALSE,
-    h = kde_bandwidth(object, method = "double"),
-    H = kde_bandwidth(object, method = "double"), ...) {
+    object,
+    distribution = dist_kde(object, method = "double", ...),
+    loo = FALSE,
+    ...) {
   object <- as.matrix(object)
-  tmp <- calc_kde_scores(object, h, H, ...)
-  if (loo) {
-    return(tmp$loo_scores)
-  } else {
-    return(tmp$scores)
+  if(NCOL(object) == 1L)
+    object <- c(object)
+  scores <- -log(density(distribution, at = object)[[1]])
+  if(loo & stats::family(distribution) == "kde") {
+    n <- NROW(object)
+    d <- NCOL(object)
+    if (d == 1L) {
+      h <- vctrs::vec_data(distribution)[[1]]$kde$h
+      K0 <- 1 / (h * sqrt(2 * pi))
+    } else {
+      H <- vctrs::vec_data(distribution)[[1]]$kde$H
+      K0 <- det(H)^(-1 / 2) * (2 * pi)^(-d / 2)
+    }
+    scores <- -log(pmax(0, (n * exp(-scores) - K0) / (n - 1)))
   }
+  return(scores)
 }
 
-#' @rdname surprisals
+#' @rdname surprisals_model
+#' @title Surprisals computed from a model
+#' @param object A model object such as returned by \code{\link[stats]{lm}},
+#' or \code{\link[mgcv]{gam}}.
+#' @param loo Should leave-one-out surprisals be computed?
 #' @param ... Other arguments are ignored.
 #' @examples
-#' # Density scores computed from bivariate KDE
-#' f_kde <- ks::kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
-#' of |>
-#'   mutate(
-#'     fscores = surprisals(f_kde),
-#'     loo_fscores = surprisals(f_kde, loo = TRUE)
-#'   )
-#' @export
-surprisals.kde <- function(object, loo = FALSE, ...) {
-  n <- NROW(object$x)
-  d <- NCOL(object$x)
-  # kde on a grid, but we need it at observations, so we will re-estimate
-  # interpolation is probably quicker, but less accurate and
-  # this works ok.
-  output <- calc_kde_scores(object$x, object$h, object$H, ...)
-  if (loo) {
-    return(output$loo_scores)
-  } else {
-    return(output$scores)
-  }
-}
-
-#' @rdname surprisals
-#' @examples
-#' # Density scores computed from linear model
+#' # surprisals computed from linear model
 #' of <- oldfaithful |>
 #'   filter(duration < 7200, waiting < 7200)
 #' lm_of <- lm(waiting ~ duration, data = of)
@@ -91,9 +76,10 @@ surprisals.kde <- function(object, loo = FALSE, ...) {
 #'   mutate(
 #'     fscore = surprisals(lm_of),
 #'     loo_fscore = surprisals(lm_of, loo = TRUE),
-#'     lookout_prob = lookout(surprisals = fscore, loo_scores = loo_fscore)
+#'     #lookout_prob = lookout(surprisals = fscore, loo_scores = loo_fscore)
 #'   ) |>
-#'   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.02)) +
+#'   ggplot(aes(x = duration, y = waiting,
+#'     color = loo_fscore > quantile(loo_fscore, 0.99))) +
 #'   geom_point()
 #' @export
 surprisals.lm <- function(object, loo = FALSE, ...) {
@@ -108,19 +94,14 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
   return(0.5 * (log(2 * pi) + r2))
 }
 
-
-#' @rdname surprisals
+#' @rdname surprisals_model
 #' @examples
-#' # Density scores computed from GAM
+#' # surprisals computed from GAM
 #' of <- oldfaithful |>
 #'   filter(duration > 1, duration < 7200, waiting < 7200)
 #' gam_of <- mgcv::gam(waiting ~ s(duration), data = of)
 #' of |>
-#'   mutate(
-#'     fscore = surprisals(gam_of),
-#'     lookout_prob = lookout(surprisals = fscore)
-#'   ) |>
-#'   filter(lookout_prob < 0.02)
+#'   mutate(fscore = surprisals(gam_of))
 #' @importFrom stats approx dbinom density dnorm dpois na.omit
 #' @export
 surprisals.gam <- function(object, loo = FALSE, ...) {
@@ -142,34 +123,6 @@ surprisals.gam <- function(object, loo = FALSE, ...) {
     stop("Unsupported family")
   }
   return(surprisals)
-}
-
-# Compute value of density at each observation using kde
-calc_kde_scores <- function(
-    y,
-    h = kde_bandwidth(y, method = "double"),
-    H = kde_bandwidth(y, method = "double"), ...) {
-  n <- NROW(y)
-  d <- NCOL(y)
-  # Estimate density at each observation
-  if (d == 1L) {
-    gridsize <- 10001
-    K0 <- 1 / (h * sqrt(2 * pi))
-    fi <- ks::kde(y,
-      h = h, gridsize = gridsize, binned = n > 2000,
-      eval.points = y, compute.cont = FALSE, ...
-    )$estimate
-  } else {
-    gridsize <- 101
-    K0 <- det(H)^(-1 / 2) * (2 * pi)^(-d / 2)
-    fi <- ks::kde(y,
-      H = H, gridsize = gridsize, binned = n > 2000,
-      eval.points = y, compute.cont = FALSE, ...
-    )$estimate
-  }
-  loo_scores <- -log(pmax(0, (n * fi - K0) / (n - 1)))
-  scores <- -log(pmax(0, fi))
-  return(list(scores = scores, loo_scores = loo_scores))
 }
 
 utils::globalVariables(c(

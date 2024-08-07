@@ -2,106 +2,17 @@
 % Please edit documentation in R/surprisals.R
 \name{surprisals}
 \alias{surprisals}
-\alias{surprisals.default}
-\alias{surprisals.kde}
-\alias{surprisals.lm}
-\alias{surprisals.gam}
-\title{Density scores}
+\title{Surprisals}
 \usage{
-surprisals(object, loo = FALSE, ...)
-
-\method{surprisals}{default}(
-  object,
-  loo = FALSE,
-  h = kde_bandwidth(object, method = "double"),
-  H = kde_bandwidth(object, method = "double"),
-  ...
-)
-
-\method{surprisals}{kde}(object, loo = FALSE, ...)
-
-\method{surprisals}{lm}(object, loo = FALSE, ...)
-
-\method{surprisals}{gam}(object, loo = FALSE, ...)
+surprisals(object, ...)
 }
 \arguments{
-\item{object}{A model object or a numerical data set.}
+\item{object}{A model or numerical data set}
 
-\item{loo}{Should leave-one-out density scores be computed?}
-
-\item{...}{Other arguments are ignored.}
-
-\item{h}{Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
-
-\item{H}{Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.}
-}
-\value{
-A numerical vector containing either the density scores, or the LOO
-density scores.
+\item{...}{Other arguments are passed to the appropriate method.}
 }
 \description{
-Compute density scores or leave-one-out density scores from a
-model or a kernel density estimate of a data set.
-The density scores are defined as minus the log of the conditional density,
-or kernel density estimate, at each observation.
-The leave-one-out density scores (or LOO density scores) are obtained by
-estimating the conditional density or kernel density estimate using all
-other observations.
-}
-\details{
-If the first argument is a numerical vector or matrix, then
-a kernel density estimate is computed, using a Gaussian kernel,
-with default bandwidth given by a robust normal reference rule.
-Otherwise the model is used to compute the conditional
-density function at each observation, from which the density scores (or
-possibly the LOO density scores) are obtained.
-}
-\examples{
-# Density scores computed from bivariate data set
-of <- oldfaithful |>
-  filter(duration < 7000, waiting < 7000) |>
-  mutate(
-    fscores = surprisals(cbind(duration, waiting)),
-    loo_fscores = surprisals(cbind(duration, waiting), loo = TRUE),
-    lookout_prob = lookout(surprisals = fscores, loo_scores = loo_fscores)
-  )
-of |>
-  ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
-  geom_point()
-# Density scores computed from bivariate KDE
-f_kde <- ks::kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
-of |>
-  mutate(
-    fscores = surprisals(f_kde),
-    loo_fscores = surprisals(f_kde, loo = TRUE)
-  )
-# Density scores computed from linear model
-of <- oldfaithful |>
-  filter(duration < 7200, waiting < 7200)
-lm_of <- lm(waiting ~ duration, data = of)
-of |>
-  mutate(
-    fscore = surprisals(lm_of),
-    loo_fscore = surprisals(lm_of, loo = TRUE),
-    lookout_prob = lookout(surprisals = fscore, loo_scores = loo_fscore)
-  ) |>
-  ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.02)) +
-  geom_point()
-# Density scores computed from GAM
-of <- oldfaithful |>
-  filter(duration > 1, duration < 7200, waiting < 7200)
-gam_of <- mgcv::gam(waiting ~ s(duration), data = of)
-of |>
-  mutate(
-    fscore = surprisals(gam_of),
-    lookout_prob = lookout(surprisals = fscore)
-  ) |>
-  filter(lookout_prob < 0.02)
-}
-\seealso{
-\code{\link{kde_bandwidth}}
-\code{\link[ks]{kde}}
-}
-\author{
-Rob J Hyndman
+Compute surprisals from a model or a data set given a
+probability distribution. The surprisals are defined as minus the log of the
+density at each observation.
 }
