@@ -3,26 +3,33 @@
 #' Compute the probability of a surprisal at least as extreme as those observed.
 #' A surprisal is given by \eqn{-\log(f)} where \eqn{f} is the density or
 #' probability mass function of the distribution.
-#' These probabilities may be computed in three different ways.
-#' 1. Given a specified `distribution` passed as an argument.
+#' The surprisal values are computed from the `distribution` provided. If no
+#' distribution is provided, a kernel density estimate is used.
+#'
+#' The surprisal probabilities may be computed in three different ways.
+#' 1. Given the same `distribution` that was used to compute the surprisal values.
+#' Under this option, surprisal probabilities are equal to 1 minus the
+#' coverage probability of the largest HDR that contains each value. Surprisal
+#' probabilities smaller than 1e-6 are returned as 1e-6.
 #' 2. Using a Generalized Pareto Distribution fitted to the most extreme
-#' surprisal values (those with probability less than the `threshold_probability`
-#' quantile). This option is used if `GPD = TRUE`. For surprisal values with
-#' tail probability less than `threshold_probability`, the value of
-#' `threshold_probability` is returned.
-#' 3. Empirically as the proportion of values with greater surprisal values.
-#' This option is used when `GPD = FALSE` and no distribution is provided.
+#' surprisal values (those with probability less than `threshold_probability`).
+#' This option is used if `GPD = TRUE`. For surprisal values with
+#' probability less than `threshold_probability`, the value of
+#' `threshold_probability` is returned. Under this option, the distribution is
+#' used for computing the surprisal values but not for determining their
+#' probabilities. Due to extreme value theory, the resulting probabilities should
+#' be relatively insensitive to the distribution used in computing the surprisal
+#' values.
+#' 3. Empirically as the proportion of observations with greater surprisal values.
+#' This option is used when `GPD = FALSE` and no distribution is explicitly
+#' provided. This is also insensitive to the distribution used in computing the
+#' surprisal values.
 #'
 #' @param object A model or numerical data set.
 #' @param distribution A probability distribution stored as a distributional
 #' object. Ignored if `object` is a model.
 #' @param GPD Logical value specifying if a Generalized Pareto distribution
 #' should be used to estimate the probabilities.
-#' @param smallest_prob Smallest detectable probability to be used
-#' if empirical proportions are used. If the surprisal has lower probability
-#' than this, `smallest_prob` is returned.
-#' @param gridsize Size of grid used in estimating the empirical probabilities.
-#' A larger number gives more accurate estimates but takes more time.
 #' @param threshold_probability Probability threshold when computing the GPD
 #' distribution for the surprisals.
 #' @param ... Other arguments are passed to \code{\link{surprisals}}.
@@ -30,32 +37,30 @@
 #' surprisal_prob(-3:3, dist_normal())
 #' tibble(
 #'   y = n01$v1,
-#'   prob1 = surprisal_prob(y, dist_normal()),
+#'   prob1 = surprisal_prob(y),
 #'   prob2 = surprisal_prob(y, GPD = TRUE),
-#'   prob3 = surprisal_prob(y)
+#'   prob3 = surprisal_prob(y, dist_normal()),
+#'   prob4 = surprisal_prob(y, dist_normal(), GPD = TRUE)
 #' ) |>
-#'   filter(prob1 < 0.01 | prob2 < 0.01 | prob3 < 0.01)
+#'   arrange(prob1)
 
 #' @export
 
-surprisal_prob <- function(object,
+surprisal_prob <- function(
+    object,
     distribution = NULL,
     GPD = FALSE,
-    smallest_prob = 1e-6, gridsize = 100001,
     threshold_probability = 0.10,
     ...) {
-  if(is.null(distribution)) {
+  if (is.null(distribution)) {
     g <- surprisals(object)
   } else {
     g <- surprisals(object, distribution = distribution, ...)
   }
   n <- length(g)
-  if (GPD & !is.null(distribution)) {
-    warning("GPD is specified, so the distribution argument will be ignored.")
-  }
   if (GPD) {
     threshold <- stats::quantile(g,
-      prob = 1-threshold_probability,
+      prob = 1 - threshold_probability,
       type = 8, na.rm = TRUE
     )
     if (!any(g > threshold, na.rm = TRUE)) {
@@ -83,15 +88,9 @@ surprisal_prob <- function(object,
     p <- 2 * (1 - stats::pnorm(abs(x), mu, sqrt(sigma2)))
   } else {
     # Slower computation, but more general (although approximate)
-    dist_x <- quantile(
-      distribution,
-      seq(smallest_prob, 1 - smallest_prob, length.out = gridsize)
-    )
+    dist_x <- quantile(distribution, seq(1e-6, 1 - 1e-6, length.out = 100001))
     dist_x <- unique(unlist(dist_x))
-    dist_y <- -density(
-      distribution, dist_x,
-      log = TRUE
-    )[[1]]
+    dist_y <- -density(distribution, dist_x, log = TRUE)[[1]]
     prob <- (rank(dist_y) - 1) / length(dist_y)
     p <- 1 - approx(dist_y, prob, xout = g, rule = 2, ties = mean)$y
   }

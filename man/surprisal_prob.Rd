@@ -8,8 +8,6 @@ surprisal_prob(
   object,
   distribution = NULL,
   GPD = FALSE,
-  smallest_prob = 1e-06,
-  gridsize = 100001,
   threshold_probability = 0.1,
   ...
 )
@@ -23,13 +21,6 @@ object. Ignored if \code{object} is a model.}
 \item{GPD}{Logical value specifying if a Generalized Pareto distribution
 should be used to estimate the probabilities.}
 
-\item{smallest_prob}{Smallest detectable probability to be used
-if empirical proportions are used. If the surprisal has lower probability
-than this, \code{smallest_prob} is returned.}
-
-\item{gridsize}{Size of grid used in estimating the empirical probabilities.
-A larger number gives more accurate estimates but takes more time.}
-
 \item{threshold_probability}{Probability threshold when computing the GPD
 distribution for the surprisals.}
 
@@ -39,25 +30,39 @@ distribution for the surprisals.}
 Compute the probability of a surprisal at least as extreme as those observed.
 A surprisal is given by \eqn{-\log(f)} where \eqn{f} is the density or
 probability mass function of the distribution.
-These probabilities may be computed in three different ways.
+The surprisal values are computed from the \code{distribution} provided. If no
+distribution is provided, a kernel density estimate is used.
+}
+\details{
+The surprisal probabilities may be computed in three different ways.
 \enumerate{
-\item Given a specified \code{distribution} passed as an argument.
+\item Given the same \code{distribution} that was used to compute the surprisal values.
+Under this option, surprisal probabilities are equal to 1 minus the
+coverage probability of the largest HDR that contains each value. Surprisal
+probabilities smaller than 1e-6 are returned as 1e-6.
 \item Using a Generalized Pareto Distribution fitted to the most extreme
 surprisal values (those with probability less than the \code{threshold_probability}
 quantile). This option is used if \code{GPD = TRUE}. For surprisal values with
 tail probability less than \code{threshold_probability}, the value of
-\code{threshold_probability} is returned.
-\item Empirically as the proportion of values with greater surprisal values.
-This option is used when \code{GPD = FALSE} and no distribution is provided.
+\code{threshold_probability} is returned. Under this option, the distribution is
+used for computing the surprisal values but not for determining their
+probabilities. Due to extreme value theory, the resulting probabilities should
+be relatively insensitive to the distribution used in computing the surprisal
+values.
+\item Empirically as the proportion of observations with greater surprisal values.
+This option is used when \code{GPD = FALSE} and no distribution is explicitly
+provided. This is also insensitive to the distribution used in computing the
+surprisal values.
 }
 }
 \examples{
 surprisal_prob(-3:3, dist_normal())
 tibble(
   y = n01$v1,
-  prob1 = surprisal_prob(y, dist_normal()),
+  prob1 = surprisal_prob(y),
   prob2 = surprisal_prob(y, GPD = TRUE),
-  prob3 = surprisal_prob(y)
+  prob3 = surprisal_prob(y, dist_normal()),
+  prob4 = surprisal_prob(y, dist_normal(), GPD = TRUE)
 ) |>
-  filter(prob1 < 0.01 | prob2 < 0.01 | prob3 < 0.01)
+  arrange(prob1)
 }
