@@ -158,7 +158,7 @@ of |>
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting)),
-    lookout = lookout(cbind(duration, waiting))
+    lookout = lookout_prob(cbind(duration, waiting))
   ) |>
   filter(
     surprisal > quantile(surprisal, prob = 0.998) |
@@ -168,6 +168,17 @@ of |>
       lookout < 0.05
   ) |>
   arrange(lookout)
+```
+
+In addition to the `surprisals()` function, the `surprisal_prob()` function computes the probability of obtaining surprisal values at least as extreme as those observed.
+
+```{r}
+of |>
+  mutate(
+    surprisal = surprisals(cbind(duration, waiting)),
+    prob = surprisal_prob(cbind(duration, waiting))
+  ) |>
+  arrange(prob)
 ```
 
 ## Robust multivariate scaling
