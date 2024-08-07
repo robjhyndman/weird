@@ -3,8 +3,6 @@
 <url><loc>https://pkg.robjhyndman.com/weird-package/authors.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/index.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/news/index.html</loc></url>
-<url><loc>https://pkg.robjhyndman.com/weird-package/reference/as_kde.html</loc></url>
-<url><loc>https://pkg.robjhyndman.com/weird-package/reference/autoplot.kde.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/bagplot.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/cricket_batting.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/dist_density.html</loc></url>
@@ -22,7 +20,7 @@
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/index.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/kde_bandwidth.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/lof_scores.html</loc></url>
-<url><loc>https://pkg.robjhyndman.com/weird-package/reference/lookout.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/lookout_prob.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/mvscale.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/n01.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/oldfaithful.html</loc></url>
@@ -31,7 +29,9 @@
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/stray_anomalies.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/stray_scores.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/surprisal_prob.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/surprisals.default.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/surprisals.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird-package/reference/surprisals_model.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/weird-package.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/weird_conflicts.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird-package/reference/weird_packages.html</loc></url>

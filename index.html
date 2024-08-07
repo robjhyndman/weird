@@ -213,7 +213,7 @@
 <li>The <code><a href="reference/stray_scores.html">stray_scores()</a></code> function uses the stray algorithm to compute anomaly scores.</li>
 <li>The <code><a href="reference/lof_scores.html">lof_scores()</a></code> function uses local outlier factors to compute anomaly scores.</li>
 <li>The <code><a href="reference/glosh_scores.html">glosh_scores()</a></code> function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.</li>
-<li>The <code><a href="reference/lookout.html">lookout()</a></code> function uses the lookout algorithm to compute anomaly probabilities</li>
+<li>The <code>lookout()</code> function uses the lookout algorithm to compute anomaly probabilities</li>
 </ul>
 <p>Here are the top 0.02% most anomalous observations identified by each of the first four methods, along with the observations having lookout probability less than 0.05.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -223,7 +223,7 @@
 <span>    strayscore <span class="op">=</span> <span class="fu"><a href="reference/stray_scores.html">stray_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    lofscore <span class="op">=</span> <span class="fu"><a href="reference/lof_scores.html">lof_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">150</span><span class="op">)</span>,</span>
 <span>    gloshscore <span class="op">=</span> <span class="fu"><a href="reference/glosh_scores.html">glosh_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    lookout <span class="op">=</span> <span class="fu"><a href="reference/lookout.html">lookout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
+<span>    lookout <span class="op">=</span> <span class="fu"><a href="reference/lookout_prob.html">lookout_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="va">surprisal</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">surprisal</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
@@ -233,27 +233,58 @@
 <span>      <span class="va">lookout</span> <span class="op">&lt;</span> <span class="fl">0.05</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">lookout</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 11 × 8</span></span>
+<span><span class="co">#&gt; # A tibble: 20 × 8</span></span>
 <span><span class="co">#&gt;    time                duration waiting surprisal strayscore lofscore gloshscore</span></span>
 <span><span class="co">#&gt;    &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt;  1 2018-04-25 19:08:00        1    5700      17.5     0.380      3.78      1    </span></span>
-<span><span class="co">#&gt;  2 2020-06-01 21:04:00      120    6060      17.5     0.132      1.88      1    </span></span>
-<span><span class="co">#&gt;  3 2021-01-22 18:35:00      170    3600      16.8     0.0606     1.09      0.860</span></span>
-<span><span class="co">#&gt;  4 2020-08-31 09:56:00      170    3840      16.7     0.0606     1.01      0.816</span></span>
-<span><span class="co">#&gt;  5 2015-11-21 20:27:00      150    3420      16.7     0.0772     1.27      1    </span></span>
-<span><span class="co">#&gt;  6 2017-05-03 06:19:00       90    4740      16.4     0.0495     1.68      1    </span></span>
-<span><span class="co">#&gt;  7 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1    </span></span>
-<span><span class="co">#&gt;  8 2017-09-22 18:51:00      281    7140      15.5     0.0333     2.64      1    </span></span>
-<span><span class="co">#&gt;  9 2017-08-12 13:14:00      120    4920      15.2     0.0690     1.53      1    </span></span>
-<span><span class="co">#&gt; 10 2020-05-18 21:21:00      272    7080      14.9     0.0333     2.42      1    </span></span>
-<span><span class="co">#&gt; 11 2018-09-22 16:37:00      253    7140      14.7     0.0200     2.63      1    </span></span>
+<span><span class="co">#&gt;  2 2020-06-01 21:04:00      120    6060      17.6     0.132      1.88      1    </span></span>
+<span><span class="co">#&gt;  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860</span></span>
+<span><span class="co">#&gt;  4 2020-08-31 09:56:00      170    3840      16.8     0.0606     1.01      0.816</span></span>
+<span><span class="co">#&gt;  5 2020-09-16 14:44:00      160    6120      15.9     0.0362     1.29      1    </span></span>
+<span><span class="co">#&gt;  6 2015-11-21 20:27:00      150    3420      16.7     0.0772     1.27      1    </span></span>
+<span><span class="co">#&gt;  7 2017-05-03 06:19:00       90    4740      16.3     0.0495     1.68      1    </span></span>
+<span><span class="co">#&gt;  8 2016-11-11 14:23:00      180    6480      15.8     0.0447     1.10      1    </span></span>
+<span><span class="co">#&gt;  9 2020-07-23 23:17:00      186    4320      16.0     0.0473     1.04      0.946</span></span>
+<span><span class="co">#&gt; 10 2020-09-15 18:01:00      160    5880      15.6     0.0362     1.40      1    </span></span>
+<span><span class="co">#&gt; 11 2021-08-13 22:19:23      210    6971      15.8     0.0429     2.07      1    </span></span>
+<span><span class="co">#&gt; 12 2019-07-25 06:32:00      300    5280      15.9     0.0447     1.14      1    </span></span>
+<span><span class="co">#&gt; 13 2021-07-26 18:35:39      192    6618      15.7     0.0392     1.26      1    </span></span>
+<span><span class="co">#&gt; 14 2016-12-09 23:10:00      166    6000      15.3     0.0201     1.35      1    </span></span>
+<span><span class="co">#&gt; 15 2017-08-03 23:39:00      165    4440      15.8     0.0447     1.14      0.943</span></span>
+<span><span class="co">#&gt; 16 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1    </span></span>
+<span><span class="co">#&gt; 17 2017-08-12 13:14:00      120    4920      15.3     0.0690     1.53      1    </span></span>
+<span><span class="co">#&gt; 18 2017-09-22 18:51:00      281    7140      15.5     0.0333     2.64      1    </span></span>
+<span><span class="co">#&gt; 19 2020-05-18 21:21:00      272    7080      14.9     0.0333     2.42      1    </span></span>
+<span><span class="co">#&gt; 20 2018-09-22 16:37:00      253    7140      14.8     0.0200     2.63      1    </span></span>
 <span><span class="co">#&gt; # ℹ 1 more variable: lookout &lt;dbl&gt;</span></span></code></pre></div>
+<p>In addition to the <code><a href="reference/surprisals.html">surprisals()</a></code> function, the <code><a href="reference/surprisal_prob.html">surprisal_prob()</a></code> function computes the probability of obtaining surprisal values at least as extreme as those observed.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    surprisal <span class="op">=</span> <span class="fu"><a href="reference/surprisals.html">surprisals</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    prob <span class="op">=</span> <span class="fu"><a href="reference/surprisal_prob.html">surprisal_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2,197 × 5</span></span>
+<span><span class="co">#&gt;    time                duration waiting surprisal     prob</span></span>
+<span><span class="co">#&gt;    &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2020-06-01 21:04:00      120    6060      17.6 0.000455</span></span>
+<span><span class="co">#&gt;  2 2018-04-25 19:08:00        1    5700      17.5 0.000910</span></span>
+<span><span class="co">#&gt;  3 2021-01-22 18:35:00      170    3600      16.9 0.00137 </span></span>
+<span><span class="co">#&gt;  4 2020-08-31 09:56:00      170    3840      16.8 0.00182 </span></span>
+<span><span class="co">#&gt;  5 2015-11-21 20:27:00      150    3420      16.7 0.00228 </span></span>
+<span><span class="co">#&gt;  6 2017-05-03 06:19:00       90    4740      16.3 0.00273 </span></span>
+<span><span class="co">#&gt;  7 2020-07-23 23:17:00      186    4320      16.0 0.00319 </span></span>
+<span><span class="co">#&gt;  8 2020-09-16 14:44:00      160    6120      15.9 0.00364 </span></span>
+<span><span class="co">#&gt;  9 2019-07-25 06:32:00      300    5280      15.9 0.00410 </span></span>
+<span><span class="co">#&gt; 10 2016-11-11 14:23:00      180    6480      15.8 0.00455 </span></span>
+<span><span class="co">#&gt; # ℹ 2,187 more rows</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="robust-multivariate-scaling">Robust multivariate scaling<a class="anchor" aria-label="anchor" href="#robust-multivariate-scaling"></a>
 </h2>
 <p>Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The <code><a href="reference/mvscale.html">mvscale()</a></code> function provides a multivariate robust scaling method, that optionally takes account of the relationships betwen variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as <code>z1</code>, <code>z2</code>, etc. Non-rotated scaling is possible by setting <code>cov = NULL</code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/mvscale.html">mvscale</a></span><span class="op">(</span><span class="va">of</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in mvscale(of): Ignoring non-numeric columns: time</span></span>
 <span><span class="co">#&gt; # A tibble: 2,197 × 3</span></span>
