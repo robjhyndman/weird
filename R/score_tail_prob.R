@@ -1,7 +1,7 @@
-#' Density score tail probabilities
+#' Surprisal probabilities
 #'
-#' Compute the probability of a density score at least as extreme as `g`.
-#' A density score is given by \eqn{g = -\log(f)}
+#' Compute the probability of a surprisal at least as extreme as `g`.
+#' A surprisal is given by \eqn{g = -\log(f)}
 #' where \eqn{f} is the density or probability mass function of the
 #' distribution.
 #' These probabilities may be computed in three different ways.
@@ -11,36 +11,36 @@
 #' option is used if `GPD = TRUE`. For `g` values with tail probability
 #' greater than `threshold_probability`, the value of `threshold_probability`
 #' is returned.
-#' 3. Empirically as the proportion of values above `g`.  This option is
+#' 3. Empirically as the proportion of values above `g`. This option is
 #' used when `GPD = FALSE` and `distribution = NULL`.
 #'
-#' @param g vector of density scores.
+#' @param g vector of surprisals.
 #' @param distribution A distributional object specifying the probability
 #' distribution to use.
 #' @param GPD Logical value specifying if a Generalized Pareto distribution
 #' should be used to estimate the tail probabilities.
 #' @param smallest_prob Smallest detectable tail probability to be used
-#' if empirical tail proportions are used. If the score has lower probability
+#' if empirical tail proportions are used. If the surprisal has lower probability
 #' than this, `smallest_prob` is returned.
 #' @param gridsize Size of grid used in estimating the empirical tail
 #' probabilities. A larger number gives more accurate estimates but takes
 #' more time.
 #' @param threshold_probability Probability threshold when computing the GPD
-#' distribution for the log scores.
+#' distribution for the surprisals.
 #' @examples
-#' score_tail_prob(-dnorm(1:3, log = TRUE), distributional::dist_normal())
+#' surprisal_prob(-dnorm(1:3, log = TRUE), dist_normal())
 #' tibble(
 #'   y = n01$v1,
 #'   g = -dnorm(y, log = TRUE),
-#'   prob1 = score_tail_prob(g, distributional::dist_normal()),
-#'   prob2 = score_tail_prob(g, GPD = TRUE),
-#'   prob3 = score_tail_prob(g)
+#'   prob1 = surprisal_prob(g, dist_normal()),
+#'   prob2 = surprisal_prob(g, GPD = TRUE),
+#'   prob3 = surprisal_prob(g)
 #' ) |>
 #'   filter(prob1 < 0.01 | prob2 < 0.01 | prob3 < 0.01)
 
 #' @export
 
-score_tail_prob <- function(
+surprisal_prob <- function(
     g,
     distribution = NULL, GPD = FALSE,
     smallest_prob = 1e-6, gridsize = 100001,
@@ -55,12 +55,12 @@ score_tail_prob <- function(
       type = 8, na.rm = TRUE
     )
     if (!any(g > threshold, na.rm = TRUE)) {
-      warning("No scores above threshold.")
+      warning("No surprisals above threshold.")
       return(rep(1, n))
     }
     finite <- g < Inf
     if (any(!finite, na.rm = TRUE)) {
-      warning("Infinite density scores will be ignored in GPD.")
+      warning("Infinite surprisals will be ignored in GPD.")
     }
     gpd <- evd::fpot(g[finite], threshold = threshold, std.err = FALSE)$estimate
     p <- (1 - threshold_probability) * evd::pgpd(
