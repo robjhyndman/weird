@@ -5,59 +5,59 @@
 \title{Surprisal probabilities}
 \usage{
 surprisal_prob(
-  g,
+  object,
   distribution = NULL,
   GPD = FALSE,
   smallest_prob = 1e-06,
   gridsize = 100001,
-  threshold_probability = 0.9
+  threshold_probability = 0.1,
+  ...
 )
 }
 \arguments{
-\item{g}{vector of surprisals.}
+\item{object}{A model or numerical data set.}
 
-\item{distribution}{A distributional object specifying the probability
-distribution to use.}
+\item{distribution}{A probability distribution stored as a distributional
+object. Ignored if \code{object} is a model.}
 
 \item{GPD}{Logical value specifying if a Generalized Pareto distribution
-should be used to estimate the tail probabilities.}
+should be used to estimate the probabilities.}
 
-\item{smallest_prob}{Smallest detectable tail probability to be used
-if empirical tail proportions are used. If the surprisal has lower probability
+\item{smallest_prob}{Smallest detectable probability to be used
+if empirical proportions are used. If the surprisal has lower probability
 than this, \code{smallest_prob} is returned.}
 
-\item{gridsize}{Size of grid used in estimating the empirical tail
-probabilities. A larger number gives more accurate estimates but takes
-more time.}
+\item{gridsize}{Size of grid used in estimating the empirical probabilities.
+A larger number gives more accurate estimates but takes more time.}
 
 \item{threshold_probability}{Probability threshold when computing the GPD
 distribution for the surprisals.}
+
+\item{...}{Other arguments are passed to \code{\link{surprisals}}.}
 }
 \description{
-Compute the probability of a surprisal at least as extreme as \code{g}.
-A surprisal is given by \eqn{g = -\log(f)}
-where \eqn{f} is the density or probability mass function of the
-distribution.
+Compute the probability of a surprisal at least as extreme as those observed.
+A surprisal is given by \eqn{-\log(f)} where \eqn{f} is the density or
+probability mass function of the distribution.
 These probabilities may be computed in three different ways.
 \enumerate{
-\item Given a specified \code{distribution}.
+\item Given a specified \code{distribution} passed as an argument.
 \item Using a Generalized Pareto Distribution fitted to the most extreme
-values of \code{g} (those above the \code{threshold_probability} quantile). This
-option is used if \code{GPD = TRUE}. For \code{g} values with tail probability
-greater than \code{threshold_probability}, the value of \code{threshold_probability}
-is returned.
-\item Empirically as the proportion of values above \code{g}. This option is
-used when \code{GPD = FALSE} and \code{distribution = NULL}.
+surprisal values (those with probability less than the \code{threshold_probability}
+quantile). This option is used if \code{GPD = TRUE}. For surprisal values with
+tail probability less than \code{threshold_probability}, the value of
+\code{threshold_probability} is returned.
+\item Empirically as the proportion of values with greater surprisal values.
+This option is used when \code{GPD = FALSE} and no distribution is provided.
 }
 }
 \examples{
-surprisal_prob(-dnorm(1:3, log = TRUE), dist_normal())
+surprisal_prob(-3:3, dist_normal())
 tibble(
   y = n01$v1,
-  g = -dnorm(y, log = TRUE),
-  prob1 = surprisal_prob(g, dist_normal()),
-  prob2 = surprisal_prob(g, GPD = TRUE),
-  prob3 = surprisal_prob(g)
+  prob1 = surprisal_prob(y, dist_normal()),
+  prob2 = surprisal_prob(y, GPD = TRUE),
+  prob3 = surprisal_prob(y)
 ) |>
   filter(prob1 < 0.01 | prob2 < 0.01 | prob3 < 0.01)
 }
