@@ -136,3 +136,4 @@ names_dist <- function(object, unique = FALSE) {
     dist_names
   }
 }
+

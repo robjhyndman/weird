@@ -7,6 +7,7 @@
 surprisal_prob(
   object,
   distribution = NULL,
+  loo = FALSE,
   GPD = FALSE,
   threshold_probability = 0.1,
   ...
@@ -17,6 +18,8 @@ surprisal_prob(
 
 \item{distribution}{A probability distribution stored as a distributional
 object. Ignored if \code{object} is a model.}
+
+\item{loo}{Logical value specifying if leave-one-out surprisals should be computed.}
 
 \item{GPD}{Logical value specifying if a Generalized Pareto distribution
 should be used to estimate the probabilities.}
@@ -41,9 +44,9 @@ Under this option, surprisal probabilities are equal to 1 minus the
 coverage probability of the largest HDR that contains each value. Surprisal
 probabilities smaller than 1e-6 are returned as 1e-6.
 \item Using a Generalized Pareto Distribution fitted to the most extreme
-surprisal values (those with probability less than the \code{threshold_probability}
-quantile). This option is used if \code{GPD = TRUE}. For surprisal values with
-tail probability less than \code{threshold_probability}, the value of
+surprisal values (those with probability less than \code{threshold_probability}).
+This option is used if \code{GPD = TRUE}. For surprisal values with
+probability less than \code{threshold_probability}, the value of
 \code{threshold_probability} is returned. Under this option, the distribution is
 used for computing the surprisal values but not for determining their
 probabilities. Due to extreme value theory, the resulting probabilities should
@@ -56,7 +59,11 @@ surprisal values.
 }
 }
 \examples{
-surprisal_prob(-3:3, dist_normal())
+# Univariate data
+tibble(
+  y = c(5, rnorm(49)),
+  p = surprisal_prob(y)
+)
 tibble(
   y = n01$v1,
   prob1 = surprisal_prob(y),
@@ -65,4 +72,16 @@ tibble(
   prob4 = surprisal_prob(y, dist_normal(), GPD = TRUE)
 ) |>
   arrange(prob1)
+# Bivariate data
+tibble(
+  x = rnorm(50),
+  y = c(5, rnorm(49)),
+  lookout = lookout_prob(cbind(x,y))
+)
+# Using a regression model
+of <- oldfaithful |> filter(duration < 7200, waiting < 7200)
+fit_of <- lm(waiting ~ duration, data = of)
+of |>
+  mutate(p = surprisal_prob(fit_of)) |>
+  arrange(p)
 }

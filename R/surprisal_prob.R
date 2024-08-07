@@ -28,13 +28,18 @@
 #' @param object A model or numerical data set.
 #' @param distribution A probability distribution stored as a distributional
 #' object. Ignored if `object` is a model.
+#' @param loo Logical value specifying if leave-one-out surprisals should be computed.
 #' @param GPD Logical value specifying if a Generalized Pareto distribution
 #' should be used to estimate the probabilities.
 #' @param threshold_probability Probability threshold when computing the GPD
 #' distribution for the surprisals.
 #' @param ... Other arguments are passed to \code{\link{surprisals}}.
 #' @examples
-#' surprisal_prob(-3:3, dist_normal())
+#' # Univariate data
+#' tibble(
+#'   y = c(5, rnorm(49)),
+#'   p = surprisal_prob(y)
+#' )
 #' tibble(
 #'   y = n01$v1,
 #'   prob1 = surprisal_prob(y),
@@ -43,19 +48,31 @@
 #'   prob4 = surprisal_prob(y, dist_normal(), GPD = TRUE)
 #' ) |>
 #'   arrange(prob1)
-
+#' # Bivariate data
+#' tibble(
+#'   x = rnorm(50),
+#'   y = c(5, rnorm(49)),
+#'   lookout = lookout_prob(cbind(x,y))
+#' )
+#' # Using a regression model
+#' of <- oldfaithful |> filter(duration < 7200, waiting < 7200)
+#' fit_of <- lm(waiting ~ duration, data = of)
+#' of |>
+#'   mutate(p = surprisal_prob(fit_of)) |>
+#'   arrange(p)
 #' @export
 
 surprisal_prob <- function(
     object,
     distribution = NULL,
+    loo = FALSE,
     GPD = FALSE,
     threshold_probability = 0.10,
     ...) {
   if (is.null(distribution)) {
-    g <- surprisals(object)
+    g <- surprisals(object, loo = loo, ...)
   } else {
-    g <- surprisals(object, distribution = distribution, ...)
+    g <- surprisals(object, distribution = distribution, loo = loo, ...)
   }
   n <- length(g)
   if (GPD) {
@@ -88,7 +105,7 @@ surprisal_prob <- function(
     p <- 2 * (1 - stats::pnorm(abs(x), mu, sqrt(sigma2)))
   } else {
     # Slower computation, but more general (although approximate)
-    dist_x <- quantile(distribution, seq(1e-6, 1 - 1e-6, length.out = 100001))
+    dist_x <- stats::quantile(distribution, seq(1e-6, 1 - 1e-6, length.out = 100001))
     dist_x <- unique(unlist(dist_x))
     dist_y <- -density(distribution, dist_x, log = TRUE)[[1]]
     prob <- (rank(dist_y) - 1) / length(dist_y)
@@ -96,3 +113,6 @@ surprisal_prob <- function(
   }
   return(p)
 }
+
+#' @importFrom stats quantile
+#' @importFrom evd fpot

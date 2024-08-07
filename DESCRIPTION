@@ -25,6 +25,7 @@ Imports:
   grDevices,
   interpolation,
   ks,
+  lookout,
   mvtnorm,
   purrr (>= 0.2.4),
   rlang,

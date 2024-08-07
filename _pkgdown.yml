@@ -37,8 +37,10 @@ reference:
       - lof_scores
       - stray_scores
       - surprisals
+      - surprisals.default
+      - surprisals.lm
       - surprisal_prob
-      - lookout
+      - lookout_prob
   - title: Functions for identifying anomalies
     contents:
       - chauvenet_anomalies

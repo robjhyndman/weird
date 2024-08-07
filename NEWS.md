@@ -4,7 +4,8 @@
 * Refactored package to use distributional objects
 * Removed as_kde() and autoplot.kde()
 * Added gg_density() and gg_density_layer()
-* Added surprisals() and surprisals_prob()
+* Added surprisals() and surprisal_prob()
+* Renamed lookout() to lookout_prob()
 * Added hampel_anomalies() 
 * mvscale() more resilient to weird data
 
