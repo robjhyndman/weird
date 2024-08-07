@@ -63,27 +63,23 @@ oldfaithful
 
 ## Kernel density estimates
 
-The package provides the `kde_bandwidth()` function for estimating the bandwidth of a kernel density estimate, and an `autoplot()` method for plotting the resulting density. The figure below shows the kernel density estimate of the `duration` variable obtained using these functions. The rug plot shows the actual data values.
+The package provides the `kde_bandwidth()` function for estimating the bandwidth of a kernel density estimate, `dist_kde()` for constructing the distribution, and `gg_density()` for plotting the resulting density. The figure below shows the kernel density estimate of the `duration` variable obtained using these functions. 
 
 ```{r of-density}
 of <- oldfaithful |>
   filter(duration < 3600, waiting < 7200)
-of_density <- kde(of$duration, h = kde_bandwidth(of$duration))
-of_density |>
-  autoplot() +
-  geom_rug(aes(x = duration), of) +
+dist_kde(of$duration) |>
+  gg_density(show_points = TRUE, jitter = TRUE) +
   labs(x = "Duration (seconds)")
 ```
 
-The `kde_bandwidth()` function can also be used to estimate the bandwidth for a bivariate kernel density estimate. The figure below shows the kernel density estimate of the `duration` and `waiting` variables using the bandwidth selected by the `kde_bandwidth()` function. The rug plot shows the actual data values.
+The same functions also work with bivariate data. The figure below shows the kernel density estimate of the `duration` and `waiting` variables.
 
 ```{r of-density2}
-of_density <- of |>
+of |>
   select(duration, waiting) |>
-  kde(H = kde_bandwidth(of[, c("duration", "waiting")]))
-of_density |>
-  autoplot() +
-  geom_point(aes(duration, waiting), data = of, alpha = 0.15) +
+  dist_kde() |>
+  gg_density(show_points = TRUE, alpha = 0.15) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
@@ -147,7 +143,7 @@ The latter two plots show likely outliers in red, using the lookout algorithm.
 
 Several functions are provided for providing anomaly scores for all observations. 
 
-* The `density_scores()` function uses either a fitted statistical model, or a kernel density estimate, to compute density scores.
+* The `surprisals()` function uses either a fitted statistical model, or a kernel density estimate, to compute density scores.
 * The `stray_scores()` function uses the stray algorithm to compute anomaly scores.
 * The `lof_scores()` function uses local outlier factors to compute anomaly scores.
 * The `glosh_scores()` function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.
@@ -158,14 +154,14 @@ Here are the top 0.02% most anomalous observations identified by each of the fir
 ```{r of-scores}
 of |>
   mutate(
-    denscore = density_scores(cbind(duration, waiting)),
+    surprisal = surprisals(cbind(duration, waiting)),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting)),
     lookout = lookout(cbind(duration, waiting))
   ) |>
   filter(
-    denscore > quantile(denscore, prob = 0.998) |
+    surprisal > quantile(surprisal, prob = 0.998) |
       strayscore > quantile(strayscore, prob = 0.998) |
       lofscore > quantile(lofscore, prob = 0.998) |
       gloshscore > quantile(gloshscore, prob = 0.998) |

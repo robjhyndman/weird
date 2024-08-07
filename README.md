@@ -19,8 +19,15 @@ described in the book.
 
 ## Installation
 
-You can install the development version of weird from
-[GitHub](https://github.com/) with:
+You can install the **stable** version from
+[CRAN](https://cran.r-project.org/package=weird) with:
+
+``` r
+install.packages("weird")
+```
+
+You can install the **development** version of weird from
+[GitHub](https://github.com/robjhyndman/weird-package) with:
 
 ``` r
 # install.packages("devtools")
@@ -41,9 +48,9 @@ have loaded:
 
 ``` r
 library(weird)
-#> ── Attaching packages ────────────────────────────────────── weird 0.0.0.9000 ──
-#> ✔ dplyr   1.1.4      ✔ ks      1.14.1
-#> ✔ ggplot2 3.4.4
+#> ── Attaching packages ────────────────────────────────────── weird 1.0.2.9000 ──
+#> ✔ dplyr          1.1.4          ✔ distributional 0.4.0.9000
+#> ✔ ggplot2        3.5.1
 #> ── Conflicts ──────────────────────────────────────────────── weird_conflicts ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
@@ -86,36 +93,29 @@ oldfaithful
 ## Kernel density estimates
 
 The package provides the `kde_bandwidth()` function for estimating the
-bandwidth of a kernel density estimate, and an `autoplot()` method for
-plotting the resulting density. The figure below shows the kernel
-density estimate of the `duration` variable obtained using these
-functions. The rug plot shows the actual data values.
+bandwidth of a kernel density estimate, `dist_kde()` for constructing
+the distribution, and `gg_density()` for plotting the resulting density.
+The figure below shows the kernel density estimate of the `duration`
+variable obtained using these functions.
 
 ``` r
 of <- oldfaithful |>
   filter(duration < 3600, waiting < 7200)
-of_density <- kde(of$duration, h=kde_bandwidth(of$duration))
-of_density |>
-  autoplot() +
-  geom_rug(aes(x=duration), of) +
+dist_kde(of$duration) |>
+  gg_density(show_points = TRUE, jitter = TRUE) +
   labs(x = "Duration (seconds)")
 ```
 
 <img src="man/figures/README-of-density-1.png" style="width:100.0%" />
 
-The `kde_bandwidth()` function can also be used to estimate the
-bandwidth for a bivariate kernel density estimate. The figure below
-shows the kernel density estimate of the `duration` and `waiting`
-variables using the bandwidth selected by the `kde_bandwidth()`
-function. The rug plot shows the actual data values.
+The same functions also work with bivariate data. The figure below shows
+the kernel density estimate of the `duration` and `waiting` variables.
 
 ``` r
-of_density <- of |>
-  select(duration, waiting) |> 
-  kde(H = kde_bandwidth(of[,c("duration","waiting")]))
-of_density |>
-  autoplot() +
-  geom_point(aes(duration, waiting), data = of, alpha=0.15) +
+of |>
+  select(duration, waiting) |>
+  dist_kde() |>
+  gg_density(show_points = TRUE, alpha = 0.15) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
@@ -216,17 +216,17 @@ of |>
 And here are two types of HDR boxplot
 
 ``` r
-of |> 
+of |>
   gg_hdrboxplot(duration, waiting) +
-  labs(x = "Duration (seconds)", y = "Waiting time (seconds)") 
+  labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
 <img src="man/figures/README-of-boxplot3-1.png" style="width:100.0%" />
 
 ``` r
-of |> 
+of |>
   gg_hdrboxplot(duration, waiting, scatterplot = TRUE) +
-  labs(x = "Duration (seconds)", y = "Waiting time (seconds)") 
+  labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
 <img src="man/figures/README-of-boxplot3-2.png" style="width:100.0%" />
@@ -239,8 +239,8 @@ algorithm.
 Several functions are provided for providing anomaly scores for all
 observations.
 
-- The `density_scores()` function uses either a fitted statistical
-  model, or a kernel density estimate, to compute density scores.
+- The `surprisals()` function uses either a fitted statistical model, or
+  a kernel density estimate, to compute density scores.
 - The `stray_scores()` function uses the stray algorithm to compute
   anomaly scores.
 - The `lof_scores()` function uses local outlier factors to compute
@@ -257,34 +257,34 @@ probability less than 0.05.
 ``` r
 of |>
   mutate(
-    denscore = density_scores(cbind(duration, waiting)),
+    surprisal = surprisals(cbind(duration, waiting)),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting)),
     lookout = lookout(cbind(duration, waiting))
-  ) |> 
+  ) |>
   filter(
-    denscore > quantile(denscore, prob=0.998) |
-    strayscore > quantile(strayscore, prob=0.998) |
-    lofscore > quantile(lofscore, prob=0.998) |
-    gloshscore > quantile(gloshscore, prob=0.998) |
-    lookout < 0.05
-  ) |> 
+    surprisal > quantile(surprisal, prob = 0.998) |
+      strayscore > quantile(strayscore, prob = 0.998) |
+      lofscore > quantile(lofscore, prob = 0.998) |
+      gloshscore > quantile(gloshscore, prob = 0.998) |
+      lookout < 0.05
+  ) |>
   arrange(lookout)
 #> # A tibble: 11 × 8
-#>    time                duration waiting denscore strayscore lofscore gloshscore
-#>    <dttm>                 <dbl>   <dbl>    <dbl>      <dbl>    <dbl>      <dbl>
-#>  1 2018-04-25 19:08:00        1    5700     17.5     0.380      3.78      1    
-#>  2 2020-06-01 21:04:00      120    6060     17.5     0.132      1.88      1    
-#>  3 2021-01-22 18:35:00      170    3600     16.8     0.0606     1.09      0.860
-#>  4 2020-08-31 09:56:00      170    3840     16.7     0.0606     1.01      0.816
-#>  5 2015-11-21 20:27:00      150    3420     16.7     0.0772     1.27      1    
-#>  6 2017-05-03 06:19:00       90    4740     16.4     0.0495     1.68      1    
-#>  7 2020-10-15 17:11:00      220    7080     15.7     0.0429     2.42      1    
-#>  8 2017-09-22 18:51:00      281    7140     15.5     0.0333     2.64      1    
-#>  9 2017-08-12 13:14:00      120    4920     15.2     0.0690     1.53      1    
-#> 10 2020-05-18 21:21:00      272    7080     14.9     0.0333     2.42      1    
-#> 11 2018-09-22 16:37:00      253    7140     14.7     0.0200     2.63      1    
+#>    time                duration waiting surprisal strayscore lofscore gloshscore
+#>    <dttm>                 <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>
+#>  1 2018-04-25 19:08:00        1    5700      17.5     0.380      3.78      1    
+#>  2 2020-06-01 21:04:00      120    6060      17.5     0.132      1.88      1    
+#>  3 2021-01-22 18:35:00      170    3600      16.8     0.0606     1.09      0.860
+#>  4 2020-08-31 09:56:00      170    3840      16.7     0.0606     1.01      0.816
+#>  5 2015-11-21 20:27:00      150    3420      16.7     0.0772     1.27      1    
+#>  6 2017-05-03 06:19:00       90    4740      16.4     0.0495     1.68      1    
+#>  7 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1    
+#>  8 2017-09-22 18:51:00      281    7140      15.5     0.0333     2.64      1    
+#>  9 2017-08-12 13:14:00      120    4920      15.2     0.0690     1.53      1    
+#> 10 2020-05-18 21:21:00      272    7080      14.9     0.0333     2.42      1    
+#> 11 2018-09-22 16:37:00      253    7140      14.7     0.0200     2.63      1    
 #> # ℹ 1 more variable: lookout <dbl>
 ```
 
