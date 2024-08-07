@@ -294,7 +294,7 @@ gg_density2 <- function(
           data = as.data.frame(show_x),
           mapping = aes(x = x, y = y, col = group)
         ) +
-        ggplot2::scale_color_manual(values = c(colors, "#000"))
+        ggplot2::scale_color_manual(values = c(colors[-1], "#000"))
     } else {
       if (is.null(alpha)) {
         alpha <- min(1, 500 / NROW(show_x))
