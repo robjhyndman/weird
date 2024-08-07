@@ -22,11 +22,11 @@
 #'  \code{\link[ks]{kde}}
 #' @export
 
-density_scores <- function(object, loo = FALSE, ...) {
-  UseMethod("density_scores")
+surprisals <- function(object, loo = FALSE, ...) {
+  UseMethod("surprisals")
 }
 
-#' @rdname density_scores
+#' @rdname surprisals
 #' @param h Bandwidth for univariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
 #' @param H Bandwidth for multivariate kernel density estimate. Default is \code{\link{kde_bandwidth}}.
 #' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
@@ -35,15 +35,15 @@ density_scores <- function(object, loo = FALSE, ...) {
 #' of <- oldfaithful |>
 #'   filter(duration < 7000, waiting < 7000) |>
 #'   mutate(
-#'     fscores = density_scores(cbind(duration, waiting)),
-#'     loo_fscores = density_scores(cbind(duration, waiting), loo = TRUE),
-#'     lookout_prob = lookout(density_scores = fscores, loo_scores = loo_fscores)
+#'     fscores = surprisals(cbind(duration, waiting)),
+#'     loo_fscores = surprisals(cbind(duration, waiting), loo = TRUE),
+#'     lookout_prob = lookout(surprisals = fscores, loo_scores = loo_fscores)
 #'   )
 #' of |>
 #'   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.01)) +
 #'   geom_point()
 #' @export
-density_scores.default <- function(
+surprisals.default <- function(
     object, loo = FALSE,
     h = kde_bandwidth(object, method = "double"),
     H = kde_bandwidth(object, method = "double"), ...) {
@@ -56,18 +56,18 @@ density_scores.default <- function(
   }
 }
 
-#' @rdname density_scores
+#' @rdname surprisals
 #' @param ... Other arguments are ignored.
 #' @examples
 #' # Density scores computed from bivariate KDE
 #' f_kde <- ks::kde(of[, 2:3], H = kde_bandwidth(of[, 2:3]))
 #' of |>
 #'   mutate(
-#'     fscores = density_scores(f_kde),
-#'     loo_fscores = density_scores(f_kde, loo = TRUE)
+#'     fscores = surprisals(f_kde),
+#'     loo_fscores = surprisals(f_kde, loo = TRUE)
 #'   )
 #' @export
-density_scores.kde <- function(object, loo = FALSE, ...) {
+surprisals.kde <- function(object, loo = FALSE, ...) {
   n <- NROW(object$x)
   d <- NCOL(object$x)
   # kde on a grid, but we need it at observations, so we will re-estimate
@@ -81,7 +81,7 @@ density_scores.kde <- function(object, loo = FALSE, ...) {
   }
 }
 
-#' @rdname density_scores
+#' @rdname surprisals
 #' @examples
 #' # Density scores computed from linear model
 #' of <- oldfaithful |>
@@ -89,14 +89,14 @@ density_scores.kde <- function(object, loo = FALSE, ...) {
 #' lm_of <- lm(waiting ~ duration, data = of)
 #' of |>
 #'   mutate(
-#'     fscore = density_scores(lm_of),
-#'     loo_fscore = density_scores(lm_of, loo = TRUE),
-#'     lookout_prob = lookout(density_scores = fscore, loo_scores = loo_fscore)
+#'     fscore = surprisals(lm_of),
+#'     loo_fscore = surprisals(lm_of, loo = TRUE),
+#'     lookout_prob = lookout(surprisals = fscore, loo_scores = loo_fscore)
 #'   ) |>
 #'   ggplot(aes(x = duration, y = waiting, color = lookout_prob < 0.02)) +
 #'   geom_point()
 #' @export
-density_scores.lm <- function(object, loo = FALSE, ...) {
+surprisals.lm <- function(object, loo = FALSE, ...) {
   e <- stats::residuals(object, type = "response")
   h <- stats::hatvalues(object)
   sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
@@ -109,7 +109,7 @@ density_scores.lm <- function(object, loo = FALSE, ...) {
 }
 
 
-#' @rdname density_scores
+#' @rdname surprisals
 #' @examples
 #' # Density scores computed from GAM
 #' of <- oldfaithful |>
@@ -117,31 +117,31 @@ density_scores.lm <- function(object, loo = FALSE, ...) {
 #' gam_of <- mgcv::gam(waiting ~ s(duration), data = of)
 #' of |>
 #'   mutate(
-#'     fscore = density_scores(gam_of),
-#'     lookout_prob = lookout(density_scores = fscore)
+#'     fscore = surprisals(gam_of),
+#'     lookout_prob = lookout(surprisals = fscore)
 #'   ) |>
 #'   filter(lookout_prob < 0.02)
 #' @importFrom stats approx dbinom density dnorm dpois na.omit
 #' @export
-density_scores.gam <- function(object, loo = FALSE, ...) {
+surprisals.gam <- function(object, loo = FALSE, ...) {
   if (loo) {
     warning("Leave-one-out log scores unavailable for GAM models. Returning log scores.")
   }
   fit_aug <- broom::augment(object, type.predict = "response")
   if (object$family$family == "gaussian") {
     std.resid <- c(scale(fit_aug$.resid / fit_aug$.se.fit))
-    density_scores <- -dnorm(std.resid, log = TRUE)
+    surprisals <- -dnorm(std.resid, log = TRUE)
   } else if (object$family$family == "binomial") {
-    density_scores <- -dbinom(
+    surprisals <- -dbinom(
       x = object$y * object$prior.weights,
       size = object$prior.weights, prob = fit_aug$.fitted, log = TRUE
     )
   } else if (object$family$family == "poisson") {
-    density_scores <- -dpois(object$y, lambda = fit_aug$.fitted, log = TRUE)
+    surprisals <- -dpois(object$y, lambda = fit_aug$.fitted, log = TRUE)
   } else {
     stop("Unsupported family")
   }
-  return(density_scores)
+  return(surprisals)
 }
 
 # Compute value of density at each observation using kde

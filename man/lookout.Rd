@@ -6,15 +6,15 @@
 \usage{
 lookout(
   object = NULL,
-  density_scores = NULL,
-  loo_scores = density_scores,
+  surprisals = NULL,
+  loo_scores = surprisals,
   threshold_probability = 0.95
 )
 }
 \arguments{
 \item{object}{A model object or a numerical data set.}
 
-\item{density_scores}{Numerical vector of log scores}
+\item{surprisals}{Numerical vector of log scores}
 
 \item{loo_scores}{Optional numerical vector of leave-one-out log scores}
 
@@ -31,10 +31,10 @@ indicates a likely anomaly.
 }
 \details{
 This function can work with several object types.
-If \code{object} is not \code{NULL}, then the object is passed to \code{\link{density_scores}}
-to compute density scores (and possibly LOO density scores). Otherwise,
-the density scores are taken from the \code{density_scores} argument, and the
-LOO density scores are taken from the \code{loo_scores} argument. Then the Generalized
+If \code{object} is not \code{NULL}, then the object is passed to \code{\link{surprisals}}
+to compute surprisals (and possibly LOO surprisals). Otherwise,
+the surprisals are taken from the \code{surprisals} argument, and the
+LOO surprisals are taken from the \code{loo_scores} argument. Then the Generalized
 Pareto distribution is fitted to the scores, to obtain the probability of each observation.
 }
 \examples{
@@ -47,9 +47,9 @@ tibble(
 tibble(
   x = rnorm(50),
   y = c(5, rnorm(49)),
-  fscores = density_scores(y),
-  loo_fscores = density_scores(y, loo = TRUE),
-  lookout = lookout(density_scores = fscores, loo_scores = loo_fscores)
+  fscores = surprisals(y),
+  loo_fscores = surprisals(y, loo = TRUE),
+  lookout = lookout(surprisals = fscores, loo_scores = loo_fscores)
 )
 # Using a regression model
 of <- oldfaithful |> filter(duration < 7200, waiting < 7200)

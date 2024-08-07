@@ -4,13 +4,13 @@
 #' being from the same distribution as the majority of observations. A low probability
 #' indicates a likely anomaly.
 #' @details This function can work with several object types.
-#' If `object` is not `NULL`, then the object is passed to \code{\link{density_scores}}
-#' to compute density scores (and possibly LOO density scores). Otherwise,
-#' the density scores are taken from the `density_scores` argument, and the
-#' LOO density scores are taken from the `loo_scores` argument. Then the Generalized
+#' If `object` is not `NULL`, then the object is passed to \code{\link{surprisals}}
+#' to compute surprisals (and possibly LOO surprisals). Otherwise,
+#' the surprisals are taken from the `surprisals` argument, and the
+#' LOO surprisals are taken from the `loo_scores` argument. Then the Generalized
 #' Pareto distribution is fitted to the scores, to obtain the probability of each observation.
 #' @param object A model object or a numerical data set.
-#' @param density_scores Numerical vector of log scores
+#' @param surprisals Numerical vector of log scores
 #' @param loo_scores Optional numerical vector of leave-one-out log scores
 #' @param threshold_probability Probability threshold when computing the POT model for the log scores.
 #' @references Sevvandi Kandanaarachchi & Rob J Hyndman (2022) "Leave-one-out
@@ -28,9 +28,9 @@
 #' tibble(
 #'   x = rnorm(50),
 #'   y = c(5, rnorm(49)),
-#'   fscores = density_scores(y),
-#'   loo_fscores = density_scores(y, loo = TRUE),
-#'   lookout = lookout(density_scores = fscores, loo_scores = loo_fscores)
+#'   fscores = surprisals(y),
+#'   loo_fscores = surprisals(y, loo = TRUE),
+#'   lookout = lookout(surprisals = fscores, loo_scores = loo_fscores)
 #' )
 #' # Using a regression model
 #' of <- oldfaithful |> filter(duration < 7200, waiting < 7200)
@@ -45,34 +45,34 @@
 
 lookout <- function(
     object = NULL,
-    density_scores = NULL, loo_scores = density_scores,
+    surprisals = NULL, loo_scores = surprisals,
     threshold_probability = 0.95) {
   if (!is.null(object)) {
-    if (!is.null(density_scores) | !is.null(loo_scores)) {
-      warning("Ignoring density_scores and loo_scores arguments and using object.")
+    if (!is.null(surprisals) | !is.null(loo_scores)) {
+      warning("Ignoring surprisals and loo_scores arguments and using object.")
     }
     if (is.data.frame(object) | inherits(object, "matrix") | inherits(object, "numeric")) {
       tmp <- calc_kde_scores(as.matrix(object))
-      density_scores <- tmp$scores
+      surprisals <- tmp$scores
       loo_scores <- tmp$loo_scores
     } else {
-      density_scores <- density_scores(object)
-      loo_scores <- density_scores(object, loo = TRUE) |> suppressWarnings()
+      surprisals <- surprisals(object)
+      loo_scores <- surprisals(object, loo = TRUE) |> suppressWarnings()
     }
   }
-  threshold <- stats::quantile(density_scores,
+  threshold <- stats::quantile(surprisals,
     prob = threshold_probability,
     type = 8, na.rm = TRUE
   )
-  if (sum(density_scores > threshold, na.rm = TRUE) == 0L) {
+  if (sum(surprisals > threshold, na.rm = TRUE) == 0L) {
     warning("No scores above threshold.")
-    return(rep(1, length(density_scores)))
+    return(rep(1, length(surprisals)))
   }
-  finite <- density_scores < Inf
+  finite <- surprisals < Inf
   if (any(!finite, na.rm = TRUE)) {
-    warning("Infinite density scores will be ignored in GPD.")
+    warning("Infinite surprisals will be ignored in GPD.")
   }
-  gpd <- evd::fpot(density_scores[finite], threshold = threshold, std.err = FALSE)$estimate
+  gpd <- evd::fpot(surprisals[finite], threshold = threshold, std.err = FALSE)$estimate
   evd::pgpd(
     loo_scores,
     loc = threshold,

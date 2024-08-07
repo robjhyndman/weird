@@ -33,10 +33,10 @@ reference:
       - fr_mortality
   - title: Functions for calculating anomaly scores
     contents:
-      - density_scores
       - glosh_scores
       - lof_scores
       - stray_scores
+      - surprisals
       - surprisal_prob
       - lookout
   - title: Functions for identifying anomalies
