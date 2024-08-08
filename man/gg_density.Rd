@@ -11,7 +11,7 @@ gg_density(
   show_hdr = FALSE,
   show_points = FALSE,
   show_mode = FALSE,
-  show_lookout = FALSE,
+  show_anomalies = FALSE,
   ngrid = 501,
   color = "#00659e",
   alpha = NULL,
@@ -36,7 +36,7 @@ specified by \code{prob} are shown as a ribbon below the density.}
 \item{show_mode}{If \code{TRUE}, then the mode of the distribution is shown as a
 point.}
 
-\item{show_lookout}{If \code{TRUE}, then the observations with lookout probabilities less than 0.05 are shown in red.}
+\item{show_anomalies}{If \code{TRUE}, then the observations with surprisal probabilities less than 0.01 are shown in red.}
 
 \item{ngrid}{Number of points at which to evaluate the density function.}
 

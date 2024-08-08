@@ -23,7 +23,7 @@
 #' @param show_points If `TRUE`, then individual observations are plotted.
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown as a
 #' point.
-#' @param show_lookout If `TRUE`, then the observations with lookout probabilities less than 0.05 are shown in red.
+#' @param show_anomalies If `TRUE`, then the observations with surprisal probabilities less than 0.01 are shown in red.
 #' @param ngrid Number of points at which to evaluate the density function.
 #' @param color Color used for mode and HDR contours/regions when there is only
 #' one distribution. Otherwise a ggplot color scale is used.
@@ -50,23 +50,23 @@
 
 gg_density <- function(
     object, prob = seq(9) / 10, fill = FALSE,
-    show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_lookout = FALSE,
+    show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_anomalies = FALSE,
     ngrid = 501, color = "#00659e", alpha = NULL, jitter = FALSE, ...) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
   d <- dimension_dist(object)
   if (d == 1) {
-    gg_density1(object, prob, fill, TRUE, show_hdr, show_points, show_lookout, show_mode, ngrid, color, alpha, jitter, ...)
+    gg_density1(object, prob, fill, TRUE, show_hdr, show_points, show_anomalies, show_mode, ngrid, color, alpha, jitter, ...)
   } else if (d == 2) {
-    gg_density2(object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, alpha, scatterplot = FALSE, ...)
+    gg_density2(object, prob, fill, show_points, show_anomalies, show_mode, ngrid, color, alpha, scatterplot = FALSE, ...)
   } else {
     stop("Only univariate and bivariate densities are supported")
   }
 }
 
 gg_density1 <- function(
-    object, prob, fill, show_density, show_hdr, show_points, show_lookout, show_mode, ngrid, color, alpha, jitter, ...) {
+    object, prob, fill, show_density, show_hdr, show_points, show_anomalies, show_mode, ngrid, color, alpha, jitter, ...) {
   # Names of distributions
   dist_names <- names_dist(object)
   dist <- stats::family(object)
@@ -111,73 +111,60 @@ gg_density1 <- function(
     hdr$id <- seq(NROW(hdr))
   }
 
-  # Show observations in bottom margin
-  if (show_points) {
+  # Construct data for showing points or anomalies
+  if (show_points | show_anomalies) {
     # Extract data
     x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
     names(x) <- dist_names
     if (all(lengths(x) == 0)) {
-      stop("No observations found. Set show_points to FALSE")
+      stop("No observations found. Set show_points and show_anomalies to FALSE")
     }
-    if (show_hdr) {
+    # Drop distributions with no data
+    some_data <- which(lengths(x) > 0)
+    x <- x[some_data]
+    show_x <- tibble(
+      Distribution = rep(names(x), lengths(x)),
+      x = unlist(x)
+    )
+    if(show_anomalies) {
+      show_x$prob <- unlist(mapply(surprisal_prob, object = x, distribution = vctrs::vec_data(object)[some_data],
+                     SIMPLIFY = FALSE))
+    }
+    if(show_hdr) {
+      show_x$den <- unlist(mapply(density, vctrs::vec_data(object)[some_data], at = x,
+                                      SIMPLIFY = FALSE))
       # Drop points obscured by largest HDR
       thresh <- tibble(object = object, Distribution = dist_names) |>
         dplyr::left_join(hdr |> filter(level == max(level)), by = "Distribution") |>
         dplyr::rowwise() |>
         dplyr::mutate(fi = density(object, at = lower)) |>
         dplyr::select(Distribution, fi)
-      threshold <- as.list(thresh$fi)
-      names(threshold) <- thresh$Distribution
-      fi <- purrr::map2(object, x, function(u, x) {
-        if (is.null(x)) {
-          return(NULL)
-        } else {
-          density(u, at = x)[[1]]
-        }
-      })
-      idx <- purrr::map2(fi, threshold, function(f, t) {
-        which(f < t)
-      })
-      x <- purrr::map2(x, idx, function(x, i) x[i])
+      show_x <- show_x |>
+        dplyr::left_join(thresh, by = "Distribution") |>
+        dplyr::filter(den < fi)
     }
-    # Drop distributions with no data
-    some_data <- names(x)[lengths(x) > 0]
-    x <- x[some_data]
-    show_x <- tibble(
-      Distribution = rep(names(x), lengths(x)),
-      x = unlist(x)
-    )
     if (no_groups) {
-      a <- aes(x = x, y = -maxden * as.numeric(factor(Distribution)) / 40)
+      show_x$y <- -maxden * as.numeric(factor(show_x$Distribution)) / 40
+      a <- aes(x = x, y = y)
     } else {
-      a <- aes(
-        x = x, y = -maxden * (as.numeric(factor(Distribution)) - 0.5) / 20,
-        color = Distribution
-      )
+      show_x$y <- -maxden * (as.numeric(factor(show_x$Distribution)) - 0.5) / 20
+      a <- aes(x = x, y = y, color = Distribution)
+    }
+    if(jitter) {
+      show_x$y <- show_x$y + runif(NROW(show_x), -maxden / 200, maxden / 200)
     }
     if (is.null(alpha)) {
       alpha <- ifelse(fill, 1, min(1, 500 / NROW(show_x)))
     }
-    if (jitter) {
-      p <- p + ggplot2::geom_jitter(
-        data = show_x, mapping = a, alpha = alpha,
-        width = 0, height = maxden / 100
-      )
+    if(show_anomalies) {
+        p <- p + ggplot2::geom_point(
+          data = show_x[show_x$prob > 0.01,], mapping = a, alpha = alpha)
+        p <- p + ggplot2::geom_point(
+          data = show_x[show_x$prob <= 0.01,], mapping = a, alpha = alpha,
+          color = "#ff0000")
     } else {
       p <- p + ggplot2::geom_point(data = show_x, mapping = a, alpha = alpha)
     }
-  }
-  if (show_lookout) {
-    warning("lookout not yet implemented")
-    # if (!show_hdr) {
-    #   kscores <- calc_kde_scores(object$x, h = object$h, ...)
-    # }
-    # lookout_highlight <- lookout(density_scores = kscores$scores, loo_scores = kscores$loo) < 0.05
-    # lookout <- tibble(x = object$x[lookout_highlight])
-    # p <- p + ggplot2::geom_point(
-    #   data = lookout, mapping = aes(x = x, y = -maxden / 40),
-    #   color = "#ff0000"
-    # )
   }
 
   if (show_hdr) {
@@ -249,7 +236,7 @@ gg_density1 <- function(
 }
 
 gg_density2 <- function(
-    object, prob, fill, show_points, show_lookout, show_mode, ngrid, color, alpha, scatterplot, ...) {
+    object, prob, fill, show_points, show_anomalies, show_mode, ngrid, color, alpha, scatterplot, ...) {
   if (length(object) > 1) {
     stop("I can only handle one bivariate density in a plot")
   }
@@ -307,7 +294,7 @@ gg_density2 <- function(
         )
       }
     }
-    if (show_lookout) {
+    if (show_anomalies) {
       warning("lookout not yet implemented")
       # p <- p + ggplot2::geom_point(
       #  data = lookout, mapping = aes(x = x, y = y),
