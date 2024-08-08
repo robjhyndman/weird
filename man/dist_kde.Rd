@@ -4,7 +4,7 @@
 \alias{dist_kde}
 \title{Create distributional object based on a kernel density estimate}
 \usage{
-dist_kde(y, h = NULL, H = NULL, kde_options = NULL, ...)
+dist_kde(y, h = NULL, H = NULL, multiplier = 1, ...)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data, or a list of such objects. If a
@@ -17,9 +17,10 @@ all vectors, or all matrices with the same number of columns.}
 \item{H}{Bandwidth matrix for multivariate distribution. If \code{NULL}, the
 \code{\link{kde_bandwidth}} function is used.}
 
-\item{kde_options}{A named list containing arguments for \code{\link[ks]{kde}}.}
+\item{multiplier}{Multiplier for bandwidth passed to \code{\link{kde_bandwidth}}.
+Ignored if \code{h} or \code{H} are specified.}
 
-\item{...}{Other arguments are passed to the \code{\link{kde_bandwidth}} function.}
+\item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
 }
 \description{
 Creates a distributional object using a kernel density estimate with a
@@ -29,7 +30,7 @@ The cdf, quantiles and moments are consistent with the kde. Generating
 random values from the kde is equivalent to a smoothed bootstrap.
 }
 \examples{
-dist_kde(c(rnorm(200), rnorm(100, 5)), method = "double")
+dist_kde(c(rnorm(200), rnorm(100, 5)), multiplier = 2)
 dist_kde(cbind(rnorm(200), rnorm(200, 5)))
 
 }

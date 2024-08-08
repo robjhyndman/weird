@@ -6,7 +6,7 @@
 \usage{
 \method{surprisals}{default}(
   object,
-  distribution = dist_kde(object, method = "double", ...),
+  distribution = dist_kde(object, multiplier = 2, ...),
   loo = FALSE,
   ...
 )

@@ -39,7 +39,7 @@ surprisals <- function(object, ...) {
 #' @export
 surprisals.default <- function(
     object,
-    distribution = dist_kde(object, method = "double", ...),
+    distribution = dist_kde(object, multiplier = 2, ...),
     loo = FALSE,
     ...) {
   object <- as.matrix(object)

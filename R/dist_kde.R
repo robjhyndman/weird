@@ -13,15 +13,16 @@
 #' \code{\link{kde_bandwidth}} function is used.
 #' @param H Bandwidth matrix for multivariate distribution. If `NULL`, the
 #' \code{\link{kde_bandwidth}} function is used.
-#' @param kde_options A named list containing arguments for \code{\link[ks]{kde}}.
-#' @param ... Other arguments are passed to the \code{\link{kde_bandwidth}} function.
+#' @param multiplier Multiplier for bandwidth passed to \code{\link{kde_bandwidth}}.
+#' Ignored if `h` or `H` are specified.
+#' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
 #' @examples
-#' dist_kde(c(rnorm(200), rnorm(100, 5)), method = "double")
+#' dist_kde(c(rnorm(200), rnorm(100, 5)), multiplier = 2)
 #' dist_kde(cbind(rnorm(200), rnorm(200, 5)))
 #'
 #' @export
 
-dist_kde <- function(y, h = NULL, H = NULL, kde_options = NULL, ...) {
+dist_kde <- function(y, h = NULL, H = NULL, multiplier = 1, ...) {
   if (!is.list(y)) {
     y <- list(y)
   } else if (is.data.frame(y)) {
@@ -41,15 +42,15 @@ dist_kde <- function(y, h = NULL, H = NULL, kde_options = NULL, ...) {
           if (!is.null(H)) {
             h <- sqrt(H)
           } else {
-            h <- kde_bandwidth(u, ...)
+            h <- kde_bandwidth(u, multiplier = multiplier)
           }
         }
-        do.call(ks::kde, c(list(x = u, h = h), kde_options))
+        ks::kde(x = u, h = h, ...)
       } else {
         if (is.null(H)) {
-          H <- kde_bandwidth(u, ...)
+          H <- kde_bandwidth(u, multiplier = multiplier)
         }
-        do.call(ks::kde, c(list(x = u, H = H), kde_options))
+        ks::kde(x = u, H = H, ...)
       }
     }
   )
@@ -94,7 +95,6 @@ format.dist_kde <- function(x, ...) {
   }
 }
 
-
 #' @export
 density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
   d <- NCOL(x$kde$x)
@@ -115,7 +115,6 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
   d[is.na(d)] <- 0
   return(d)
 }
-
 
 #' @exportS3Method distributional::log_density
 log_density.dist_kde <- function(x, at, ..., na.rm = TRUE) {

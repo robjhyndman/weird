@@ -57,7 +57,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     d <- 2L
     data <- data |> select({{ var1 }}, {{ var2 }})
   }
-  dist <- dist_kde(data[,seq(d)], method = "double")
+  dist <- dist_kde(data[,seq(d)], multiplier = 2)
 
   if (d == 2L) {
     gg_density2(dist,

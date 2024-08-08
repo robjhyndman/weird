@@ -4,22 +4,13 @@
 \alias{kde_bandwidth}
 \title{Robust bandwidth estimation for kernel density estimation}
 \usage{
-kde_bandwidth(
-  data,
-  method = c("robust_normal", "double", "lookout"),
-  max.iter = 2
-)
+kde_bandwidth(data, multiplier = 1)
 }
 \arguments{
 \item{data}{A numeric matrix or data frame.}
 
-\item{method}{Method to use for selecting the bandwidth.
-\code{robust_normal} uses a robust version of the normal reference rule.
-\code{lookout} uses the topological data analysis approach that is part of the lookout algorithm.}
-
-\item{max.iter}{How many times should the \code{lookout} method be iterated. That is, outliers
-(probability < 0.05) are removed and the bandwidth is re-computed from the
-remaining observations.}
+\item{multiplier}{Bandwidths are chosen using a robust version of the
+normal reference rule multiplied by a constant. The default is 1.}
 }
 \value{
 A matrix of bandwidths (or scalar in the case of univariate data).
