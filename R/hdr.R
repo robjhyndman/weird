@@ -14,7 +14,7 @@
 #' (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).
 #' @param color The base color to use for the mode. Colors for the HDRs are generated
 #' by whitening this color.
-#' @param show_lookout A logical argument indicating if the plot should highlight observations with "lookout"
+#' @param show_anomalies A logical argument indicating if the plot should highlight observations with "lookout"
 #' probabilities less than 0.05.
 #' @param ... Other arguments passed to \code{\link[ks]{kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
@@ -40,7 +40,7 @@
 
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
                           color = "#00659e", scatterplot = FALSE,
-                          show_lookout = FALSE, ...) {
+                          show_anomalies = FALSE, ...) {
   if (missing(var1)) {
     # Grab first variable
     data <- as.data.frame(data)
@@ -64,7 +64,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       prob = prob,
       colors = NULL, color = color, fill = !scatterplot, alpha = NULL,
       show_points = TRUE, show_mode = TRUE, scatterplot = scatterplot,
-      show_lookout = show_lookout
+      show_anomalies = show_anomalies
     ) +
     ggplot2::guides(fill = "none", color = "none")
 
@@ -73,7 +73,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       show_hdr = TRUE, show_density = FALSE, ngrid = 501,
       prob = prob, alpha = NULL, jitter = TRUE,
       color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE,
-      show_lookout = show_lookout, ...
+      show_anomalies = show_anomalies, ...
     ) +
       ggplot2::guides(alpha = "none") +
       ggplot2::scale_y_continuous(breaks = NULL) +
