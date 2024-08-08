@@ -52,7 +52,7 @@
 #' tibble(
 #'   x = rnorm(50),
 #'   y = c(5, rnorm(49)),
-#'   lookout = lookout_prob(cbind(x,y))
+#'   lookout = lookout_prob(cbind(x, y))
 #' )
 #' # Using a regression model
 #' of <- oldfaithful |> filter(duration < 7200, waiting < 7200)
@@ -107,7 +107,7 @@ surprisal_prob <- function(
     # Slower computation, but more general (although approximate)
     dist_x <- stats::quantile(distribution, seq(1e-6, 1 - 1e-6, length.out = 100001))
     dist_x <- unique(unlist(dist_x))
-    dist_y <- -density(distribution, dist_x, log = TRUE)[[1]]
+    dist_y <- unlist(-density(distribution, dist_x, log = TRUE))
     prob <- (rank(dist_y) - 1) / length(dist_y)
     p <- 1 - approx(dist_y, prob, xout = g, rule = 2, ties = mean)$y
   }
