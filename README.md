@@ -40,8 +40,8 @@ devtools::install_github("robjhyndman/weird-package")
 
 - [dplyr](https://dplyr.tidyverse.org), for data manipulation.
 - [ggplot2](https://ggplot2.tidyverse.org), for data visualisation.
-- [ks](https://cran.r-project.org/package=ks), for fitting models and
-  producing forecasts.
+- [distributional](https://cran.r-project.org/package=distributional),
+  for handling probability distributions.
 
 You also get a condensed summary of conflicts with other packages you
 have loaded:
@@ -178,7 +178,7 @@ of |> gg_hdrboxplot(duration) +
 <img src="man/figures/README-of-boxplot-2.png" style="width:100.0%" />
 
 ``` r
-of |> gg_hdrboxplot(duration, scatterplot = TRUE) +
+of |> gg_hdrboxplot(duration, show_points = TRUE, show_anomalies = TRUE) +
   labs(x = "Duration (seconds)")
 ```
 
@@ -225,7 +225,7 @@ of |>
 
 ``` r
 of |>
-  gg_hdrboxplot(duration, waiting, scatterplot = TRUE) +
+  gg_hdrboxplot(duration, waiting, scatterplot = TRUE, show_anomalies = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
