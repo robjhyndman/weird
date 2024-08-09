@@ -7,49 +7,42 @@
 gg_density(
   object,
   prob = seq(9)/10,
-  fill = FALSE,
-  show_hdr = FALSE,
+  hdr = c("none", "fill", "points", "contours"),
   show_points = FALSE,
   show_mode = FALSE,
   show_anomalies = FALSE,
-  ngrid = 501,
-  color = "#00659e",
+  colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
   alpha = NULL,
-  jitter = FALSE,
-  ...
+  jitter = FALSE
 )
 }
 \arguments{
 \item{object}{distribution object from the distributional package or
 \code{\link{dist_kde}}()}
 
-\item{prob}{Probability of the HDR regions to be drawn.}
+\item{prob}{Probability of the HDRs to be drawn.}
 
-\item{fill}{If \code{TRUE}, and the density is bivariate, the bivariate contours
-are shown as filled regions rather than lines.}
-
-\item{show_hdr}{If \code{TRUE}, and the density is univariate, then the HDR regions
-specified by \code{prob} are shown as a ribbon below the density.}
+\item{hdr}{Character string describing how the HDRs are to be shown. Options
+are "none", "fill", "points" and "contours" (the latter only for bivariate plots).}
 
 \item{show_points}{If \code{TRUE}, then individual observations are plotted.}
 
 \item{show_mode}{If \code{TRUE}, then the mode of the distribution is shown as a
 point.}
 
-\item{show_anomalies}{If \code{TRUE}, then the observations with surprisal probabilities less than 0.01 are shown in red.}
+\item{show_anomalies}{If \code{TRUE}, then the observations with surprisal
+probabilities less than 0.01 are shown in red.}
 
-\item{ngrid}{Number of points at which to evaluate the density function.}
-
-\item{color}{Color used for mode and HDR contours/regions when there is only
-one distribution. Otherwise a ggplot color scale is used.}
+\item{colors}{Color palette to use. If there are more than
+\code{length(colors)} distributions, they are recycled. Default is the
+Okabe-Ito color palette.}
 
 \item{alpha}{Transparency of points. Ignored if \code{show_points} is \code{FALSE}.
 Defaults to min(1, 500/n), where n is the number of observations plotted.}
 
-\item{jitter}{When TRUE and \code{show_points} is TRUE, a small amount of vertical
-jittering is applied to the observations for a univariate distribution.}
-
-\item{...}{Additional arguments are currently ignored.}
+\item{jitter}{For univariate distributions, when \code{jitter} is \code{TRUE} and
+\code{show_points} is TRUE, a small amount of vertical jittering is applied to the
+observations. Ignored for bivariate distributions.}
 }
 \value{
 A ggplot object.
@@ -61,23 +54,25 @@ Produce ggplot of densities from distributional objects in 1 or 2 dimensions
 This function produces a ggplot of a density from a distributional object.
 For univariate densities, it produces a line plot of the density function, with
 an optional ribbon showing some highest density regions (HDRs) and/or the observations.
-For bivariate densities, it produces a contour plot of the density function, with
+For bivariate densities, it produces ah HDR contour plot of the density function, with
 the observations optionally shown as points.
 The mode can also be drawn as a point.
-For bivariate densities, the combination of fill = TRUE\verb{, }show_points = TRUE\verb{, }show_mode = TRUE\verb{, and }prob = c(0.5, 0.99)\verb{is equivalent to showing an HDR boxplot beneath the density plot. For univariate densities,  the combination of}show_hdr = TRUE\verb{, }show_points = TRUE\verb{, }show_mode = TRUE\verb{, and }prob = c(0.5, 0.99)` is equivalent to an HDR boxplot.
+The combination of \code{hdr = "fill"}, \code{show_points = TRUE},
+\code{show_mode = TRUE}, and \code{prob = c(0.5, 0.99)} is equivalent to showing
+HDR boxplots.
 }
 \examples{
 # Univariate density
 kde <- dist_kde(c(rnorm(500), rnorm(500, 4, .5)))
 gg_density(kde,
-  show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14",
+  hdr = "fill", prob = c(0.5, 0.95), color = "#c14b14",
   show_mode = TRUE, show_points = TRUE, jitter = TRUE
 )
 c(dist_normal(), kde) |>
-  gg_density(show_hdr = TRUE, prob = c(0.5, 0.95))
+  gg_density(hdr = "fill", prob = c(0.5, 0.95))
 tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000)) |>
   dist_kde() |>
-  gg_density(show_points = TRUE, alpha = 0.1, fill = TRUE)
+  gg_density(show_points = TRUE, alpha = 0.1, hdr = "fill")
 }
 \author{
 Rob J Hyndman

@@ -13,7 +13,7 @@
 # @examples
 # hdr_palette(prob = c(0.5, 0.99))
 
-hdr_palette <- function(n, color = "#00659e", prob = NULL) {
+hdr_palette <- function(n, color = "#0072b2", prob = NULL) {
   if (missing(prob)) {
     prob <- seq(n - 1) / n
   } else if (min(prob) <= 0 | max(prob) >= 1) {

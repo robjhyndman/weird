@@ -4,99 +4,156 @@
 #' This function produces a ggplot of a density from a distributional object.
 #' For univariate densities, it produces a line plot of the density function, with
 #' an optional ribbon showing some highest density regions (HDRs) and/or the observations.
-#' For bivariate densities, it produces a contour plot of the density function, with
+#' For bivariate densities, it produces ah HDR contour plot of the density function, with
 #' the observations optionally shown as points.
 #' The mode can also be drawn as a point.
-#' For bivariate densities, the combination of fill = TRUE`, `show_points = TRUE`,
-#' `show_mode = TRUE`, and `prob = c(0.5, 0.99)` is equivalent to showing an
-#' HDR boxplot beneath the density plot.
-#' For univariate densities,  the combination of `show_hdr = TRUE`, `show_points = TRUE`,
-#' `show_mode = TRUE`, and `prob = c(0.5, 0.99)` is equivalent to an HDR boxplot.
+#' The combination of `hdr = "fill"`, `show_points = TRUE`,
+#' `show_mode = TRUE`, and `prob = c(0.5, 0.99)` is equivalent to showing
+#' HDR boxplots.
 #'
 #' @param object distribution object from the distributional package or
 #' \code{\link{dist_kde}}()
-#' @param prob Probability of the HDR regions to be drawn.
-#' @param fill If `TRUE`, and the density is bivariate, the bivariate contours
-#' are shown as filled regions rather than lines.
-#' @param show_hdr If `TRUE`, and the density is univariate, then the HDR regions
-#' specified by `prob` are shown as a ribbon below the density.
+#' @param prob Probability of the HDRs to be drawn.
+#' @param hdr Character string describing how the HDRs are to be shown. Options
+#' are "none", "fill", "points" and "contours" (the latter only for bivariate plots).
 #' @param show_points If `TRUE`, then individual observations are plotted.
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown as a
 #' point.
-#' @param show_anomalies If `TRUE`, then the observations with surprisal probabilities less than 0.01 are shown in red.
-#' @param ngrid Number of points at which to evaluate the density function.
-#' @param color Color used for mode and HDR contours/regions when there is only
-#' one distribution. Otherwise a ggplot color scale is used.
+#' @param show_anomalies If `TRUE`, then the observations with surprisal
+#' probabilities less than 0.01 are shown in red.
+#' @param colors Color palette to use. If there are more than
+#' `length(colors)` distributions, they are recycled. Default is the
+#' Okabe-Ito color palette.
 #' @param alpha Transparency of points. Ignored if `show_points` is `FALSE`.
 #' Defaults to min(1, 500/n), where n is the number of observations plotted.
-#' @param jitter When TRUE and `show_points` is TRUE, a small amount of vertical
-#' jittering is applied to the observations for a univariate distribution.
-#' @param ... Additional arguments are currently ignored.
+#' @param jitter For univariate distributions, when `jitter` is `TRUE` and
+#' `show_points` is TRUE, a small amount of vertical jittering is applied to the
+#' observations. Ignored for bivariate distributions.
 #' @return A ggplot object.
 #' @author Rob J Hyndman
 #' @examples
 #' # Univariate density
 #' kde <- dist_kde(c(rnorm(500), rnorm(500, 4, .5)))
 #' gg_density(kde,
-#'   show_hdr = TRUE, prob = c(0.5, 0.95), color = "#c14b14",
+#'   hdr = "fill", prob = c(0.5, 0.95), color = "#c14b14",
 #'   show_mode = TRUE, show_points = TRUE, jitter = TRUE
 #' )
 #' c(dist_normal(), kde) |>
-#'   gg_density(show_hdr = TRUE, prob = c(0.5, 0.95))
+#'   gg_density(hdr = "fill", prob = c(0.5, 0.95))
 #' tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000)) |>
 #'   dist_kde() |>
-#'   gg_density(show_points = TRUE, alpha = 0.1, fill = TRUE)
+#'   gg_density(show_points = TRUE, alpha = 0.1, hdr = "fill")
 #' @export
 
 gg_density <- function(
-    object, prob = seq(9) / 10, fill = FALSE,
-    show_hdr = FALSE, show_points = FALSE, show_mode = FALSE, show_anomalies = FALSE,
-    ngrid = 501, color = "#00659e", alpha = NULL, jitter = FALSE, ...) {
+    object, prob = seq(9) / 10,
+    hdr = c("none", "fill", "points", "contours"),
+    show_points = FALSE, show_mode = FALSE, show_anomalies = FALSE,
+    colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+    alpha = NULL, jitter = FALSE) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
+  hdr <- match.arg(hdr)
   d <- dimension_dist(object)
+
+  # Set up data frame containing densities
+  df <- make_density_df(object, ngrid = 501)
+
+  # Set up data frame containing observations
+  if (any(stats::family(object) == "kde" & (show_points | show_anomalies | hdr == "points"))) {
+    show_x <- show_data(object, prob)
+  } else {
+    show_x <- NULL
+  }
+
+  # Set up color palette
+  prob <- sort(prob)
+  colors <- rep(colors, 10)[seq(length(object))]
+  hdr_colors <- lapply(
+    colors,
+    function(u) { hdr_palette(color = u, prob = c(prob, 0.995)) }
+  )
+  names(hdr_colors) <- names_dist(object, unique = TRUE)
+
   if (d == 1) {
-    gg_density1(object, prob, fill, TRUE, show_hdr, show_points, show_anomalies, show_mode, ngrid, color, alpha, jitter, ...)
+    if (hdr == "contours") {
+      stop("Contours not possible for univariate densities")
+    }
+    gg_density1(object, df, show_x, prob, hdr, TRUE, show_points, show_anomalies, show_mode, hdr_colors, alpha, jitter)
   } else if (d == 2) {
-    gg_density2(object, prob, fill, show_points, show_anomalies, show_mode, ngrid, color, alpha, scatterplot = FALSE, ...)
+    gg_density2(object, df, show_x, prob, hdr, show_points, show_anomalies, show_mode, hdr_colors, alpha)
   } else {
     stop("Only univariate and bivariate densities are supported")
   }
 }
 
 gg_density1 <- function(
-    object, prob, fill, show_density, show_hdr, show_points, show_anomalies, show_mode, ngrid, color, alpha, jitter, ...) {
-  # Names of distributions
-  dist_names <- names_dist(object)
-  dist <- stats::family(object)
-  no_groups <- length(dist) == 1L
-
-  # Set up data frame for densities
-  df <- make_density_df(object, ngrid)
+    object, df, show_x, prob, hdr, show_density, show_points, show_anomalies, show_mode, hdr_colors, alpha, jitter) {
+  dist_names <- names_dist(object, unique = TRUE)
   maxden <- max(df$Density)
   discrete <- is.logical(df$x) | is.integer(df$x)
 
-  # Add density lines to plot
+  # Start plot
   p <- ggplot(df)
+  # Add density lines to plot
   if (show_density) {
-    if (no_groups) {
-      if (discrete) {
-        p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density))
-      } else {
-        p <- p + geom_line(aes(x = x, y = Density))
-      }
+    if (discrete) {
+      p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density, color = Distribution))
     } else {
-      if (NROW(df) < 20) {
-        p <- p + geom_segment(aes(x = x, xend = x, y = 0, yend = Density, color = Distribution))
-      } else {
-        p <- p + geom_line(aes(x = x, y = Density, color = Distribution))
+      p <- p + geom_line(aes(x = x, y = Density, color = Distribution))
+    }
+  }
+  # Show observations
+  if (!is.null(show_x)) {
+    # Add y plotting position for observations
+    show_x$y <- -maxden * (as.numeric(factor(show_x$Distribution, levels = dist_names)) - 0.5) / 20
+    if (jitter) {
+      show_x$y <- show_x$y + stats::runif(NROW(show_x), -maxden / 100, maxden / 100)
+    }
+    if (hdr == "fill") {
+      # Drop observations obscured by largest HDR
+      include <- paste0(prob * 100, "%")
+      show_x <- show_x |>
+        dplyr::filter(!(group %in% include))
+    }
+  }
+  if(NROW(show_x) > 0) {
+    if (show_anomalies) {
+      # Split data set into anomalies and the rest
+      outliers <- show_x[show_x$anomaly, ]
+      show_x <- show_x[!show_x$anomaly, ]
+    }
+  }
+  if(NROW(show_x) > 0) {
+    if (hdr == "points") {
+      # Add one interval at a time because we can't use multiple ggplot color scales
+      levels <- sort(unique(show_x$level))
+      for (dist in unique(show_x$Distribution)) {
+        for (i in seq_along(levels)) {
+          p <- p + geom_point(
+            data = show_x[show_x$Distribution == dist & show_x$level == levels[i], ],
+            aes(x = x, y = y),
+            color = hdr_colors[[dist]][i + 1]
+          )
+        }
+      }
+    } else if (show_points) {
+      p <- p + ggplot2::geom_point(
+        data = show_x, mapping = aes(x = x, y = y, color = Distribution),
+        alpha = min(1, 500 / NROW(show_x))
+      )
+    }
+    if (show_anomalies) {
+      if(NROW(outliers) > 0) {
+      p <- p + ggplot2::geom_point(
+        data = outliers, mapping = aes(x = x, y = y), color = "#000"
+      )
       }
     }
   }
-
-  # Set up HDRs if needed
-  if (show_hdr) {
+  # Add HDRs to plot
+  if (hdr == "fill") {
     prob <- sort(unique(prob), decreasing = TRUE)
     hdr <- purrr::map_dfr(prob, function(u) {
       hdri <- distributional::hdr(object, size = u * 100)
@@ -109,101 +166,22 @@ gg_density1 <- function(
         tidyr::unnest(c(lower, upper))
     })
     hdr$id <- seq(NROW(hdr))
-  }
-
-  # Construct data for showing points or anomalies
-  if (show_points | show_anomalies) {
-    # Extract data
-    x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
-    names(x) <- dist_names
-    if (all(lengths(x) == 0)) {
-      stop("No observations found. Set show_points and show_anomalies to FALSE")
-    }
-    # Drop distributions with no data
-    some_data <- which(lengths(x) > 0)
-    x <- x[some_data]
-    show_x <- tibble(
-      Distribution = rep(names(x), lengths(x)),
-      x = unlist(x)
-    )
-    if(show_anomalies) {
-      show_x$prob <- unlist(mapply(surprisal_prob, object = x, distribution = vctrs::vec_data(object)[some_data],
-                     SIMPLIFY = FALSE))
-    }
-    if(show_hdr) {
-      show_x$den <- unlist(mapply(density, vctrs::vec_data(object)[some_data], at = x,
-                                      SIMPLIFY = FALSE))
-      # Drop points obscured by largest HDR
-      thresh <- tibble(object = object, Distribution = dist_names) |>
-        dplyr::left_join(hdr |> filter(level == max(level)), by = "Distribution") |>
-        dplyr::rowwise() |>
-        dplyr::mutate(fi = density(object, at = lower)) |>
-        dplyr::select(Distribution, fi)
-      show_x <- show_x |>
-        dplyr::left_join(thresh, by = "Distribution") |>
-        dplyr::filter(den < fi)
-    }
-    if (no_groups) {
-      show_x$y <- -maxden * as.numeric(factor(show_x$Distribution)) / 40
-      a <- aes(x = x, y = y)
-    } else {
-      show_x$y <- -maxden * (as.numeric(factor(show_x$Distribution)) - 0.5) / 20
-      a <- aes(x = x, y = y, color = Distribution)
-    }
-    if(jitter) {
-      show_x$y <- show_x$y + runif(NROW(show_x), -maxden / 200, maxden / 200)
-    }
-    if (is.null(alpha)) {
-      alpha <- ifelse(fill, 1, min(1, 500 / NROW(show_x)))
-    }
-    if(show_anomalies) {
-        p <- p + ggplot2::geom_point(
-          data = show_x[show_x$prob > 0.01,], mapping = a, alpha = alpha)
-        p <- p + ggplot2::geom_point(
-          data = show_x[show_x$prob <= 0.01,], mapping = a, alpha = alpha,
-          color = "#ff0000")
-    } else {
-      p <- p + ggplot2::geom_point(data = show_x, mapping = a, alpha = alpha)
-    }
-  }
-
-  if (show_hdr) {
-    if (no_groups) {
-      # Use solid colors
-      colors <- hdr_palette(color = color, prob = prob)
-      p <- p +
-        ggplot2::geom_rect(
-          data = hdr,
-          aes(
-            xmin = lower, xmax = upper,
-            ymin = -maxden * as.numeric(factor(Distribution)) / 20,
-            ymax = -maxden * (as.numeric(factor(Distribution)) - 1) / 20,
-            fill = as.factor(level)
+    hdr$ymin <- -maxden * as.numeric(factor(hdr$Distribution, levels = dist_names)) / 20
+    hdr$ymax <- hdr$ymin + maxden / 20
+    # Add one interval at a time because we can't use multiple ggplot fill scales
+    levels <- sort(unique(hdr$level), decreasing = TRUE)
+    for (dist in unique(hdr$Distribution)) {
+      for (i in seq_along(levels)) {
+        p <- p +
+          ggplot2::geom_rect(
+            data = hdr[hdr$Distribution == dist & hdr$level == levels[i], ],
+            aes(xmin = lower, xmax = upper, ymin = ymin, ymax = ymax),
+            fill = rev(hdr_colors[[dist]])[i + 1]
           )
-        ) +
-        ggplot2::scale_fill_manual(values = rev(colors[-1]), labels = paste0(100 * rev(prob), "%")) +
-        ggplot2::guides(fill = "none")
-    } else {
-      # Use transparent colors
-      p <- p +
-        ggplot2::geom_rect(
-          data = hdr,
-          aes(
-            xmin = lower, xmax = upper,
-            ymin = -maxden * as.numeric(factor(Distribution)) / 20,
-            ymax = -maxden * (as.numeric(factor(Distribution)) - 1) / 20,
-            alpha = level,
-            fill = Distribution
-          )
-        ) +
-        ggplot2::scale_alpha(
-          name = "HDR coverage",
-          breaks = 100 * rev(prob),
-          labels = paste0(100 * rev(prob), "%"),
-          range = c(0.65, 0.2)
-        )
+      }
     }
   }
+  # Add mode to plot
   if (show_mode) {
     modes <- df |>
       dplyr::group_by(Distribution) |>
@@ -211,122 +189,104 @@ gg_density1 <- function(
       dplyr::ungroup() |>
       dplyr::select(mode = x, Distribution) |>
       dplyr::mutate(
-        i = as.numeric(factor(Distribution)),
+        i = as.numeric(factor(Distribution, levels = dist_names)),
         lower = -maxden * i / 20,
         upper = -maxden * (i - 1) / 20
       ) |>
       tidyr::pivot_longer(lower:upper, values_to = "y", names_to = "ypos")
-    if (no_groups) {
-      p <- p + ggplot2::geom_line(
-        data = modes,
-        mapping = aes(x = mode, y = y, group = Distribution),
-        color = color,
-        size = 1
-      )
-    } else {
-      p <- p + ggplot2::geom_line(
-        data = modes,
-        mapping = aes(x = mode, y = y, group = Distribution, color = Distribution),
-        size = 1
-      )
-    }
+    p <- p + ggplot2::geom_line(
+      data = modes,
+      mapping = aes(x = mode, y = y, group = Distribution, color = Distribution),
+      size = 1
+    )
+  }
+
+  # Color scale and legend
+  colors <- unlist(lapply(hdr_colors, function(u) { u[1] } ))
+  p <- p + ggplot2::scale_color_manual(breaks = dist_names, values = colors, labels = dist_names)
+
+  # Don't show color legend if only one density
+  if (length(object) == 1L) {
+    p <- p + ggplot2::guides(color = "none")
   }
 
   return(p)
 }
 
 gg_density2 <- function(
-    object, prob, fill, show_points, show_anomalies, show_mode, ngrid, color, alpha, scatterplot, ...) {
+    object, df, show_x, prob, hdr, show_points, show_anomalies, show_mode, hdr_colors, alpha) {
   if (length(object) > 1) {
     stop("I can only handle one bivariate density in a plot")
   }
-  if (fill & scatterplot) {
-    stop("Cannot have both fill and scatterplot")
-  }
-  # Names of distributions
-  dist_names <- names_dist(object)
-  dist <- stats::family(object)
-  no_groups <- length(dist) == 1L
+  dist_names <- names_dist(object, unique = TRUE)
+  hdr_colors <- hdr_colors[[1]]
 
-  # Set up data frame for densities
-  df <- make_density_df(object, ngrid)
+  # Start plot
   p <- ggplot(df)
-  # Find HDR cut points. Note that distributional::hdr applied to mvnorm object is wrong
-  random_sample <- distributional::generate(object, times = 5000)[[1]]
-  fi <- density(object, at = as.matrix(random_sample))[[1]]
-  threshold <- quantile(fi, prob = 1 - prob, type = 8)
-  colors <- hdr_palette(color = color, prob = prob)
-  if (show_points | scatterplot) {
-    show_x <- vctrs::vec_data(object)[[1]]$kde$x
-    colnames(show_x) <- c("x", "y")
-    if (fill | scatterplot) {
-      show_x <- cbind(show_x, den = density(object, at = as.matrix(show_x))[[1]]) |>
-        as.data.frame()
-    }
-    # If fill, only show points outside largest HDR
-    if (fill) {
-      show_x <- show_x[show_x$den < min(threshold), , drop = FALSE]
-    }
-    if (scatterplot) {
+  # Plot individual observations
+  # Show observations
+  if (!is.null(show_x)) {
+    if (hdr == "fill") {
+      # Drop observations obscured by largest HDR
+      include <- paste0(prob * 100, "%")
       show_x <- show_x |>
-        dplyr::mutate(
-          group = cut(den, breaks = c(0, threshold, Inf), labels = FALSE),
-          group = factor(group,
-            levels = rev(seq(length(prob) + 1)),
-            labels = c(paste0(sort(prob) * 100, "%"), "Outside")
-          )
-        )
+        dplyr::filter(!(group %in% include))
+    }
+    if (show_anomalies) {
+      # Split data set into anomalies and the rest
+      outliers <- show_x[show_x$anomaly, ]
+      show_x <- show_x[!show_x$anomaly, ]
+    }
+    if (hdr == "points") {
       p <- p +
         ggplot2::geom_point(
           data = as.data.frame(show_x),
           mapping = aes(x = x, y = y, col = group)
         ) +
-        ggplot2::scale_color_manual(values = c(colors[-1], "#000"))
-    } else {
-      if (is.null(alpha)) {
-        alpha <- min(1, 500 / NROW(show_x))
-      }
-      if (NROW(show_x) > 0) {
-        p <- p + ggplot2::geom_point(
-          data = as.data.frame(show_x),
-          mapping = aes(x = x, y = y),
-          alpha = alpha
-        )
-      }
+        ggplot2::scale_color_manual(values = c(hdr_colors[-1], "#000"))
+    } else if (show_points) {
+      p <- p + ggplot2::geom_point(
+        data = show_x, mapping = aes(x = x, y = y),
+        color = dplyr::if_else(show_anomalies, tail(hdr_colors,1), head(hdr_colors, 1)),
+        alpha = min(1, 500 / NROW(show_x))
+      )
     }
     if (show_anomalies) {
-      warning("lookout not yet implemented")
-      # p <- p + ggplot2::geom_point(
-      #  data = lookout, mapping = aes(x = x, y = y),
-      #  color = "#ff0000"
-      # )
+      p <- p + ggplot2::geom_point(
+        data = outliers, mapping = aes(x = x, y = y), color = "#000"
+      )
     }
   }
-  if (fill) {
-    p <- p +
-      geom_contour_filled(
-        aes(x = x, y = y, z = Density),
-        breaks = c(Inf, threshold)
-      ) +
-      scale_fill_manual(
-        values = colors[-1],
-        labels = paste0(100 * prob, "%")
-      ) +
-      ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
-  } else if (!scatterplot) {
-    p <- p + geom_contour(aes(x = x, y = y, z = Density),
-      breaks = threshold, color = color
-    )
+  if (hdr == "fill" | hdr == "contours") {
+    random_sample <- distributional::generate(object, times = 5000)[[1]]
+    fi <- density(object, at = as.matrix(random_sample))[[1]]
+    threshold <- quantile(fi, prob = 1 - prob, type = 8)
+    if (hdr == "fill") {
+      p <- p +
+        geom_contour_filled(
+          aes(x = x, y = y, z = Density),
+          breaks = c(Inf, threshold)
+        ) +
+        scale_fill_manual(
+          values = hdr_colors[-1],
+          labels = paste0(100 * prob, "%")
+        ) +
+        ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
+    } else if (hdr == "contours") {
+      p <- p + geom_contour(aes(x = x, y = y, z = Density),
+        breaks = threshold, color = hdr_colors[1]
+      )
+    }
   }
   if (show_mode) {
     modes <- df |>
       dplyr::filter(Density == max(Density))
     p <- p + ggplot2::geom_point(
       data = modes, mapping = aes(x = x, y = y),
-      color = color
+      color = hdr_colors[1]
     )
   }
   return(p)
 }
 
-utils::globalVariables(c("Density", "Distribution", "level", "i", "den"))
+utils::globalVariables(c("dist","Density", "Distribution", "level", "i", "den", "ymin", "ymax"))

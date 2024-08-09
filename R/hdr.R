@@ -10,8 +10,8 @@
 #' @param var1 The name of the first variable to plot (a bare expression).
 #' @param var2 Optionally, the name of the second variable to plot (a bare expression).
 #' @param prob A numeric vector specifying the coverage probabilities for the HDRs.
-#' @param scatterplot A logical argument indicating if a regular HDR plot is required
-#' (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).
+#' @param show_points A logical argument indicating if a regular HDR plot is required
+#' (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).
 #' @param color The base color to use for the mode. Colors for the HDRs are generated
 #' by whitening this color.
 #' @param show_anomalies A logical argument indicating if the plot should highlight observations with "lookout"
@@ -27,10 +27,10 @@
 #' df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
 #' df$y <- df$x + rnorm(200, sd = 2)
 #' gg_hdrboxplot(df, x)
-#' gg_hdrboxplot(df, x, y, scatterplot = TRUE)
+#' gg_hdrboxplot(df, x, y, show_points = TRUE)
 #' oldfaithful |>
 #'   filter(duration < 7000, waiting < 7000) |>
-#'   gg_hdrboxplot(duration, waiting, scatterplot = TRUE)
+#'   gg_hdrboxplot(duration, waiting, show_points = TRUE, show_anomalies = TRUE)
 #' cricket_batting |>
 #'   filter(Innings > 20) |>
 #'   gg_hdrboxplot(Average)
@@ -39,7 +39,8 @@
 #' @export
 
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
-                          color = "#00659e", scatterplot = FALSE,
+                          color = "#0072b2",
+                          show_points = FALSE,
                           show_anomalies = FALSE, ...) {
   if (missing(var1)) {
     # Grab first variable
@@ -57,22 +58,37 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     d <- 2L
     data <- data |> select({{ var1 }}, {{ var2 }})
   }
-  dist <- dist_kde(data[,seq(d)], multiplier = 2)
+  dist <- dist_kde(data[, seq(d)], multiplier = 2)
+  hdr <- dplyr::if_else(show_points, "points", "fill")
 
+  # Set up color palette
+  prob <- sort(prob)
+  hdr_colors <- list(hdr_palette(color = color, prob = c(prob, 0.995)))
+  names(hdr_colors) <- names_dist(dist)
   if (d == 2L) {
     gg_density2(dist,
+      df = make_density_df(dist, ngrid = 101),
+      show_x = show_data(dist, prob),
       prob = prob,
-      colors = NULL, color = color, fill = !scatterplot, alpha = NULL,
-      show_points = TRUE, show_mode = TRUE, scatterplot = scatterplot,
+      hdr = hdr,
+      hdr_colors = hdr_colors,
+      alpha = NULL,
+      show_points = TRUE,
+      show_mode = TRUE,
       show_anomalies = show_anomalies
     ) +
-    ggplot2::guides(fill = "none", color = "none")
-
+      ggplot2::guides(fill = "none", color = "none")
   } else {
     gg_density1(dist,
-      show_hdr = TRUE, show_density = FALSE, ngrid = 501,
-      prob = prob, alpha = NULL, jitter = TRUE,
-      color = color, fill = TRUE, show_points = TRUE, show_mode = TRUE,
+      df = make_density_df(dist, ngrid = 501),
+      show_x = show_data(dist, prob),
+      prob = prob,
+      hdr = hdr,
+      hdr_colors = hdr_colors,
+      show_density = FALSE,
+      jitter = TRUE,
+      show_points = TRUE,
+      show_mode = TRUE,
       show_anomalies = show_anomalies, ...
     ) +
       ggplot2::guides(alpha = "none") +

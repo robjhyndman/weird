@@ -9,9 +9,9 @@ gg_hdrboxplot(
   var1,
   var2 = NULL,
   prob = c(0.5, 0.99),
-  color = "#00659e",
-  scatterplot = FALSE,
-  show_lookout = FALSE,
+  color = "#0072b2",
+  show_points = FALSE,
+  show_anomalies = FALSE,
   ...
 )
 }
@@ -27,10 +27,10 @@ gg_hdrboxplot(
 \item{color}{The base color to use for the mode. Colors for the HDRs are generated
 by whitening this color.}
 
-\item{scatterplot}{A logical argument indicating if a regular HDR plot is required
-(\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).}
+\item{show_points}{A logical argument indicating if a regular HDR plot is required
+(\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).}
 
-\item{show_lookout}{A logical argument indicating if the plot should highlight observations with "lookout"
+\item{show_anomalies}{A logical argument indicating if the plot should highlight observations with "lookout"
 probabilities less than 0.05.}
 
 \item{...}{Other arguments passed to \code{\link[ks]{kde}}.}
@@ -53,10 +53,10 @@ all arguments set to their defaults other than \code{lookout}.
 df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
 df$y <- df$x + rnorm(200, sd = 2)
 gg_hdrboxplot(df, x)
-gg_hdrboxplot(df, x, y, scatterplot = TRUE)
+gg_hdrboxplot(df, x, y, show_points = TRUE)
 oldfaithful |>
   filter(duration < 7000, waiting < 7000) |>
-  gg_hdrboxplot(duration, waiting, scatterplot = TRUE)
+  gg_hdrboxplot(duration, waiting, show_points = TRUE, show_anomalies = TRUE)
 cricket_batting |>
   filter(Innings > 20) |>
   gg_hdrboxplot(Average)
