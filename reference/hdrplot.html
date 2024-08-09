@@ -59,6 +59,7 @@ less than 0.05 are optionally shown in red.</p>
 <span>  color <span class="op">=</span> <span class="st">"#0072b2"</span>,</span>
 <span>  show_points <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show_anomalies <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  scatterplot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -94,8 +95,13 @@ by whitening this color.</p></dd>
 
 
 <dt id="arg-show-anomalies">show_anomalies<a class="anchor" aria-label="anchor" href="#arg-show-anomalies"></a></dt>
-<dd><p>A logical argument indicating if the plot should highlight observations with "lookout"
-probabilities less than 0.05.</p></dd>
+<dd><p>A logical argument indicating if the plot should highlight observations with
+surprisal probabilities less than 0.01.</p></dd>
+
+
+<dt id="arg-scatterplot">scatterplot<a class="anchor" aria-label="anchor" href="#arg-scatterplot"></a></dt>
+<dd><p>Equivalent to <code>show_points</code>. Included for compatability
+with <code><a href="bagplot.html">gg_bagplot</a>()</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -108,8 +114,8 @@ probabilities less than 0.05.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The original HDR boxplot proposed by Hyndman (1996), R can be produced with
-all arguments set to their defaults other than <code>lookout</code>.</p>
+    <p>The original HDR boxplot proposed by Hyndman (1996), can be produced with
+all arguments set to their defaults other than <code>show_anomalies</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
