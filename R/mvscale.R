@@ -98,7 +98,11 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_IQR,
     Sinv <- try(solve(S), silent = TRUE)
     if(inherits(Sinv, "try-error")) {
       # Add a small ridge to the covariance matrix to avoid singularity issues
-      Sinv <- solve(S + diag(1e-6, nrow(S), ncol(S)))
+      Sinv <- try(solve(S + diag(1e-6, nrow(S), ncol(S))), silent = TRUE)
+      if(inherits(Sinv, "try-error")) {
+        # Add a bigger ridge
+        Sinv <- solve(S + diag(1e-2, nrow(S), ncol(S)))
+      }
     }
     U <- chol(Sinv)
     z <- mat %*% t(U)
