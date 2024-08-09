@@ -42,16 +42,13 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gg_density</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
 <span>  prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">9</span><span class="op">)</span><span class="op">/</span><span class="fl">10</span>,</span>
-<span>  fill <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  show_hdr <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  hdr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"fill"</span>, <span class="st">"points"</span>, <span class="st">"contours"</span><span class="op">)</span>,</span>
 <span>  show_points <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show_mode <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show_anomalies <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  ngrid <span class="op">=</span> <span class="fl">501</span>,</span>
-<span>  color <span class="op">=</span> <span class="st">"#00659e"</span>,</span>
+<span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#0072b2"</span>, <span class="st">"#D55E00"</span>, <span class="st">"#009E73"</span>, <span class="st">"#CC79A7"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#F0E442"</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  jitter <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  jitter <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -65,17 +62,12 @@
 
 
 <dt id="arg-prob">prob<a class="anchor" aria-label="anchor" href="#arg-prob"></a></dt>
-<dd><p>Probability of the HDR regions to be drawn.</p></dd>
+<dd><p>Probability of the HDRs to be drawn.</p></dd>
 
 
-<dt id="arg-fill">fill<a class="anchor" aria-label="anchor" href="#arg-fill"></a></dt>
-<dd><p>If <code>TRUE</code>, and the density is bivariate, the bivariate contours
-are shown as filled regions rather than lines.</p></dd>
-
-
-<dt id="arg-show-hdr">show_hdr<a class="anchor" aria-label="anchor" href="#arg-show-hdr"></a></dt>
-<dd><p>If <code>TRUE</code>, and the density is univariate, then the HDR regions
-specified by <code>prob</code> are shown as a ribbon below the density.</p></dd>
+<dt id="arg-hdr">hdr<a class="anchor" aria-label="anchor" href="#arg-hdr"></a></dt>
+<dd><p>Character string describing how the HDRs are to be shown. Options
+are "none", "fill", "points" and "contours" (the latter only for bivariate plots).</p></dd>
 
 
 <dt id="arg-show-points">show_points<a class="anchor" aria-label="anchor" href="#arg-show-points"></a></dt>
@@ -88,16 +80,14 @@ point.</p></dd>
 
 
 <dt id="arg-show-anomalies">show_anomalies<a class="anchor" aria-label="anchor" href="#arg-show-anomalies"></a></dt>
-<dd><p>If <code>TRUE</code>, then the observations with surprisal probabilities less than 0.01 are shown in red.</p></dd>
+<dd><p>If <code>TRUE</code>, then the observations with surprisal
+probabilities less than 0.01 are shown in red.</p></dd>
 
 
-<dt id="arg-ngrid">ngrid<a class="anchor" aria-label="anchor" href="#arg-ngrid"></a></dt>
-<dd><p>Number of points at which to evaluate the density function.</p></dd>
-
-
-<dt id="arg-color">color<a class="anchor" aria-label="anchor" href="#arg-color"></a></dt>
-<dd><p>Color used for mode and HDR contours/regions when there is only
-one distribution. Otherwise a ggplot color scale is used.</p></dd>
+<dt id="arg-colors">colors<a class="anchor" aria-label="anchor" href="#arg-colors"></a></dt>
+<dd><p>Color palette to use. If there are more than
+<code>length(colors)</code> distributions, they are recycled. Default is the
+Okabe-Ito color palette.</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
@@ -106,12 +96,9 @@ Defaults to min(1, 500/n), where n is the number of observations plotted.</p></d
 
 
 <dt id="arg-jitter">jitter<a class="anchor" aria-label="anchor" href="#arg-jitter"></a></dt>
-<dd><p>When TRUE and <code>show_points</code> is TRUE, a small amount of vertical
-jittering is applied to the observations for a univariate distribution.</p></dd>
-
-
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional arguments are currently ignored.</p></dd>
+<dd><p>For univariate distributions, when <code>jitter</code> is <code>TRUE</code> and
+<code>show_points</code> is TRUE, a small amount of vertical jittering is applied to the
+observations. Ignored for bivariate distributions.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -123,10 +110,12 @@ jittering is applied to the observations for a univariate distribution.</p></dd>
     <p>This function produces a ggplot of a density from a distributional object.
 For univariate densities, it produces a line plot of the density function, with
 an optional ribbon showing some highest density regions (HDRs) and/or the observations.
-For bivariate densities, it produces a contour plot of the density function, with
+For bivariate densities, it produces ah HDR contour plot of the density function, with
 the observations optionally shown as points.
 The mode can also be drawn as a point.
-For bivariate densities, the combination of fill = TRUE<code>, </code>show_points = TRUE<code>, </code>show_mode = TRUE<code>, and </code>prob = c(0.5, 0.99)<code>is equivalent to showing an HDR boxplot beneath the density plot. For univariate densities,  the combination of</code>show_hdr = TRUE<code>, </code>show_points = TRUE<code>, </code>show_mode = TRUE<code>, and </code>prob = c(0.5, 0.99)` is equivalent to an HDR boxplot.</p>
+The combination of <code>hdr = "fill"</code>, <code>show_points = TRUE</code>,
+<code>show_mode = TRUE</code>, and <code>prob = c(0.5, 0.99)</code> is equivalent to showing
+HDR boxplots.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -138,16 +127,16 @@ For bivariate densities, the combination of fill = TRUE<code>, </code>show_point
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Univariate density</span></span></span>
 <span class="r-in"><span><span class="va">kde</span> <span class="op">&lt;-</span> <span class="fu"><a href="dist_kde.html">dist_kde</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">4</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">gg_density</span><span class="op">(</span><span class="va">kde</span>,</span></span>
-<span class="r-in"><span>  show_hdr <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.95</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#c14b14"</span>,</span></span>
+<span class="r-in"><span>  hdr <span class="op">=</span> <span class="st">"fill"</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.95</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"#c14b14"</span>,</span></span>
 <span class="r-in"><span>  show_mode <span class="op">=</span> <span class="cn">TRUE</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span>, jitter <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_density-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">dist_normal</span><span class="op">(</span><span class="op">)</span>, <span class="va">kde</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">gg_density</span><span class="op">(</span>show_hdr <span class="op">=</span> <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">gg_density</span><span class="op">(</span>hdr <span class="op">=</span> <span class="st">"fill"</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_density-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">tibble</span><span class="op">(</span>y1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5000</span><span class="op">)</span>, y2 <span class="op">=</span> <span class="va">y1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5000</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="dist_kde.html">dist_kde</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">gg_density</span><span class="op">(</span>show_points <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>, fill <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">gg_density</span><span class="op">(</span>show_points <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">0.1</span>, hdr <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="gg_density-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
