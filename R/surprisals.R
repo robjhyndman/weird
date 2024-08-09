@@ -45,10 +45,11 @@ surprisals.default <- function(
   object <- as.matrix(object)
   if(NCOL(object) == 1L)
     object <- c(object)
-  scores <- -density(distribution, at = object, log = TRUE)
-  if(is.list(scores)) {
-    scores <- scores[[1]]
+  den <- density(distribution, at = object, log = TRUE)
+  if(is.list(den)) {
+    den <- den[[1]]
   }
+  scores <- -den
   if(loo & stats::family(distribution) == "kde") {
     n <- NROW(object)
     d <- NCOL(object)
