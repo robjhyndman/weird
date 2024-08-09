@@ -147,7 +147,7 @@ Several functions are provided for providing anomaly scores for all observations
 * The `stray_scores()` function uses the stray algorithm to compute anomaly scores.
 * The `lof_scores()` function uses local outlier factors to compute anomaly scores.
 * The `glosh_scores()` function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.
-* The `lookout()` function uses the lookout algorithm to compute anomaly probabilities
+* The `lookout_prob()` function uses the lookout algorithm to compute anomaly probabilities
 
 Here are the top 0.02% most anomalous observations identified by each of the first four methods, along with the observations having lookout probability less than 0.05.
 
