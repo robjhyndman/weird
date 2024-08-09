@@ -4,8 +4,8 @@
 #' points with lower probability. Points outside the largest HDR are shown as
 #' individual points. Points with lookout probabilities
 #' less than 0.05 are optionally shown in red.
-#' @details The original HDR boxplot proposed by Hyndman (1996), R can be produced with
-#' all arguments set to their defaults other than `lookout`.
+#' @details The original HDR boxplot proposed by Hyndman (1996), can be produced with
+#' all arguments set to their defaults other than `show_anomalies`.
 #' @param data A data frame or matrix containing the data.
 #' @param var1 The name of the first variable to plot (a bare expression).
 #' @param var2 Optionally, the name of the second variable to plot (a bare expression).
@@ -14,8 +14,10 @@
 #' (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).
 #' @param color The base color to use for the mode. Colors for the HDRs are generated
 #' by whitening this color.
-#' @param show_anomalies A logical argument indicating if the plot should highlight observations with "lookout"
-#' probabilities less than 0.05.
+#' @param show_anomalies A logical argument indicating if the plot should highlight observations with
+#' surprisal probabilities less than 0.01.
+#' @param scatterplot Equivalent to `show_points`. Included for compatability
+#' with \code{\link{gg_bagplot}()}.
 #' @param ... Other arguments passed to \code{\link[ks]{kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
 #' @author Rob J Hyndman
@@ -41,7 +43,8 @@
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
                           color = "#0072b2",
                           show_points = FALSE,
-                          show_anomalies = FALSE, ...) {
+                          show_anomalies = FALSE,
+                          scatterplot = FALSE, ...) {
   if (missing(var1)) {
     # Grab first variable
     data <- as.data.frame(data)
@@ -59,7 +62,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     data <- data |> select({{ var1 }}, {{ var2 }})
   }
   dist <- dist_kde(data[, seq(d)], multiplier = 2)
-  hdr <- dplyr::if_else(show_points, "points", "fill")
+  hdr <- dplyr::if_else(show_points | scatterplot, "points", "fill")
 
   # Set up color palette
   prob <- sort(prob)
@@ -73,7 +76,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       hdr = hdr,
       hdr_colors = hdr_colors,
       alpha = NULL,
-      show_points = TRUE,
+      show_points = TRUE ,
       show_mode = TRUE,
       show_anomalies = show_anomalies
     ) +

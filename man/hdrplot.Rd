@@ -12,6 +12,7 @@ gg_hdrboxplot(
   color = "#0072b2",
   show_points = FALSE,
   show_anomalies = FALSE,
+  scatterplot = FALSE,
   ...
 )
 }
@@ -30,8 +31,11 @@ by whitening this color.}
 \item{show_points}{A logical argument indicating if a regular HDR plot is required
 (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).}
 
-\item{show_anomalies}{A logical argument indicating if the plot should highlight observations with "lookout"
-probabilities less than 0.05.}
+\item{show_anomalies}{A logical argument indicating if the plot should highlight observations with
+surprisal probabilities less than 0.01.}
+
+\item{scatterplot}{Equivalent to \code{show_points}. Included for compatability
+with \code{\link{gg_bagplot}()}.}
 
 \item{...}{Other arguments passed to \code{\link[ks]{kde}}.}
 }
@@ -46,8 +50,8 @@ individual points. Points with lookout probabilities
 less than 0.05 are optionally shown in red.
 }
 \details{
-The original HDR boxplot proposed by Hyndman (1996), R can be produced with
-all arguments set to their defaults other than \code{lookout}.
+The original HDR boxplot proposed by Hyndman (1996), can be produced with
+all arguments set to their defaults other than \code{show_anomalies}.
 }
 \examples{
 df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))

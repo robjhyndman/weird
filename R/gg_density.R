@@ -16,6 +16,7 @@
 #' @param prob Probability of the HDRs to be drawn.
 #' @param hdr Character string describing how the HDRs are to be shown. Options
 #' are "none", "fill", "points" and "contours" (the latter only for bivariate plots).
+#' If `NULL`, then "none" is used for univariate distributions and "contours" for bivariate.
 #' @param show_points If `TRUE`, then individual observations are plotted.
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown as a
 #' point.
@@ -47,16 +48,23 @@
 
 gg_density <- function(
     object, prob = seq(9) / 10,
-    hdr = c("none", "fill", "points", "contours"),
+    hdr = NULL,
     show_points = FALSE, show_mode = FALSE, show_anomalies = FALSE,
     colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
     alpha = NULL, jitter = FALSE) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
-  hdr <- match.arg(hdr)
   d <- dimension_dist(object)
-
+  if(is.null(hdr)) {
+    if(d == 1)
+      hdr <- "none"
+    else
+      hdr <- "contours"
+  }
+  if(!(hdr %in% c("none", "fill", "points", "contours"))) {
+    stop("hdr must be one of 'none', 'fill', 'points', or 'contours'")
+  }
   # Set up data frame containing densities
   df <- make_density_df(object, ngrid = 501)
 

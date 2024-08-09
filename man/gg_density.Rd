@@ -7,7 +7,7 @@
 gg_density(
   object,
   prob = seq(9)/10,
-  hdr = c("none", "fill", "points", "contours"),
+  hdr = NULL,
   show_points = FALSE,
   show_mode = FALSE,
   show_anomalies = FALSE,
@@ -23,7 +23,8 @@ gg_density(
 \item{prob}{Probability of the HDRs to be drawn.}
 
 \item{hdr}{Character string describing how the HDRs are to be shown. Options
-are "none", "fill", "points" and "contours" (the latter only for bivariate plots).}
+are "none", "fill", "points" and "contours" (the latter only for bivariate plots).
+If \code{NULL}, then "none" is used for univariate distributions and "contours" for bivariate.}
 
 \item{show_points}{If \code{TRUE}, then individual observations are plotted.}
 
