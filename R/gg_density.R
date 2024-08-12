@@ -63,9 +63,7 @@ gg_density <- function(
     else
       hdr <- "contours"
   }
-  if(!(hdr %in% c("none", "fill", "points", "contours"))) {
-    stop("hdr must be one of 'none', 'fill', 'points', or 'contours'")
-  }
+  hdr <- match.arg(hdr, c("none", "fill", "points", "contours"))
   # Set up data frame containing densities
   df <- make_density_df(object, ngrid = 501)
   # HDR thresholds
