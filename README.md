@@ -178,7 +178,7 @@ of |> gg_hdrboxplot(duration) +
 <img src="man/figures/README-of-boxplot-2.png" style="width:100.0%" />
 
 ``` r
-of |> gg_hdrboxplot(duration, show_points = TRUE, show_anomalies = TRUE) +
+of |> gg_hdrboxplot(duration, show_points = TRUE) +
   labs(x = "Duration (seconds)")
 ```
 
@@ -225,7 +225,7 @@ of |>
 
 ``` r
 of |>
-  gg_hdrboxplot(duration, waiting, scatterplot = TRUE, show_anomalies = TRUE) +
+  gg_hdrboxplot(duration, waiting, scatterplot = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
@@ -247,8 +247,8 @@ observations.
   anomaly scores.
 - The `glosh_scores()` function uses the Global-Local Outlier Score from
   Hierarchies algorithm to compute anomaly scores.
-- The `lookout()` function uses the lookout algorithm to compute anomaly
-  probabilities
+- The `lookout_prob()` function uses the lookout algorithm to compute
+  anomaly probabilities
 
 Here are the top 0.02% most anomalous observations identified by each of
 the first four methods, along with the observations having lookout

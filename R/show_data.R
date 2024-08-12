@@ -1,7 +1,7 @@
 # Function to construct a data frame for plotting purposes
 # The object is a distributional object returned from dist_kde()
 
-show_data <- function(object, prob) {
+show_data <- function(object, prob, threshold) {
   # Names of distributions
   dist_names <- names_dist(object)
   d <- dimension_dist(object)
@@ -41,20 +41,7 @@ show_data <- function(object, prob) {
     u = show_x, dist = as.list(object),
     SIMPLIFY = FALSE
   )
-  # Find HDR cut points.
-  threshold <- mapply(
-    function(u, dist) {
-      r <- distributional::generate(u, times = 1e5)[[1]]
-      fi <- density(u, at = as.matrix(r))[[1]]
-      tibble(
-        Distribution = dist,
-        level = 100 * prob,
-        threshold = quantile(fi, prob = 1 - prob, type = 8)
-      )
-    },
-    u = as.list(object), dist = as.list(dist_names[some_data]),
-    SIMPLIFY = FALSE
-  )
+
   # Divide into HDR groups
   show_x <- mapply(
     function(u, threshold) {
@@ -67,8 +54,9 @@ show_data <- function(object, prob) {
       u$level[is.na(u$level)] <- Inf
       return(u)
     },
-    u = show_x, threshold = threshold, SIMPLIFY = FALSE
+    u = show_x, threshold = split(threshold, threshold$Distribution), SIMPLIFY = FALSE
   )
   # Combine into a single tibble
   purrr::list_rbind(show_x)
 }
+

@@ -11,7 +11,6 @@ gg_hdrboxplot(
   prob = c(0.5, 0.99),
   color = "#0072b2",
   show_points = FALSE,
-  show_anomalies = FALSE,
   scatterplot = FALSE,
   ...
 )
@@ -30,9 +29,6 @@ by whitening this color.}
 
 \item{show_points}{A logical argument indicating if a regular HDR plot is required
 (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).}
-
-\item{show_anomalies}{A logical argument indicating if the plot should highlight observations with
-surprisal probabilities less than 0.01.}
 
 \item{scatterplot}{Equivalent to \code{show_points}. Included for compatability
 with \code{\link{gg_bagplot}()}.}
@@ -60,7 +56,7 @@ gg_hdrboxplot(df, x)
 gg_hdrboxplot(df, x, y, show_points = TRUE)
 oldfaithful |>
   filter(duration < 7000, waiting < 7000) |>
-  gg_hdrboxplot(duration, waiting, show_points = TRUE, show_anomalies = TRUE)
+  gg_hdrboxplot(duration, waiting, show_points = TRUE)
 cricket_batting |>
   filter(Innings > 20) |>
   gg_hdrboxplot(Average)

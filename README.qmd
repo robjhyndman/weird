@@ -109,7 +109,7 @@ of |>
   labs(y = "", x = "Duration (seconds)")
 of |> gg_hdrboxplot(duration) +
   labs(x = "Duration (seconds)")
-of |> gg_hdrboxplot(duration, show_points = TRUE, show_anomalies = TRUE) +
+of |> gg_hdrboxplot(duration, show_points = TRUE) +
   labs(x = "Duration (seconds)")
 ```
 
@@ -133,7 +133,7 @@ of |>
   gg_hdrboxplot(duration, waiting) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 of |>
-  gg_hdrboxplot(duration, waiting, scatterplot = TRUE, show_anomalies = TRUE) +
+  gg_hdrboxplot(duration, waiting, scatterplot = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 

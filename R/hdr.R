@@ -14,8 +14,6 @@
 #' (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).
 #' @param color The base color to use for the mode. Colors for the HDRs are generated
 #' by whitening this color.
-#' @param show_anomalies A logical argument indicating if the plot should highlight observations with
-#' surprisal probabilities less than 0.01.
 #' @param scatterplot Equivalent to `show_points`. Included for compatability
 #' with \code{\link{gg_bagplot}()}.
 #' @param ... Other arguments passed to \code{\link[ks]{kde}}.
@@ -32,7 +30,7 @@
 #' gg_hdrboxplot(df, x, y, show_points = TRUE)
 #' oldfaithful |>
 #'   filter(duration < 7000, waiting < 7000) |>
-#'   gg_hdrboxplot(duration, waiting, show_points = TRUE, show_anomalies = TRUE)
+#'   gg_hdrboxplot(duration, waiting, show_points = TRUE)
 #' cricket_batting |>
 #'   filter(Innings > 20) |>
 #'   gg_hdrboxplot(Average)
@@ -43,7 +41,6 @@
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
                           color = "#0072b2",
                           show_points = FALSE,
-                          show_anomalies = FALSE,
                           scatterplot = FALSE, ...) {
   if (missing(var1)) {
     # Grab first variable
@@ -68,39 +65,144 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   prob <- sort(prob)
   hdr_colors <- list(hdr_palette(color = color, prob = c(prob, 0.995)))
   names(hdr_colors) <- names_dist(dist)
+
+  # HDR thresholds
+  threshold <- hdr_table(dist, prob) |>
+    dplyr::transmute(level = 100*prob, Distribution = distribution, threshold = density) |>
+    dplyr::distinct()
+
+  # Data to plot
+  show_x <-  show_data(dist, prob, threshold)
+
+  # Call gg_density functions
   if (d == 2L) {
     gg_density2(dist,
       df = make_density_df(dist, ngrid = 101),
-      show_x = show_data(dist, prob),
+      show_x = show_x,
+      threshold = threshold,
       prob = prob,
       hdr = hdr,
       hdr_colors = hdr_colors,
       alpha = NULL,
       show_points = TRUE ,
       show_mode = TRUE,
-      show_anomalies = show_anomalies
+      show_anomalies = TRUE
     ) +
       ggplot2::guides(fill = "none", color = "none")
   } else {
     gg_density1(dist,
       df = make_density_df(dist, ngrid = 501),
-      show_x = show_data(dist, prob),
+      show_x = show_x,
+      threshold = threshold,
       prob = prob,
       hdr = hdr,
       hdr_colors = hdr_colors,
+      alpha = NULL,
       show_density = FALSE,
       jitter = TRUE,
       show_points = TRUE,
       show_mode = TRUE,
-      show_anomalies = show_anomalies, ...
+      show_anomalies = TRUE
     ) +
       ggplot2::guides(alpha = "none") +
       ggplot2::scale_y_continuous(breaks = NULL) +
       labs(y = "", x = names(data)[1])
   }
 }
+#' @title Table of Highest Density Regions
+#' @description
+#' Compute a table of highest density regions (HDR) for a distributional object.
+#' The HDRs are returned as a tibble with one row per interval and columns:
+#' `prob` (giving the probability coverage),
+#' `density` (the value of the density at the boundary of the HDR),
+#' For one dimensional density functions, the tibble also has columns
+#' `lower` (the lower ends of the intervals), and
+#' `upper` (the upper ends of the intervals).
+#' @param object Distributional object such as that returned by `dist_kde()`
+#' @param prob Vector of probabilities giving the HDR coverage (between 0 and 1)
+#' @return A tibble
+#' @author Rob J Hyndman
+#' @examples
+#' # Univariate HDRs
+#' c(dist_normal(), dist_kde(c(rnorm(100), rnorm(100, 3, 1)))) |>
+#'   hdr_table(c(0.5, 0.95))
+#' dist_kde(oldfaithful$duration) |> hdr_table(0.95)
+#' # Bivariate HDRs
+#' dist_kde(oldfaithful[,c("duration", "waiting")]) |> hdr_table(0.90)
+#' @export
+hdr_table <- function(object, prob) {
+  d <- dimension_dist(object)
+  prob <- sort(unique(prob), decreasing = TRUE)
+  dist_names <- names_dist(object)
+  if(d == 1L) {
+    output <- lapply(prob,
+      function(p) {
+        hdri <- distributional::hdr(object, size = p * 100)
+        # Extract limits
+        hdri <- tibble(
+          prob = p,
+          distribution = dist_names,
+          lower = vctrs::field(hdri, "lower"),
+          upper = vctrs::field(hdri, "upper")
+        ) |>
+          tidyr::unnest(c(lower, upper) )
+        mapply(
+          function(dist, hdr) {
+            hdr |>
+              dplyr::mutate(density = unlist(density(dist, at = lower)))
+          },
+          dist = as.list(object), hdr = split(hdri, hdri$distribution)[dist_names],
+          SIMPLIFY = FALSE
+        ) |>
+          purrr::list_rbind()
+      })
+  } else {
+  output <- mapply(
+    function(u, dist) {
+      r <- distributional::generate(u, times = 5e5)[[1]]
+      fi <- density(u, at = as.matrix(r))[[1]]
+      tibble(
+        distribution = dist,
+        prob = prob,
+        density = quantile(fi, prob = 1 - prob, type = 8)
+      )
+    },
+    u = as.list(object), dist = as.list(names_dist(object)),
+    SIMPLIFY = FALSE
+  )
+  }
+  purrr::list_rbind(output) |>
+    dplyr::arrange(distribution, prob)
 
+}
+
+# Color palette designed for plotting Highest Density Regions
+#
+# A sequential color palette is returned, with the first color being `color`,
+# and the rest of the colors being a mix of `color` with increasing amounts of white.
+# If `prob` is provided, then the mixing proportions are determined by `prob` (and
+# n is ignored). Otherwise the mixing proportions are equally spaced between 0 and 1.
+#
+# @param n Number of colors in palette.
+# @param color First color of vector.
+# @param prob Vector of probabilities between 0 and 1.
+# @return A function that returns a vector of colors of length `length(prob) + 1`.
+# @examples
+# hdr_palette(prob = c(0.5, 0.99))
+
+hdr_palette <- function(n, color = "#0072b2", prob = NULL) {
+  if (missing(prob)) {
+    prob <- seq(n - 1) / n
+  } else if (min(prob) <= 0 | max(prob) >= 1) {
+    stop("prob must be between 0 and 1")
+  }
+  pc_colors <- grDevices::colorRampPalette(c(color, "white"))(180)[32:130]
+  idx <- approx(seq(99) / 100, seq(99), prob, rule = 2)$y
+  c(color, pc_colors[idx])
+}
 
 #' @importFrom utils head tail
 #' @importFrom tibble tibble
+
 utils::globalVariables(c("ends", "type", "lower", "upper", "group"))
+utils::globalVariables(c("x", "y", "y1", "y2", "distribution"))
