@@ -25,15 +25,13 @@
 #' *J Computational & Graphical Statistics*, **31**(2), 586-599. \url{https://robjhyndman.com/publications/lookout/}
 #' @examples
 #' df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
-#' df$y <- df$x + rnorm(200, sd = 2)
 #' gg_hdrboxplot(df, x)
-#' gg_hdrboxplot(df, x, y, show_points = TRUE)
-#' oldfaithful |>
-#'   filter(duration < 7000, waiting < 7000) |>
-#'   gg_hdrboxplot(duration, waiting, show_points = TRUE)
 #' cricket_batting |>
 #'   filter(Innings > 20) |>
 #'   gg_hdrboxplot(Average)
+#' oldfaithful |>
+#'   filter(duration < 7000, waiting < 7000) |>
+#'   gg_hdrboxplot(duration, waiting, show_points = TRUE)
 #'
 #' @rdname hdrplot
 #' @export
@@ -72,7 +70,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     dplyr::distinct()
 
   # Data to plot
-  show_x <- show_data(dist, prob, threshold)
+  show_x <- show_data(dist, prob, threshold, anomalies = TRUE)
 
   # Call gg_density functions
   if (d == 2L) {

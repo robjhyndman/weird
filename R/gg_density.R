@@ -66,28 +66,32 @@ gg_density <- function(
     }
   }
   hdr <- match.arg(hdr, c("none", "fill", "points", "contours"))
+
   # Set up data frame containing densities
   df <- make_density_df(object)
-  # HDR thresholds
-  threshold <- hdr_table(object, prob) |>
-    dplyr::transmute(level = 100*prob, Distribution = distribution, threshold = density) |>
-    dplyr::distinct()
+  # HDR thresholds if needed
+  if (hdr != "none") {
+    # HDR thresholds
+    threshold <- hdr_table(object, prob) |>
+      dplyr::transmute(level = 100 * prob, Distribution = distribution, threshold = density) |>
+      dplyr::distinct()
+    # HDR color palette
+    colors <- rep(colors, 10)[seq(length(object))]
+    hdr_colors <- lapply(
+      colors,
+      function(u) { hdr_palette(color = u, prob = c(prob, 0.995)) }
+    )
+    names(hdr_colors) <- names_dist(object, unique = TRUE)
+  } else {
+    threshold <- NULL
+    hdr_colors <- as.list(colors)
+  }
   # Set up data frame containing observations
   if (any(stats::family(object) == "kde" & (show_points | show_anomalies | hdr == "points"))) {
-    show_x <- show_data(object, prob, threshold)
+    show_x <- show_data(object, prob, threshold, anomalies = show_anomalies)
   } else {
     show_x <- NULL
   }
-
-  # Set up color palette
-  colors <- rep(colors, 10)[seq(length(object))]
-  hdr_colors <- lapply(
-    colors,
-    function(u) {
-      hdr_palette(color = u, prob = c(prob, 0.995))
-    }
-  )
-  names(hdr_colors) <- names_dist(object, unique = TRUE)
 
   if (d == 1) {
     if (hdr == "contours") {

@@ -29,10 +29,12 @@ of |>
   mutate(
     fscore = surprisals(lm_of),
     loo_fscore = surprisals(lm_of, loo = TRUE),
-    #lookout_prob = lookout(surprisals = fscore, loo_scores = loo_fscore)
+    # lookout_prob = lookout(surprisals = fscore, loo_scores = loo_fscore)
   ) |>
-  ggplot(aes(x = duration, y = waiting,
-    color = loo_fscore > quantile(loo_fscore, 0.99))) +
+  ggplot(aes(
+    x = duration, y = waiting,
+    color = loo_fscore > quantile(loo_fscore, 0.99)
+  )) +
   geom_point()
 # surprisals computed from GAM
 of <- oldfaithful |>

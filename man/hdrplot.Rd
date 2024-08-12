@@ -51,15 +51,13 @@ all arguments set to their defaults other than \code{show_anomalies}.
 }
 \examples{
 df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
-df$y <- df$x + rnorm(200, sd = 2)
 gg_hdrboxplot(df, x)
-gg_hdrboxplot(df, x, y, show_points = TRUE)
-oldfaithful |>
-  filter(duration < 7000, waiting < 7000) |>
-  gg_hdrboxplot(duration, waiting, show_points = TRUE)
 cricket_batting |>
   filter(Innings > 20) |>
   gg_hdrboxplot(Average)
+oldfaithful |>
+  filter(duration < 7000, waiting < 7000) |>
+  gg_hdrboxplot(duration, waiting, show_points = TRUE)
 
 }
 \references{

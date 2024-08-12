@@ -32,7 +32,7 @@ tibble(
 tibble(
   x = rnorm(50),
   y = c(5, rnorm(49)),
-  lookout = lookout_prob(cbind(x,y))
+  lookout = lookout_prob(cbind(x, y))
 )
 # Using a regression model
 of <- oldfaithful |> filter(duration < 7200, waiting < 7200)
