@@ -16,6 +16,7 @@
 #' by whitening this color.
 #' @param scatterplot Equivalent to `show_points`. Included for compatability
 #' with \code{\link{gg_bagplot}()}.
+#' @param ngrid Number of grid points to use for the density function.
 #' @param ... Other arguments passed to \code{\link[ks]{kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
 #' @author Rob J Hyndman
@@ -39,7 +40,8 @@
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
                           color = "#0072b2",
                           show_points = FALSE,
-                          scatterplot = FALSE, ...) {
+                          scatterplot = FALSE,
+                          ngrid = 501, ...) {
   if (missing(var1)) {
     # Grab first variable
     data <- as.data.frame(data)
@@ -75,7 +77,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   # Call gg_density functions
   if (d == 2L) {
     gg_density2(dist,
-      df = make_density_df(dist),
+      df = make_density_df(dist, ngrid = ngrid),
       show_x = show_x,
       threshold = threshold,
       prob = prob,
@@ -89,7 +91,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       ggplot2::guides(fill = "none", color = "none")
   } else {
     gg_density1(dist,
-      df = make_density_df(dist),
+      df = make_density_df(dist, ngrid = ngrid),
       show_x = show_x,
       threshold = threshold,
       prob = prob,

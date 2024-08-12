@@ -30,6 +30,7 @@
 #' @param jitter For univariate distributions, when `jitter` is `TRUE` and
 #' `show_points` is TRUE, a small amount of vertical jittering is applied to the
 #' observations. Ignored for bivariate distributions.
+#' @param ngrid Number of grid points to use for the density function.
 #' @return A ggplot object.
 #' @author Rob J Hyndman
 #' @examples
@@ -52,7 +53,7 @@ gg_density <- function(
     hdr = NULL,
     show_points = FALSE, show_mode = FALSE, show_anomalies = FALSE,
     colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
-    alpha = NULL, jitter = FALSE) {
+    alpha = NULL, jitter = FALSE, ngrid = 501) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
@@ -68,7 +69,7 @@ gg_density <- function(
   hdr <- match.arg(hdr, c("none", "fill", "points", "contours"))
 
   # Set up data frame containing densities
-  df <- make_density_df(object)
+  df <- make_density_df(object, ngrid = ngrid)
   # HDR thresholds if needed
   if (hdr != "none") {
     # HDR thresholds

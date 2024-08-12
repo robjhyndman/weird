@@ -4,13 +4,15 @@
 \alias{gg_density_layer}
 \title{Add ggplot layer of densities from distributional objects in 1 dimension}
 \usage{
-gg_density_layer(object, scale = 1, ...)
+gg_density_layer(object, scale = 1, ngrid = 501, ...)
 }
 \arguments{
 \item{object}{distribution object from the distributional package or
 \code{\link{dist_kde}}()}
 
 \item{scale}{Scaling factor for the density function.}
+
+\item{ngrid}{Number of grid points to use for the density function.}
 
 \item{...}{Additional arguments are passed to \code{\link[ggplot2]{geom_line}}.}
 }

@@ -201,3 +201,4 @@ kurtosis.dist_kde <- function(x, ..., na.rm = FALSE) {
     (mean((x$kde$x - mean(x$kde$x))^4) + 6 * h^2 * v - 3 * h^4) / v^2 - 3
   }
 }
+

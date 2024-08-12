@@ -12,6 +12,7 @@ gg_hdrboxplot(
   color = "#0072b2",
   show_points = FALSE,
   scatterplot = FALSE,
+  ngrid = 501,
   ...
 )
 }
@@ -32,6 +33,8 @@ by whitening this color.}
 
 \item{scatterplot}{Equivalent to \code{show_points}. Included for compatability
 with \code{\link{gg_bagplot}()}.}
+
+\item{ngrid}{Number of grid points to use for the density function.}
 
 \item{...}{Other arguments passed to \code{\link[ks]{kde}}.}
 }

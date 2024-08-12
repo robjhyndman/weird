@@ -8,6 +8,7 @@
 #' @param object distribution object from the distributional package or
 #' \code{\link{dist_kde}}()
 #' @param scale Scaling factor for the density function.
+#' @param ngrid Number of grid points to use for the density function.
 #' @param ... Additional arguments are passed to \code{\link[ggplot2]{geom_line}}.
 #' @return A ggplot layer
 #' @author Rob J Hyndman
@@ -22,8 +23,8 @@
 #'   gg_density_layer(dist_normal(2, 1), linetype = "dashed", scale = 2 / 3)
 #' @export
 
-gg_density_layer <- function(object, scale = 1, ...) {
-  df <- make_density_df(object)
+gg_density_layer <- function(object, scale = 1, ngrid = 501, ...) {
+  df <- make_density_df(object, ngrid = ngrid)
   if (length(object) == 1L) {
     geom_line(data = df, aes(x = x, y = scale * Density), ...)
   } else {
@@ -32,14 +33,13 @@ gg_density_layer <- function(object, scale = 1, ...) {
 }
 
 # Make data frame containing densities from distributional object
-make_density_df <- function(object) {
+make_density_df <- function(object, ngrid = 501) {
   # Find dimension of distribution
   d <- dimension_dist(object)
   if (d > 2) {
     stop("Only univariate and bivariate densities are supported")
   }
   if (d == 1) {
-    ngrid <- 501
     # Find range of support values to use
     rand <- unlist(distributional::generate(object, times = 1e5))
     if (is.logical(rand)) {
@@ -67,7 +67,7 @@ make_density_df <- function(object) {
     # Density on grid
     df <- c(x = list(y), density(object, at = y))
   } else {
-    ngrid <- 101
+    ngrid <- min(ngrid, 101)
     if (length(object) > 1) {
       stop("Currently only supporting one bivariate density")
     }
