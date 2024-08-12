@@ -68,7 +68,7 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
     }
     if(is.null(fi)) {
       # Compute 99% threshold
-      fi <- hdr_table(object, prob = 0.99) |>
+      fi <- hdr_table(object, prob = 0.99, density_only = TRUE) |>
         dplyr::select(Distribution = distribution, threshold = density) |>
         dplyr::distinct()
     }
