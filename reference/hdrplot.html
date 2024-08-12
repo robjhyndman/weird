@@ -58,7 +58,6 @@ less than 0.05 are optionally shown in red.</p>
 <span>  prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.99</span><span class="op">)</span>,</span>
 <span>  color <span class="op">=</span> <span class="st">"#0072b2"</span>,</span>
 <span>  show_points <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  show_anomalies <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  scatterplot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -92,11 +91,6 @@ by whitening this color.</p></dd>
 <dt id="arg-show-points">show_points<a class="anchor" aria-label="anchor" href="#arg-show-points"></a></dt>
 <dd><p>A logical argument indicating if a regular HDR plot is required
 (<code>FALSE</code>), or whether to show the individual observations in the same colors (<code>TRUE</code>).</p></dd>
-
-
-<dt id="arg-show-anomalies">show_anomalies<a class="anchor" aria-label="anchor" href="#arg-show-anomalies"></a></dt>
-<dd><p>A logical argument indicating if the plot should highlight observations with
-surprisal probabilities less than 0.01.</p></dd>
 
 
 <dt id="arg-scatterplot">scatterplot<a class="anchor" aria-label="anchor" href="#arg-scatterplot"></a></dt>
@@ -139,7 +133,7 @@ Kandanaarachchi, S &amp; Hyndman, R J (2022) "Leave-one-out kernel density estim
 <span class="r-plt img"><img src="hdrplot-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="va">oldfaithful</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">duration</span> <span class="op">&lt;</span> <span class="fl">7000</span>, <span class="va">waiting</span> <span class="op">&lt;</span> <span class="fl">7000</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">gg_hdrboxplot</span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span>, show_anomalies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">gg_hdrboxplot</span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hdrplot-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="va">cricket_batting</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Innings</span> <span class="op">&gt;</span> <span class="fl">20</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>

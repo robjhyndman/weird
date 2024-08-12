@@ -176,7 +176,7 @@
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot-2.png" style="width:100.0%"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span>, show_anomalies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot-3.png" style="width:100.0%"></p>
 <p>The latter two plots are HDR boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers in red using the lookout algorithm (described in <a href="https://otexts.com/weird/06-density.html" class="external-link">Chapter 6 of the book</a>). An explanation of these plots is provided in <a href="https://otexts.com/weird/05-boxplots.html" class="external-link">Chapter 5 of the book</a>.</p>
@@ -199,7 +199,7 @@
 <p><img src="reference/figures/README-of-boxplot3-1.png" style="width:100.0%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span>, show_anomalies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot3-2.png" style="width:100.0%"></p>
 <p>The latter two plots show likely outliers in red, using the lookout algorithm.</p>
@@ -213,7 +213,7 @@
 <li>The <code><a href="reference/stray_scores.html">stray_scores()</a></code> function uses the stray algorithm to compute anomaly scores.</li>
 <li>The <code><a href="reference/lof_scores.html">lof_scores()</a></code> function uses local outlier factors to compute anomaly scores.</li>
 <li>The <code><a href="reference/glosh_scores.html">glosh_scores()</a></code> function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.</li>
-<li>The <code>lookout()</code> function uses the lookout algorithm to compute anomaly probabilities</li>
+<li>The <code><a href="reference/lookout_prob.html">lookout_prob()</a></code> function uses the lookout algorithm to compute anomaly probabilities</li>
 </ul>
 <p>Here are the top 0.02% most anomalous observations identified by each of the first four methods, along with the observations having lookout probability less than 0.05.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
