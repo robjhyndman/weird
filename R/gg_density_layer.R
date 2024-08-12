@@ -13,7 +13,6 @@
 #' @return A ggplot layer
 #' @author Rob J Hyndman
 #' @examples
-#' library(distributional)
 #' dist_mixture(
 #'   dist_normal(-2, 1),
 #'   dist_normal(2, 1),
