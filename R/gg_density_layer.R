@@ -7,7 +7,6 @@
 #'
 #' @param object distribution object from the distributional package or
 #' \code{\link{dist_kde}}()
-#' @param ngrid Number of points at which to evaluate the density function.
 #' @param scale Scaling factor for the density function.
 #' @param ... Additional arguments are passed to \code{\link[ggplot2]{geom_line}}.
 #' @return A ggplot layer
@@ -23,8 +22,8 @@
 #'   gg_density_layer(dist_normal(2, 1), linetype = "dashed", scale = 2 / 3)
 #' @export
 
-gg_density_layer <- function(object, ngrid = 501, scale = 1, ...) {
-  df <- make_density_df(object, ngrid)
+gg_density_layer <- function(object, scale = 1, ...) {
+  df <- make_density_df(object)
   if (length(object) == 1L) {
     geom_line(data = df, aes(x = x, y = scale * Density), ...)
   } else {
@@ -33,13 +32,14 @@ gg_density_layer <- function(object, ngrid = 501, scale = 1, ...) {
 }
 
 # Make data frame containing densities from distributional object
-make_density_df <- function(object, ngrid = 501) {
+make_density_df <- function(object) {
   # Find dimension of distribution
   d <- dimension_dist(object)
   if (d > 2) {
     stop("Only univariate and bivariate densities are supported")
   }
   if (d == 1) {
+    ngrid <- 501
     # Find range of support values to use
     rand <- unlist(distributional::generate(object, times = 1e5))
     if (is.logical(rand)) {
@@ -67,6 +67,7 @@ make_density_df <- function(object, ngrid = 501) {
     # Density on grid
     df <- c(x = list(y), density(object, at = y))
   } else {
+    ngrid <- 101
     if (length(object) > 1) {
       stop("Currently only supporting one bivariate density")
     }
@@ -82,17 +83,8 @@ make_density_df <- function(object, ngrid = 501) {
         apply(u, 2, range, na.rm = TRUE)
       })
       range_xy <- apply(do.call(rbind, support), 2, range)
-      # Expand to include all data points if a kde
-      if ("kde" %in% stats::family(object)) {
-        x <- lapply(vctrs::vec_data(object), function(u) u$kde$x)
-        support <- lapply(x, function(u) {
-          apply(u, 2, range, na.rm = TRUE)
-        })
-        range_xy <- apply(do.call(rbind, c(list(range_xy), support)), 2, range)
-      }
       # Create grid
       support <- apply(range_xy, 2, diff)
-      ngrid <- min(ngrid, 101)
       x <- c(
         min(range_xy[, 1]) - 0.0001 * support[1],
         seq(min(range_xy[, 1]), max(range_xy[, 1]), length = ngrid - 2),

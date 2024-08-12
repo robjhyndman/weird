@@ -77,7 +77,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
   # Call gg_density functions
   if (d == 2L) {
     gg_density2(dist,
-      df = make_density_df(dist, ngrid = 101),
+      df = make_density_df(dist),
       show_x = show_x,
       threshold = threshold,
       prob = prob,
@@ -91,7 +91,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       ggplot2::guides(fill = "none", color = "none")
   } else {
     gg_density1(dist,
-      df = make_density_df(dist, ngrid = 501),
+      df = make_density_df(dist),
       show_x = show_x,
       threshold = threshold,
       prob = prob,

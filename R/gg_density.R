@@ -66,7 +66,7 @@ gg_density <- function(
   }
   hdr <- match.arg(hdr, c("none", "fill", "points", "contours"))
   # Set up data frame containing densities
-  df <- make_density_df(object, ngrid = 501)
+  df <- make_density_df(object)
   # HDR thresholds
   threshold <- hdr_table(object, prob) |>
     dplyr::transmute(level = 100*prob, Distribution = distribution, threshold = density) |>

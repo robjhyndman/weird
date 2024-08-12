@@ -4,13 +4,11 @@
 \alias{gg_density_layer}
 \title{Add ggplot layer of densities from distributional objects in 1 dimension}
 \usage{
-gg_density_layer(object, ngrid = 501, scale = 1, ...)
+gg_density_layer(object, scale = 1, ...)
 }
 \arguments{
 \item{object}{distribution object from the distributional package or
 \code{\link{dist_kde}}()}
-
-\item{ngrid}{Number of points at which to evaluate the density function.}
 
 \item{scale}{Scaling factor for the density function.}
 
