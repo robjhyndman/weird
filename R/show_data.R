@@ -29,13 +29,13 @@ show_data <- function(object, prob, threshold) {
   show_x <- mapply(
     function(u, dist) {
       d <- NCOL(u) - 1
-      if(d == 1) {
-        u$prob <- surprisal_prob(u[,seq(d)], dist)
+      if (d == 1) {
+        u$prob <- surprisal_prob(u[, seq(d)], dist)
       } else {
-        u$prob <- surprisal_prob(u[,seq(d)], dist, GPD = TRUE)
+        u$prob <- surprisal_prob(u[, seq(d)], dist, GPD = TRUE)
       }
       u$anomaly <- u$prob < 0.01
-      u$den <- unlist(density(dist, at = as.matrix(u[,seq(d)])))
+      u$den <- unlist(density(dist, at = as.matrix(u[, seq(d)])))
       return(u)
     },
     u = show_x, dist = as.list(object),
@@ -50,7 +50,7 @@ show_data <- function(object, prob, threshold) {
         levels = rev(seq(length(prob) + 1)),
         labels = c(paste0(sort(prob) * 100, "%"), "Outside")
       )
-      u$level = sort(threshold$level)[as.numeric(u$group)]
+      u$level <- sort(threshold$level)[as.numeric(u$group)]
       u$level[is.na(u$level)] <- Inf
       return(u)
     },
@@ -59,4 +59,3 @@ show_data <- function(object, prob, threshold) {
   # Combine into a single tibble
   purrr::list_rbind(show_x)
 }
-

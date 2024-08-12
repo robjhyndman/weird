@@ -31,7 +31,7 @@ gg_bagplot <- function(
     data, var1, var2,
     color = "#00659e",
     scatterplot = FALSE, ...) {
-  col = c(hdr_palette(color = color, prob = c(0.5, 0.99)), "#000000")
+  col <- c(hdr_palette(color = color, prob = c(0.5, 0.99)), "#000000")
   data <- data |> select({{ var1 }}, {{ var2 }})
   bp <- aplpack::compute.bagplot(as.matrix(data), na.rm = TRUE, approx.limit = 1000, ...)
   cn <- colnames(data)

@@ -58,11 +58,12 @@ gg_density <- function(
   }
   prob <- sort(prob)
   d <- dimension_dist(object)
-  if(is.null(hdr)) {
-    if(d == 1)
+  if (is.null(hdr)) {
+    if (d == 1) {
       hdr <- "none"
-    else
+    } else {
       hdr <- "contours"
+    }
   }
   hdr <- match.arg(hdr, c("none", "fill", "points", "contours"))
   # Set up data frame containing densities
@@ -82,7 +83,9 @@ gg_density <- function(
   colors <- rep(colors, 10)[seq(length(object))]
   hdr_colors <- lapply(
     colors,
-    function(u) { hdr_palette(color = u, prob = c(prob, 0.995)) }
+    function(u) {
+      hdr_palette(color = u, prob = c(prob, 0.995))
+    }
   )
   names(hdr_colors) <- names_dist(object, unique = TRUE)
 
@@ -116,7 +119,7 @@ gg_density1 <- function(
   }
   # Show observations
   if (!is.null(show_x)) {
-    if(is.null(alpha)) {
+    if (is.null(alpha)) {
       alpha <- min(1, 500 / NROW(show_x))
     }
     # Add y plotting position for observations
@@ -131,7 +134,7 @@ gg_density1 <- function(
         dplyr::filter(!(group %in% include))
     }
   }
-  if(NROW(show_x) > 0) {
+  if (NROW(show_x) > 0) {
     if (show_anomalies) {
       # Split data set into anomalies and the rest
       outliers <- show_x[show_x$anomaly, ]
@@ -140,7 +143,7 @@ gg_density1 <- function(
   } else {
     outliers <- NULL
   }
-  if(NROW(show_x) > 0) {
+  if (NROW(show_x) > 0) {
     if (hdr == "points") {
       # Add one interval at a time because we can't use multiple ggplot color scales
       levels <- sort(unique(show_x$level))
@@ -161,8 +164,8 @@ gg_density1 <- function(
     }
   }
   if (show_anomalies) {
-      if(NROW(outliers) > 0) {
-        p <- p + ggplot2::geom_point(
+    if (NROW(outliers) > 0) {
+      p <- p + ggplot2::geom_point(
         data = outliers, mapping = aes(x = x, y = y), color = "#000"
       )
     }
@@ -217,7 +220,9 @@ gg_density1 <- function(
   }
 
   # Color scale and legend
-  colors <- unlist(lapply(hdr_colors, function(u) { u[1] } ))
+  colors <- unlist(lapply(hdr_colors, function(u) {
+    u[1]
+  }))
   p <- p + ggplot2::scale_color_manual(breaks = dist_names, values = colors, labels = dist_names)
 
   # Don't show color legend if only one density
@@ -240,7 +245,7 @@ gg_density2 <- function(
   # Plot individual observations
   # Show observations
   if (!is.null(show_x)) {
-    if(is.null(alpha)) {
+    if (is.null(alpha)) {
       alpha <- min(1, 500 / NROW(show_x))
     }
     if (hdr == "fill") {
@@ -255,20 +260,22 @@ gg_density2 <- function(
       show_x <- show_x[!show_x$anomaly, ]
     }
     if (hdr == "points") {
-      outsideprob = 1 - 0.01*show_anomalies
+      outsideprob <- 1 - 0.01 * show_anomalies
       p <- p +
         ggplot2::geom_point(
           data = as.data.frame(show_x) |>
             filter(),
           mapping = aes(x = x, y = y, col = group)
         ) +
-        ggplot2::scale_color_manual(values = hdr_colors[-1],
-                                    labels = paste0(100 * c(prob,outsideprob), "%"),
-                                    name = "HDR coverage")
+        ggplot2::scale_color_manual(
+          values = hdr_colors[-1],
+          labels = paste0(100 * c(prob, outsideprob), "%"),
+          name = "HDR coverage"
+        )
     } else if (show_points) {
       p <- p + ggplot2::geom_point(
         data = show_x, mapping = aes(x = x, y = y),
-        color = dplyr::if_else(show_anomalies, tail(hdr_colors,1), head(hdr_colors, 1)),
+        color = dplyr::if_else(show_anomalies, tail(hdr_colors, 1), head(hdr_colors, 1)),
         alpha = alpha
       )
     }
@@ -288,7 +295,8 @@ gg_density2 <- function(
         scale_fill_manual(
           values = hdr_colors[-1],
           labels = paste0(100 * prob, "%"),
-          name = "HDR coverage")
+          name = "HDR coverage"
+        )
     } else if (hdr == "contours") {
       p <- p + geom_contour(aes(x = x, y = y, z = Density),
         breaks = threshold$threshold, color = hdr_colors[1]
@@ -306,4 +314,4 @@ gg_density2 <- function(
   return(p)
 }
 
-utils::globalVariables(c("dist","Density", "Distribution", "level", "i", "den", "ymin", "ymax"))
+utils::globalVariables(c("dist", "Density", "Distribution", "level", "i", "den", "ymin", "ymax"))

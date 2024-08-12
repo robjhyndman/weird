@@ -2,14 +2,14 @@
 test_that("dist_kde1", {
   set.seed(123)
   x <- rnorm(100)
-  y <- c(rnorm(100), rnorm(100,5))
+  y <- c(rnorm(100), rnorm(100, 5))
   dist <- dist_kde(list(x, y))
   # Mean
   expect_equal(mean(dist), c(mean(x), mean(y)))
   # Median
   expect_equal(median(dist), quantile(dist, 0.5))
   # Variance
-  expect_equal(distributional::variance(dist) > 0, c(TRUE,TRUE))
+  expect_equal(distributional::variance(dist) > 0, c(TRUE, TRUE))
   # Density
   at <- seq(-4, 10, by = 1)
   expect_equal(lengths(density(dist, at)), c(15L, 15L))

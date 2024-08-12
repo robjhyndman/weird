@@ -68,11 +68,11 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
 
   # HDR thresholds
   threshold <- hdr_table(dist, prob) |>
-    dplyr::transmute(level = 100*prob, Distribution = distribution, threshold = density) |>
+    dplyr::transmute(level = 100 * prob, Distribution = distribution, threshold = density) |>
     dplyr::distinct()
 
   # Data to plot
-  show_x <-  show_data(dist, prob, threshold)
+  show_x <- show_data(dist, prob, threshold)
 
   # Call gg_density functions
   if (d == 2L) {
@@ -84,7 +84,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       hdr = hdr,
       hdr_colors = hdr_colors,
       alpha = NULL,
-      show_points = TRUE ,
+      show_points = TRUE,
       show_mode = TRUE,
       show_anomalies = TRUE
     ) +
@@ -128,16 +128,17 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
 #'   hdr_table(c(0.5, 0.95))
 #' dist_kde(oldfaithful$duration) |> hdr_table(0.95)
 #' # Bivariate HDRs
-#' dist_kde(oldfaithful[,c("duration", "waiting")]) |> hdr_table(0.90)
+#' dist_kde(oldfaithful[, c("duration", "waiting")]) |> hdr_table(0.90)
 #' @export
 hdr_table <- function(object, prob) {
   d <- dimension_dist(object)
   prob <- sort(unique(prob), decreasing = TRUE)
   dist_names <- names_dist(object)
-  if(d == 1L) {
-    output <- lapply(prob,
+  if (d == 1L) {
+    output <- lapply(
+      prob,
       function(p) {
-        hdri <- distributional::hdr(object, size = p * 100, n=1024)
+        hdri <- distributional::hdr(object, size = p * 100, n = 1024)
         # Extract limits
         hdri <- tibble(
           prob = p,
@@ -145,7 +146,7 @@ hdr_table <- function(object, prob) {
           lower = vctrs::field(hdri, "lower"),
           upper = vctrs::field(hdri, "upper")
         ) |>
-          tidyr::unnest(c(lower, upper) )
+          tidyr::unnest(c(lower, upper))
         mapply(
           function(dist, hdr) {
             hdr |>
@@ -155,25 +156,25 @@ hdr_table <- function(object, prob) {
           SIMPLIFY = FALSE
         ) |>
           purrr::list_rbind()
-      })
+      }
+    )
   } else {
-  output <- mapply(
-    function(u, dist) {
-      r <- distributional::generate(u, times = 1e5)[[1]]
-      fi <- density(u, at = as.matrix(r))[[1]]
-      tibble(
-        distribution = dist,
-        prob = prob,
-        density = quantile(fi, prob = 1 - prob, type = 8)
-      )
-    },
-    u = as.list(object), dist = as.list(names_dist(object)),
-    SIMPLIFY = FALSE
-  )
+    output <- mapply(
+      function(u, dist) {
+        r <- distributional::generate(u, times = 1e5)[[1]]
+        fi <- density(u, at = as.matrix(r))[[1]]
+        tibble(
+          distribution = dist,
+          prob = prob,
+          density = quantile(fi, prob = 1 - prob, type = 8)
+        )
+      },
+      u = as.list(object), dist = as.list(names_dist(object)),
+      SIMPLIFY = FALSE
+    )
   }
   purrr::list_rbind(output) |>
     dplyr::arrange(distribution, prob)
-
 }
 
 # Color palette designed for plotting Highest Density Regions

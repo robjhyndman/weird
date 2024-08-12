@@ -52,13 +52,13 @@ log_density.dist_gpd <- function(x, at, ...) {
   } else {
     xx <- 1 + x[["shape"]] * z
     xx[xx <= 0] <- NA_real_
-    pdf <- - (1/x[["shape"]] + 1) * log(xx)
+    pdf <- -(1 / x[["shape"]] + 1) * log(xx)
     pdf[is.na(pdf)] <- -Inf
   }
-  if(x[["shape"]] >= 0) {
+  if (x[["shape"]] >= 0) {
     pdf[z < 0] <- -Inf
   } else {
-    pdf[z < 0 | z > -1/x[["shape"]]] <- -Inf
+    pdf[z < 0 | z > -1 / x[["shape"]]] <- -Inf
   }
   pdf - log(x[["scale"]])
 }
@@ -74,16 +74,16 @@ cdf.dist_gpd <- function(x, q, ...) {
   if (x[["shape"]] == 0) {
     1 - exp(-z)
   } else {
-    1 - pmax(1 + x[["shape"]] * z, 0)^(-1/x[["shape"]])
+    1 - pmax(1 + x[["shape"]] * z, 0)^(-1 / x[["shape"]])
   }
 }
 
 #' @exportS3Method stats::quantile
 quantile.dist_gpd <- function(x, p, ...) {
   if (x[["shape"]] == 0) {
-    x[["location"]] - x[["scale"]] * log(1-p)
+    x[["location"]] - x[["scale"]] * log(1 - p)
   } else {
-    x[["location"]] + x[["scale"]] * ((1-p)^(-x[["shape"]]) - 1) / x[["shape"]]
+    x[["location"]] + x[["scale"]] * ((1 - p)^(-x[["shape"]]) - 1) / x[["shape"]]
   }
 }
 
@@ -107,7 +107,7 @@ mean.dist_gpd <- function(x, ...) {
 
 #' @exportS3Method stats::median
 median.dist_gpd <- function(x, ...) {
-  if(x[["shape"]] == 0) {
+  if (x[["shape"]] == 0) {
     x[["location"]] - x[["scale"]] * log(0.5)
   } else {
     x[["location"]] + x[["scale"]] * (2^x[["shape"]] - 1) / x[["shape"]]
@@ -117,7 +117,7 @@ median.dist_gpd <- function(x, ...) {
 #' @exportS3Method distributional::covariance
 covariance.dist_gpd <- function(x, ...) {
   if (x[["shape"]] < 0.5) {
-    x[["scale"]]^2 / (1-x[["shape"]])^2 / (1 - 2*x[["shape"]])
+    x[["scale"]]^2 / (1 - x[["shape"]])^2 / (1 - 2 * x[["shape"]])
   } else {
     Inf
   }

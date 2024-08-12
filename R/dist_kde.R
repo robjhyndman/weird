@@ -103,14 +103,14 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
   } else {
     # Bivariate interpolation
     grid <- expand.grid(x$kde$eval.points[[1]], x$kde$eval.points[[2]])
-    ifun <- interpolation::interpfun(x = grid[,1], y = grid[,2], z = c(x$kde$estimate))
+    ifun <- interpolation::interpfun(x = grid[, 1], y = grid[, 2], z = c(x$kde$estimate))
     # Turn at into a matrix
-    if(is.list(at)) {
+    if (is.list(at)) {
       at <- do.call(rbind, at)
     } else {
       at <- matrix(at, ncol = d)
     }
-    d <- ifun(at[,1], at[,2])
+    d <- ifun(at[, 1], at[, 2])
   }
   d[is.na(d)] <- 0
   return(d)
@@ -124,7 +124,7 @@ log_density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
 #' @exportS3Method distributional::cdf
 cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
   # Apply independently over margins
-  if(NCOL(x$kde$x) > 1) {
+  if (NCOL(x$kde$x) > 1) {
     stop("Multivariate kde cdf not implemented")
   }
   # Integrate density
@@ -134,13 +134,15 @@ cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
 
 #' @export
 quantile.dist_kde <- function(x, p, ..., na.rm = TRUE) {
-  if(NCOL(x$kde$x) > 1) {
+  if (NCOL(x$kde$x) > 1) {
     stop("Multivariate kde quantiles not implemented")
   }
   # Compute CDF at density ordinates
   F <- cumintegral(x$kde$eval.points, x$kde$estimate)
-  stats::approx(F$y, F$x, xout = p, yleft = min(F$x), yright = max(F$x),
-                ties = mean, ..., na.rm = na.rm)$y
+  stats::approx(F$y, F$x,
+    xout = p, yleft = min(F$x), yright = max(F$x),
+    ties = mean, ..., na.rm = na.rm
+  )$y
 }
 
 #' @exportS3Method distributional::generate
@@ -150,13 +152,13 @@ generate.dist_kde <- function(x, times, ...) {
   if (d == 1) {
     x$kde$x[i] + stats::rnorm(times, sd = x$kde$h)
   } else {
-    x$kde$x[i,] + mvtnorm::rmvnorm(times, sigma = x$kde$H)
+    x$kde$x[i, ] + mvtnorm::rmvnorm(times, sigma = x$kde$H)
   }
 }
 
 #' @export
 mean.dist_kde <- function(x, ...) {
-  if(NCOL(x$kde$x) > 1) {
+  if (NCOL(x$kde$x) > 1) {
     matrix(apply(x$kde$x, 2, mean, ...), ncol = NCOL(x$kde$x))
   } else {
     mean(x$kde$x, ...)
@@ -171,7 +173,7 @@ median.dist_kde <- function(x, na.rm = FALSE, ...) {
 #' @exportS3Method distributional::covariance
 covariance.dist_kde <- function(x, ...) {
   n <- NROW(x$kde$x)
-  if(NCOL(x$kde$x) > 1) {
+  if (NCOL(x$kde$x) > 1) {
     stop("Multivariate kde covariance is not yet implemented.")
     stats::cov(x$kde$x, ...) # Needs adjustment
   } else {
@@ -181,7 +183,7 @@ covariance.dist_kde <- function(x, ...) {
 
 #' @exportS3Method distributional::skewness
 skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
-  if(NCOL(x$kde$x) > 1) {
+  if (NCOL(x$kde$x) > 1) {
     stop("Multivariate kde skewness is not yet implemented.")
   } else {
     mean((x$kde$x - mean(x$kde$x))^3) / distributional::variance(x)^1.5
@@ -191,7 +193,7 @@ skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
 #' @exportS3Method distributional::kurtosis
 # Excess kurtosis for consistency with distributional package
 kurtosis.dist_kde <- function(x, ..., na.rm = FALSE) {
-  if(NCOL(x$kde$x) > 1) {
+  if (NCOL(x$kde$x) > 1) {
     stop("Multivariate kde kurtosis is not yet implemented.")
   } else {
     h <- x$kde$h

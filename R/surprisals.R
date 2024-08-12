@@ -43,14 +43,15 @@ surprisals.default <- function(
     loo = FALSE,
     ...) {
   object <- as.matrix(object)
-  if(NCOL(object) == 1L)
+  if (NCOL(object) == 1L) {
     object <- c(object)
+  }
   den <- density(distribution, at = object, log = TRUE)
-  if(is.list(den)) {
+  if (is.list(den)) {
     den <- den[[1]]
   }
   scores <- -den
-  if(loo & stats::family(distribution) == "kde") {
+  if (loo & stats::family(distribution) == "kde") {
     n <- NROW(object)
     d <- NCOL(object)
     if (d == 1L) {
@@ -80,10 +81,12 @@ surprisals.default <- function(
 #'   mutate(
 #'     fscore = surprisals(lm_of),
 #'     loo_fscore = surprisals(lm_of, loo = TRUE),
-#'     #lookout_prob = lookout(surprisals = fscore, loo_scores = loo_fscore)
+#'     # lookout_prob = lookout(surprisals = fscore, loo_scores = loo_fscore)
 #'   ) |>
-#'   ggplot(aes(x = duration, y = waiting,
-#'     color = loo_fscore > quantile(loo_fscore, 0.99))) +
+#'   ggplot(aes(
+#'     x = duration, y = waiting,
+#'     color = loo_fscore > quantile(loo_fscore, 0.99)
+#'   )) +
 #'   geom_point()
 #' @export
 surprisals.lm <- function(object, loo = FALSE, ...) {

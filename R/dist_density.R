@@ -33,7 +33,7 @@ dist_density <- function(x, density) {
   output <- distributional::new_dist(x = x, f = density, class = "dist_density")
   # Replace degenerate distributions
   degenerate <- (n == 1L)
-  if(any(degenerate)) {
+  if (any(degenerate)) {
     output[degenerate] <- distributional::dist_degenerate(x = x[degenerate])
   }
   return(output)
@@ -67,8 +67,10 @@ cdf.dist_density <- function(x, q, ..., na.rm = TRUE) {
 quantile.dist_density <- function(x, p, ..., na.rm = TRUE) {
   # Compute CDF at density ordinates
   F <- cumintegral(x$x, x$f)
-  stats::approx(F$y, F$x, xout = p, yleft = min(x$x), yright = max(x$x),
-    ties = mean, ..., na.rm = na.rm)$y
+  stats::approx(F$y, F$x,
+    xout = p, yleft = min(x$x), yright = max(x$x),
+    ties = mean, ..., na.rm = na.rm
+  )$y
 }
 
 #' @exportS3Method distributional::generate
@@ -76,7 +78,7 @@ generate.dist_density <- function(x, times, ...) {
   # Set up fine grid
   n <- length(x$x)
   delta <- (x$x[n] - x$x[1]) / 1000
-  xgrid <- seq(x$x[1] + delta/2, x$x[n] - delta/2, l=1000)
+  xgrid <- seq(x$x[1] + delta / 2, x$x[n] - delta / 2, l = 1000)
   ygrid <- stats::approx(x$x, x$f, xout = xgrid)$y
   sample(xgrid, size = times, replace = TRUE, prob = ygrid) +
     stats::runif(times, -delta / 2, delta / 2)
@@ -116,16 +118,16 @@ cumintegral <- function(x, y, grid = TRUE) {
   if (n == 1) {
     return(list(x = x, y = 0))
   }
-  if(grid) {
+  if (grid) {
     # Set up fine grid
-    xgrid <- seq(x[1], x[n], l=1001)
+    xgrid <- seq(x[1], x[n], l = 1001)
     ygrid <- stats::approx(x, y, xout = xgrid)$y
   } else {
     xgrid <- x
     ygrid <- y
   }
   # Apply trapezoidal rule
-  cell <- 0.5 * (ygrid[1:1000] + ygrid[2:1001]) * (xgrid[2]-xgrid[1])
+  cell <- 0.5 * (ygrid[1:1000] + ygrid[2:1001]) * (xgrid[2] - xgrid[1])
   list(x = xgrid, y = cumsum(c(0, cell)))
 }
 
@@ -138,9 +140,9 @@ integral <- function(x, y, grid = TRUE) {
 # Can't use integral directly because x^k * f(x) is not piecewise linear
 density_moment <- function(x, k = 1, central = (k > 1)) {
   # Set up fine grid
-  xgrid <- seq(head(x$x, 1), tail(x$x, 1), l=1001)
+  xgrid <- seq(head(x$x, 1), tail(x$x, 1), l = 1001)
   fgrid <- stats::approx(x$x, x$f, xout = xgrid)$y
-  integrand <- if(central) {
+  integrand <- if (central) {
     (xgrid - mean(x))^k * fgrid
   } else {
     xgrid^k * fgrid
