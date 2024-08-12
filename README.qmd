@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+options(width = 100)
 ```
 
 # weird  <img src="man/figures/weird-hex.png" align="right" width = 150 />
@@ -113,7 +114,7 @@ of |> gg_hdrboxplot(duration, show_points = TRUE) +
   labs(x = "Duration (seconds)")
 ```
 
-The latter two plots are HDR boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers in red using the lookout algorithm (described in [Chapter 6 of the book](https://otexts.com/weird/06-density.html)). An explanation of these plots is provided in [Chapter 5 of the book](https://otexts.com/weird/05-boxplots.html).
+The latter two plots are highest density region (HDR) boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers (those points lying outside the 99% HDR). An explanation of these plots is provided in [Chapter 5 of the book](https://otexts.com/weird/05-boxplots.html).
 
 It is also possible to produce bivariate boxplots. Several variations are provided in the package. Here are two types of bagplot.
 
@@ -137,7 +138,7 @@ of |>
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
-The latter two plots show likely outliers in red, using the lookout algorithm.
+The latter two plots show possible outliers in black (again, defined as points outside the 99% HDR).
 
 ## Scoring functions
 
@@ -147,9 +148,9 @@ Several functions are provided for providing anomaly scores for all observations
 * The `stray_scores()` function uses the stray algorithm to compute anomaly scores.
 * The `lof_scores()` function uses local outlier factors to compute anomaly scores.
 * The `glosh_scores()` function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.
-* The `lookout_prob()` function uses the lookout algorithm to compute anomaly probabilities
+* The `lookout_prob()` function uses the lookout algorithm of [Kandanaarachchi & Hyndman (2022)]( https://robjhyndman.com/publications/lookout/) to compute anomaly probabilities.
 
-Here are the top 0.02% most anomalous observations identified by each of the first four methods, along with the observations having lookout probability less than 0.05.
+Here are the top 0.02% most anomalous observations identified by each of the methods.
 
 ```{r of-scores}
 of |>
@@ -165,7 +166,7 @@ of |>
       strayscore > quantile(strayscore, prob = 0.998) |
       lofscore > quantile(lofscore, prob = 0.998) |
       gloshscore > quantile(gloshscore, prob = 0.998) |
-      lookout < 0.05
+      lookout < 0.002
   ) |>
   arrange(lookout)
 ```

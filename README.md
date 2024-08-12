@@ -48,10 +48,10 @@ have loaded:
 
 ``` r
 library(weird)
-#> ── Attaching packages ────────────────────────────────────── weird 1.0.2.9000 ──
+#> ── Attaching packages ────────────────────────────────────────────────────────── weird 1.0.2.9000 ──
 #> ✔ dplyr          1.1.4          ✔ distributional 0.4.0.9000
 #> ✔ ggplot2        3.5.1
-#> ── Conflicts ──────────────────────────────────────────────── weird_conflicts ──
+#> ── Conflicts ──────────────────────────────────────────────────────────────────── weird_conflicts ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -184,15 +184,13 @@ of |> gg_hdrboxplot(duration, show_points = TRUE) +
 
 <img src="man/figures/README-of-boxplot-3.png" style="width:100.0%" />
 
-The latter two plots are HDR boxplots, which allow the bimodality of the
-data to be seen. The dark shaded region contains 50% of the
-observations, while the lighter shaded region contains 99% of the
-observations. The plots use vertical jittering to reduce overplotting,
-and highlight potential outliers in red using the lookout algorithm
-(described in [Chapter 6 of the
-book](https://otexts.com/weird/06-density.html)). An explanation of
-these plots is provided in [Chapter 5 of the
-book](https://otexts.com/weird/05-boxplots.html).
+The latter two plots are highest density region (HDR) boxplots, which
+allow the bimodality of the data to be seen. The dark shaded region
+contains 50% of the observations, while the lighter shaded region
+contains 99% of the observations. The plots use vertical jittering to
+reduce overplotting, and highlight potential outliers (those points
+lying outside the 99% HDR). An explanation of these plots is provided in
+[Chapter 5 of the book](https://otexts.com/weird/05-boxplots.html).
 
 It is also possible to produce bivariate boxplots. Several variations
 are provided in the package. Here are two types of bagplot.
@@ -231,8 +229,8 @@ of |>
 
 <img src="man/figures/README-of-boxplot3-2.png" style="width:100.0%" />
 
-The latter two plots show likely outliers in red, using the lookout
-algorithm.
+The latter two plots show possible outliers in black (again, defined as
+points outside the 99% HDR).
 
 ## Scoring functions
 
@@ -247,12 +245,13 @@ observations.
   anomaly scores.
 - The `glosh_scores()` function uses the Global-Local Outlier Score from
   Hierarchies algorithm to compute anomaly scores.
-- The `lookout_prob()` function uses the lookout algorithm to compute
-  anomaly probabilities
+- The `lookout_prob()` function uses the lookout algorithm of
+  [Kandanaarachchi & Hyndman
+  (2022)](https://robjhyndman.com/publications/lookout/) to compute
+  anomaly probabilities.
 
 Here are the top 0.02% most anomalous observations identified by each of
-the first four methods, along with the observations having lookout
-probability less than 0.05.
+the methods.
 
 ``` r
 of |>
@@ -268,33 +267,22 @@ of |>
       strayscore > quantile(strayscore, prob = 0.998) |
       lofscore > quantile(lofscore, prob = 0.998) |
       gloshscore > quantile(gloshscore, prob = 0.998) |
-      lookout < 0.05
+      lookout < 0.002
   ) |>
   arrange(lookout)
-#> # A tibble: 20 × 8
-#>    time                duration waiting surprisal strayscore lofscore gloshscore
-#>    <dttm>                 <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>
-#>  1 2018-04-25 19:08:00        1    5700      17.5     0.380      3.78      1    
-#>  2 2020-06-01 21:04:00      120    6060      17.6     0.132      1.88      1    
-#>  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860
-#>  4 2020-08-31 09:56:00      170    3840      16.8     0.0606     1.01      0.816
-#>  5 2020-09-16 14:44:00      160    6120      15.9     0.0362     1.29      1    
-#>  6 2015-11-21 20:27:00      150    3420      16.7     0.0772     1.27      1    
-#>  7 2017-05-03 06:19:00       90    4740      16.3     0.0495     1.68      1    
-#>  8 2016-11-11 14:23:00      180    6480      15.8     0.0447     1.10      1    
-#>  9 2020-07-23 23:17:00      186    4320      16.0     0.0473     1.04      0.946
-#> 10 2020-09-15 18:01:00      160    5880      15.6     0.0362     1.40      1    
-#> 11 2021-08-13 22:19:23      210    6971      15.8     0.0429     2.07      1    
-#> 12 2019-07-25 06:32:00      300    5280      15.9     0.0447     1.14      1    
-#> 13 2021-07-26 18:35:39      192    6618      15.7     0.0392     1.26      1    
-#> 14 2016-12-09 23:10:00      166    6000      15.3     0.0201     1.35      1    
-#> 15 2017-08-03 23:39:00      165    4440      15.8     0.0447     1.14      0.943
-#> 16 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1    
-#> 17 2017-08-12 13:14:00      120    4920      15.3     0.0690     1.53      1    
-#> 18 2017-09-22 18:51:00      281    7140      15.5     0.0333     2.64      1    
-#> 19 2020-05-18 21:21:00      272    7080      14.9     0.0333     2.42      1    
-#> 20 2018-09-22 16:37:00      253    7140      14.8     0.0200     2.63      1    
-#> # ℹ 1 more variable: lookout <dbl>
+#> # A tibble: 10 × 8
+#>    time                duration waiting surprisal strayscore lofscore gloshscore  lookout
+#>    <dttm>                 <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>    <dbl>
+#>  1 2018-04-25 19:08:00        1    5700      17.5     0.380      3.78      1     0       
+#>  2 2020-06-01 21:04:00      120    6060      17.6     0.132      1.88      1     5.67e-10
+#>  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860 4.50e- 5
+#>  4 2020-08-31 09:56:00      170    3840      16.8     0.0606     1.01      0.816 3.74e- 4
+#>  5 2015-11-21 20:27:00      150    3420      16.7     0.0772     1.27      1     6.34e- 3
+#>  6 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1     4.52e- 2
+#>  7 2017-08-12 13:14:00      120    4920      15.3     0.0690     1.53      1     1.40e- 1
+#>  8 2017-09-22 18:51:00      281    7140      15.5     0.0333     2.64      1     1.54e- 1
+#>  9 2020-05-18 21:21:00      272    7080      14.9     0.0333     2.42      1     3.72e- 1
+#> 10 2018-09-22 16:37:00      253    7140      14.8     0.0200     2.63      1     3.94e- 1
 ```
 
 In addition to the `surprisals()` function, the `surprisal_prob()`
