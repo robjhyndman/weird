@@ -161,6 +161,12 @@ hdr_table <- function(object, prob, density_only = FALSE) {
           purrr::list_rbind()
       }
     )
+    # For multiple intervals, average the density values at the ends
+    # to avoid having different values
+    output <- lapply(output, function(df) {
+      df$density <- mean(df$density)
+      return(df)
+    })
   } else {
     output <- mapply(
       function(u, dist) {
