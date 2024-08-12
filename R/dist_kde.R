@@ -174,7 +174,7 @@ median.dist_kde <- function(x, na.rm = FALSE, ...) {
 covariance.dist_kde <- function(x, ...) {
   n <- NROW(x$kde$x)
   if (NCOL(x$kde$x) > 1) {
-    stop("Multivariate kde covariance is not yet implemented.")
+    stop("Multivariate kde covariance is not yet implemented")
     stats::cov(x$kde$x, ...) # Needs adjustment
   } else {
     (n - 1) / n * stats::var(x$kde$x, ...) + x$kde$h^2
@@ -184,7 +184,7 @@ covariance.dist_kde <- function(x, ...) {
 #' @exportS3Method distributional::skewness
 skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
   if (NCOL(x$kde$x) > 1) {
-    stop("Multivariate kde skewness is not yet implemented.")
+    stop("Multivariate kde skewness is not yet implemented")
   } else {
     mean((x$kde$x - mean(x$kde$x))^3) / distributional::variance(x)^1.5
   }
@@ -194,7 +194,7 @@ skewness.dist_kde <- function(x, ..., na.rm = FALSE) {
 # Excess kurtosis for consistency with distributional package
 kurtosis.dist_kde <- function(x, ..., na.rm = FALSE) {
   if (NCOL(x$kde$x) > 1) {
-    stop("Multivariate kde kurtosis is not yet implemented.")
+    stop("Multivariate kde kurtosis is not yet implemented")
   } else {
     h <- x$kde$h
     v <- distributional::variance(x)

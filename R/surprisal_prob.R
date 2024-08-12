@@ -81,12 +81,12 @@ surprisal_prob <- function(
       type = 8, na.rm = TRUE
     )
     if (!any(g > threshold, na.rm = TRUE)) {
-      warning("No surprisals above threshold.")
+      warning("No surprisals above threshold")
       return(rep(1, n))
     }
     finite <- g < Inf
     if (any(!finite, na.rm = TRUE)) {
-      warning("Infinite surprisals will be ignored in GPD.")
+      warning("Infinite surprisals will be ignored in GPD")
     }
     gpd <- evd::fpot(g[finite], threshold = threshold, std.err = FALSE)$estimate
     p <- threshold_probability * evd::pgpd(

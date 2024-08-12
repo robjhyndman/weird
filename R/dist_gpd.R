@@ -29,7 +29,7 @@ dist_gpd <- function(location, scale, shape) {
   shape <- vctrs::vec_cast(unname(shape), double())
   scale <- vctrs::vec_cast(unname(scale), double())
   if (any(scale <= 0)) {
-    stop("The scale parameter of a GPD distribution must be strictly positive.")
+    stop("The scale parameter of a GPD distribution must be strictly positive")
   }
   distributional::new_dist(location = location, scale = scale, shape = shape, class = "dist_gpd")
 }

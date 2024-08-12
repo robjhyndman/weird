@@ -113,7 +113,7 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
 #' @export
 surprisals.gam <- function(object, loo = FALSE, ...) {
   if (loo) {
-    warning("Leave-one-out log scores unavailable for GAM models. Returning log scores.")
+    warning("Leave-one-out log scores unavailable for GAM models. Returning log scores")
   }
   fit_aug <- broom::augment(object, type.predict = "response")
   if (object$family$family == "gaussian") {
