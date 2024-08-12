@@ -130,7 +130,7 @@ gg_density1 <- function(
     # Add y plotting position for observations
     show_x$y <- -maxden * (as.numeric(factor(show_x$Distribution, levels = dist_names)) - 0.5) / 20
     if (jitter) {
-      show_x$y <- show_x$y + stats::runif(NROW(show_x), -maxden / 100, maxden / 100)
+      show_x$y <- show_x$y + stats::runif(NROW(show_x), -maxden / 45, maxden / 45)
     }
     if (hdr == "fill") {
       # Drop observations obscured by largest HDR
