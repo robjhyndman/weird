@@ -85,10 +85,10 @@
 <p>You also get a condensed summary of conflicts with other packages you have loaded:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/weird-package/">weird</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; ── Attaching packages ────────────────────────────────────── weird 1.0.2.9000 ──</span></span>
+<span><span class="co">#&gt; ── Attaching packages ────────────────────────────────────────────────────────── weird 1.0.2.9000 ──</span></span>
 <span><span class="co">#&gt; ✔ dplyr          1.1.4          ✔ distributional 0.4.0.9000</span></span>
 <span><span class="co">#&gt; ✔ ggplot2        3.5.1</span></span>
-<span><span class="co">#&gt; ── Conflicts ──────────────────────────────────────────────── weird_conflicts ──</span></span>
+<span><span class="co">#&gt; ── Conflicts ──────────────────────────────────────────────────────────────────── weird_conflicts ──</span></span>
 <span><span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span></span>
 <span><span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span></span></code></pre></div>
 </div>
@@ -179,7 +179,7 @@
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot-3.png" style="width:100.0%"></p>
-<p>The latter two plots are HDR boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers in red using the lookout algorithm (described in <a href="https://otexts.com/weird/06-density.html" class="external-link">Chapter 6 of the book</a>). An explanation of these plots is provided in <a href="https://otexts.com/weird/05-boxplots.html" class="external-link">Chapter 5 of the book</a>.</p>
+<p>The latter two plots are highest density region (HDR) boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers (those points lying outside the 99% HDR). An explanation of these plots is provided in <a href="https://otexts.com/weird/05-boxplots.html" class="external-link">Chapter 5 of the book</a>.</p>
 <p>It is also possible to produce bivariate boxplots. Several variations are provided in the package. Here are two types of bagplot.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
@@ -202,7 +202,7 @@
 <span>  <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot3-2.png" style="width:100.0%"></p>
-<p>The latter two plots show likely outliers in red, using the lookout algorithm.</p>
+<p>The latter two plots show possible outliers in black (again, defined as points outside the 99% HDR).</p>
 </div>
 <div class="section level2">
 <h2 id="scoring-functions">Scoring functions<a class="anchor" aria-label="anchor" href="#scoring-functions"></a>
@@ -213,9 +213,9 @@
 <li>The <code><a href="reference/stray_scores.html">stray_scores()</a></code> function uses the stray algorithm to compute anomaly scores.</li>
 <li>The <code><a href="reference/lof_scores.html">lof_scores()</a></code> function uses local outlier factors to compute anomaly scores.</li>
 <li>The <code><a href="reference/glosh_scores.html">glosh_scores()</a></code> function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.</li>
-<li>The <code><a href="reference/lookout_prob.html">lookout_prob()</a></code> function uses the lookout algorithm to compute anomaly probabilities</li>
+<li>The <code><a href="reference/lookout_prob.html">lookout_prob()</a></code> function uses the lookout algorithm of <a href="https://robjhyndman.com/publications/lookout/" class="external-link">Kandanaarachchi &amp; Hyndman (2022)</a> to compute anomaly probabilities.</li>
 </ul>
-<p>Here are the top 0.02% most anomalous observations identified by each of the first four methods, along with the observations having lookout probability less than 0.05.</p>
+<p>Here are the top 0.02% most anomalous observations identified by each of the methods.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
@@ -230,33 +230,22 @@
 <span>      <span class="va">strayscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">strayscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
 <span>      <span class="va">lofscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">lofscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
 <span>      <span class="va">gloshscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">gloshscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
-<span>      <span class="va">lookout</span> <span class="op">&lt;</span> <span class="fl">0.05</span></span>
+<span>      <span class="va">lookout</span> <span class="op">&lt;</span> <span class="fl">0.002</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">lookout</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 20 × 8</span></span>
-<span><span class="co">#&gt;    time                duration waiting surprisal strayscore lofscore gloshscore</span></span>
-<span><span class="co">#&gt;    &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2018-04-25 19:08:00        1    5700      17.5     0.380      3.78      1    </span></span>
-<span><span class="co">#&gt;  2 2020-06-01 21:04:00      120    6060      17.6     0.132      1.88      1    </span></span>
-<span><span class="co">#&gt;  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860</span></span>
-<span><span class="co">#&gt;  4 2020-08-31 09:56:00      170    3840      16.8     0.0606     1.01      0.816</span></span>
-<span><span class="co">#&gt;  5 2020-09-16 14:44:00      160    6120      15.9     0.0362     1.29      1    </span></span>
-<span><span class="co">#&gt;  6 2015-11-21 20:27:00      150    3420      16.7     0.0772     1.27      1    </span></span>
-<span><span class="co">#&gt;  7 2017-05-03 06:19:00       90    4740      16.3     0.0495     1.68      1    </span></span>
-<span><span class="co">#&gt;  8 2016-11-11 14:23:00      180    6480      15.8     0.0447     1.10      1    </span></span>
-<span><span class="co">#&gt;  9 2020-07-23 23:17:00      186    4320      16.0     0.0473     1.04      0.946</span></span>
-<span><span class="co">#&gt; 10 2020-09-15 18:01:00      160    5880      15.6     0.0362     1.40      1    </span></span>
-<span><span class="co">#&gt; 11 2021-08-13 22:19:23      210    6971      15.8     0.0429     2.07      1    </span></span>
-<span><span class="co">#&gt; 12 2019-07-25 06:32:00      300    5280      15.9     0.0447     1.14      1    </span></span>
-<span><span class="co">#&gt; 13 2021-07-26 18:35:39      192    6618      15.7     0.0392     1.26      1    </span></span>
-<span><span class="co">#&gt; 14 2016-12-09 23:10:00      166    6000      15.3     0.0201     1.35      1    </span></span>
-<span><span class="co">#&gt; 15 2017-08-03 23:39:00      165    4440      15.8     0.0447     1.14      0.943</span></span>
-<span><span class="co">#&gt; 16 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1    </span></span>
-<span><span class="co">#&gt; 17 2017-08-12 13:14:00      120    4920      15.3     0.0690     1.53      1    </span></span>
-<span><span class="co">#&gt; 18 2017-09-22 18:51:00      281    7140      15.5     0.0333     2.64      1    </span></span>
-<span><span class="co">#&gt; 19 2020-05-18 21:21:00      272    7080      14.9     0.0333     2.42      1    </span></span>
-<span><span class="co">#&gt; 20 2018-09-22 16:37:00      253    7140      14.8     0.0200     2.63      1    </span></span>
-<span><span class="co">#&gt; # ℹ 1 more variable: lookout &lt;dbl&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 10 × 8</span></span>
+<span><span class="co">#&gt;    time                duration waiting surprisal strayscore lofscore gloshscore  lookout</span></span>
+<span><span class="co">#&gt;    &lt;dttm&gt;                 &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2018-04-25 19:08:00        1    5700      17.5     0.380      3.78      1     0       </span></span>
+<span><span class="co">#&gt;  2 2020-06-01 21:04:00      120    6060      17.6     0.132      1.88      1     5.67e-10</span></span>
+<span><span class="co">#&gt;  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860 4.50e- 5</span></span>
+<span><span class="co">#&gt;  4 2020-08-31 09:56:00      170    3840      16.8     0.0606     1.01      0.816 3.74e- 4</span></span>
+<span><span class="co">#&gt;  5 2015-11-21 20:27:00      150    3420      16.7     0.0772     1.27      1     6.34e- 3</span></span>
+<span><span class="co">#&gt;  6 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1     4.52e- 2</span></span>
+<span><span class="co">#&gt;  7 2017-08-12 13:14:00      120    4920      15.3     0.0690     1.53      1     1.40e- 1</span></span>
+<span><span class="co">#&gt;  8 2017-09-22 18:51:00      281    7140      15.5     0.0333     2.64      1     1.54e- 1</span></span>
+<span><span class="co">#&gt;  9 2020-05-18 21:21:00      272    7080      14.9     0.0333     2.42      1     3.72e- 1</span></span>
+<span><span class="co">#&gt; 10 2018-09-22 16:37:00      253    7140      14.8     0.0200     2.63      1     3.94e- 1</span></span></code></pre></div>
 <p>In addition to the <code><a href="reference/surprisals.html">surprisals()</a></code> function, the <code><a href="reference/surprisal_prob.html">surprisal_prob()</a></code> function computes the probability of obtaining surprisal values at least as extreme as those observed.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
