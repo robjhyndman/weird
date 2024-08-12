@@ -137,7 +137,7 @@ hdr_table <- function(object, prob) {
   if(d == 1L) {
     output <- lapply(prob,
       function(p) {
-        hdri <- distributional::hdr(object, size = p * 100)
+        hdri <- distributional::hdr(object, size = p * 100, n=1e5)
         # Extract limits
         hdri <- tibble(
           prob = p,
@@ -159,7 +159,7 @@ hdr_table <- function(object, prob) {
   } else {
   output <- mapply(
     function(u, dist) {
-      r <- distributional::generate(u, times = 5e5)[[1]]
+      r <- distributional::generate(u, times = 1e5)[[1]]
       fi <- density(u, at = as.matrix(r))[[1]]
       tibble(
         distribution = dist,
