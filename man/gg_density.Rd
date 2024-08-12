@@ -63,7 +63,7 @@ The combination of \code{hdr = "fill"}, \code{show_points = TRUE},
 HDR boxplots.
 }
 \examples{
-# Univariate density
+# Univariate densities
 kde <- dist_kde(c(rnorm(500), rnorm(500, 4, .5)))
 gg_density(kde,
   hdr = "fill", prob = c(0.5, 0.95), color = "#c14b14",
@@ -71,6 +71,7 @@ gg_density(kde,
 )
 c(dist_normal(), kde) |>
   gg_density(hdr = "fill", prob = c(0.5, 0.95))
+# Bivariate density
 tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000)) |>
   dist_kde() |>
   gg_density(show_points = TRUE, alpha = 0.1, hdr = "fill")

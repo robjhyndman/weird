@@ -33,7 +33,7 @@
 #' @return A ggplot object.
 #' @author Rob J Hyndman
 #' @examples
-#' # Univariate density
+#' # Univariate densities
 #' kde <- dist_kde(c(rnorm(500), rnorm(500, 4, .5)))
 #' gg_density(kde,
 #'   hdr = "fill", prob = c(0.5, 0.95), color = "#c14b14",
@@ -41,6 +41,7 @@
 #' )
 #' c(dist_normal(), kde) |>
 #'   gg_density(hdr = "fill", prob = c(0.5, 0.95))
+#' # Bivariate density
 #' tibble(y1 = rnorm(5000), y2 = y1 + rnorm(5000)) |>
 #'   dist_kde() |>
 #'   gg_density(show_points = TRUE, alpha = 0.1, hdr = "fill")
@@ -254,12 +255,16 @@ gg_density2 <- function(
       show_x <- show_x[!show_x$anomaly, ]
     }
     if (hdr == "points") {
+      outsideprob = 1 - 0.01*show_anomalies
       p <- p +
         ggplot2::geom_point(
-          data = as.data.frame(show_x),
+          data = as.data.frame(show_x) |>
+            filter(),
           mapping = aes(x = x, y = y, col = group)
         ) +
-        ggplot2::scale_color_manual(values = c(hdr_colors[-1], "#000"))
+        ggplot2::scale_color_manual(values = hdr_colors[-1],
+                                    labels = paste0(100 * c(prob,outsideprob), "%"),
+                                    name = "HDR coverage")
     } else if (show_points) {
       p <- p + ggplot2::geom_point(
         data = show_x, mapping = aes(x = x, y = y),
@@ -281,10 +286,9 @@ gg_density2 <- function(
           breaks = c(Inf, threshold$threshold)
         ) +
         scale_fill_manual(
-          values = rev(hdr_colors[-1]),
-          labels = paste0(100 * prob, "%")
-        ) +
-        ggplot2::guides(fill = ggplot2::guide_legend(title = "HDR coverage"))
+          values = hdr_colors[-1],
+          labels = paste0(100 * prob, "%"),
+          name = "HDR coverage")
     } else if (hdr == "contours") {
       p <- p + geom_contour(aes(x = x, y = y, z = Density),
         breaks = threshold$threshold, color = hdr_colors[1]
