@@ -38,7 +38,7 @@
 #'   head(5) |>
 #'   dist()
 #' @export
-mvscale <- function(object, center = stats::median, scale = robustbase::s_IQR,
+mvscale <- function(object, center = stats::median, scale = robustbase::s_Qn,
                     cov = robustbase::covOGK, warning = TRUE) {
   d <- NCOL(object)
   vec <- FALSE # Indicator if object is a vector

@@ -16,10 +16,10 @@ kde_bandwidth <- function(data, multiplier = 1) {
   d <- NCOL(data)
   n <- NROW(data)
   if (d == 1L) {
-    return(multiplier * 1.06 * robustbase::s_IQR(data) * n^(-0.2))
+    return(multiplier * 1.06 * robustbase::s_Qn(data) * n^(-0.2))
   } else {
     # Find robust covariance matrix of data
-    S <- robustbase::covOGK(data, sigmamu = robustbase::s_IQR)$cov
+    S <- robustbase::covOGK(data, sigmamu = robustbase::s_Qn)$cov
     return(multiplier^2 * (4 / (n * (d + 2)))^(2 / (d + 4)) * S)
   }
 }

@@ -7,7 +7,7 @@
 mvscale(
   object,
   center = stats::median,
-  scale = robustbase::s_IQR,
+  scale = robustbase::s_Qn,
   cov = robustbase::covOGK,
   warning = TRUE
 )
