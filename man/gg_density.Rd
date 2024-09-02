@@ -11,7 +11,8 @@ gg_density(
   show_points = FALSE,
   show_mode = FALSE,
   show_anomalies = FALSE,
-  colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+  colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442",
+    "#333333"),
   alpha = NULL,
   jitter = FALSE,
   ngrid = 501
