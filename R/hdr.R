@@ -170,7 +170,7 @@ hdr_table <- function(object, prob, density_only = FALSE) {
   } else {
     output <- mapply(
       function(u, dist) {
-        r <- distributional::generate(u, times = 1e5)[[1]]
+        r <- distributional::generate(u, times = 1e4)[[1]]
         fi <- density(u, at = as.matrix(r))[[1]]
         tibble(
           distribution = dist,
