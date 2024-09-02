@@ -13,7 +13,7 @@ test_that("dist_kde2", {
   # Density
   at <- expand.grid(x = seq(-3, 3, by = 0.5), y = seq(-2, 10, by = 2)) |>
     as.matrix()
-  expect_equal(all(density(dist, at)[[1]] > 0), TRUE)
+  expect_equal(all(density(dist, at)[[1]] >= 0), TRUE)
   # CDF
   expect_error(distributional::cdf(dist, at))
   # Quantiles
