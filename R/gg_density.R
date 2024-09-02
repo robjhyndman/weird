@@ -52,7 +52,7 @@ gg_density <- function(
     object, prob = seq(9) / 10,
     hdr = NULL,
     show_points = FALSE, show_mode = FALSE, show_anomalies = FALSE,
-    colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442"),
+    colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442", "#333333"),
     alpha = NULL, jitter = FALSE, ngrid = 501) {
   if (min(prob) <= 0 | max(prob) >= 1) {
     stop("prob must be between 0 and 1")
@@ -70,6 +70,12 @@ gg_density <- function(
 
   # Set up data frame containing densities
   df <- make_density_df(object, ngrid = ngrid)
+  # Repeat colors
+  if(length(object) > length(colors)) {
+    warning("Insufficient colors. Some densities will be plotted in the same color.")
+    colors <- rep(colors, 1 + round(length(object)/length(colors)))[seq(length(object))]
+  }
+
   # HDR thresholds if needed
   if (hdr != "none") {
     # HDR thresholds
@@ -77,7 +83,6 @@ gg_density <- function(
       dplyr::transmute(level = 100 * prob, Distribution = distribution, threshold = density) |>
       dplyr::distinct()
     # HDR color palette
-    colors <- rep(colors, 10)[seq(length(object))]
     hdr_colors <- lapply(
       colors,
       function(u) { hdr_palette(color = u, prob = c(prob, 0.995)) }
