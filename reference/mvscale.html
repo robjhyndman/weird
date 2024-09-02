@@ -60,7 +60,7 @@ computing pairwise Mahalanobis distances.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mvscale</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
 <span>  center <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span>,</span>
-<span>  scale <span class="op">=</span> <span class="fu">robustbase</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/robustbase/man/covOGK.html" class="external-link">s_IQR</a></span>,</span>
+<span>  scale <span class="op">=</span> <span class="fu">robustbase</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/robustbase/man/Qn.html" class="external-link">s_Qn</a></span>,</span>
 <span>  cov <span class="op">=</span> <span class="fu">robustbase</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/robustbase/man/covOGK.html" class="external-link">covOGK</a></span>,</span>
 <span>  warning <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -146,18 +146,18 @@ with a warning.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,251 more rows</span></span>
 <span class="r-in"><span><span class="fu">mvscale</span><span class="op">(</span><span class="va">oldfaithful</span>, warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,261 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    time                    z1     z2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2015-01-02 <span style="color: #949494;">14:53:00</span>  1.91  -<span style="color: #BB0000;">1.42</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2015-01-09 <span style="color: #949494;">23:55:00</span>  0.149  0.777</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2015-02-07 <span style="color: #949494;">00:49:00</span> -<span style="color: #BB0000;">1.71</span>  -<span style="color: #BB0000;">0.518</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2015-02-14 <span style="color: #949494;">01:09:00</span> -<span style="color: #BB0000;">1.97</span>  -<span style="color: #BB0000;">1.03</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2015-02-21 <span style="color: #949494;">01:12:00</span> -<span style="color: #BB0000;">1.33</span>  -<span style="color: #BB0000;">0.645</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2015-02-28 <span style="color: #949494;">01:11:00</span> -<span style="color: #BB0000;">2.63</span>  -<span style="color: #BB0000;">0.388</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2015-03-07 <span style="color: #949494;">00:50:00</span> -<span style="color: #BB0000;">3.74</span>  -<span style="color: #BB0000;">0.904</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2015-03-13 <span style="color: #949494;">21:57:00</span> -<span style="color: #BB0000;">0.862</span>  0.647</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2015-03-13 <span style="color: #949494;">23:37:00</span> -<span style="color: #BB0000;">2.29</span>  -<span style="color: #BB0000;">0.775</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2015-03-20 <span style="color: #949494;">22:26:00</span> -<span style="color: #BB0000;">5.90</span>  -<span style="color: #BB0000;">3.75</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    time                     z1     z2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2015-01-02 <span style="color: #949494;">14:53:00</span>  1.93   -<span style="color: #BB0000;">1.25</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2015-01-09 <span style="color: #949494;">23:55:00</span>  0.061<span style="text-decoration: underline;">5</span>  0.684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2015-02-07 <span style="color: #949494;">00:49:00</span> -<span style="color: #BB0000;">1.55</span>   -<span style="color: #BB0000;">0.456</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2015-02-14 <span style="color: #949494;">01:09:00</span> -<span style="color: #BB0000;">1.74</span>   -<span style="color: #BB0000;">0.910</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2015-02-21 <span style="color: #949494;">01:12:00</span> -<span style="color: #BB0000;">1.18</span>   -<span style="color: #BB0000;">0.568</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2015-02-28 <span style="color: #949494;">01:11:00</span> -<span style="color: #BB0000;">2.43</span>   -<span style="color: #BB0000;">0.342</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2015-03-07 <span style="color: #949494;">00:50:00</span> -<span style="color: #BB0000;">3.42</span>   -<span style="color: #BB0000;">0.796</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2015-03-13 <span style="color: #949494;">21:57:00</span> -<span style="color: #BB0000;">0.873</span>   0.570</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2015-03-13 <span style="color: #949494;">23:37:00</span> -<span style="color: #BB0000;">2.07</span>   -<span style="color: #BB0000;">0.682</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2015-03-20 <span style="color: #949494;">22:26:00</span> -<span style="color: #BB0000;">5.15</span>   -<span style="color: #BB0000;">3.30</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,251 more rows</span></span>
 <span class="r-in"><span><span class="co"># Robust Mahalanobis distances</span></span></span>
 <span class="r-in"><span><span class="va">oldfaithful</span> <span class="op">|&gt;</span></span></span>
@@ -166,10 +166,10 @@ with a warning.</p>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           1         2         3         4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2.8170543                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 3.7249234 2.2623734                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 3.8979507 2.7884156 0.5800668          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 3.3248738 2.0486310 0.4013823 0.7538288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2.6919702                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 3.5671576 1.9718769                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 3.6897826 2.4089549 0.4950822          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 3.1820624 1.7618897 0.3861243 0.6617578</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
