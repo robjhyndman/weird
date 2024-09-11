@@ -11,7 +11,7 @@ gg_hdrboxplot(
   prob = c(0.5, 0.99),
   color = "#0072b2",
   show_points = FALSE,
-  scatterplot = FALSE,
+  scatterplot = show_points,
   ngrid = 501,
   ...
 )
@@ -36,7 +36,7 @@ with \code{\link{gg_bagplot}()}.}
 
 \item{ngrid}{Number of grid points to use for the density function.}
 
-\item{...}{Other arguments passed to \code{\link[ks]{kde}}.}
+\item{...}{Other arguments passed to \code{\link{dist_kde}}.}
 }
 \value{
 A ggplot object showing an HDR plot or scatterplot of the data.
@@ -44,13 +44,13 @@ A ggplot object showing an HDR plot or scatterplot of the data.
 \description{
 Produces a 1d or 2d box plot of HDR regions. The darker regions
 contain observations with higher probability, while the lighter regions contain
-points with lower probability. Points outside the largest HDR are shown as
-individual points. Points with surprisal probabilities less than 0.05 are
-optionally shown in black
+points with lower probability. Observations outside the largest HDR are shown
+as individual points. Points with surprisal probabilities less than 0.05 are
+shown in black.
 }
 \details{
 The original HDR boxplot proposed by Hyndman (1996), can be produced with
-all arguments set to their defaults other than \code{show_anomalies}.
+all arguments set to their defaults.
 }
 \examples{
 df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))

@@ -1,11 +1,11 @@
 #' @title HDR plot
 #' @description Produces a 1d or 2d box plot of HDR regions. The darker regions
 #' contain observations with higher probability, while the lighter regions contain
-#' points with lower probability. Points outside the largest HDR are shown as
-#' individual points. Points with surprisal probabilities less than 0.05 are
-#' optionally shown in black
+#' points with lower probability. Observations outside the largest HDR are shown
+#' as individual points. Points with surprisal probabilities less than 0.05 are
+#' shown in black.
 #' @details The original HDR boxplot proposed by Hyndman (1996), can be produced with
-#' all arguments set to their defaults other than `show_anomalies`.
+#' all arguments set to their defaults.
 #' @param data A data frame or matrix containing the data.
 #' @param var1 The name of the first variable to plot (a bare expression).
 #' @param var2 Optionally, the name of the second variable to plot (a bare expression).
@@ -17,7 +17,7 @@
 #' @param scatterplot Equivalent to `show_points`. Included for compatibility
 #' with \code{\link{gg_bagplot}()}.
 #' @param ngrid Number of grid points to use for the density function.
-#' @param ... Other arguments passed to \code{\link[ks]{kde}}.
+#' @param ... Other arguments passed to \code{\link{dist_kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
 #' @author Rob J Hyndman
 #' @references Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
@@ -40,7 +40,7 @@
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
                           color = "#0072b2",
                           show_points = FALSE,
-                          scatterplot = FALSE,
+                          scatterplot = show_points,
                           ngrid = 501, ...) {
   if (missing(var1)) {
     # Grab first variable
