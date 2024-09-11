@@ -34,7 +34,7 @@ If \code{NULL}, then "none" is used for univariate distributions and "contours" 
 point.}
 
 \item{show_anomalies}{If \code{TRUE}, then the observations with surprisal
-probabilities less than 0.01 are shown in red.}
+probabilities less than 0.01 are shown in black.}
 
 \item{colors}{Color palette to use. If there are more than
 \code{length(colors)} distributions, they are recycled. Default is the

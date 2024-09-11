@@ -2,8 +2,8 @@
 #' @description Produces a 1d or 2d box plot of HDR regions. The darker regions
 #' contain observations with higher probability, while the lighter regions contain
 #' points with lower probability. Points outside the largest HDR are shown as
-#' individual points. Points with lookout probabilities less than 0.05 are
-#' optionally shown in red.
+#' individual points. Points with surprisal probabilities less than 0.05 are
+#' optionally shown in black
 #' @details The original HDR boxplot proposed by Hyndman (1996), can be produced with
 #' all arguments set to their defaults other than `show_anomalies`.
 #' @param data A data frame or matrix containing the data.

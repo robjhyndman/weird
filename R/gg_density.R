@@ -21,7 +21,7 @@
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown as a
 #' point.
 #' @param show_anomalies If `TRUE`, then the observations with surprisal
-#' probabilities less than 0.01 are shown in red.
+#' probabilities less than 0.01 are shown in black.
 #' @param colors Color palette to use. If there are more than
 #' `length(colors)` distributions, they are recycled. Default is the
 #' Okabe-Ito color palette.
@@ -285,7 +285,7 @@ gg_density2 <- function(
     } else if (show_points) {
       p <- p + ggplot2::geom_point(
         data = show_x, mapping = aes(x = x, y = y),
-        color = dplyr::if_else(show_anomalies, tail(hdr_colors, 1), head(hdr_colors, 1)),
+        color = head(hdr_colors, 1), #dplyr::if_else(show_anomalies, tail(hdr_colors, 1), head(hdr_colors, 1)),
         alpha = alpha
       )
     }
