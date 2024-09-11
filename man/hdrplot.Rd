@@ -31,7 +31,7 @@ by whitening this color.}
 \item{show_points}{A logical argument indicating if a regular HDR plot is required
 (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).}
 
-\item{scatterplot}{Equivalent to \code{show_points}. Included for compatability
+\item{scatterplot}{Equivalent to \code{show_points}. Included for compatibility
 with \code{\link{gg_bagplot}()}.}
 
 \item{ngrid}{Number of grid points to use for the density function.}
@@ -45,8 +45,8 @@ A ggplot object showing an HDR plot or scatterplot of the data.
 Produces a 1d or 2d box plot of HDR regions. The darker regions
 contain observations with higher probability, while the lighter regions contain
 points with lower probability. Points outside the largest HDR are shown as
-individual points. Points with lookout probabilities
-less than 0.05 are optionally shown in red.
+individual points. Points with lookout probabilities less than 0.05 are
+optionally shown in red.
 }
 \details{
 The original HDR boxplot proposed by Hyndman (1996), can be produced with
