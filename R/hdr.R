@@ -2,8 +2,8 @@
 #' @description Produces a 1d or 2d box plot of HDR regions. The darker regions
 #' contain observations with higher probability, while the lighter regions contain
 #' points with lower probability. Points outside the largest HDR are shown as
-#' individual points. Points with lookout probabilities
-#' less than 0.05 are optionally shown in red.
+#' individual points. Points with lookout probabilities less than 0.05 are
+#' optionally shown in red.
 #' @details The original HDR boxplot proposed by Hyndman (1996), can be produced with
 #' all arguments set to their defaults other than `show_anomalies`.
 #' @param data A data frame or matrix containing the data.
@@ -14,7 +14,7 @@
 #' (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).
 #' @param color The base color to use for the mode. Colors for the HDRs are generated
 #' by whitening this color.
-#' @param scatterplot Equivalent to `show_points`. Included for compatability
+#' @param scatterplot Equivalent to `show_points`. Included for compatibility
 #' with \code{\link{gg_bagplot}()}.
 #' @param ngrid Number of grid points to use for the density function.
 #' @param ... Other arguments passed to \code{\link[ks]{kde}}.
