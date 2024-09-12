@@ -127,6 +127,35 @@ gg_density1 <- function(
       p <- p + geom_line(aes(x = x, y = Density, color = Distribution))
     }
   }
+  # Add HDRs to plot
+  if (hdr == "fill") {
+    prob <- sort(unique(prob), decreasing = TRUE)
+    hdrdf <- purrr::map_dfr(prob, function(u) {
+      hdri <- distributional::hdr(object, size = u * 100)
+      tibble(
+        level = u * 100,
+        Distribution = dist_names,
+        lower = vctrs::field(hdri, "lower"),
+        upper = vctrs::field(hdri, "upper")
+      ) |>
+        tidyr::unnest(c(lower, upper))
+    })
+    hdrdf$id <- seq(NROW(hdrdf))
+    hdrdf$ymin <- -maxden * as.numeric(factor(hdrdf$Distribution, levels = dist_names)) / 20
+    hdrdf$ymax <- hdrdf$ymin + maxden / 20
+    # Add one interval at a time because we can't use multiple ggplot fill scales
+    levels <- sort(unique(hdrdf$level), decreasing = TRUE)
+    for (dist in unique(hdrdf$Distribution)) {
+      for (i in seq_along(levels)) {
+        p <- p +
+          ggplot2::geom_rect(
+            data = hdrdf[hdrdf$Distribution == dist & hdrdf$level == levels[i], ],
+            aes(xmin = lower, xmax = upper, ymin = ymin, ymax = ymax),
+            fill = rev(hdr_colors[[dist]])[i + 1]
+          )
+      }
+    }
+  }
   # Show observations
   if (!is.null(show_x)) {
     if (is.null(alpha)) {
@@ -180,35 +209,7 @@ gg_density1 <- function(
       )
     }
   }
-  # Add HDRs to plot
-  if (hdr == "fill") {
-    prob <- sort(unique(prob), decreasing = TRUE)
-    hdr <- purrr::map_dfr(prob, function(u) {
-      hdri <- distributional::hdr(object, size = u * 100)
-      tibble(
-        level = u * 100,
-        Distribution = dist_names,
-        lower = vctrs::field(hdri, "lower"),
-        upper = vctrs::field(hdri, "upper")
-      ) |>
-        tidyr::unnest(c(lower, upper))
-    })
-    hdr$id <- seq(NROW(hdr))
-    hdr$ymin <- -maxden * as.numeric(factor(hdr$Distribution, levels = dist_names)) / 20
-    hdr$ymax <- hdr$ymin + maxden / 20
-    # Add one interval at a time because we can't use multiple ggplot fill scales
-    levels <- sort(unique(hdr$level), decreasing = TRUE)
-    for (dist in unique(hdr$Distribution)) {
-      for (i in seq_along(levels)) {
-        p <- p +
-          ggplot2::geom_rect(
-            data = hdr[hdr$Distribution == dist & hdr$level == levels[i], ],
-            aes(xmin = lower, xmax = upper, ymin = ymin, ymax = ymax),
-            fill = rev(hdr_colors[[dist]])[i + 1]
-          )
-      }
-    }
-  }
+
   # Add mode to plot
   if (show_mode) {
     modes <- df |>
@@ -252,6 +253,19 @@ gg_density2 <- function(
   hdr_colors <- hdr_colors[[1]]
   # Start plot
   p <- ggplot(df)
+  # Show filled regions
+  if (hdr == "fill") {
+    p <- p +
+      geom_contour_filled(
+        aes(x = x, y = y, z = Density),
+        breaks = c(Inf, threshold$threshold)
+      ) +
+      scale_fill_manual(
+        values = hdr_colors[-1],
+        labels = paste0(100 * prob, "%"),
+        name = "HDR coverage"
+      )
+  }
   # Plot individual observations
   # Show observations
   if (!is.null(show_x)) {
@@ -285,7 +299,7 @@ gg_density2 <- function(
     } else if (show_points) {
       p <- p + ggplot2::geom_point(
         data = show_x, mapping = aes(x = x, y = y),
-        color = head(hdr_colors, 1), #dplyr::if_else(show_anomalies, tail(hdr_colors, 1), head(hdr_colors, 1)),
+        color = head(hdr_colors, 1), # dplyr::if_else(show_anomalies, tail(hdr_colors, 1), head(hdr_colors, 1)),
         alpha = alpha
       )
     }
@@ -295,23 +309,11 @@ gg_density2 <- function(
       )
     }
   }
-  if (hdr == "fill" | hdr == "contours") {
-    if (hdr == "fill") {
-      p <- p +
-        geom_contour_filled(
-          aes(x = x, y = y, z = Density),
-          breaks = c(Inf, threshold$threshold)
-        ) +
-        scale_fill_manual(
-          values = hdr_colors[-1],
-          labels = paste0(100 * prob, "%"),
-          name = "HDR coverage"
-        )
-    } else if (hdr == "contours") {
-      p <- p + geom_contour(aes(x = x, y = y, z = Density),
-        breaks = threshold$threshold, color = hdr_colors[1]
-      )
-    }
+  # Show contours
+  if (hdr == "contours") {
+    p <- p + geom_contour(aes(x = x, y = y, z = Density),
+      breaks = threshold$threshold, color = hdr_colors[1]
+    )
   }
   if (show_mode) {
     modes <- df |>
