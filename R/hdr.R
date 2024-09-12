@@ -2,8 +2,7 @@
 #' @description Produces a 1d or 2d box plot of HDR regions. The darker regions
 #' contain observations with higher probability, while the lighter regions contain
 #' points with lower probability. Observations outside the largest HDR are shown
-#' as individual points. Points with surprisal probabilities less than 0.05 are
-#' shown in black.
+#' as individual points in black.
 #' @details The original HDR boxplot proposed by Hyndman (1996), can be produced with
 #' all arguments set to their defaults.
 #' @param data A data frame or matrix containing the data.
@@ -22,8 +21,6 @@
 #' @author Rob J Hyndman
 #' @references Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
 #' *The American Statistician*, **50**(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
-#' Kandanaarachchi, S & Hyndman, R J (2022) "Leave-one-out kernel density estimates for outlier detection",
-#' *J Computational & Graphical Statistics*, **31**(2), 586-599. \url{https://robjhyndman.com/publications/lookout/}
 #' @examples
 #' df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
 #' gg_hdrboxplot(df, x)

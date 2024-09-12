@@ -45,8 +45,7 @@ A ggplot object showing an HDR plot or scatterplot of the data.
 Produces a 1d or 2d box plot of HDR regions. The darker regions
 contain observations with higher probability, while the lighter regions contain
 points with lower probability. Observations outside the largest HDR are shown
-as individual points. Points with surprisal probabilities less than 0.05 are
-shown in black.
+as individual points in black.
 }
 \details{
 The original HDR boxplot proposed by Hyndman (1996), can be produced with
@@ -66,8 +65,6 @@ oldfaithful |>
 \references{
 Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
 \emph{The American Statistician}, \strong{50}(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
-Kandanaarachchi, S & Hyndman, R J (2022) "Leave-one-out kernel density estimates for outlier detection",
-\emph{J Computational & Graphical Statistics}, \strong{31}(2), 586-599. \url{https://robjhyndman.com/publications/lookout/}
 }
 \author{
 Rob J Hyndman
