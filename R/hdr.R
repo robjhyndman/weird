@@ -16,7 +16,8 @@
 #' @param show_points A logical argument indicating if a regular HDR plot is required
 #' (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).
 #' @param show_anomalies A logical argument indicating if the surprisal anomalies should be shown (in black).
-#' These are points with leave-one-out surprisal probability values less than 0.005.
+#' These are points with leave-one-out surprisal probability values less than 0.005,
+#' and which lie outside the 99% HDR region.
 #' @param alpha Transparency of points. Ignored if `show_points` is `FALSE`.
 #' Defaults to min(1, 500/n), where n is the number of observations plotted.
 #' @param jitter A logical value indicating if the points should be vertically jittered
