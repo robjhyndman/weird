@@ -64,7 +64,7 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
     # Anomalies are points with p < 0.005
     show_x <- mapply(
       function(u, p) {
-        u$anomaly <- p < 0.005
+        u$anomaly <- p < 0.005 & u$group == "Outside"
         return(u)
       },
       u = show_x, p,

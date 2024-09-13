@@ -11,7 +11,7 @@ gg_hdrboxplot(
   prob = c(0.5, 0.99),
   color = "#0072b2",
   show_points = FALSE,
-  show_anomalies = FALSE,
+  show_anomalies = TRUE,
   scatterplot = show_points,
   alpha = NULL,
   jitter = TRUE,
@@ -61,8 +61,9 @@ as individual points. Anomalies with leave-one-out surprisal probabilities
 less than 0.005 are optionally shown in black.
 }
 \details{
-The original HDR boxplot proposed by Hyndman (1996), can be produced with
-\code{jitter = FALSE}, \code{alpha = 1}, and all other arguments set to their defaults.
+The original HDR boxplot proposed by Hyndman (1996), can be produced
+with \code{show_anomalies = FALSE}, \code{jitter = FALSE}, \code{alpha = 1}, and all other
+arguments set to their defaults.
 }
 \examples{
 df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1), 10))

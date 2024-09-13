@@ -94,7 +94,7 @@ surprisal_prob <- function(
       loc = threshold,
       scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
     )
-  } else if (is.null(distribution)) {
+  } else if (is.null(distribution) | dimension_dist(distribution) > 1) {
     # Just use empirical cdf
     p <- 1 - (rank(g) - 1) / n
   } else if (stats::family(distribution) == "normal") {

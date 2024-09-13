@@ -4,8 +4,9 @@
 #' points with lower probability. Observations outside the largest HDR are shown
 #' as individual points. Anomalies with leave-one-out surprisal probabilities
 #' less than 0.005 are optionally shown in black.
-#' @details The original HDR boxplot proposed by Hyndman (1996), can be produced with
-#' `jitter = FALSE`, `alpha = 1`, and all other arguments set to their defaults.
+#' @details The original HDR boxplot proposed by Hyndman (1996), can be produced
+#' with `show_anomalies = FALSE`, `jitter = FALSE`, `alpha = 1`, and all other
+#' arguments set to their defaults.
 #' @param data A data frame or matrix containing the data.
 #' @param var1 The name of the first variable to plot (a bare expression).
 #' @param var2 Optionally, the name of the second variable to plot (a bare expression).
@@ -45,7 +46,7 @@
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
                           color = "#0072b2",
                           show_points = FALSE,
-                          show_anomalies = FALSE,
+                          show_anomalies = TRUE,
                           scatterplot = show_points,
                           alpha = NULL,
                           jitter = TRUE,
