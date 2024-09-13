@@ -71,8 +71,10 @@ surprisal_prob <- function(
     ...) {
   if (is.null(distribution)) {
     g <- surprisals(object, loo = loo, ...)
+    d <- NCOL(object)
   } else {
     g <- surprisals(object, distribution = distribution, loo = loo, ...)
+    d <- dimension_dist(distribution)
   }
   n <- length(g)
   if (GPD) {
@@ -94,7 +96,7 @@ surprisal_prob <- function(
       loc = threshold,
       scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
     )
-  } else if (is.null(distribution) | dimension_dist(distribution) > 1) {
+  } else if (is.null(distribution) | d > 1) {
     # Just use empirical cdf
     p <- 1 - (rank(g) - 1) / n
   } else if (stats::family(distribution) == "normal") {
