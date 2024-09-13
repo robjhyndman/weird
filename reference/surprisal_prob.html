@@ -120,7 +120,20 @@ surprisal values.</p></li>
 <span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">49</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  p <span class="op">=</span> <span class="fu">surprisal_prob</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in UseMethod("generate"):</span> no applicable method for 'generate' applied to an object of class "NULL"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          y      p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  5      0.020<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> -<span style="color: #BB0000;">0.189</span>  0.98  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>  0.082<span style="text-decoration: underline;">8</span> 0.8   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> -<span style="color: #BB0000;">0.352</span>  0.82  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> -<span style="color: #BB0000;">0.929</span>  0.52  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> -<span style="color: #BB0000;">0.583</span>  0.66  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  0.227  0.72  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> -<span style="color: #BB0000;">1.01</span>   0.46  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>  1.22   0.28  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> -<span style="color: #BB0000;">0.313</span>  0.86  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 40 more rows</span></span>
 <span class="r-in"><span><span class="fu">tibble</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  y <span class="op">=</span> <span class="va">n01</span><span class="op">$</span><span class="va">v1</span>,</span></span>
 <span class="r-in"><span>  prob1 <span class="op">=</span> <span class="fu">surprisal_prob</span><span class="op">(</span><span class="va">y</span><span class="op">)</span>,</span></span>
@@ -129,7 +142,20 @@ surprisal values.</p></li>
 <span class="r-in"><span>  prob4 <span class="op">=</span> <span class="fu">surprisal_prob</span><span class="op">(</span><span class="va">y</span>, <span class="fu">dist_normal</span><span class="op">(</span><span class="op">)</span>, GPD <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">prob1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in UseMethod("generate"):</span> no applicable method for 'generate' applied to an object of class "NULL"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y   prob1    prob2    prob3    prob4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  3.81 0.001<span style="text-decoration: underline;">00</span> 0.000<span style="text-decoration: underline;">113</span> 0.000<span style="text-decoration: underline;">139</span> 0.000<span style="text-decoration: underline;">135</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>  3.06 0.002<span style="text-decoration: underline;">00</span> 0.001<span style="text-decoration: underline;">94</span>  0.002<span style="text-decoration: underline;">25</span>  0.002<span style="text-decoration: underline;">61</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> -<span style="color: #BB0000;">3.01</span> 0.003<span style="text-decoration: underline;">00</span> 0.003<span style="text-decoration: underline;">62</span>  0.002<span style="text-decoration: underline;">63</span>  0.003<span style="text-decoration: underline;">08</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> -<span style="color: #BB0000;">3.00</span> 0.004<span style="text-decoration: underline;">00</span> 0.003<span style="text-decoration: underline;">76</span>  0.002<span style="text-decoration: underline;">73</span>  0.003<span style="text-decoration: underline;">20</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> -<span style="color: #BB0000;">2.94</span> 0.005<span style="text-decoration: underline;">00</span> 0.004<span style="text-decoration: underline;">56</span>  0.003<span style="text-decoration: underline;">28</span>  0.003<span style="text-decoration: underline;">89</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> -<span style="color: #BB0000;">2.89</span> 0.006<span style="text-decoration: underline;">00</span> 0.005<span style="text-decoration: underline;">38</span>  0.003<span style="text-decoration: underline;">87</span>  0.004<span style="text-decoration: underline;">61</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  2.68 0.007<span style="text-decoration: underline;">00</span> 0.008<span style="text-decoration: underline;">10</span>  0.007<span style="text-decoration: underline;">46</span>  0.009<span style="text-decoration: underline;">13</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>  2.65 0.008<span style="text-decoration: underline;">00</span> 0.008<span style="text-decoration: underline;">87</span>  0.008<span style="text-decoration: underline;">07</span>  0.009<span style="text-decoration: underline;">91</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> -<span style="color: #BB0000;">2.60</span> 0.009<span style="text-decoration: underline;">00</span> 0.012<span style="text-decoration: underline;">8</span>   0.009<span style="text-decoration: underline;">43</span>  0.011<span style="text-decoration: underline;">6</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> -<span style="color: #BB0000;">2.59</span> 0.010<span style="text-decoration: underline;">0</span>  0.013<span style="text-decoration: underline;">0</span>   0.009<span style="text-decoration: underline;">53</span>  0.011<span style="text-decoration: underline;">8</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 990 more rows</span></span>
 <span class="r-in"><span><span class="co"># Bivariate data</span></span></span>
 <span class="r-in"><span><span class="fu">tibble</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span>,</span></span>
@@ -139,16 +165,16 @@ surprisal values.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          x       y lookout</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> -<span style="color: #BB0000;">0.018</span><span style="color: #BB0000; text-decoration: underline;">5</span>  5       0.038<span style="text-decoration: underline;">4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> -<span style="color: #BB0000;">0.375</span>  -<span style="color: #BB0000;">0.177</span>   1     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>  0.853  -<span style="color: #BB0000;">0.859</span>   1     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> -<span style="color: #BB0000;">0.393</span>   0.471   1     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>  0.817   0.746   1     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> -<span style="color: #BB0000;">1.24</span>    1.94    0.465 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> -<span style="color: #BB0000;">0.464</span>  -<span style="color: #BB0000;">0.019</span><span style="color: #BB0000; text-decoration: underline;">4</span>  1     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> -<span style="color: #BB0000;">1.00</span>   -<span style="color: #BB0000;">0.390</span>   1     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> -<span style="color: #BB0000;">0.926</span>  -<span style="color: #BB0000;">1.82</span>    1     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> -<span style="color: #BB0000;">0.025</span><span style="color: #BB0000; text-decoration: underline;">3</span>  0.247   1     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  0.853   5       0.039<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> -<span style="color: #BB0000;">0.393</span>   0.471   1     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>  0.817   0.746   1     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> -<span style="color: #BB0000;">1.24</span>    1.94    0.478 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> -<span style="color: #BB0000;">0.464</span>  -<span style="color: #BB0000;">0.019</span><span style="color: #BB0000; text-decoration: underline;">4</span>  1     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> -<span style="color: #BB0000;">1.00</span>   -<span style="color: #BB0000;">0.390</span>   1     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> -<span style="color: #BB0000;">0.926</span>  -<span style="color: #BB0000;">1.82</span>    1     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> -<span style="color: #BB0000;">0.025</span><span style="color: #BB0000; text-decoration: underline;">3</span>  0.247   1     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>  1.41    0.779   1     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>  0.453   0.468   1     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 40 more rows</span></span>
 <span class="r-in"><span><span class="co"># Using a regression model</span></span></span>
 <span class="r-in"><span><span class="va">of</span> <span class="op">&lt;-</span> <span class="va">oldfaithful</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">duration</span> <span class="op">&lt;</span> <span class="fl">7200</span>, <span class="va">waiting</span> <span class="op">&lt;</span> <span class="fl">7200</span><span class="op">)</span></span></span>
@@ -156,9 +182,20 @@ surprisal values.</p></li>
 <span class="r-in"><span><span class="va">of</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">mutate</span><span class="op">(</span>p <span class="op">=</span> <span class="fu">surprisal_prob</span><span class="op">(</span><span class="va">fit_of</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mutate(of, p = surprisal_prob(fit_of)):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `p = surprisal_prob(fit_of)`.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `UseMethod()`:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> no applicable method for 'generate' applied to an object of class "NULL"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,197 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    time                duration waiting        p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2018-04-25 <span style="color: #949494;">19:08:00</span>        1    <span style="text-decoration: underline;">5</span>700 0.000<span style="text-decoration: underline;">455</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2020-06-01 <span style="color: #949494;">21:04:00</span>      120    <span style="text-decoration: underline;">6</span>060 0.000<span style="text-decoration: underline;">910</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2021-08-13 <span style="color: #949494;">22:19:23</span>      210    <span style="text-decoration: underline;">6</span>971 0.001<span style="text-decoration: underline;">37</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2020-10-15 <span style="color: #949494;">17:11:00</span>      220    <span style="text-decoration: underline;">7</span>080 0.001<span style="text-decoration: underline;">82</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2016-11-11 <span style="color: #949494;">14:23:00</span>      180    <span style="text-decoration: underline;">6</span>480 0.002<span style="text-decoration: underline;">28</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2021-07-26 <span style="color: #949494;">18:35:39</span>      192    <span style="text-decoration: underline;">6</span>618 0.002<span style="text-decoration: underline;">73</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2017-02-25 <span style="color: #949494;">00:53:00</span>      201    <span style="text-decoration: underline;">6</span>720 0.003<span style="text-decoration: underline;">19</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2015-06-17 <span style="color: #949494;">23:06:00</span>      210    <span style="text-decoration: underline;">6</span>780 0.003<span style="text-decoration: underline;">64</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2021-05-21 <span style="color: #949494;">23:21:09</span>      222    <span style="text-decoration: underline;">6</span>891 0.004<span style="text-decoration: underline;">10</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2020-09-16 <span style="color: #949494;">14:44:00</span>      160    <span style="text-decoration: underline;">6</span>120 0.004<span style="text-decoration: underline;">55</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,187 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
