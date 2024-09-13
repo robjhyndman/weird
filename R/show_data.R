@@ -56,29 +56,18 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
 
   # Compute surprisal probabilities
   if(anomalies) {
-    # Check if we already have the threshold for 99%
-    fi <- NULL
-    if(!is.null(threshold)) {
-      if(99 %in% threshold$level) {
-        fi <- threshold |>
-          dplyr::filter(level == 99) |>
-          dplyr::select(Distribution, threshold) |>
-          dplyr::distinct()
-      }
-    }
-    if(is.null(fi)) {
-      # Compute 99% threshold
-      fi <- hdr_table(object, prob = 0.99, density_only = TRUE) |>
-        dplyr::select(Distribution = distribution, threshold = density) |>
-        dplyr::distinct()
-    }
-    # Anomalies are points with density less than threshold
+    p <- mapply(
+        function(data, dist) { c(surprisal_prob(data, dist, loo = TRUE)) },
+        x, object,
+        SIMPLIFY = FALSE
+    )
+    # Anomalies are points with p < 0.005
     show_x <- mapply(
-      function(u, threshold) {
-        u$anomaly <- u$den < threshold$threshold
+      function(u, p) {
+        u$anomaly <- p < 0.005
         return(u)
       },
-      u = show_x, threshold = split(fi, fi$Distribution),
+      u = show_x, p,
       SIMPLIFY = FALSE
     )
   }

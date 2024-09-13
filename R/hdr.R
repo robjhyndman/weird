@@ -2,28 +2,36 @@
 #' @description Produces a 1d or 2d box plot of HDR regions. The darker regions
 #' contain observations with higher probability, while the lighter regions contain
 #' points with lower probability. Observations outside the largest HDR are shown
-#' as individual points in black.
+#' as individual points. Anomalies with leave-one-out surprisal probabilities
+#' less than 0.005 are optionally shown in black.
 #' @details The original HDR boxplot proposed by Hyndman (1996), can be produced with
-#' all arguments set to their defaults.
+#' `jitter = FALSE`, `alpha = 1`, and all other arguments set to their defaults.
 #' @param data A data frame or matrix containing the data.
 #' @param var1 The name of the first variable to plot (a bare expression).
 #' @param var2 Optionally, the name of the second variable to plot (a bare expression).
 #' @param prob A numeric vector specifying the coverage probabilities for the HDRs.
-#' @param show_points A logical argument indicating if a regular HDR plot is required
-#' (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).
 #' @param color The base color to use for the mode. Colors for the HDRs are generated
 #' by whitening this color.
+#' @param show_points A logical argument indicating if a regular HDR plot is required
+#' (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).
+#' @param show_anomalies A logical argument indicating if the surprisal anomalies should be shown (in black).
+#' These are points with leave-one-out surprisal probability values less than 0.005.
+#' @param alpha Transparency of points. Ignored if `show_points` is `FALSE`.
+#' Defaults to min(1, 500/n), where n is the number of observations plotted.
+#' @param jitter A logical value indicating if the points should be vertically jittered
+#' for the 1d box plots to reduce overplotting.
 #' @param scatterplot Equivalent to `show_points`. Included for compatibility
 #' with \code{\link{gg_bagplot}()}.
 #' @param ngrid Number of grid points to use for the density function.
 #' @param ... Other arguments passed to \code{\link{dist_kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
 #' @author Rob J Hyndman
+#' @seealso \code{\link{surprisal_prob}}, \code{\link{hdr_table}}
 #' @references Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
 #' *The American Statistician*, **50**(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
 #' @examples
-#' df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
-#' gg_hdrboxplot(df, x)
+#' df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1), 10))
+#' gg_hdrboxplot(df, x, show_anomalies = TRUE)
 #' cricket_batting |>
 #'   filter(Innings > 20) |>
 #'   gg_hdrboxplot(Average)
@@ -37,7 +45,10 @@
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
                           color = "#0072b2",
                           show_points = FALSE,
+                          show_anomalies = FALSE,
                           scatterplot = show_points,
+                          alpha = NULL,
+                          jitter = TRUE,
                           ngrid = 501, ...) {
   if (missing(var1)) {
     # Grab first variable
@@ -69,7 +80,10 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     dplyr::distinct()
 
   # Data to plot
-  show_x <- show_data(dist, prob, threshold, anomalies = TRUE)
+  show_x <- show_data(dist, prob, threshold, anomalies = show_anomalies)
+  if(NROW(show_x) != NROW(data)) {
+    stop("Something has gone wrong here!")
+  }
 
   # Call gg_density functions
   if (d == 2L) {
@@ -80,10 +94,10 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       prob = prob,
       hdr = hdr,
       hdr_colors = hdr_colors,
-      alpha = NULL,
       show_points = TRUE,
       show_mode = TRUE,
-      show_anomalies = TRUE
+      show_anomalies = show_anomalies,
+      alpha = alpha
     ) +
       ggplot2::guides(fill = "none", color = "none")
   } else {
@@ -94,12 +108,12 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
       prob = prob,
       hdr = hdr,
       hdr_colors = hdr_colors,
-      alpha = NULL,
       show_density = FALSE,
-      jitter = TRUE,
       show_points = TRUE,
       show_mode = TRUE,
-      show_anomalies = TRUE
+      show_anomalies = show_anomalies,
+      alpha = alpha,
+      jitter = jitter
     ) +
       ggplot2::guides(alpha = "none") +
       ggplot2::scale_y_continuous(breaks = NULL) +

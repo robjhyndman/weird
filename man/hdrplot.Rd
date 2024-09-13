@@ -11,7 +11,10 @@ gg_hdrboxplot(
   prob = c(0.5, 0.99),
   color = "#0072b2",
   show_points = FALSE,
+  show_anomalies = FALSE,
   scatterplot = show_points,
+  alpha = NULL,
+  jitter = TRUE,
   ngrid = 501,
   ...
 )
@@ -31,8 +34,17 @@ by whitening this color.}
 \item{show_points}{A logical argument indicating if a regular HDR plot is required
 (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).}
 
+\item{show_anomalies}{A logical argument indicating if the surprisal anomalies should be shown (in black).
+These are points with leave-one-out surprisal probability values less than 0.005.}
+
 \item{scatterplot}{Equivalent to \code{show_points}. Included for compatibility
 with \code{\link{gg_bagplot}()}.}
+
+\item{alpha}{Transparency of points. Ignored if \code{show_points} is \code{FALSE}.
+Defaults to min(1, 500/n), where n is the number of observations plotted.}
+
+\item{jitter}{A logical value indicating if the points should be vertically jittered
+for the 1d box plots to reduce overplotting.}
 
 \item{ngrid}{Number of grid points to use for the density function.}
 
@@ -45,15 +57,16 @@ A ggplot object showing an HDR plot or scatterplot of the data.
 Produces a 1d or 2d box plot of HDR regions. The darker regions
 contain observations with higher probability, while the lighter regions contain
 points with lower probability. Observations outside the largest HDR are shown
-as individual points in black.
+as individual points. Anomalies with leave-one-out surprisal probabilities
+less than 0.005 are optionally shown in black.
 }
 \details{
 The original HDR boxplot proposed by Hyndman (1996), can be produced with
-all arguments set to their defaults.
+\code{jitter = FALSE}, \code{alpha = 1}, and all other arguments set to their defaults.
 }
 \examples{
-df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1)))
-gg_hdrboxplot(df, x)
+df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1), 10))
+gg_hdrboxplot(df, x, show_anomalies = TRUE)
 cricket_batting |>
   filter(Innings > 20) |>
   gg_hdrboxplot(Average)
@@ -65,6 +78,9 @@ oldfaithful |>
 \references{
 Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
 \emph{The American Statistician}, \strong{50}(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
+}
+\seealso{
+\code{\link{surprisal_prob}}, \code{\link{hdr_table}}
 }
 \author{
 Rob J Hyndman
