@@ -107,7 +107,11 @@ surprisal_prob <- function(
     p <- 2 * (1 - stats::pnorm(abs(x), mu, sqrt(sigma2)))
   } else {
     # Slower computation, but more general (although approximate)
-    dist_x <- stats::quantile(distribution, seq(1e-6, 1 - 1e-6, length.out = 100001))
+    dist_x <- stats::quantile(
+      distribution,
+      seq(1e-6, 1 - 1e-6, length.out = 10001),
+      type = 8
+    )
     dist_x <- unique(unlist(dist_x))
     dist_y <- -unlist(density(distribution, dist_x, log = TRUE))
     prob <- (rank(dist_y) - 1) / length(dist_y)
