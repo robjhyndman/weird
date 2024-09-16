@@ -117,6 +117,7 @@ surprisal_prob <- function(
     prob <- (rank(dist_y) - 1) / length(dist_y)
     p <- 1 - approx(dist_y, prob, xout = g, rule = 2, ties = mean)$y
   }
+  p[g == Inf] <- 0
   return(p)
 }
 
