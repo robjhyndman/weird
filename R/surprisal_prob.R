@@ -109,8 +109,7 @@ surprisal_prob <- function(
     # Slower computation, but more general (although approximate)
     dist_x <- stats::quantile(
       distribution,
-      seq(1e-6, 1 - 1e-6, length.out = 10001),
-      type = 8
+      seq(1e-6, 1 - 1e-6, length.out = 10001)
     )
     dist_x <- unique(unlist(dist_x))
     dist_y <- -unlist(density(distribution, dist_x, log = TRUE))
