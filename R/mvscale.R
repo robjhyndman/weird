@@ -75,8 +75,8 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_Qn,
   }
   # Create more resilient version of scale function
   if(!is.null(scale)) {
-    my_scale <- function(x, mu.too = FALSE, na.rm = TRUE) {
-      s <- scale(x, mu.too = mu.too, na.rm = na.rm)
+    my_scale <- function(x, ..., na.rm = TRUE) {
+      s <- scale(x, ..., na.rm = na.rm)
       s[s == 0] <- 1 # Avoid division by zero
       return(s)
     }
