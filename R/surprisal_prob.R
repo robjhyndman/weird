@@ -99,12 +99,16 @@ surprisal_prob <- function(
   } else if (is.null(distribution) | d > 1) {
     # Just use empirical cdf
     p <- 1 - (rank(g) - 1) / n
-  } else if (stats::family(distribution) == "normal") {
-    # Fast computation for normal distribution
+  } else if (stats::family(distribution == "normal")) {
+    # Fast computation for normal distributions
     mu <- mean(distribution)
     sigma2 <- distributional::variance(distribution)
     x <- sqrt(2 * g - log(2 * pi * sigma2))
     p <- 2 * (1 - stats::pnorm(abs(x), mu, sqrt(sigma2)))
+  } else if (is_symmetric(distribution)) {
+    # Faster computation for other symmetric distributions
+    centre <- stats::median(distribution)
+    p <- 2 * (1 - cdf(distribution, q = centre + abs(object - centre)))
   } else {
     # Slower computation, but more general (although approximate)
     dist_x <- stats::quantile(
@@ -119,6 +123,23 @@ surprisal_prob <- function(
   p[g == Inf] <- 0
   return(p)
 }
+
+# Check if distribution is symmetric
+is_symmetric <- function(dist) {
+  if (stats::family(distribution) %in%
+      c("student_t", "cauchy", "logistic", "triangular", "uniform")) {
+    return(TRUE)
+  } else {
+    q1 <- unlist(stats::quantile(dist, seq(0.5, 0.99, length.out = 5)))
+    q2 <- unlist(stats::quantile(dist, seq(0.5, 0.01, length.out = 5)))
+    q1 <- q1 - q1[1]
+    q2 <- q2 - q2[1]
+    return(sum(abs(q1 + q2) / max(abs(c(q1, q2)))) < 1e-8)
+  }
+}
+
+
+
 
 #' @importFrom stats quantile
 #' @importFrom evd fpot
