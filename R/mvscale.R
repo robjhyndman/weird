@@ -81,7 +81,7 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_Qn,
       return(s)
     }
   } else {
-    my_scale <- function(x, ...) {1}
+    my_scale <- function(x, ..., na.rm = TRUE) {1}
   }
   # Scale
   if (d == 1L) {
