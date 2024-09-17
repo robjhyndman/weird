@@ -99,7 +99,7 @@ surprisal_prob <- function(
   } else if (is.null(distribution) | d > 1) {
     # Just use empirical cdf
     p <- 1 - (rank(g) - 1) / n
-  } else if (stats::family(distribution == "normal")) {
+  } else if (stats::family(distribution) == "normal") {
     # Fast computation for normal distributions
     mu <- mean(distribution)
     sigma2 <- distributional::variance(distribution)
@@ -108,7 +108,7 @@ surprisal_prob <- function(
   } else if (is_symmetric(distribution)) {
     # Faster computation for other symmetric distributions
     centre <- stats::median(distribution)
-    p <- 2 * (1 - cdf(distribution, q = centre + abs(object - centre)))
+    p <- 2 * (1 - distributional::cdf(distribution, q = centre + abs(object - centre)))
   } else {
     # Slower computation, but more general (although approximate)
     dist_x <- stats::quantile(
@@ -126,7 +126,7 @@ surprisal_prob <- function(
 
 # Check if distribution is symmetric
 is_symmetric <- function(dist) {
-  if (stats::family(distribution) %in%
+  if (stats::family(dist) %in%
       c("student_t", "cauchy", "logistic", "triangular", "uniform")) {
     return(TRUE)
   } else {
