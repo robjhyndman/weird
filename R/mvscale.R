@@ -73,24 +73,24 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_Qn,
     med <- apply(mat, 2, center)
     mat <- sweep(mat, 2L, med)
   }
+  # Create more resilient version of scale function
+  if(!is.null(scale)) {
+    my_scale <- function(x, mu.too = FALSE, na.rm = TRUE) {
+      s <- scale(x, mu.too = mu.too, na.rm = na.rm)
+      s[s == 0] <- 1 # Avoid division by zero
+      return(s)
+    }
+  } else {
+    my_scale <- function(x, ...) {1}
+  }
   # Scale
   if (d == 1L) {
-    if (!is.null(scale)) {
-      z <- mat / scale(mat)
-    } else {
-      z <- mat
-    }
+    z <- mat / my_scale(mat)
     if (vec) {
       return(c(z))
     }
   } else if (!is.null(cov)) {
     if (identical(cov, robustbase::covOGK)) {
-      # Create more resilient version of scale function
-      my_scale <- function(x, mu.too = FALSE, na.rm = TRUE) {
-        s <- scale(x, mu.too = mu.too, na.rm = na.rm)
-        s[s == 0] <- 1 # Avoid division by zero
-        return(s)
-      }
       S <- cov(mat, sigmamu = my_scale)$cov
     } else {
       S <- cov(mat)
@@ -107,7 +107,7 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_Qn,
     U <- chol(Sinv)
     z <- mat %*% t(U)
   } else {
-    s <- apply(mat, 2, scale)
+    s <- apply(mat, 2, my_scale)
     z <- sweep(mat, 2L, s, "/")
   }
   # Convert back to matrix, data frame or tibble if necessary
