@@ -155,7 +155,7 @@ Here are the top 0.02% most anomalous observations identified by each of the met
 ```{r of-scores}
 of |>
   mutate(
-    surprisal = surprisals(cbind(duration, waiting)),
+    surprisal = surprisals(cbind(duration, waiting), probability = FALSE),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting)),
@@ -171,13 +171,14 @@ of |>
   arrange(lookout)
 ```
 
-In addition to the `surprisals()` function, the `surprisal_prob()` function computes the probability of obtaining surprisal values at least as extreme as those observed.
+The `surprisals()` function can also compute the probability of obtaining surprisal values at least as extreme as those observed. In fact, this is the default behaviour, obtained
+when `probability = TRUE`.
 
 ```{r}
 of |>
   mutate(
-    surprisal = surprisals(cbind(duration, waiting)),
-    prob = surprisal_prob(cbind(duration, waiting))
+    surprisal = surprisals(cbind(duration, waiting), probability = FALSE),
+    prob = surprisals(cbind(duration, waiting))
   ) |>
   arrange(prob)
 ```
