@@ -5,13 +5,40 @@
 \alias{surprisals.gam}
 \title{Surprisals computed from a model}
 \usage{
-\method{surprisals}{lm}(object, loo = FALSE, ...)
+\method{surprisals}{lm}(
+  object,
+  probability = TRUE,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.1,
+  loo = FALSE,
+  ...
+)
 
-\method{surprisals}{gam}(object, loo = FALSE, ...)
+\method{surprisals}{gam}(
+  object,
+  probability = TRUE,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.1,
+  loo = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{A model object such as returned by \code{\link[stats]{lm}},
 or \code{\link[mgcv]{gam}}.}
+
+\item{probability}{Should surprisal probabilities be computed, or the
+surprisal values?}
+
+\item{approximation}{Character string specifying the approximation to use in
+computing the surprisal probabilities. Ignored if \code{probability = FALSE}. :
+\code{none} specifies that no approximation is to be used;
+\code{gpd} specifies that  the Generalized Pareto distribution should be used;
+while \code{empirical} specifies that the probabilities should be estimated empirically.}
+
+\item{threshold_probability}{Probability threshold when computing the GPD
+approximation. This is the probability below which the GPD is fitted. Only
+used if \code{approximation = "gpd"}).}
 
 \item{loo}{Should leave-one-out surprisals be computed?}
 

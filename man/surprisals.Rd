@@ -2,17 +2,116 @@
 % Please edit documentation in R/surprisals.R
 \name{surprisals}
 \alias{surprisals}
+\alias{surprisals.default}
 \title{Surprisals}
 \usage{
-surprisals(object, ...)
+surprisals(
+  object,
+  probability = TRUE,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.1,
+  ...
+)
+
+\method{surprisals}{default}(
+  object,
+  probability = TRUE,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.1,
+  distribution = dist_kde(object, multiplier = 2, ...),
+  loo = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{A model or numerical data set}
 
+\item{probability}{Should surprisal probabilities be computed, or the
+surprisal values?}
+
+\item{approximation}{Character string specifying the approximation to use in
+computing the surprisal probabilities. Ignored if \code{probability = FALSE}. :
+\code{none} specifies that no approximation is to be used;
+\code{gpd} specifies that  the Generalized Pareto distribution should be used;
+while \code{empirical} specifies that the probabilities should be estimated empirically.}
+
+\item{threshold_probability}{Probability threshold when computing the GPD
+approximation. This is the probability below which the GPD is fitted. Only
+used if \code{approximation = "gpd"}).}
+
 \item{...}{Other arguments are passed to the appropriate method.}
+
+\item{distribution}{A distribution object. If not provided, a kernel density
+estimate is computed from the data \code{object}.}
+
+\item{loo}{Should leave-one-out surprisals be computed?}
+}
+\value{
+A numerical vector containing the surprisals or surprisal probabilities.
 }
 \description{
-Compute surprisals from a model or a data set given a
-probability distribution. The surprisals are defined as minus the log of the
-density at each observation.
+Compute surprisals or surprisal probabilities from a model or a
+data set. A surprisal is given by \eqn{s = -\log f(y)} where \eqn{f} is the
+density or probability mass function of the estimated or assumed distribution,
+and \eqn{y} is an observation. A surprisal probability is the probability of
+a surprisal at least as extreme as \eqn{s}.
+
+The surprisal probabilities may be computed in three different ways.
+\enumerate{
+\item Given the same distribution that was used to compute the surprisal values.
+Under this option, surprisal probabilities are equal to 1 minus the
+coverage probability of the largest HDR that contains each value. Surprisal
+probabilities smaller than 1e-6 are returned as 1e-6.
+\item Using a Generalized Pareto Distribution fitted to the most extreme
+surprisal values (those with probability less than \code{threshold_probability}).
+This option is used if \code{approximation = "gpd"}. For surprisal values with
+probability less than \code{threshold_probability}, the value of
+\code{threshold_probability} is returned. Under this option, the distribution is
+used for computing the surprisal values but not for determining their
+probabilities. Due to extreme value theory, the resulting probabilities should
+be relatively insensitive to the distribution used in computing the surprisal
+values.
+\item Empirically as the proportion of observations with greater surprisal values.
+This option is used when \code{approxiation = "empirical"}. This is also
+insensitive to the distribution used in computing the surprisal values.
+}
+}
+\details{
+If no distribution is provided, a kernel density estimate is
+computed. The leave-one-out surprisals (or LOO surprisals) are obtained by
+estimating the kernel density estimate using all other observations.
+}
+\examples{
+# surprisals computed from bivariate data set
+oldfaithful |>
+  filter(duration < 7000, waiting < 7000) |>
+  mutate(
+    loo_fscores = surprisals(cbind(duration, waiting), loo = TRUE)
+  )
+# Univariate data
+tibble(
+  y = c(5, rnorm(49)),
+  p = surprisals(y)
+)
+tibble(
+  y = n01$v1,
+  prob1 = surprisals(y),
+  prob2 = surprisals(y, approximation = "gpd"),
+  prob3 = surprisals(y, distribution = dist_normal()),
+  prob4 = surprisals(y, distribution = dist_normal(), approximation = "gpd")
+) |>
+  arrange(prob1)
+# Bivariate data
+tibble(
+  x = rnorm(50),
+  y = c(5, rnorm(49)),
+  prob = surprisals(cbind(x, y)),
+  lookout = lookout_prob(cbind(x, y))
+)
+}
+\seealso{
+\code{\link{dist_kde}}
+}
+\author{
+Rob J Hyndman
 }

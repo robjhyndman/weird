@@ -39,7 +39,6 @@ reference:
       - surprisals
       - surprisals.default
       - surprisals.lm
-      - surprisal_prob
       - lookout_prob
   - title: Functions for identifying anomalies
     contents:

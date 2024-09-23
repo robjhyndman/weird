@@ -82,7 +82,7 @@ Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
 \emph{The American Statistician}, \strong{50}(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
 }
 \seealso{
-\code{\link{surprisal_prob}}, \code{\link{hdr_table}}
+\code{\link{surprisals}}, \code{\link{hdr_table}}
 }
 \author{
 Rob J Hyndman

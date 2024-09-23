@@ -28,7 +28,7 @@
 #' @param ... Other arguments passed to \code{\link{dist_kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
 #' @author Rob J Hyndman
-#' @seealso \code{\link{surprisal_prob}}, \code{\link{hdr_table}}
+#' @seealso \code{\link{surprisals}}, \code{\link{hdr_table}}
 #' @references Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
 #' *The American Statistician*, **50**(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
 #' @examples
@@ -41,7 +41,6 @@
 #'   filter(duration < 7000, waiting < 7000) |>
 #'   gg_hdrboxplot(duration, waiting, show_points = TRUE)
 #'
-#' @rdname hdrplot
 #' @export
 
 gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),

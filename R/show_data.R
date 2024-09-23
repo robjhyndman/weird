@@ -57,7 +57,7 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
   # Compute surprisal probabilities
   if(anomalies) {
     p <- mapply(
-        function(data, dist) { c(surprisal_prob(data, dist, loo = TRUE)) },
+        function(data, dist) { c(surprisals(data, distribution = dist, loo = TRUE, probablity = TRUE)) },
         x, object,
         SIMPLIFY = FALSE
     )

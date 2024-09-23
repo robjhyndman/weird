@@ -19,8 +19,8 @@ The lookout algorithm (Kandanaarachchi & Hyndman, 2022) computes
 leave-one-out surprisal probabilities from a kernel density estimate using a
 Generalized Pareto distribution. The kernel density estimate uses a
 bandwidth based on topological data analysis and a quadratic kernel. So it is
-similar but not identical to using \link{surprisal_prob} with \code{loo = TRUE}
-and \code{GPD = TRUE}. A low probability indicates a likely anomaly.
+similar but not identical to using \code{\link{surprisals}} with \code{loo = TRUE}
+and \code{approximation = "gdp"}. A low probability indicates a likely anomaly.
 }
 \examples{
 # Univariate data

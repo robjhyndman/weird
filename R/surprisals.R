@@ -1,34 +1,42 @@
 #' @title Surprisals
 
-#' @description Compute surprisals from a model or a data set given a
-#' probability distribution. The surprisals are defined as minus the log of the
-#' density at each observation.
+#' @description Compute surprisals or surprisal probabilities from a model or a
+#' data set. A surprisal is given by \eqn{s = -\log f(y)} where \eqn{f} is the
+#' density or probability mass function of the estimated or assumed distribution,
+#' and \eqn{y} is an observation. A surprisal probability is the probability of
+#' a surprisal at least as extreme as \eqn{s}.
+#'
+#' The surprisal probabilities may be computed in three different ways.
+#' 1. Given the same distribution that was used to compute the surprisal values.
+#' Under this option, surprisal probabilities are equal to 1 minus the
+#' coverage probability of the largest HDR that contains each value. Surprisal
+#' probabilities smaller than 1e-6 are returned as 1e-6.
+#' 2. Using a Generalized Pareto Distribution fitted to the most extreme
+#' surprisal values (those with probability less than `threshold_probability`).
+#' This option is used if `approximation = "gpd"`. For surprisal values with
+#' probability less than `threshold_probability`, the value of
+#' `threshold_probability` is returned. Under this option, the distribution is
+#' used for computing the surprisal values but not for determining their
+#' probabilities. Due to extreme value theory, the resulting probabilities should
+#' be relatively insensitive to the distribution used in computing the surprisal
+#' values.
+#' 3. Empirically as the proportion of observations with greater surprisal values.
+#' This option is used when `approxiation = "empirical"`. This is also
+#' insensitive to the distribution used in computing the surprisal values.
 #' @param object A model or numerical data set
+#' @param probability Should surprisal probabilities be computed, or the
+#' surprisal values?
+#' @param approximation Character string specifying the approximation to use in
+#' computing the surprisal probabilities. Ignored if `probability = FALSE`. :
+#' `none` specifies that no approximation is to be used;
+#' `gpd` specifies that  the Generalized Pareto distribution should be used;
+#' while `empirical` specifies that the probabilities should be estimated empirically.
+#' @param threshold_probability Probability threshold when computing the GPD
+#' approximation. This is the probability below which the GPD is fitted. Only
+#' used if `approximation = "gpd"`).
 #' @param ... Other arguments are passed to the appropriate method.
-#' @export
-
-surprisals <- function(object, ...) {
-  UseMethod("surprisals")
-}
-
-#' @title Surprisals computed from a data set
-#'
-#' @description Compute surprisals from a data set given a probability
-#' distribution. The surprisals are defined as minus the log of the density at
-#' each observation.
-#'
-#' @details If no distribution is provided, a kernel density estimate is
-#' computed. The leave-one-out surprisals (or LOO surprisals) are obtained by
-#' estimating the kernel density estimate using all other observations.
-#'
-#' @param object A numerical data  set, either a vector, matrix or data frame.
-#' @param distribution A probability distribution stored as a distributional
-#' object.
-#' @param loo Should leave-one-out surprisals be computed?
-#' @param ... Other arguments are passed to \code{\link{dist_kde}}.
 #' @author Rob J Hyndman
-#' @return A numerical vector containing the surprisals.
-#' @seealso \code{\link{dist_kde}}
+#' @return A numerical vector containing the surprisals or surprisal probabilities.
 #' @examples
 #' # surprisals computed from bivariate data set
 #' oldfaithful |>
@@ -37,8 +45,53 @@ surprisals <- function(object, ...) {
 #'     loo_fscores = surprisals(cbind(duration, waiting), loo = TRUE)
 #'   )
 #' @export
+
+surprisals <- function(
+    object,
+    probability = TRUE,
+    approximation = c("none", "gpd", "empirical"),
+    threshold_probability = 0.10,
+    ...) {
+  UseMethod("surprisals")
+}
+
+
+#' @rdname surprisals
+#' @details If no distribution is provided, a kernel density estimate is
+#' computed. The leave-one-out surprisals (or LOO surprisals) are obtained by
+#' estimating the kernel density estimate using all other observations.
+#'
+#' @param distribution A distribution object. If not provided, a kernel density
+#' estimate is computed from the data `object`.
+#' @param loo Should leave-one-out surprisals be computed?
+#' @seealso \code{\link{dist_kde}}
+#' @examples
+#' # Univariate data
+#' tibble(
+#'   y = c(5, rnorm(49)),
+#'   p = surprisals(y)
+#' )
+#' tibble(
+#'   y = n01$v1,
+#'   prob1 = surprisals(y),
+#'   prob2 = surprisals(y, approximation = "gpd"),
+#'   prob3 = surprisals(y, distribution = dist_normal()),
+#'   prob4 = surprisals(y, distribution = dist_normal(), approximation = "gpd")
+#' ) |>
+#'   arrange(prob1)
+#' # Bivariate data
+#' tibble(
+#'   x = rnorm(50),
+#'   y = c(5, rnorm(49)),
+#'   prob = surprisals(cbind(x, y)),
+#'   lookout = lookout_prob(cbind(x, y))
+#' )
+#' @export
 surprisals.default <- function(
     object,
+    probability = TRUE,
+    approximation = c("none", "gpd", "empirical"),
+    threshold_probability = 0.10,
     distribution = dist_kde(object, multiplier = 2, ...),
     loo = FALSE,
     ...) {
@@ -63,10 +116,16 @@ surprisals.default <- function(
     }
     scores <- -log(pmax(0, (n * exp(-scores) - K0) / (n - 1)))
   }
-  return(scores)
+  if (probability) {
+    surprisal_prob(scores, distribution, approximation, threshold_probability) |>
+      suppressWarnings()
+  } else {
+    scores
+  }
 }
 
 #' @rdname surprisals_model
+#' @inheritParams surprisals
 #' @title Surprisals computed from a model
 #' @param object A model object such as returned by \code{\link[stats]{lm}},
 #' or \code{\link[mgcv]{gam}}.
@@ -89,7 +148,12 @@ surprisals.default <- function(
 #'   )) +
 #'   geom_point()
 #' @export
-surprisals.lm <- function(object, loo = FALSE, ...) {
+surprisals.lm <- function(
+    object,
+    probability = TRUE,
+    approximation = c("none", "gpd", "empirical"),
+    threshold_probability = 0.10,
+    loo = FALSE, ...) {
   e <- stats::residuals(object, type = "response")
   h <- stats::hatvalues(object)
   sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
@@ -98,7 +162,12 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
     sigma2 <- (sigma2 * resdf - e^2 / (1 - h)) / (resdf - 1)
   }
   r2 <- e^2 / ((1 - h) * sigma2)
-  return(0.5 * (log(2 * pi) + r2))
+  s <- 0.5 * (log(2 * pi) + r2)
+  if (probability) {
+    surprisal_prob(s, distributional::dist_normal(), approximation, threshold_probability)
+  } else {
+    s
+  }
 }
 
 #' @rdname surprisals_model
@@ -111,25 +180,37 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
 #'   mutate(fscore = surprisals(gam_of))
 #' @importFrom stats approx dbinom density dnorm dpois na.omit
 #' @export
-surprisals.gam <- function(object, loo = FALSE, ...) {
+surprisals.gam <- function(
+    object,
+    probability = TRUE,
+    approximation = c("none", "gpd", "empirical"),
+    threshold_probability = 0.10,
+    loo = FALSE, ...) {
   if (loo) {
-    warning("Leave-one-out log scores unavailable for GAM models. Returning log scores")
+    warning("Leave-one-out log scores unavailable for GAM models.")
   }
   fit_aug <- broom::augment(object, type.predict = "response")
   if (object$family$family == "gaussian") {
     std.resid <- c(scale(fit_aug$.resid / fit_aug$.se.fit))
     surprisals <- -dnorm(std.resid, log = TRUE)
+    dist <- distributional::dist_normal()
   } else if (object$family$family == "binomial") {
     surprisals <- -dbinom(
       x = object$y * object$prior.weights,
       size = object$prior.weights, prob = fit_aug$.fitted, log = TRUE
     )
+    dist <- distributional::dist_binomial(object$prior.weights, fit_aug$.fitted)
   } else if (object$family$family == "poisson") {
     surprisals <- -dpois(object$y, lambda = fit_aug$.fitted, log = TRUE)
+    dist <- distributional::dist_poisson(lambda = fit_aug$.fitted)
   } else {
     stop("Unsupported family")
   }
-  return(surprisals)
+  if (probability) {
+    surprisal_prob(surprisals, dist, approximation, threshold_probability)
+  } else {
+    surprisals
+  }
 }
 
 utils::globalVariables(c(

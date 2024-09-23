@@ -3,8 +3,8 @@
 #' leave-one-out surprisal probabilities from a kernel density estimate using a
 #' Generalized Pareto distribution. The kernel density estimate uses a
 #' bandwidth based on topological data analysis and a quadratic kernel. So it is
-#' similar but not identical to using \link{surprisal_prob} with `loo = TRUE`
-#' and `GPD = TRUE`. A low probability indicates a likely anomaly.
+#' similar but not identical to using \code{\link{surprisals}} with `loo = TRUE`
+#' and `approximation = "gdp"`. A low probability indicates a likely anomaly.
 #' @param object A numerical data set.
 #' @param ... Other arguments are passed to \code{\link[lookout]{lookout}}.
 #' @references Sevvandi Kandanaarachchi & Rob J Hyndman (2022) "Leave-one-out
