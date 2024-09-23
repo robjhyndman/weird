@@ -172,11 +172,11 @@
 <span>  <span class="fu">labs</span><span class="op">(</span>y <span class="op">=</span> <span class="st">""</span>, x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot-1.png" style="width:100.0%"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/gg_hdrboxplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot-2.png" style="width:100.0%"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/gg_hdrboxplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot-3.png" style="width:100.0%"></p>
 <p>The latter two plots are highest density region (HDR) boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers (those points lying outside the 99% HDR). An explanation of these plots is provided in <a href="https://otexts.com/weird/05-boxplots.html" class="external-link">Chapter 5 of the book</a>.</p>
@@ -194,12 +194,12 @@
 <p>And here are two types of HDR boxplot</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/gg_hdrboxplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot3-1.png" style="width:100.0%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/hdrplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/gg_hdrboxplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot3-2.png" style="width:100.0%"></p>
 <p>The latter two plots show possible outliers in black (again, defined as points outside the 99% HDR).</p>
@@ -246,12 +246,12 @@
 <span><span class="co">#&gt;  8 2017-09-22 18:51:00      281    7140      15.5     0.0333     2.64      1     1.54e- 1</span></span>
 <span><span class="co">#&gt;  9 2020-05-18 21:21:00      272    7080      14.9     0.0333     2.42      1     3.72e- 1</span></span>
 <span><span class="co">#&gt; 10 2018-09-22 16:37:00      253    7140      14.8     0.0200     2.63      1     3.94e- 1</span></span></code></pre></div>
-<p>In addition to the <code><a href="reference/surprisals.html">surprisals()</a></code> function, the <code><a href="reference/surprisal_prob.html">surprisal_prob()</a></code> function computes the probability of obtaining surprisal values at least as extreme as those observed.</p>
+<p>In addition to the <code><a href="reference/surprisals.html">surprisals()</a></code> function, the <code>surprisal_prob()</code> function computes the probability of obtaining surprisal values at least as extreme as those observed.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">of</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    surprisal <span class="op">=</span> <span class="fu"><a href="reference/surprisals.html">surprisals</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    prob <span class="op">=</span> <span class="fu"><a href="reference/surprisal_prob.html">surprisal_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
+<span>    prob <span class="op">=</span> <span class="fu">surprisal_prob</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 2,197 × 5</span></span>
@@ -356,7 +356,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>

@@ -40,10 +40,24 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'lm'</span></span>
-<span><span class="fu"><a href="surprisals.html">surprisals</a></span><span class="op">(</span><span class="va">object</span>, loo <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu"><a href="surprisals.html">surprisals</a></span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  probability <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"gpd"</span>, <span class="st">"empirical"</span><span class="op">)</span>,</span>
+<span>  threshold_probability <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  loo <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'gam'</span></span>
-<span><span class="fu"><a href="surprisals.html">surprisals</a></span><span class="op">(</span><span class="va">object</span>, loo <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="surprisals.html">surprisals</a></span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  probability <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"gpd"</span>, <span class="st">"empirical"</span><span class="op">)</span>,</span>
+<span>  threshold_probability <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  loo <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -53,6 +67,25 @@
 <dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>A model object such as returned by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code>,
 or <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></code>.</p></dd>
+
+
+<dt id="arg-probability">probability<a class="anchor" aria-label="anchor" href="#arg-probability"></a></dt>
+<dd><p>Should surprisal probabilities be computed, or the
+surprisal values?</p></dd>
+
+
+<dt id="arg-approximation">approximation<a class="anchor" aria-label="anchor" href="#arg-approximation"></a></dt>
+<dd><p>Character string specifying the approximation to use in
+computing the surprisal probabilities. Ignored if <code>probability = FALSE</code>. :
+<code>none</code> specifies that no approximation is to be used;
+<code>gpd</code> specifies that  the Generalized Pareto distribution should be used;
+while <code>empirical</code> specifies that the probabilities should be estimated empirically.</p></dd>
+
+
+<dt id="arg-threshold-probability">threshold_probability<a class="anchor" aria-label="anchor" href="#arg-threshold-probability"></a></dt>
+<dd><p>Probability threshold when computing the GPD
+approximation. This is the probability below which the GPD is fitted. Only
+used if <code>approximation = "gpd"</code>).</p></dd>
 
 
 <dt id="arg-loo">loo<a class="anchor" aria-label="anchor" href="#arg-loo"></a></dt>
@@ -91,16 +124,16 @@ or <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">g
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,196 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    time                duration waiting fscore</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2015-01-02 <span style="color: #949494;">14:53:00</span>      271    <span style="text-decoration: underline;">5</span>040  2.13 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2015-01-09 <span style="color: #949494;">23:55:00</span>      247    <span style="text-decoration: underline;">6</span>060  1.27 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2015-02-07 <span style="color: #949494;">00:49:00</span>      203    <span style="text-decoration: underline;">5</span>460  0.928</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2015-02-14 <span style="color: #949494;">01:09:00</span>      195    <span style="text-decoration: underline;">5</span>221  0.984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2015-02-21 <span style="color: #949494;">01:12:00</span>      210    <span style="text-decoration: underline;">5</span>401  0.956</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2015-02-28 <span style="color: #949494;">01:11:00</span>      185    <span style="text-decoration: underline;">5</span>520  0.921</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2015-03-07 <span style="color: #949494;">00:50:00</span>      160    <span style="text-decoration: underline;">5</span>281  0.946</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2015-03-13 <span style="color: #949494;">21:57:00</span>      226    <span style="text-decoration: underline;">6</span>000  1.34 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2015-03-13 <span style="color: #949494;">23:37:00</span>      190    <span style="text-decoration: underline;">5</span>341  0.934</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2015-03-20 <span style="color: #949494;">22:26:00</span>      102    <span style="text-decoration: underline;">3</span>961  0.920</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2015-01-02 <span style="color: #949494;">14:53:00</span>      271    <span style="text-decoration: underline;">5</span>040  0.119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2015-01-09 <span style="color: #949494;">23:55:00</span>      247    <span style="text-decoration: underline;">6</span>060  0.402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2015-02-07 <span style="color: #949494;">00:49:00</span>      203    <span style="text-decoration: underline;">5</span>460  0.890</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2015-02-14 <span style="color: #949494;">01:09:00</span>      195    <span style="text-decoration: underline;">5</span>221  0.717</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2015-02-21 <span style="color: #949494;">01:12:00</span>      210    <span style="text-decoration: underline;">5</span>401  0.787</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2015-02-28 <span style="color: #949494;">01:11:00</span>      185    <span style="text-decoration: underline;">5</span>520  0.948</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2015-03-07 <span style="color: #949494;">00:50:00</span>      160    <span style="text-decoration: underline;">5</span>281  0.817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2015-03-13 <span style="color: #949494;">21:57:00</span>      226    <span style="text-decoration: underline;">6</span>000  0.361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2015-03-13 <span style="color: #949494;">23:37:00</span>      190    <span style="text-decoration: underline;">5</span>341  0.862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2015-03-20 <span style="color: #949494;">22:26:00</span>      102    <span style="text-decoration: underline;">3</span>961  0.960</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,186 more rows</span></span>
 </code></pre></div>
     </div>
@@ -113,7 +146,7 @@ or <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">g
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
