@@ -1,27 +1,56 @@
 # Compute probability of surprisals
+# Note that each value of s may come from a different distribution
+# so distribution may be a vector
 
 surprisal_prob <- function(
     s,
     distribution,
     approximation = c("none", "gpd", "empirical"),
-    threshold_probability = 0.10) {
+    threshold_probability = 0.10,
+    y = NULL) {
   approximation <- match.arg(approximation)
   n <- length(s)
-  d <- dimension_dist(distribution)
-  if(d > 1) {
-    warning("Using an empirical approximation for multivariate data.")
-    approximation <- "empirical"
+
+  if(approximation == "none") {
+    if(dimension_dist(distribution) > 1) {
+      warning("Using an empirical approximation for multivariate data")
+      approximation <- "empirical"
+    } else if (identical(unique(stats::family(distribution)), "normal")) {
+      approximation <- "normal"
+    } else if (is_symmetric(distribution)) {
+      approximation <- "symmetric"
+    }
   }
+  if(approximation == "none") {
+    # Univariate, not normal, not symmetric
+    if(length(unique(distribution)) == 1L) {
+      distribution <- unique(distribution)
+    } else {
+      # Need to compute probabilities one by one
+      dd <- length(distribution)
+      if(dd != n) {
+        stop("Length of distribution must be 1 or equal to length of s")
+      }
+      p <- numeric(n)
+      for(i in seq(n)) {
+        p[i] <- surprisal_prob(s[i], distribution[i], y = y[i],
+          approximation = approximation,
+          threshold_probability = threshold_probability)
+      }
+      return(p)
+    }
+  }
+
+
   if (approximation == "gpd") {
-    return(surprisal_gpd_prob(s, threshold_probability))
+    p <- surprisal_gpd_prob(s, threshold_probability)
   } else if (approximation == "empirical") {
-    # Just use empirical cdf
     p <- 1 - (rank(s) - 1) / n
-  } else if (stats::family(distribution) == "normal") {
-    return(surprisal_normal_prob(s, distribution))
-  #} else if (is_symmetric(distribution)) {
-    #centre <- stats::median(distribution)
-    #p <- 2 * (1 - distributional::cdf(distribution, q = centre + abs(object - centre)))
+  } else if (approximation == "normal") {
+    p <- surprisal_normal_prob(s, distribution)
+  } else if (approximation == "symmetric" & !is.null(y)) {
+    centre <- stats::median(distribution)
+    p <- 2 * (1 - distributional::cdf(distribution, q = centre + abs(y - centre)))
   } else {
     # Slower computation, but more general (although approximate)
     dist_x <- stats::quantile(
@@ -55,7 +84,6 @@ surprisal_gpd_prob <- function(s, threshold) {
     loc = threshold,
     scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
   )
-  p[s == Inf] <- 0
   return(p)
 }
 
@@ -64,11 +92,16 @@ surprisal_normal_prob <- function(s, distribution) {
   mu <- mean(distribution)
   sigma2 <- distributional::variance(distribution)
   x <- sqrt(2 * s - log(2 * pi * sigma2))
-  2 * (1 - stats::pnorm(abs(x), mu, sqrt(sigma2)))
+  z <- (x - mu)/sqrt(sigma2)
+  2 * (1 - stats::pnorm(abs(z)))
 }
 
 # Check if distribution is symmetric
 is_symmetric <- function(dist) {
+  fam <- stats::family(dist)
+  if(length(fam) > 1) {
+    stop("Distribution has multiple families")
+  }
   if (stats::family(dist) %in%
     c("student_t", "cauchy", "logistic", "triangular", "uniform")) {
     return(TRUE)

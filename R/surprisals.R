@@ -115,9 +115,17 @@ surprisals.default <- function(
       K0 <- det(H)^(-1 / 2) * (2 * pi)^(-d / 2)
     }
     scores <- -log(pmax(0, (n * exp(-scores) - K0) / (n - 1)))
+    y <- object
+  } else {
+    y <- NULL
   }
   if (probability) {
-    surprisal_prob(scores, distribution, approximation, threshold_probability) |>
+    surprisal_prob(scores,
+      distribution = distribution,
+      approximation = approximation,
+      threshold_probability = threshold_probability,
+      y = y
+    ) |>
       suppressWarnings()
   } else {
     scores
@@ -164,7 +172,11 @@ surprisals.lm <- function(
   r2 <- e^2 / ((1 - h) * sigma2)
   s <- 0.5 * (log(2 * pi) + r2)
   if (probability) {
-    surprisal_prob(s, distributional::dist_normal(), approximation, threshold_probability)
+    surprisal_prob(s,
+      distribution = distributional::dist_normal(),
+      approximation = approximation,
+      threshold_probability = threshold_probability
+    )
   } else {
     s
   }
@@ -207,7 +219,12 @@ surprisals.gam <- function(
     stop("Unsupported family")
   }
   if (probability) {
-    surprisal_prob(surprisals, dist, approximation, threshold_probability)
+    surprisal_prob(surprisals,
+      distribution = dist,
+      approximation = approximation,
+      threshold_probability = threshold_probability,
+      y = object$y * object$prior.weights
+    )
   } else {
     surprisals
   }
