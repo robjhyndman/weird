@@ -45,7 +45,7 @@ surprisal_prob <- function(
   if (approximation == "gpd") {
     p <- surprisal_gpd_prob(s, threshold_probability)
   } else if (approximation == "empirical") {
-    p <- 1 - (rank(s) - 1) / n
+    p <- rank(-s) / n
   } else if (approximation == "normal") {
     p <- surprisal_normal_prob(s, distribution)
   } else if (approximation == "symmetric" & !is.null(y)) {
