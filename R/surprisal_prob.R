@@ -98,12 +98,15 @@ surprisal_normal_prob <- function(s, distribution) {
 
 # Check if distribution is symmetric
 is_symmetric <- function(dist) {
+  dist <- unique(dist)
   fam <- stats::family(dist)
   if(length(fam) > 1) {
-    stop("Distribution has multiple families")
-  }
-  if (stats::family(dist) %in%
-    c("student_t", "cauchy", "logistic", "triangular", "uniform")) {
+    for(i in seq_along(fam)) {
+      if(!is_symmetric(dist[i]))
+        return(FALSE)
+    }
+    return(TRUE)
+  } else if (fam %in% c("student_t", "cauchy", "logistic", "triangular", "uniform")) {
     return(TRUE)
   } else {
     q1 <- unlist(stats::quantile(dist, seq(0.5, 0.99, length.out = 5)))
@@ -113,8 +116,6 @@ is_symmetric <- function(dist) {
     return(sum(abs(q1 + q2) / max(abs(c(q1, q2)))) < 1e-8)
   }
 }
-
-
 
 #' @importFrom stats quantile
 #' @importFrom evd fpot
