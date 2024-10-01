@@ -64,8 +64,8 @@ coverage probability of the largest HDR that contains each value. Surprisal
 probabilities smaller than 1e-6 are returned as 1e-6.
 \item Using a Generalized Pareto Distribution fitted to the most extreme
 surprisal values (those with probability less than \code{threshold_probability}).
-This option is used if \code{approximation = "gpd"}. For surprisal values with
-probability less than \code{threshold_probability}, the value of
+This option is used if \code{approximation = "gpd"}. For surprisal probabilities
+greater than \code{threshold_probability}, the value of
 \code{threshold_probability} is returned. Under this option, the distribution is
 used for computing the surprisal values but not for determining their
 probabilities. Due to extreme value theory, the resulting probabilities should
@@ -91,11 +91,13 @@ oldfaithful |>
 # Univariate data
 tibble(
   y = c(5, rnorm(49)),
-  p = surprisals(y)
+  p_kde = surprisals(y, loo = TRUE),
+  p_normal = surprisals(y, distribution = dist_normal()),
+  p_zscore = 2*(1-pnorm(abs(y)))
 )
 tibble(
   y = n01$v1,
-  prob1 = surprisals(y),
+  prob1 = surprisals(y, loo = TRUE),
   prob2 = surprisals(y, approximation = "gpd"),
   prob3 = surprisals(y, distribution = dist_normal()),
   prob4 = surprisals(y, distribution = dist_normal(), approximation = "gpd")

@@ -67,10 +67,10 @@ surprisal_prob <- function(
 }
 
 # Surprisal probabilities using GPD approximation
-surprisal_gpd_prob <- function(s, threshold) {
+surprisal_gpd_prob <- function(s, threshold_p) {
   n <- length(s)
-  threshold <- stats::quantile(s, prob = 1 - threshold, type = 8, na.rm = TRUE)
-  if (!any(s > threshold, na.rm = TRUE)) {
+  threshold_q <- stats::quantile(s, prob = 1 - threshold_p, type = 8, na.rm = TRUE)
+  if (!any(s > threshold_q, na.rm = TRUE)) {
     warning("No surprisals above threshold")
     return(rep(1, n))
   }
@@ -78,10 +78,10 @@ surprisal_gpd_prob <- function(s, threshold) {
   if (any(!finite, na.rm = TRUE)) {
     warning("Infinite surprisals will be ignored in GPD")
   }
-  gpd <- evd::fpot(s[finite], threshold = threshold, std.err = FALSE)$estimate
-  p <- threshold * evd::pgpd(
+  gpd <- evd::fpot(s[finite], threshold = threshold_q, std.err = FALSE)$estimate
+  p <- threshold_p * evd::pgpd(
     s,
-    loc = threshold,
+    loc = threshold_q,
     scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
   )
   return(p)
