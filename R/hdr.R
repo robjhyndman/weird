@@ -132,9 +132,6 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
 #' `upper` (the upper ends of the intervals).
 #' @param object Distributional object such as that returned by `dist_kde()`
 #' @param prob Vector of probabilities giving the HDR coverage (between 0 and 1)
-#' @param density_only If `TRUE`, only the density values are returned for each
-#' distribution, not the end points of the interval. (Default `FALSE` for
-#' univariate distributions, and `TRUE` for multivariate distributions.)
 #' @return A tibble
 #' @author Rob J Hyndman
 #' @examples
@@ -145,7 +142,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
 #' # Bivariate HDRs
 #' dist_kde(oldfaithful[, c("duration", "waiting")]) |> hdr_table(0.90)
 #' @export
-hdr_table <- function(object, prob, density_only = FALSE) {
+hdr_table <- function(object, prob) {
   d <- dimension_dist(object)
   prob <- sort(unique(prob), decreasing = TRUE)
   dist_names <- names_dist(object)

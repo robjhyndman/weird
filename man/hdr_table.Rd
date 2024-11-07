@@ -4,16 +4,12 @@
 \alias{hdr_table}
 \title{Table of Highest Density Regions}
 \usage{
-hdr_table(object, prob, density_only = FALSE)
+hdr_table(object, prob)
 }
 \arguments{
 \item{object}{Distributional object such as that returned by \code{dist_kde()}}
 
 \item{prob}{Vector of probabilities giving the HDR coverage (between 0 and 1)}
-
-\item{density_only}{If \code{TRUE}, only the density values are returned for each
-distribution, not the end points of the interval. (Default \code{FALSE} for
-univariate distributions, and \code{TRUE} for multivariate distributions.)}
 }
 \value{
 A tibble
