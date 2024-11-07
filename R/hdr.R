@@ -177,19 +177,22 @@ hdr_table <- function(object, prob) {
       return(df)
     })
   } else {
-    output <- mapply(
-      function(u, dist) {
-        r <- distributional::generate(u, times = 1e4)[[1]]
-        fi <- density(u, at = as.matrix(r))[[1]]
-        tibble(
-          distribution = dist,
-          prob = prob,
-          density = quantile(fi, prob = 1 - prob, type = 8)
-        )
-      },
-      u = as.list(object), dist = as.list(names_dist(object)),
-      SIMPLIFY = FALSE
-    )
+    output <- lapply(as.list(object),
+      function(u) {
+          # If u is a kde, we can use the data
+          # Otherwise we need to generate a random sample
+          if (stats::family(u) == "kde") {
+            x <- lapply(vctrs::vec_data(u), function(u) u$kde$x)[[1]]
+          } else {
+            x <- distributional::generate(u, times = 1e5)[[1]]
+          }
+          fi <- density(u, at = as.matrix(x))[[1]]
+          tibble(
+            distribution = names_dist(object),
+            prob = prob,
+            density = quantile(fi, prob = 1 - prob, type = 8)
+          )
+        })
   }
   purrr::list_rbind(output) |>
     dplyr::arrange(distribution, prob)
