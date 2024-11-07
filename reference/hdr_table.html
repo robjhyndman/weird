@@ -57,7 +57,7 @@ For one dimensional density functions, the tibble also has columns
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hdr_table</span><span class="op">(</span><span class="va">object</span>, <span class="va">prob</span>, density_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hdr_table</span><span class="op">(</span><span class="va">object</span>, <span class="va">prob</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,12 +70,6 @@ For one dimensional density functions, the tibble also has columns
 
 <dt id="arg-prob">prob<a class="anchor" aria-label="anchor" href="#arg-prob"></a></dt>
 <dd><p>Vector of probabilities giving the HDR coverage (between 0 and 1)</p></dd>
-
-
-<dt id="arg-density-only">density_only<a class="anchor" aria-label="anchor" href="#arg-density-only"></a></dt>
-<dd><p>If <code>TRUE</code>, only the density values are returned for each
-distribution, not the end points of the interval. (Default <code>FALSE</code> for
-univariate distributions, and <code>TRUE</code> for multivariate distributions.)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -111,7 +105,7 @@ univariate distributions, and <code>TRUE</code> for multivariate distributions.)
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   distribution                                      prob     density</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> kde[2d, H={(40, 3.3e+02)', (3.3e+02, 2.1e+04)'}]   0.9 0.000<span style="text-decoration: underline;">000</span>881</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> kde[2d, H={(40, 3.3e+02)', (3.3e+02, 2.1e+04)'}]   0.9 0.000<span style="text-decoration: underline;">000</span>902</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
