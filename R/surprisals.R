@@ -106,7 +106,7 @@ surprisals.default <- function(
     den <- den[[1]]
   }
   scores <- -den
-  if (loo & stats::family(distribution) == "kde") {
+  if (loo & all(stats::family(distribution) == "kde")) {
     n <- NROW(object)
     d <- NCOL(object)
     if (d == 1L) {
