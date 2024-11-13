@@ -89,10 +89,8 @@ surprisal_gpd_prob <- function(s, threshold_p) {
 
 # Surprisal probabilities for normal distributions
 surprisal_normal_prob <- function(s, distribution) {
-  mu <- mean(distribution)
   sigma2 <- distributional::variance(distribution)
-  x <- sqrt(2 * s - log(2 * pi * sigma2))
-  z <- (x - mu)/sqrt(sigma2)
+  z <- sqrt(2 * s - log(2 * pi * sigma2))
   2 * (1 - stats::pnorm(abs(z)))
 }
 
