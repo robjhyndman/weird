@@ -90,8 +90,8 @@ surprisal_gpd_prob <- function(s, threshold_p) {
 # Surprisal probabilities for normal distributions
 surprisal_normal_prob <- function(s, distribution) {
   sigma2 <- distributional::variance(distribution)
-  z <- sqrt(2 * s - log(2 * pi * sigma2))
-  2 * (1 - stats::pnorm(abs(z)))
+  z <- sqrt(abs(2 * s - log(2 * pi * sigma2)))
+  2 * (1 - stats::pnorm(z))
 }
 
 # Check if distribution is symmetric
