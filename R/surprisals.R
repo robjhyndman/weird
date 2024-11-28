@@ -101,6 +101,10 @@ surprisals.default <- function(
   if (NCOL(object) == 1L) {
     object <- c(object)
   }
+  if(length(distribution) > 1 & length(object) > 1) {
+    if(length(distribution) != length(object))
+      stop("Length of distribution and object must be the same or equal to 1")
+  }
   den <- mapply(density, distribution, object, log = TRUE)
   scores <- -den
   if (loo & all(stats::family(distribution) == "kde")) {
