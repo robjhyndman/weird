@@ -105,11 +105,15 @@ surprisals.default <- function(
     if(length(distribution) != length(object))
       stop("Length of distribution and object must be the same or equal to 1")
   }
-  den <- density(distribution, at = object, log = TRUE)
-  if(is.list(den)) {
-    if(length(den) > 1)
-      stop("What's going on?")
-    den <- den[[1]]
+  if(length(distribution) == NROW(object)) {
+    den <- mapply(density, distribution, object, log = TRUE)
+  } else {
+    den <- density(distribution, at = object, log = TRUE)
+    if(is.list(den)) {
+      if(length(den) > 1)
+        stop("What's going on?")
+      den <- den[[1]]
+    }
   }
   surprisals_from_den(object, den, probability, approximation, threshold_probability, distribution, loo, ...)
 }
