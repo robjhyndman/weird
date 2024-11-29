@@ -105,7 +105,34 @@ surprisals.default <- function(
     if(length(distribution) != length(object))
       stop("Length of distribution and object must be the same or equal to 1")
   }
-  den <- mapply(density, distribution, object, log = TRUE)
+  den <- density(distribution, at = object, log = TRUE)
+  if(is.list(den)) {
+    if(length(den) > 1)
+      stop("What's going on?")
+    den <- den[[1]]
+  }
+  surprisals_from_den(object, den, probability, approximation, threshold_probability, distribution, loo, ...)
+}
+
+# Surprisals function that uses pre-calculated densities
+# Same arguments as surprisals.default except den is numerical vector of log densities
+surprisals_from_den <- function(
+    object,
+    den,
+    probability = TRUE,
+    approximation = c("none", "gpd", "empirical"),
+    threshold_probability = 0.10,
+    distribution = dist_kde(object, multiplier = 2, ...),
+    loo = FALSE,
+    ...) {
+  object <- as.matrix(object)
+  if (NCOL(object) == 1L) {
+    object <- c(object)
+  }
+  if(length(distribution) > 1 & length(object) > 1) {
+    if(length(distribution) != length(object))
+      stop("Length of distribution and object must be the same or equal to 1")
+  }
   scores <- -den
   if (loo & all(stats::family(distribution) == "kde")) {
     n <- NROW(object)
@@ -124,10 +151,10 @@ surprisals.default <- function(
   }
   if (probability) {
     surprisal_prob(scores,
-      distribution = distribution,
-      approximation = approximation,
-      threshold_probability = threshold_probability,
-      y = y
+                   distribution = distribution,
+                   approximation = approximation,
+                   threshold_probability = threshold_probability,
+                   y = y
     ) |>
       suppressWarnings()
   } else {
