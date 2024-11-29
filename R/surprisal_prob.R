@@ -111,7 +111,12 @@ is_symmetric <- function(dist) {
     q2 <- unlist(stats::quantile(dist, seq(0.5, 0.01, length.out = 5)))
     q1 <- q1 - q1[1]
     q2 <- q2 - q2[1]
-    return(sum(abs(q1 + q2) / max(abs(c(q1, q2)))) < 1e-8)
+    out <- sum(abs(q1 + q2) / max(abs(c(q1, q2))))
+    if(is.na(out)) {
+      return(FALSE)
+    } else {
+      return(out < 1e-8)
+    }
   }
 }
 
