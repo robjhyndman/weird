@@ -62,7 +62,7 @@ surprisal_prob <- function(
     )
     dist_x <- unique(unlist(dist_x))
     dist_y <- -unlist(density(distribution, dist_x, log = TRUE))
-    prob <- (rank(dist_y) - 1) / length
+    prob <- (rank(dist_y) - 1) / length(dist_y)
     if(all(is.na(dist_y)) | all(is.na(prob))) {
       return(rep(NA_real_, n))
     }
