@@ -10,6 +10,9 @@ surprisal_prob <- function(
     y = NULL) {
   approximation <- match.arg(approximation)
   n <- length(s)
+  if(all(is.na(s))) {
+    return(rep(NA_real_, n))
+  }
 
   if(approximation == "none") {
     if(dimension_dist(distribution) > 1) {
@@ -59,7 +62,10 @@ surprisal_prob <- function(
     )
     dist_x <- unique(unlist(dist_x))
     dist_y <- -unlist(density(distribution, dist_x, log = TRUE))
-    prob <- (rank(dist_y) - 1) / length(dist_y)
+    prob <- (rank(dist_y) - 1) / length
+    if(all(is.na(dist_y)) | all(is.na(prob))) {
+      return(rep(NA_real_, n))
+    }
     p <- 1 - approx(dist_y, prob, xout = s, rule = 2, ties = mean)$y
   }
   p[s == Inf] <- 0
