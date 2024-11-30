@@ -213,7 +213,20 @@ estimating the kernel density estimate using all other observations.</p>
 <span class="r-in"><span>  p_normal <span class="op">=</span> <span class="fu">surprisals</span><span class="op">(</span><span class="va">y</span>, distribution <span class="op">=</span> <span class="fu">dist_normal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  p_zscore <span class="op">=</span> <span class="fl">2</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in (rank(dist_y) - 1)/length:</span> non-numeric argument to binary operator</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          y   p_kde    p_normal    p_zscore</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  5      0.001<span style="text-decoration: underline;">02</span> 0.000<span style="text-decoration: underline;">000</span>573 0.000<span style="text-decoration: underline;">000</span>573</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>  0.213  0.890   0.831       0.831      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>  0.519  0.848   0.604       0.604      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>  2.00   0.246   0.045<span style="text-decoration: underline;">0</span>      0.045<span style="text-decoration: underline;">0</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>  1.07   0.603   0.285       0.285      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> -<span style="color: #BB0000;">0.524</span>  0.604   0.600       0.600      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  0.730  0.759   0.466       0.466      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>  1.07   0.601   0.284       0.284      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>  0.884  0.688   0.377       0.377      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> -<span style="color: #BB0000;">0.099</span><span style="color: #BB0000; text-decoration: underline;">0</span> 0.781   0.921       0.921      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 40 more rows</span></span>
 <span class="r-in"><span><span class="fu">tibble</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  y <span class="op">=</span> <span class="va">n01</span><span class="op">$</span><span class="va">v1</span>,</span></span>
 <span class="r-in"><span>  prob1 <span class="op">=</span> <span class="fu">surprisals</span><span class="op">(</span><span class="va">y</span>, loo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
@@ -222,7 +235,20 @@ estimating the kernel density estimate using all other observations.</p>
 <span class="r-in"><span>  prob4 <span class="op">=</span> <span class="fu">surprisals</span><span class="op">(</span><span class="va">y</span>, distribution <span class="op">=</span> <span class="fu">dist_normal</span><span class="op">(</span><span class="op">)</span>, approximation <span class="op">=</span> <span class="st">"gpd"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">prob1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in (rank(dist_y) - 1)/length:</span> non-numeric argument to binary operator</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        y    prob1    prob2    prob3    prob4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  3.81 0.000<span style="text-decoration: underline;">675</span> 0.000<span style="text-decoration: underline;">113</span> 0.000<span style="text-decoration: underline;">139</span> 0.000<span style="text-decoration: underline;">135</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>  3.06 0.006<span style="text-decoration: underline;">94</span>  0.001<span style="text-decoration: underline;">94</span>  0.002<span style="text-decoration: underline;">25</span>  0.002<span style="text-decoration: underline;">61</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> -<span style="color: #BB0000;">3.01</span> 0.010<span style="text-decoration: underline;">9</span>   0.003<span style="text-decoration: underline;">62</span>  0.002<span style="text-decoration: underline;">63</span>  0.003<span style="text-decoration: underline;">08</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> -<span style="color: #BB0000;">3.00</span> 0.011<span style="text-decoration: underline;">2</span>   0.003<span style="text-decoration: underline;">76</span>  0.002<span style="text-decoration: underline;">73</span>  0.003<span style="text-decoration: underline;">20</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> -<span style="color: #BB0000;">2.94</span> 0.012<span style="text-decoration: underline;">9</span>   0.004<span style="text-decoration: underline;">56</span>  0.003<span style="text-decoration: underline;">28</span>  0.003<span style="text-decoration: underline;">89</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> -<span style="color: #BB0000;">2.89</span> 0.014<span style="text-decoration: underline;">6</span>   0.005<span style="text-decoration: underline;">38</span>  0.003<span style="text-decoration: underline;">87</span>  0.004<span style="text-decoration: underline;">61</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  2.68 0.019<span style="text-decoration: underline;">9</span>   0.008<span style="text-decoration: underline;">10</span>  0.007<span style="text-decoration: underline;">46</span>  0.009<span style="text-decoration: underline;">13</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>  2.65 0.021<span style="text-decoration: underline;">4</span>   0.008<span style="text-decoration: underline;">87</span>  0.008<span style="text-decoration: underline;">07</span>  0.009<span style="text-decoration: underline;">91</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> -<span style="color: #BB0000;">2.60</span> 0.028<span style="text-decoration: underline;">3</span>   0.012<span style="text-decoration: underline;">8</span>   0.009<span style="text-decoration: underline;">43</span>  0.011<span style="text-decoration: underline;">6</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> -<span style="color: #BB0000;">2.59</span> 0.028<span style="text-decoration: underline;">5</span>   0.013<span style="text-decoration: underline;">0</span>   0.009<span style="text-decoration: underline;">53</span>  0.011<span style="text-decoration: underline;">8</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 990 more rows</span></span>
 <span class="r-in"><span><span class="co"># Bivariate data</span></span></span>
 <span class="r-in"><span><span class="fu">tibble</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span>,</span></span>
@@ -231,18 +257,18 @@ estimating the kernel density estimate using all other observations.</p>
 <span class="r-in"><span>  lookout <span class="op">=</span> <span class="fu"><a href="lookout_prob.html">lookout_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 50 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         x      y  prob lookout</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> -<span style="color: #BB0000;">0.528</span>  5      0.02 0.009<span style="text-decoration: underline;">69</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>  0.818  0.190  0.94 1      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> -<span style="color: #BB0000;">1.82</span>  -<span style="color: #BB0000;">0.826</span>  0.14 1      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>  0.172  0.988  0.66 1      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>  0.138  0.171  1    1      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>  0.815 -<span style="color: #BB0000;">0.735</span>  0.72 1      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> -<span style="color: #BB0000;">1.47</span>   0.183  0.4  1      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>  0.439  0.822  0.76 1      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>  0.674  0.101  0.98 1      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> -<span style="color: #BB0000;">0.601</span>  0.763  0.62 1      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         x       y  prob lookout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> -<span style="color: #BB0000;">1.82</span>   5       0.02 0.001<span style="text-decoration: underline;">71</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>  0.172  0.988   0.68 1      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>  0.138  0.171   1    1      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>  0.815 -<span style="color: #BB0000;">0.735</span>   0.72 1      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> -<span style="color: #BB0000;">1.47</span>   0.183   0.38 1      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>  0.439  0.822   0.78 1      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  0.674  0.101   0.96 1      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> -<span style="color: #BB0000;">0.601</span>  0.763   0.7  1      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>  1.98  -<span style="color: #BB0000;">0.079</span><span style="color: #BB0000; text-decoration: underline;">1</span>  0.34 1      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>  0.175  0.658   0.86 1      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 40 more rows</span></span>
 </code></pre></div>
     </div>
