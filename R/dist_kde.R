@@ -109,9 +109,8 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
     }
     # Bivariate interpolation
     grid <- expand.grid(x$kde$eval.points[[1]], x$kde$eval.points[[2]])
-    d <- interp::interpp(x = grid[,1], y = grid[,2], z = c(x$kde$estimate),
-      xo = at[,1], yo = at[,2])$z |>
-      suppressWarnings()
+    ifun <- interpolation::interpfun(x = grid[,1], y = grid[,2], z = c(x$kde$estimate))
+    d <- ifun(at[,1], at[,2])
   }
   d[is.na(d)] <- 0
   return(d)
