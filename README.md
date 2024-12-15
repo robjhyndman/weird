@@ -8,6 +8,7 @@
 
 [![R build
 status](https://github.com/robjhyndman/weird-package/workflows/R-CMD-check/badge.svg)](https://github.com/robjhyndman/weird-package/actions)
+[![R-CMD-check](https://github.com/robjhyndman/weird-package/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/robjhyndman/weird-package/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Overview
