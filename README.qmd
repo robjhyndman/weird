@@ -114,7 +114,7 @@ of |> gg_hdrboxplot(duration, show_points = TRUE) +
   labs(x = "Duration (seconds)")
 ```
 
-The latter two plots are highest density region (HDR) boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers (those points lying outside the 99% HDR). An explanation of these plots is provided in [Chapter 5 of the book](https://otexts.com/weird/05-boxplots.html).
+The latter two plots are highest density region (HDR) boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers (those points lying outside the 99% HDR which have surprisal probability less than 0.0005). An explanation of these plots is provided in [Chapter 5 of the book](https://otexts.com/weird/05-boxplots.html).
 
 It is also possible to produce bivariate boxplots. Several variations are provided in the package. Here are two types of bagplot.
 
@@ -138,7 +138,7 @@ of |>
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
-The latter two plots show possible outliers in black (again, defined as points outside the 99% HDR).
+The latter two plots show possible outliers in black (again, defined as points outside the 99% HDR which have surprisal probability less than 0.0005).
 
 ## Scoring functions
 

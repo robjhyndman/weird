@@ -8,7 +8,6 @@
 
 [![R build
 status](https://github.com/robjhyndman/weird-package/workflows/R-CMD-check/badge.svg)](https://github.com/robjhyndman/weird-package/actions)
-[![R-CMD-check](https://github.com/robjhyndman/weird-package/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/robjhyndman/weird-package/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Overview
@@ -190,8 +189,9 @@ allow the bimodality of the data to be seen. The dark shaded region
 contains 50% of the observations, while the lighter shaded region
 contains 99% of the observations. The plots use vertical jittering to
 reduce overplotting, and highlight potential outliers (those points
-lying outside the 99% HDR). An explanation of these plots is provided in
-[Chapter 5 of the book](https://otexts.com/weird/05-boxplots.html).
+lying outside the 99% HDR which have surprisal probability less than
+0.0005). An explanation of these plots is provided in [Chapter 5 of the
+book](https://otexts.com/weird/05-boxplots.html).
 
 It is also possible to produce bivariate boxplots. Several variations
 are provided in the package. Here are two types of bagplot.
@@ -231,7 +231,8 @@ of |>
 <img src="man/figures/README-of-boxplot3-2.png" style="width:100.0%" />
 
 The latter two plots show possible outliers in black (again, defined as
-points outside the 99% HDR).
+points outside the 99% HDR which have surprisal probability less than
+0.0005).
 
 ## Scoring functions
 
@@ -272,18 +273,18 @@ of |>
   ) |>
   arrange(lookout)
 #> # A tibble: 10 × 8
-#>    time                duration waiting surprisal strayscore lofscore gloshscore  lookout
-#>    <dttm>                 <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>    <dbl>
-#>  1 2018-04-25 19:08:00        1    5700      17.9     0.380      3.78      1     0       
-#>  2 2020-06-01 21:04:00      120    6060      17.8     0.132      1.88      1     3.99e-10
-#>  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860 4.83e- 5
-#>  4 2020-08-31 09:56:00      170    3840      16.7     0.0606     1.01      0.816 4.11e- 4
-#>  5 2015-11-21 20:27:00      150    3420      16.2     0.0772     1.27      1     4.10e- 3
-#>  6 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1     3.46e- 2
-#>  7 2017-08-12 13:14:00      120    4920      15.0     0.0690     1.53      1     1.42e- 1
-#>  8 2017-09-22 18:51:00      281    7140      15.0     0.0333     2.64      1     1.81e- 1
-#>  9 2020-05-18 21:21:00      272    7080      14.5     0.0333     2.42      1     4.02e- 1
-#> 10 2018-09-22 16:37:00      253    7140      14.6     0.0200     2.63      1     4.05e- 1
+#>    time                duration waiting surprisal strayscore lofscore gloshscore       lookout
+#>    <dttm>                 <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>         <dbl>
+#>  1 2018-04-25 19:08:00        1    5700      17.9     0.380      3.78      1     0            
+#>  2 2020-06-01 21:04:00      120    6060      17.8     0.132      1.88      1     0.00000000103
+#>  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860 0.0000417    
+#>  4 2020-08-31 09:56:00      170    3840      16.7     0.0606     1.01      0.816 0.000390     
+#>  5 2015-11-21 20:27:00      150    3420      16.2     0.0772     1.27      1     0.0305       
+#>  6 2017-09-22 18:51:00      281    7140      15.0     0.0333     2.64      1     0.0791       
+#>  7 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1     0.130        
+#>  8 2017-08-12 13:14:00      120    4920      15.0     0.0690     1.53      1     0.166        
+#>  9 2020-05-18 21:21:00      272    7080      14.5     0.0333     2.42      1     0.289        
+#> 10 2018-09-22 16:37:00      253    7140      14.6     0.0200     2.63      1     0.413
 ```
 
 The `surprisals()` function can also compute the probability of
