@@ -93,7 +93,7 @@ tibble(
   y = c(5, rnorm(49)),
   p_kde = surprisals(y, loo = TRUE),
   p_normal = surprisals(y, distribution = dist_normal()),
-  p_zscore = 2*(1-pnorm(abs(y)))
+  p_zscore = 2 * (1 - pnorm(abs(y)))
 )
 tibble(
   y = n01$v1,

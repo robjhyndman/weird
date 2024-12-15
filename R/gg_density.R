@@ -71,9 +71,9 @@ gg_density <- function(
   # Set up data frame containing densities
   df <- make_density_df(object, ngrid = ngrid)
   # Repeat colors
-  if(length(object) > length(colors)) {
+  if (length(object) > length(colors)) {
     warning("Insufficient colors. Some densities will be plotted in the same color.")
-    colors <- rep(colors, 1 + round(length(object)/length(colors)))[seq(length(object))]
+    colors <- rep(colors, 1 + round(length(object) / length(colors)))[seq_along(object)]
   }
 
   # HDR thresholds if needed
@@ -85,7 +85,9 @@ gg_density <- function(
     # HDR color palette
     hdr_colors <- lapply(
       colors,
-      function(u) { hdr_palette(color = u, prob = c(prob, 0.995)) }
+      function(u) {
+        hdr_palette(color = u, prob = c(prob, 0.995))
+      }
     )
     names(hdr_colors) <- names_dist(object, unique = TRUE)
   } else {
@@ -231,7 +233,9 @@ gg_density1 <- function(
   }
 
   # Color scale and legend
-  colors <- unlist(lapply(hdr_colors, function(u) { u[1] }))
+  colors <- unlist(lapply(hdr_colors, function(u) {
+    u[1]
+  }))
   p <- p + ggplot2::scale_color_manual(breaks = dist_names, values = colors, labels = dist_names)
 
   # Don't show color legend if only one density

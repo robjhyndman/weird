@@ -60,7 +60,7 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_Qn,
     mat <- object
   } else { # It must be a data frame. So let's find the numeric columns
     numeric_col <- unlist(lapply(object, is.numeric))
-    if (any(!numeric_col) & warning) {
+    if (!all(numeric_col) & warning) {
       warning(
         "Ignoring non-numeric columns: ",
         paste(names(object)[!numeric_col], collapse = ", ")
@@ -74,14 +74,16 @@ mvscale <- function(object, center = stats::median, scale = robustbase::s_Qn,
     mat <- sweep(mat, 2L, med)
   }
   # Create more resilient version of scale function
-  if(!is.null(scale)) {
+  if (!is.null(scale)) {
     my_scale <- function(x, ..., na.rm = TRUE) {
       s <- scale(x, ..., na.rm = na.rm)
       s[s == 0] <- 1 # Avoid division by zero
       return(s)
     }
   } else {
-    my_scale <- function(x, ..., na.rm = TRUE) {1}
+    my_scale <- function(x, ..., na.rm = TRUE) {
+      1
+    }
   }
   # Scale
   if (d == 1L) {

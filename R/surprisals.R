@@ -71,7 +71,7 @@ surprisals <- function(
 #'   y = c(5, rnorm(49)),
 #'   p_kde = surprisals(y, loo = TRUE),
 #'   p_normal = surprisals(y, distribution = dist_normal()),
-#'   p_zscore = 2*(1-pnorm(abs(y)))
+#'   p_zscore = 2 * (1 - pnorm(abs(y)))
 #' )
 #' tibble(
 #'   y = n01$v1,
@@ -101,17 +101,19 @@ surprisals.default <- function(
   if (NCOL(object) == 1L) {
     object <- c(object)
   }
-  if(length(distribution) > 1 & length(object) > 1) {
-    if(length(distribution) != length(object))
+  if (length(distribution) > 1 & length(object) > 1) {
+    if (length(distribution) != length(object)) {
       stop("Length of distribution and object must be the same or equal to 1")
+    }
   }
-  if(length(distribution) == NROW(object)) {
+  if (length(distribution) == NROW(object)) {
     den <- mapply(density, distribution, object, log = TRUE)
   } else {
     den <- density(distribution, at = object, log = TRUE)
-    if(is.list(den)) {
-      if(length(den) > 1)
+    if (is.list(den)) {
+      if (length(den) > 1) {
         stop("What's going on?")
+      }
       den <- den[[1]]
     }
   }
@@ -133,9 +135,10 @@ surprisals_from_den <- function(
   if (NCOL(object) == 1L) {
     object <- c(object)
   }
-  if(length(distribution) > 1 & length(object) > 1) {
-    if(length(distribution) != length(object))
+  if (length(distribution) > 1 & length(object) > 1) {
+    if (length(distribution) != length(object)) {
       stop("Length of distribution and object must be the same or equal to 1")
+    }
   }
   scores <- -den
   if (loo & all(stats::family(distribution) == "kde")) {
@@ -155,10 +158,10 @@ surprisals_from_den <- function(
   }
   if (probability) {
     surprisal_prob(scores,
-                   distribution = distribution,
-                   approximation = approximation,
-                   threshold_probability = threshold_probability,
-                   y = y
+      distribution = distribution,
+      approximation = approximation,
+      threshold_probability = threshold_probability,
+      y = y
     ) |>
       suppressWarnings()
   } else {

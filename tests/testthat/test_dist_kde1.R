@@ -5,19 +5,19 @@ test_that("dist_kde1", {
   y <- c(rnorm(100), rnorm(100, 5))
   dist <- dist_kde(list(x, y))
   # Mean
-  expect_equal(mean(dist), c(mean(x), mean(y)))
+  expect_identical(mean(dist), c(mean(x), mean(y)))
   # Median
   expect_equal(median(dist), quantile(dist, 0.5))
   # Variance
-  expect_equal(distributional::variance(dist) > 0, c(TRUE, TRUE))
+  expect_identical(distributional::variance(dist) > 0, c(TRUE, TRUE))
   # Density
   at <- seq(-4, 10, by = 1)
-  expect_equal(lengths(density(dist, at)), c(15L, 15L))
+  expect_identical(lengths(density(dist, at)), c(15L, 15L))
   # CDF
-  expect_equal(lengths(distributional::cdf(dist, at)), c(15L, 15L))
+  expect_identical(lengths(distributional::cdf(dist, at)), c(15L, 15L))
   # Quantiles
   p <- (1:19) / 20
-  expect_equal(lengths(quantile(dist, p = p)), c(19L, 19L))
+  expect_identical(lengths(quantile(dist, p = p)), c(19L, 19L))
   # Generate
   rand_dist <- distributional::generate(dist, times = 1e6)
   expect_equal(lapply(rand_dist, mean) |> unlist(),

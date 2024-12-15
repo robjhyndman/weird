@@ -5,7 +5,7 @@ test_that("dist_kde2", {
   y <- c(rnorm(100), rnorm(100, 5))
   dist <- dist_kde(cbind(x, y))
   # Mean
-  expect_equal(mean(dist), matrix(c(x = mean(x), y = mean(y)), nrow = 1))
+  expect_identical(mean(dist), matrix(c(x = mean(x), y = mean(y)), nrow = 1))
   # Median
   expect_error(median(dist))
   # Variance
@@ -13,7 +13,7 @@ test_that("dist_kde2", {
   # Density
   at <- expand.grid(x = seq(-3, 3, by = 0.5), y = seq(-2, 10, by = 2)) |>
     as.matrix()
-  expect_equal(all(density(dist, at)[[1]] >= 0), TRUE)
+  expect_true(all(density(dist, at)[[1]] >= 0))
   # CDF
   expect_error(distributional::cdf(dist, at))
   # Quantiles

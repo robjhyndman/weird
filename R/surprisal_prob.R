@@ -10,12 +10,12 @@ surprisal_prob <- function(
     y = NULL) {
   approximation <- match.arg(approximation)
   n <- length(s)
-  if(all(is.na(s))) {
+  if (all(is.na(s))) {
     return(rep(NA_real_, n))
   }
 
-  if(approximation == "none") {
-    if(dimension_dist(distribution) > 1) {
+  if (approximation == "none") {
+    if (dimension_dist(distribution) > 1) {
       warning("Using an empirical approximation for multivariate data")
       approximation <- "empirical"
     } else if (identical(unique(stats::family(distribution)), "normal")) {
@@ -24,21 +24,23 @@ surprisal_prob <- function(
       approximation <- "symmetric"
     }
   }
-  if(approximation == "none") {
+  if (approximation == "none") {
     # Univariate, not normal, not symmetric
-    if(length(unique(distribution)) == 1L) {
+    if (length(unique(distribution)) == 1L) {
       distribution <- unique(distribution)
     } else {
       # Need to compute probabilities one by one
       dd <- length(distribution)
-      if(dd != n) {
+      if (dd != n) {
         stop("Length of distribution must be 1 or equal to length of s")
       }
       p <- numeric(n)
-      for(i in seq(n)) {
-        p[i] <- surprisal_prob(s[i], distribution[i], y = y[i],
+      for (i in seq(n)) {
+        p[i] <- surprisal_prob(s[i], distribution[i],
+          y = y[i],
           approximation = approximation,
-          threshold_probability = threshold_probability)
+          threshold_probability = threshold_probability
+        )
       }
       return(p)
     }
@@ -63,7 +65,7 @@ surprisal_prob <- function(
     dist_x <- unique(unlist(dist_x))
     dist_y <- -unlist(density(distribution, dist_x, log = TRUE))
     prob <- (rank(dist_y) - 1) / length(dist_y)
-    if(all(is.na(dist_y)) | all(is.na(prob))) {
+    if (all(is.na(dist_y)) | all(is.na(prob))) {
       return(rep(NA_real_, n))
     }
     p <- 1 - approx(dist_y, prob, xout = s, rule = 2, ties = mean)$y
@@ -104,10 +106,11 @@ surprisal_normal_prob <- function(s, distribution) {
 is_symmetric <- function(dist) {
   dist <- unique(dist)
   fam <- stats::family(dist)
-  if(length(fam) > 1) {
-    for(i in seq_along(fam)) {
-      if(!is_symmetric(dist[i]))
+  if (length(fam) > 1) {
+    for (i in seq_along(fam)) {
+      if (!is_symmetric(dist[i])) {
         return(FALSE)
+      }
     }
     return(TRUE)
   } else if (fam %in% c("student_t", "cauchy", "logistic", "triangular", "uniform")) {
@@ -118,7 +121,7 @@ is_symmetric <- function(dist) {
     q1 <- q1 - q1[1]
     q2 <- q2 - q2[1]
     out <- sum(abs(q1 + q2) / max(abs(c(q1, q2))))
-    if(is.na(out)) {
+    if (is.na(out)) {
       return(FALSE)
     } else {
       return(out < 1e-8)

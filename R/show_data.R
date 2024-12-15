@@ -27,21 +27,21 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
   )
   # Compute density values
   show_x <- mapply(
-      function(u, dist) {
-        d <- NCOL(u) - 1
-        u$den <- unlist(density(dist, at = as.matrix(u[, seq(d)])))
-        return(u)
-      },
-      u = show_x, dist = as.list(object),
-      SIMPLIFY = FALSE
-    )
+    function(u, dist) {
+      d <- NCOL(u) - 1
+      u$den <- unlist(density(dist, at = as.matrix(u[, seq(d)])))
+      return(u)
+    },
+    u = show_x, dist = as.list(object),
+    SIMPLIFY = FALSE
+  )
   # Compute surprisal probabilities
-  if(anomalies) {
+  if (anomalies) {
     show_x <- mapply(
       function(u, dist) {
         d <- NCOL(u) - 2
         data <- as.matrix(u[, seq(d)])
-        u$prob <- surprisals_from_den(data, den= log(u$den), distribution = dist, loo = TRUE, probablity = TRUE)
+        u$prob <- surprisals_from_den(data, den = log(u$den), distribution = dist, loo = TRUE, probablity = TRUE)
         return(u)
       },
       u = show_x, dist = as.list(object),
@@ -49,7 +49,7 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
     )
   }
   # Divide into HDR groups
-  if(!is.null(threshold)) {
+  if (!is.null(threshold)) {
     show_x <- mapply(
       function(u, threshold) {
         u$group <- cut(u$den, breaks = c(0, threshold$threshold, Inf), labels = FALSE)
@@ -66,13 +66,15 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
     )
   }
   # Mark anomalies
-  if(anomalies) {
+  if (anomalies) {
     # Anomalies are points with p < 0.005
-    show_x <- lapply(show_x,
+    show_x <- lapply(
+      show_x,
       function(u) {
         u$anomaly <- u$prob < 0.005 & u$group == "Outside"
         return(u)
-      })
+      }
+    )
   }
   # Combine into a single tibble
   purrr::list_rbind(show_x)

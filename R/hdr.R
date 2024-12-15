@@ -82,7 +82,7 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
 
   # Data to plot
   show_x <- show_data(dist, prob, threshold, anomalies = show_anomalies)
-  if(NROW(show_x) != NROW(data)) {
+  if (NROW(show_x) != NROW(data)) {
     stop("Something has gone wrong here!")
   }
 
@@ -177,22 +177,24 @@ hdr_table <- function(object, prob) {
       return(df)
     })
   } else {
-    output <- lapply(as.list(object),
+    output <- lapply(
+      as.list(object),
       function(u) {
-          # If u is a kde, we can use the data
-          # Otherwise we need to generate a random sample
-          if (stats::family(u) == "kde") {
-            x <- lapply(vctrs::vec_data(u), function(u) u$kde$x)[[1]]
-          } else {
-            x <- distributional::generate(u, times = 1e5)[[1]]
-          }
-          fi <- density(u, at = as.matrix(x))[[1]]
-          tibble(
-            distribution = names_dist(object),
-            prob = prob,
-            density = quantile(fi, prob = 1 - prob, type = 8)
-          )
-        })
+        # If u is a kde, we can use the data
+        # Otherwise we need to generate a random sample
+        if (stats::family(u) == "kde") {
+          x <- lapply(vctrs::vec_data(u), function(u) u$kde$x)[[1]]
+        } else {
+          x <- distributional::generate(u, times = 1e5)[[1]]
+        }
+        fi <- density(u, at = as.matrix(x))[[1]]
+        tibble(
+          distribution = names_dist(object),
+          prob = prob,
+          density = quantile(fi, prob = 1 - prob, type = 8)
+        )
+      }
+    )
   }
   purrr::list_rbind(output) |>
     dplyr::arrange(distribution, prob)
