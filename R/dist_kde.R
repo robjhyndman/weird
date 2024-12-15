@@ -101,16 +101,17 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
   if (d == 1) {
     d <- stats::approx(x$kde$eval.points, x$kde$estimate, xout = at)$y
   } else {
-    # Bivariate interpolation
-    grid <- expand.grid(x$kde$eval.points[[1]], x$kde$eval.points[[2]])
-    ifun <- interpolation::interpfun(x = grid[, 1], y = grid[, 2], z = c(x$kde$estimate))
     # Turn at into a matrix
     if (is.list(at)) {
       at <- do.call(rbind, at)
     } else {
       at <- matrix(at, ncol = d)
     }
-    d <- ifun(at[, 1], at[, 2])
+    # Bivariate interpolation
+    grid <- expand.grid(x$kde$eval.points[[1]], x$kde$eval.points[[2]])
+    d <- interp::interpp(x = grid[,1], y = grid[,2], z = c(x$kde$estimate),
+      xo = at[,1], yo = at[,2])$z |>
+      suppressWarnings()
   }
   d[is.na(d)] <- 0
   return(d)

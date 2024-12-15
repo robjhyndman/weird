@@ -23,7 +23,7 @@ Imports:
   evd,
   ggplot2 (>= 3.1.1),
   grDevices,
-  interpolation,
+  interp,
   ks,
   lookout,
   mvtnorm,
