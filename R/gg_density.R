@@ -225,11 +225,17 @@ gg_density1 <- function(
         upper = -maxden * (i - 1) / 20
       ) |>
       tidyr::pivot_longer(lower:upper, values_to = "y", names_to = "ypos")
-    p <- p + ggplot2::geom_line(
-      data = modes,
-      mapping = aes(x = mode, y = y, group = Distribution, color = Distribution),
-      size = 1
-    )
+    p <- p +
+      ggplot2::geom_line(
+        data = modes,
+        mapping = aes(
+          x = mode,
+          y = y,
+          group = Distribution,
+          color = Distribution
+        ),
+        linewidth = 1
+      )
   }
 
   # Color scale and legend
