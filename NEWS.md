@@ -7,7 +7,7 @@
 * Added surprisals() and surprisal_prob()
 * Renamed lookout() to lookout_prob()
 * Added hampel_anomalies() 
-* mvscale() more resilient to weird data
+* mvscale() moved to lookout package
 
 # weird 1.0.2
 

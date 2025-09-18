@@ -48,9 +48,6 @@ reference:
       - peirce_anomalies
       - stray_anomalies
       - hampel_anomalies
-  - title: Functions for robust scaling of multivariate data
-    contents:
-      - mvscale
   - title: Functions for working with kernel density estimates
     contents:
       - dist_kde
