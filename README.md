@@ -50,7 +50,7 @@ have loaded:
 library(weird)
 #> ── Attaching packages ────────────────────────────────────────────────────────── weird 1.0.2.9000 ──
 #> ✔ dplyr          1.1.4     ✔ distributional 0.5.0
-#> ✔ ggplot2        3.5.1
+#> ✔ ggplot2        4.0.0
 #> ── Conflicts ──────────────────────────────────────────────────────────────────── weird_conflicts ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
@@ -272,19 +272,23 @@ of |>
       lookout < 0.002
   ) |>
   arrange(lookout)
-#> # A tibble: 10 × 8
-#>    time                duration waiting surprisal strayscore lofscore gloshscore       lookout
-#>    <dttm>                 <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>         <dbl>
-#>  1 2018-04-25 19:08:00        1    5700      17.9     0.380      3.78      1     0            
-#>  2 2020-06-01 21:04:00      120    6060      17.8     0.132      1.88      1     0.00000000103
-#>  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860 0.0000417    
-#>  4 2020-08-31 09:56:00      170    3840      16.7     0.0606     1.01      0.816 0.000390     
-#>  5 2015-11-21 20:27:00      150    3420      16.2     0.0772     1.27      1     0.0305       
-#>  6 2017-09-22 18:51:00      281    7140      15.0     0.0333     2.64      1     0.0791       
-#>  7 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1     0.130        
-#>  8 2017-08-12 13:14:00      120    4920      15.0     0.0690     1.53      1     0.166        
-#>  9 2020-05-18 21:21:00      272    7080      14.5     0.0333     2.42      1     0.289        
-#> 10 2018-09-22 16:37:00      253    7140      14.6     0.0200     2.63      1     0.413
+#> # A tibble: 14 × 8
+#>    time                duration waiting surprisal strayscore lofscore gloshscore  lookout
+#>    <dttm>                 <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>    <dbl>
+#>  1 2018-04-25 19:08:00        1    5700      17.9     0.380      3.78      1     0       
+#>  2 2020-06-01 21:04:00      120    6060      17.8     0.132      1.88      1     1.15e-11
+#>  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860 1.31e- 6
+#>  4 2020-08-31 09:56:00      170    3840      16.7     0.0606     1.01      0.816 3.80e- 5
+#>  5 2020-09-16 14:44:00      160    6120      16.1     0.0362     1.29      1     2.49e- 4
+#>  6 2015-11-21 20:27:00      150    3420      16.2     0.0772     1.27      0.948 8.56e- 4
+#>  7 2017-05-03 06:19:00       90    4740      16.2     0.0495     1.68      1     9.18e- 4
+#>  8 2016-11-11 14:23:00      180    6480      15.8     0.0447     1.10      1     1.36e- 3
+#>  9 2020-09-15 18:01:00      160    5880      15.9     0.0362     1.40      1     1.71e- 3
+#> 10 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1     5.66e- 3
+#> 11 2017-08-12 13:14:00      120    4920      15.0     0.0690     1.53      1     1.65e- 2
+#> 12 2017-09-22 18:51:00      281    7140      15.0     0.0333     2.64      1     2.03e- 2
+#> 13 2020-05-18 21:21:00      272    7080      14.5     0.0333     2.42      1     4.10e- 2
+#> 14 2018-09-22 16:37:00      253    7140      14.6     0.0200     2.63      1     4.13e- 2
 ```
 
 The `surprisals()` function can also compute the probability of
@@ -311,55 +315,5 @@ of |>
 #>  8 2020-07-23 23:17:00      186    4320      16.1 0.00364 
 #>  9 2019-07-25 06:32:00      300    5280      15.9 0.00410 
 #> 10 2020-09-15 18:01:00      160    5880      15.9 0.00455 
-#> # ℹ 2,187 more rows
-```
-
-## Robust multivariate scaling
-
-Some anomaly detection methods require the data to be scaled first, so
-all observations are on the same scale. However, many scaling methods
-are not robust to anomalies. The `mvscale()` function provides a
-multivariate robust scaling method, that optionally takes account of the
-relationships betwen variables, and uses robust estimates of center,
-scale and covariance by default. The centers are removed using medians,
-the scale function is the IQR, and the covariance matrix is estimated
-using a robust OGK estimate. The data are scaled using the Cholesky
-decomposition of the inverse covariance. Then the scaled data are
-returned. The scaled variables are rotated to be orthogonal, so are
-renamed as `z1`, `z2`, etc. Non-rotated scaling is possible by setting
-`cov = NULL`.
-
-``` r
-mvscale(of)
-#> Warning in mvscale(of): Ignoring non-numeric columns: time
-#> # A tibble: 2,197 × 3
-#>    time                     z1     z2
-#>    <dttm>                <dbl>  <dbl>
-#>  1 2015-01-02 14:53:00  2.02   -1.33 
-#>  2 2015-01-09 23:55:00  0.0758  0.728
-#>  3 2015-02-07 00:49:00 -1.64   -0.485
-#>  4 2015-02-14 01:09:00 -1.86   -0.968
-#>  5 2015-02-21 01:12:00 -1.25   -0.604
-#>  6 2015-02-28 01:11:00 -2.57   -0.364
-#>  7 2015-03-07 00:50:00 -3.63   -0.847
-#>  8 2015-03-13 21:57:00 -0.913   0.606
-#>  9 2015-03-13 23:37:00 -2.19   -0.726
-#> 10 2015-03-20 22:26:00 -5.50   -3.51 
-#> # ℹ 2,187 more rows
-mvscale(of, cov = NULL)
-#> Warning in mvscale(of, cov = NULL): Ignoring non-numeric columns: time
-#> # A tibble: 2,197 × 3
-#>    time                duration waiting
-#>    <dttm>                 <dbl>   <dbl>
-#>  1 2015-01-02 14:53:00    1.40   -1.24 
-#>  2 2015-01-09 23:55:00    0.316   0.676
-#>  3 2015-02-07 00:49:00   -1.67   -0.451
-#>  4 2015-02-14 01:09:00   -2.03   -0.900
-#>  5 2015-02-21 01:12:00   -1.35   -0.562
-#>  6 2015-02-28 01:11:00   -2.48   -0.338
-#>  7 2015-03-07 00:50:00   -3.61   -0.787
-#>  8 2015-03-13 21:57:00   -0.631   0.564
-#>  9 2015-03-13 23:37:00   -2.25   -0.675
-#> 10 2015-03-20 22:26:00   -6.22   -3.27 
 #> # ℹ 2,187 more rows
 ```
