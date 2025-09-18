@@ -317,3 +317,53 @@ of |>
 #> 10 2020-09-15 18:01:00      160    5880      15.9 0.00455 
 #> # ℹ 2,187 more rows
 ```
+
+## Robust multivariate scaling
+
+Some anomaly detection methods require the data to be scaled first, so
+all observations are on the same scale. However, many scaling methods
+are not robust to anomalies. The `mvscale()` function provides a
+multivariate robust scaling method, that optionally takes account of the
+relationships betwen variables, and uses robust estimates of center,
+scale and covariance by default. The centers are removed using medians,
+the scale function is the IQR, and the covariance matrix is estimated
+using a robust OGK estimate. The data are scaled using the Cholesky
+decomposition of the inverse covariance. Then the scaled data are
+returned. The scaled variables are rotated to be orthogonal, so are
+renamed as `z1`, `z2`, etc. Non-rotated scaling is possible by setting
+`cov = NULL`.
+
+``` r
+mvscale(of)
+#> Warning in mvscale(of): Ignoring non-numeric columns: time
+#> # A tibble: 2,197 × 3
+#>    time                     z1     z2
+#>    <dttm>                <dbl>  <dbl>
+#>  1 2015-01-02 14:53:00  2.02   -1.33 
+#>  2 2015-01-09 23:55:00  0.0758  0.728
+#>  3 2015-02-07 00:49:00 -1.64   -0.485
+#>  4 2015-02-14 01:09:00 -1.86   -0.968
+#>  5 2015-02-21 01:12:00 -1.25   -0.604
+#>  6 2015-02-28 01:11:00 -2.57   -0.364
+#>  7 2015-03-07 00:50:00 -3.63   -0.847
+#>  8 2015-03-13 21:57:00 -0.913   0.606
+#>  9 2015-03-13 23:37:00 -2.19   -0.726
+#> 10 2015-03-20 22:26:00 -5.50   -3.51 
+#> # ℹ 2,187 more rows
+mvscale(of, cov = NULL)
+#> Warning in mvscale(of, cov = NULL): Ignoring non-numeric columns: time
+#> # A tibble: 2,197 × 3
+#>    time                duration waiting
+#>    <dttm>                 <dbl>   <dbl>
+#>  1 2015-01-02 14:53:00    1.40   -1.24 
+#>  2 2015-01-09 23:55:00    0.316   0.676
+#>  3 2015-02-07 00:49:00   -1.67   -0.451
+#>  4 2015-02-14 01:09:00   -2.03   -0.900
+#>  5 2015-02-21 01:12:00   -1.35   -0.562
+#>  6 2015-02-28 01:11:00   -2.48   -0.338
+#>  7 2015-03-07 00:50:00   -3.61   -0.787
+#>  8 2015-03-13 21:57:00   -0.631   0.564
+#>  9 2015-03-13 23:37:00   -2.25   -0.675
+#> 10 2015-03-20 22:26:00   -6.22   -3.27 
+#> # ℹ 2,187 more rows
+```
