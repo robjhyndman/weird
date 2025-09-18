@@ -47,11 +47,12 @@
 #' @export
 
 surprisals <- function(
-    object,
-    probability = TRUE,
-    approximation = c("none", "gpd", "empirical"),
-    threshold_probability = 0.10,
-    ...) {
+  object,
+  probability = TRUE,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.10,
+  ...
+) {
   UseMethod("surprisals")
 }
 
@@ -90,13 +91,14 @@ surprisals <- function(
 #' )
 #' @export
 surprisals.default <- function(
-    object,
-    probability = TRUE,
-    approximation = c("none", "gpd", "empirical"),
-    threshold_probability = 0.10,
-    distribution = dist_kde(object, multiplier = 2, ...),
-    loo = FALSE,
-    ...) {
+  object,
+  probability = TRUE,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.10,
+  distribution = dist_kde(object, multiplier = 2, ...),
+  loo = FALSE,
+  ...
+) {
   object <- as.matrix(object)
   if (NCOL(object) == 1L) {
     object <- c(object)
@@ -117,20 +119,30 @@ surprisals.default <- function(
       den <- den[[1]]
     }
   }
-  surprisals_from_den(object, den, probability, approximation, threshold_probability, distribution, loo, ...)
+  surprisals_from_den(
+    object,
+    den,
+    probability,
+    approximation,
+    threshold_probability,
+    distribution,
+    loo,
+    ...
+  )
 }
 
 # Surprisals function that uses pre-calculated densities
 # Same arguments as surprisals.default except den is numerical vector of log densities
 surprisals_from_den <- function(
-    object,
-    den,
-    probability = TRUE,
-    approximation = c("none", "gpd", "empirical"),
-    threshold_probability = 0.10,
-    distribution = dist_kde(object, multiplier = 2, ...),
-    loo = FALSE,
-    ...) {
+  object,
+  den,
+  probability = TRUE,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.10,
+  distribution = dist_kde(object, multiplier = 2, ...),
+  loo = FALSE,
+  ...
+) {
   object <- as.matrix(object)
   if (NCOL(object) == 1L) {
     object <- c(object)
@@ -157,7 +169,8 @@ surprisals_from_den <- function(
     y <- NULL
   }
   if (probability) {
-    surprisal_prob(scores,
+    surprisal_prob(
+      scores,
       distribution = distribution,
       approximation = approximation,
       threshold_probability = threshold_probability,
@@ -194,11 +207,13 @@ surprisals_from_den <- function(
 #'   geom_point()
 #' @export
 surprisals.lm <- function(
-    object,
-    probability = TRUE,
-    approximation = c("none", "gpd", "empirical"),
-    threshold_probability = 0.10,
-    loo = FALSE, ...) {
+  object,
+  probability = TRUE,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.10,
+  loo = FALSE,
+  ...
+) {
   e <- stats::residuals(object, type = "response")
   h <- stats::hatvalues(object)
   sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
@@ -209,7 +224,8 @@ surprisals.lm <- function(
   r2 <- e^2 / ((1 - h) * sigma2)
   s <- 0.5 * (log(2 * pi) + r2)
   if (probability) {
-    surprisal_prob(s,
+    surprisal_prob(
+      s,
       distribution = distributional::dist_normal(),
       approximation = approximation,
       threshold_probability = threshold_probability
@@ -230,11 +246,13 @@ surprisals.lm <- function(
 #' @importFrom stats approx dbinom density dnorm dpois na.omit
 #' @export
 surprisals.gam <- function(
-    object,
-    probability = TRUE,
-    approximation = c("none", "gpd", "empirical"),
-    threshold_probability = 0.10,
-    loo = FALSE, ...) {
+  object,
+  probability = TRUE,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.10,
+  loo = FALSE,
+  ...
+) {
   if (loo) {
     warning("Leave-one-out log scores unavailable for GAM models.")
   }
@@ -246,7 +264,9 @@ surprisals.gam <- function(
   } else if (object$family$family == "binomial") {
     surprisals <- -dbinom(
       x = object$y * object$prior.weights,
-      size = object$prior.weights, prob = fit_aug$.fitted, log = TRUE
+      size = object$prior.weights,
+      prob = fit_aug$.fitted,
+      log = TRUE
     )
     dist <- distributional::dist_binomial(object$prior.weights, fit_aug$.fitted)
   } else if (object$family$family == "poisson") {
@@ -256,7 +276,8 @@ surprisals.gam <- function(
     stop("Unsupported family")
   }
   if (probability) {
-    surprisal_prob(surprisals,
+    surprisal_prob(
+      surprisals,
       distribution = dist,
       approximation = approximation,
       threshold_probability = threshold_probability,
@@ -268,6 +289,11 @@ surprisals.gam <- function(
 }
 
 utils::globalVariables(c(
-  ".resid", ".se.fit", ".std.resid", ".resid", ".sigma", ".hat",
+  ".resid",
+  ".se.fit",
+  ".std.resid",
+  ".resid",
+  ".sigma",
+  ".hat",
   "studentized_residuals"
 ))

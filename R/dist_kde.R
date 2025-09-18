@@ -60,29 +60,48 @@ dist_kde <- function(y, h = NULL, H = NULL, multiplier = 1, ...) {
 
 #' @export
 format.dist_kde <- function(x, ...) {
-  d <- vapply(x, function(u) {
-    NCOL(u$x)
-  }, integer(1L))
-  ngrid <- vapply(x, function(u) {
-    length(u$eval.points)
-  }, integer(1L))
+  d <- vapply(
+    x,
+    function(u) {
+      NCOL(u$x)
+    },
+    integer(1L)
+  )
+  ngrid <- vapply(
+    x,
+    function(u) {
+      length(u$eval.points)
+    },
+    integer(1L)
+  )
   if (d == 1) {
     # Find bandwidth and convert to string
-    h <- vapply(x, function(u) {
-      u$h
-    }, numeric(1L))
+    h <- vapply(
+      x,
+      function(u) {
+        u$h
+      },
+      numeric(1L)
+    )
     sprintf("kde[%sd, h=%.2g]", d, h)
   } else {
     # Create matrix as string
-    H <- c(vapply(x, function(u) {
-      u$H
-    }, numeric(d * d)))
+    H <- c(vapply(
+      x,
+      function(u) {
+        u$H
+      },
+      numeric(d * d)
+    ))
     Hstring <- "{"
     for (i in seq(d)) {
       Hstring <- paste0(
-        Hstring, "(",
-        paste0(sprintf("%.2g", H[(i - 1) * d + seq(d)]),
-          sep = "", collapse = ", "
+        Hstring,
+        "(",
+        paste0(
+          sprintf("%.2g", H[(i - 1) * d + seq(d)]),
+          sep = "",
+          collapse = ", "
         ),
         ")'"
       )
@@ -109,8 +128,12 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
     }
     # Bivariate interpolation
     grid <- expand.grid(x$kde$eval.points[[1]], x$kde$eval.points[[2]])
-    ifun <- interpolation::interpfun(x = grid[,1], y = grid[,2], z = c(x$kde$estimate))
-    d <- ifun(at[,1], at[,2])
+    ifun <- interpolation::interpfun(
+      x = grid[, 1],
+      y = grid[, 2],
+      z = c(x$kde$estimate)
+    )
+    d <- ifun(at[, 1], at[, 2])
   }
   d[is.na(d)] <- 0
   return(d)
@@ -139,9 +162,15 @@ quantile.dist_kde <- function(x, p, ..., na.rm = TRUE) {
   }
   # Compute CDF at density ordinates
   F <- cumintegral(x$kde$eval.points, x$kde$estimate)
-  stats::approx(F$y, F$x,
-    xout = p, yleft = min(F$x), yright = max(F$x),
-    ties = mean, ..., na.rm = na.rm
+  stats::approx(
+    F$y,
+    F$x,
+    xout = p,
+    yleft = min(F$x),
+    yright = max(F$x),
+    ties = mean,
+    ...,
+    na.rm = na.rm
   )$y
 }
 

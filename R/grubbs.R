@@ -72,7 +72,8 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
   sorty <- sort(y)
   n <- length(y)
   if (two_sided) {
-    Q <- max(sorty[2] - sorty[1], sorty[n] - sorty[n - 1]) / (sorty[n] - sorty[1])
+    Q <- max(sorty[2] - sorty[1], sorty[n] - sorty[n - 1]) /
+      (sorty[n] - sorty[1])
   } else {
     Q <- (sorty[n] - sorty[n - 1]) / (sorty[n] - sorty[1])
     alpha <- 2 * alpha
@@ -88,7 +89,9 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
   }
   # Find four nearest alpha values
   alpha_grid <- sort(unique(dixon_cv$alpha))
-  nearest_alpha <- (alpha_grid[order(abs(logit(alpha_grid) - logit(alpha)))])[1:4]
+  nearest_alpha <- (alpha_grid[order(abs(logit(alpha_grid) - logit(alpha)))])[
+    1:4
+  ]
   # Fit model using only alpha values?
   alpha_only_model <- (n %in% 3:50)
   # Find nearest n values
@@ -99,7 +102,9 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
     n_grid <- sort(unique(dixon_cv$n))
     nearest_n <- (n_grid[order(abs(loglog(n_grid) - loglog(n)))])[1:4]
   }
-  cv_subset <- dixon_cv[dixon_cv$alpha %in% nearest_alpha & dixon_cv$n %in% nearest_n, ]
+  cv_subset <- dixon_cv[
+    dixon_cv$alpha %in% nearest_alpha & dixon_cv$n %in% nearest_n,
+  ]
   cv_subset$loglogn <- loglog(cv_subset$n)
   cv_subset$logitalpha <- logit(cv_subset$alpha)
   if (alpha_only_model) {
@@ -107,11 +112,14 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
     dixonfit <- stats::lm(log(cv) ~ poly(logitalpha, 3), data = cv_subset)
   } else {
     # Quadratic bivariate model to 16 points. 6 df
-    dixonfit <- stats::lm(log(cv) ~ poly(loglogn, 2) + poly(logitalpha, 2) + I(logitalpha * loglogn),
+    dixonfit <- stats::lm(
+      log(cv) ~
+        poly(loglogn, 2) + poly(logitalpha, 2) + I(logitalpha * loglogn),
       data = cv_subset
     )
   }
-  threshold <- exp(stats::predict(dixonfit,
+  threshold <- exp(stats::predict(
+    dixonfit,
     newdata = data.frame(logitalpha = logit(alpha), loglogn = loglog(n))
   ))
   # Return logical vector showing where outliers are
@@ -120,7 +128,8 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
     if (two_sided) {
       output[miny] <- (sorty[2] - sorty[1]) / (sorty[n] - sorty[1]) > threshold
     }
-    output[maxy] <- (sorty[n] - sorty[n - 1]) / (sorty[n] - sorty[1]) > threshold
+    output[maxy] <- (sorty[n] - sorty[n - 1]) / (sorty[n] - sorty[1]) >
+      threshold
   }
   return(output)
 }

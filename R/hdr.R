@@ -43,14 +43,20 @@
 #'
 #' @export
 
-gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
-                          color = "#0072b2",
-                          show_points = FALSE,
-                          show_anomalies = TRUE,
-                          scatterplot = show_points,
-                          alpha = NULL,
-                          jitter = TRUE,
-                          ngrid = 501, ...) {
+gg_hdrboxplot <- function(
+  data,
+  var1,
+  var2 = NULL,
+  prob = c(0.5, 0.99),
+  color = "#0072b2",
+  show_points = FALSE,
+  show_anomalies = TRUE,
+  scatterplot = show_points,
+  alpha = NULL,
+  jitter = TRUE,
+  ngrid = 501,
+  ...
+) {
   if (missing(var1)) {
     # Grab first variable
     data <- as.data.frame(data)
@@ -77,7 +83,11 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
 
   # HDR thresholds
   threshold <- hdr_table(dist, prob) |>
-    dplyr::transmute(level = 100 * prob, Distribution = distribution, threshold = density) |>
+    dplyr::transmute(
+      level = 100 * prob,
+      Distribution = distribution,
+      threshold = density
+    ) |>
     dplyr::distinct()
 
   # Data to plot
@@ -88,7 +98,8 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
 
   # Call gg_density functions
   if (d == 2L) {
-    gg_density2(dist,
+    gg_density2(
+      dist,
       df = make_density_df(dist, ngrid = ngrid),
       show_x = show_x,
       threshold = threshold,
@@ -102,7 +113,8 @@ gg_hdrboxplot <- function(data, var1, var2 = NULL, prob = c(0.5, 0.99),
     ) +
       ggplot2::guides(fill = "none", color = "none")
   } else {
-    gg_density1(dist,
+    gg_density1(
+      dist,
       df = make_density_df(dist, ngrid = ngrid),
       show_x = show_x,
       threshold = threshold,
@@ -164,7 +176,8 @@ hdr_table <- function(object, prob) {
             hdr |>
               dplyr::mutate(density = unlist(density(dist, at = lower)))
           },
-          dist = as.list(object), hdr = split(hdri, hdri$distribution)[dist_names],
+          dist = as.list(object),
+          hdr = split(hdri, hdri$distribution)[dist_names],
           SIMPLIFY = FALSE
         ) |>
           purrr::list_rbind()

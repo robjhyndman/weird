@@ -36,7 +36,10 @@ weird_attach <- function() {
 
   versions <- vapply(to_load, package_version, character(1))
   packages <- paste0(
-    crayon::green(cli::symbol$tick), " ", crayon::blue(format(to_load)), " ",
+    crayon::green(cli::symbol$tick),
+    " ",
+    crayon::blue(format(to_load)),
+    " ",
     crayon::col_align(versions, max(crayon::col_nchar(versions)))
   )
 
@@ -59,7 +62,9 @@ package_version <- function(x) {
   version <- as.character(unclass(utils::packageVersion(x))[[1]])
 
   if (length(version) > 3) {
-    version[4:length(version)] <- crayon::red(as.character(version[4:length(version)]))
+    version[4:length(version)] <- crayon::red(as.character(version[
+      4:length(version)
+    ]))
   }
   paste0(version, collapse = ".")
 }

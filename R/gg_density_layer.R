@@ -28,7 +28,11 @@ gg_density_layer <- function(object, scale = 1, ngrid = 501, ...) {
   if (length(object) == 1L) {
     geom_line(data = df, aes(x = x, y = scale * Density), ...)
   } else {
-    geom_line(data = df, aes(x = x, y = scale * Density, color = Distribution), ...)
+    geom_line(
+      data = df,
+      aes(x = x, y = scale * Density, color = Distribution),
+      ...
+    )
   }
 }
 
@@ -104,7 +108,8 @@ make_density_df <- function(object, ngrid = 501) {
   names(df)[-seq(d)] <- names_dist(object, unique = TRUE)
   tibble::as_tibble(df) |>
     tidyr::pivot_longer(
-      cols = -seq(d), names_to = "Distribution",
+      cols = -seq(d),
+      names_to = "Distribution",
       values_to = "Density"
     ) |>
     dplyr::distinct()

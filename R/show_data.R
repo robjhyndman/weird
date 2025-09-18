@@ -17,7 +17,8 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
   object <- object[some_data]
   x <- x[some_data]
   show_x <- purrr::map2(
-    x, names(x),
+    x,
+    names(x),
     function(u, dist) {
       tmp <- tibble::as_tibble(u) |> dplyr::mutate(Distribution = dist)
       d <- NCOL(u)
@@ -32,7 +33,8 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
       u$den <- unlist(density(dist, at = as.matrix(u[, seq(d)])))
       return(u)
     },
-    u = show_x, dist = as.list(object),
+    u = show_x,
+    dist = as.list(object),
     SIMPLIFY = FALSE
   )
   # Compute surprisal probabilities
@@ -41,10 +43,17 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
       function(u, dist) {
         d <- NCOL(u) - 2
         data <- as.matrix(u[, seq(d)])
-        u$prob <- surprisals_from_den(data, den = log(u$den), distribution = dist, loo = TRUE, probablity = TRUE)
+        u$prob <- surprisals_from_den(
+          data,
+          den = log(u$den),
+          distribution = dist,
+          loo = TRUE,
+          probablity = TRUE
+        )
         return(u)
       },
-      u = show_x, dist = as.list(object),
+      u = show_x,
+      dist = as.list(object),
       SIMPLIFY = FALSE
     )
   }
@@ -52,8 +61,13 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
   if (!is.null(threshold)) {
     show_x <- mapply(
       function(u, threshold) {
-        u$group <- cut(u$den, breaks = c(0, threshold$threshold, Inf), labels = FALSE)
-        u$group <- factor(u$group,
+        u$group <- cut(
+          u$den,
+          breaks = c(0, threshold$threshold, Inf),
+          labels = FALSE
+        )
+        u$group <- factor(
+          u$group,
           levels = rev(seq(length(prob) + 1)),
           labels = c(paste0(sort(prob) * 100, "%"), "Outside")
         )
@@ -61,7 +75,8 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
         u$level[is.na(u$level)] <- Inf
         return(u)
       },
-      u = show_x, threshold = split(threshold, threshold$Distribution),
+      u = show_x,
+      threshold = split(threshold, threshold$Distribution),
       SIMPLIFY = FALSE
     )
   }

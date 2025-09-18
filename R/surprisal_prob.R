@@ -3,11 +3,12 @@
 # so distribution may be a vector
 
 surprisal_prob <- function(
-    s,
-    distribution,
-    approximation = c("none", "gpd", "empirical"),
-    threshold_probability = 0.10,
-    y = NULL) {
+  s,
+  distribution,
+  approximation = c("none", "gpd", "empirical"),
+  threshold_probability = 0.10,
+  y = NULL
+) {
   approximation <- match.arg(approximation)
   n <- length(s)
   if (all(is.na(s))) {
@@ -36,7 +37,9 @@ surprisal_prob <- function(
       }
       p <- numeric(n)
       for (i in seq(n)) {
-        p[i] <- surprisal_prob(s[i], distribution[i],
+        p[i] <- surprisal_prob(
+          s[i],
+          distribution[i],
           y = y[i],
           approximation = approximation,
           threshold_probability = threshold_probability
@@ -46,7 +49,6 @@ surprisal_prob <- function(
     }
   }
 
-
   if (approximation == "gpd") {
     p <- surprisal_gpd_prob(s, threshold_probability)
   } else if (approximation == "empirical") {
@@ -55,7 +57,8 @@ surprisal_prob <- function(
     p <- surprisal_normal_prob(s, distribution)
   } else if (approximation == "symmetric" & !is.null(y)) {
     centre <- stats::median(distribution)
-    p <- 2 * (1 - distributional::cdf(distribution, q = centre + abs(y - centre)))
+    p <- 2 *
+      (1 - distributional::cdf(distribution, q = centre + abs(y - centre)))
   } else {
     # Slower computation, but more general (although approximate)
     dist_x <- stats::quantile(
@@ -77,7 +80,12 @@ surprisal_prob <- function(
 # Surprisal probabilities using GPD approximation
 surprisal_gpd_prob <- function(s, threshold_p) {
   n <- length(s)
-  threshold_q <- stats::quantile(s, prob = 1 - threshold_p, type = 8, na.rm = TRUE)
+  threshold_q <- stats::quantile(
+    s,
+    prob = 1 - threshold_p,
+    type = 8,
+    na.rm = TRUE
+  )
   if (!any(s > threshold_q, na.rm = TRUE)) {
     warning("No surprisals above threshold")
     return(rep(1, n))
@@ -87,11 +95,14 @@ surprisal_gpd_prob <- function(s, threshold_p) {
     warning("Infinite surprisals will be ignored in GPD")
   }
   gpd <- evd::fpot(s[finite], threshold = threshold_q, std.err = FALSE)$estimate
-  p <- threshold_p * evd::pgpd(
-    s,
-    loc = threshold_q,
-    scale = gpd["scale"], shape = gpd["shape"], lower.tail = FALSE
-  )
+  p <- threshold_p *
+    evd::pgpd(
+      s,
+      loc = threshold_q,
+      scale = gpd["scale"],
+      shape = gpd["shape"],
+      lower.tail = FALSE
+    )
   return(p)
 }
 
@@ -113,7 +124,9 @@ is_symmetric <- function(dist) {
       }
     }
     return(TRUE)
-  } else if (fam %in% c("student_t", "cauchy", "logistic", "triangular", "uniform")) {
+  } else if (
+    fam %in% c("student_t", "cauchy", "logistic", "triangular", "uniform")
+  ) {
     return(TRUE)
   } else {
     q1 <- unlist(stats::quantile(dist, seq(0.5, 0.99, length.out = 5)))

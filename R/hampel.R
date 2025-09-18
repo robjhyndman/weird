@@ -34,13 +34,21 @@ hampel_anomalies <- function(y, bandwidth, k = 3) {
   bandwidth <- as.integer(round(bandwidth))
   n <- length(y)
   # Running medians
-  m <- stats::runmed(y, 2 * bandwidth + 1, endrule = "keep", na.action = "na.omit")
+  m <- stats::runmed(
+    y,
+    2 * bandwidth + 1,
+    endrule = "keep",
+    na.action = "na.omit"
+  )
   diff <- abs(y - m)
   # Set MAD to Inf so end points are not considered outliers
   mad <- rep(Inf, n)
   # Running MADs
   for (i in (bandwidth + 1):(n - bandwidth)) {
-    mad[i] <- stats::median(abs(y[(i - bandwidth):(i + bandwidth)] - m[i]), na.rm = TRUE)
+    mad[i] <- stats::median(
+      abs(y[(i - bandwidth):(i + bandwidth)] - m[i]),
+      na.rm = TRUE
+    )
   }
   # Find outliers
   return(diff > mad * k * 1.482602)

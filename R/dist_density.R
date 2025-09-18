@@ -24,7 +24,12 @@ dist_density <- function(x, density) {
     stop("x and density must have the same length")
   }
   # Ensure density integrates to 1
-  density <- mapply(function(x, f) f / integral(x, f), x, density, SIMPLIFY = FALSE)
+  density <- mapply(
+    function(x, f) f / integral(x, f),
+    x,
+    density,
+    SIMPLIFY = FALSE
+  )
   # Make sure x and f are ordered
   idx <- lapply(x, order)
   x <- mapply(function(u, i) u[i], x, idx, SIMPLIFY = FALSE)
@@ -67,9 +72,15 @@ cdf.dist_density <- function(x, q, ..., na.rm = TRUE) {
 quantile.dist_density <- function(x, p, ..., na.rm = TRUE) {
   # Compute CDF at density ordinates
   F <- cumintegral(x$x, x$f)
-  stats::approx(F$y, F$x,
-    xout = p, yleft = min(x$x), yright = max(x$x),
-    ties = mean, ..., na.rm = na.rm
+  stats::approx(
+    F$y,
+    F$x,
+    xout = p,
+    yleft = min(x$x),
+    yright = max(x$x),
+    ties = mean,
+    ...,
+    na.rm = na.rm
   )$y
 }
 
