@@ -121,20 +121,20 @@ used if <code>approximation = "gpd"</code>).</p></dd>
 <span class="r-in"><span><span class="va">gam_of</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">waiting</span> <span class="op">~</span> <span class="fu">s</span><span class="op">(</span><span class="va">duration</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">of</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">of</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">mutate</span><span class="op">(</span>fscore <span class="op">=</span> <span class="fu"><a href="surprisals.html">surprisals</a></span><span class="op">(</span><span class="va">gam_of</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,196 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3,278 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    time                duration waiting fscore</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2015-01-02 <span style="color: #949494;">14:53:00</span>      271    <span style="text-decoration: underline;">5</span>040  0.119</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2015-01-09 <span style="color: #949494;">23:55:00</span>      247    <span style="text-decoration: underline;">6</span>060  0.402</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2015-02-07 <span style="color: #949494;">00:49:00</span>      203    <span style="text-decoration: underline;">5</span>460  0.890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2015-02-14 <span style="color: #949494;">01:09:00</span>      195    <span style="text-decoration: underline;">5</span>221  0.717</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2015-02-21 <span style="color: #949494;">01:12:00</span>      210    <span style="text-decoration: underline;">5</span>401  0.787</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2015-02-28 <span style="color: #949494;">01:11:00</span>      185    <span style="text-decoration: underline;">5</span>520  0.948</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2015-03-07 <span style="color: #949494;">00:50:00</span>      160    <span style="text-decoration: underline;">5</span>281  0.817</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2015-03-13 <span style="color: #949494;">21:57:00</span>      226    <span style="text-decoration: underline;">6</span>000  0.361</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2015-03-13 <span style="color: #949494;">23:37:00</span>      190    <span style="text-decoration: underline;">5</span>341  0.862</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2015-03-20 <span style="color: #949494;">22:26:00</span>      102    <span style="text-decoration: underline;">3</span>961  0.960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,186 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2015-01-02 <span style="color: #949494;">14:53:00</span>      271    84    0.797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2015-01-09 <span style="color: #949494;">23:55:00</span>      247   101    0.848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2015-02-07 <span style="color: #949494;">00:49:00</span>      203    91    0.880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2015-02-14 <span style="color: #949494;">01:09:00</span>      195    87.0  0.876</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2015-02-21 <span style="color: #949494;">01:12:00</span>      210    90.0  0.857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2015-02-28 <span style="color: #949494;">01:11:00</span>      185    92    0.919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2015-03-07 <span style="color: #949494;">00:50:00</span>      160    88.0  0.937</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2015-03-13 <span style="color: #949494;">21:57:00</span>      226   100    0.880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2015-03-13 <span style="color: #949494;">23:37:00</span>      190    89.0  0.896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2015-03-20 <span style="color: #949494;">22:26:00</span>      102    66.0  0.941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3,268 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
