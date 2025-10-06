@@ -5,7 +5,7 @@
 \alias{cricket_batting}
 \title{Cricket batting data for international test players}
 \format{
-A data frame with 3754 rows and 15 variables:
+A data frame with 3968 rows and 15 variables:
 \describe{
 \item{Player}{Player name in form of "initials surname"}
 \item{Country}{Country played for}
@@ -35,7 +35,7 @@ Data frame
 }
 \description{
 A dataset containing career batting statistics for all international test
-players (men and women) up to 6 October 2021.
+players (men and women) up to 6 October 2025.
 }
 \examples{
 cricket_batting |>

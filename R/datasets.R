@@ -1,9 +1,9 @@
 #' Cricket batting data for international test players
 #'
 #' A dataset containing career batting statistics for all international test
-#' players (men and women) up to 6 October 2021.
+#' players (men and women) up to 6 October 2025.
 #'
-#' @format A data frame with 3754 rows and 15 variables:
+#' @format A data frame with 3968 rows and 15 variables:
 #' \describe{
 #'   \item{Player}{Player name in form of "initials surname"}
 #'   \item{Country}{Country played for}
@@ -34,11 +34,11 @@
 #'
 #' A data set containing data on recorded eruptions of the Old Faithful Geyser
 #' in Yellowstone National Park, Wyoming, USA, from
-#' 1 January 2015 to 1 October 2021.
+#' 1 January 2015 to 31 December 2024.
 #' Recordings are incomplete, especially during the winter months when observers
 #' may not be present.
 #'
-#' @format A data frame with 2261 rows and 3 columns:
+#' @format A data frame with 3280 rows and 3 columns:
 #' \describe{
 #'   \item{time}{Time eruption started}
 #'   \item{duration}{Duration of eruption in seconds}

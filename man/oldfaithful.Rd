@@ -5,7 +5,7 @@
 \alias{oldfaithful}
 \title{Old faithful eruption data}
 \format{
-A data frame with 2261 rows and 3 columns:
+A data frame with 3280 rows and 3 columns:
 \describe{
 \item{time}{Time eruption started}
 \item{duration}{Duration of eruption in seconds}
@@ -24,7 +24,7 @@ Data frame
 \description{
 A data set containing data on recorded eruptions of the Old Faithful Geyser
 in Yellowstone National Park, Wyoming, USA, from
-1 January 2015 to 1 October 2021.
+1 January 2015 to 31 December 2024.
 Recordings are incomplete, especially during the winter months when observers
 may not be present.
 }

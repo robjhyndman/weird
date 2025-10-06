@@ -30,6 +30,7 @@ oldfaithful <- gt_load_eruptions(path = here::here("data-raw")) |>
   ) |>
   filter(
     as.Date(time) > "2015-01-01",
+    as.Date(time) < "2025-01-01",
     !is.na(duration_seconds)
   ) |>
   select(time, duration = duration_seconds, waiting)
