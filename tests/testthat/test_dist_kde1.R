@@ -20,11 +20,13 @@ test_that("dist_kde1", {
   expect_identical(lengths(quantile(dist, p = p)), c(19L, 19L))
   # Generate
   rand_dist <- distributional::generate(dist, times = 1e6)
-  expect_equal(lapply(rand_dist, mean) |> unlist(),
+  expect_equal(
+    lapply(rand_dist, mean) |> unlist(),
     mean(dist),
     tolerance = 0.005
   )
-  expect_equal(lapply(rand_dist, var) |> unlist(),
+  expect_equal(
+    lapply(rand_dist, var) |> unlist(),
     distributional::variance(dist),
     tolerance = 0.005
   )

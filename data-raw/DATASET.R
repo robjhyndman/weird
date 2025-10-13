@@ -3,8 +3,18 @@ library(tidyverse)
 ## Cricket batting data
 
 library(cricketdata)
-cricket_batting_men <- fetch_cricinfo(matchtype = "test", sex = "men", activity = "batting", type = "career")
-cricket_batting_women <- fetch_cricinfo(matchtype = "test", sex = "women", activity = "batting", type = "career")
+cricket_batting_men <- fetch_cricinfo(
+  matchtype = "test",
+  sex = "men",
+  activity = "batting",
+  type = "career"
+)
+cricket_batting_women <- fetch_cricinfo(
+  matchtype = "test",
+  sex = "women",
+  activity = "batting",
+  type = "career"
+)
 cricket_batting <- bind_rows(
   cricket_batting_men |> mutate(Gender = "Men"),
   cricket_batting_women |> mutate(Gender = "Women")
@@ -42,13 +52,24 @@ usethis::use_data(oldfaithful, overwrite = TRUE)
 
 # Wine data
 
-wine_reviews <- readr::read_csv(here::here("data-raw/winemag-data-130k-v2.csv")) |>
+wine_reviews <- readr::read_csv(here::here(
+  "data-raw/winemag-data-130k-v2.csv"
+)) |>
   filter(!is.na(points), !is.na(price)) |>
   mutate(
     year = as.numeric(stringr::str_extract(title, "(198|199|200|201)\\d")),
     region_1 = if_else(is.na(region_2), region_1, region_2)
   ) |>
-  select(country, state = province, region = region_1, winery, variety, points, price, year) |>
+  select(
+    country,
+    state = province,
+    region = region_1,
+    winery,
+    variety,
+    points,
+    price,
+    year
+  ) |>
   distinct()
 
 # usethis::use_data(wine_reviews, overwrite = TRUE)

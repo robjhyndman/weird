@@ -21,7 +21,8 @@ test_that("dist_kde2", {
   expect_error(quantile(dist, p))
   # Generate
   rand_dist <- distributional::generate(dist, times = 1e6)
-  expect_equal(lapply(rand_dist, colMeans) |> unlist() |> matrix(nrow = 1),
+  expect_equal(
+    lapply(rand_dist, colMeans) |> unlist() |> matrix(nrow = 1),
     mean(dist),
     tolerance = 0.005
   )

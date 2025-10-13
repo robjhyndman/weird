@@ -62,7 +62,9 @@ if (alpha_only_model) {
   n_grid <- sort(unique(dixon_cv$n))
   nearest_n <- (n_grid[order(abs(loglog(n_grid) - loglog(n)))])[1:4]
 }
-cv_subset <- dixon_cv[dixon_cv$alpha %in% nearest_alpha & dixon_cv$n %in% nearest_n, ]
+cv_subset <- dixon_cv[
+  dixon_cv$alpha %in% nearest_alpha & dixon_cv$n %in% nearest_n,
+]
 cv_subset$loglogn <- loglog(cv_subset$n)
 cv_subset$logitalpha <- logit(cv_subset$alpha)
 if (alpha_only_model) {
@@ -70,7 +72,8 @@ if (alpha_only_model) {
   dixonfit <- stats::lm(log(cv) ~ poly(logitalpha, 3), data = cv_subset)
 } else {
   # Quadratic bivariate model to 16 points. 6 df
-  dixonfit <- stats::lm(log(cv) ~ poly(loglogn, 2) + poly(logitalpha, 2) + I(logitalpha * loglogn),
+  dixonfit <- stats::lm(
+    log(cv) ~ poly(loglogn, 2) + poly(logitalpha, 2) + I(logitalpha * loglogn),
     data = cv_subset
   )
 }

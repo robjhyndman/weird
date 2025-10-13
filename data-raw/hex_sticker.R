@@ -40,9 +40,17 @@ img_cropped <- hex_crop(
 
 ggplot() +
   geom_from_path(aes(0.5, 0.5, path = img_cropped)) +
-  annotate("text",
-    x = 0.48, y = 0.08, label = "weird", family = "singleday", size = 96, colour = "white",
-    angle = 30, hjust = 0, fontface = "bold"
+  annotate(
+    "text",
+    x = 0.48,
+    y = 0.08,
+    label = "weird",
+    family = "singleday",
+    size = 96,
+    colour = "white",
+    angle = 30,
+    hjust = 0,
+    fontface = "bold"
   ) +
   xlim(0, 1) +
   ylim(0, 1) +
