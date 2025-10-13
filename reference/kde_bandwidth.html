@@ -70,9 +70,10 @@ normal reference rule multiplied by a constant. The default is 1.</p></dd>
 <span class="r-in"><span><span class="fu">kde_bandwidth</span><span class="op">(</span><span class="va">oldfaithful</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5.087699</span>
 <span class="r-in"><span><span class="co"># Bivariate bandwidth calculation</span></span></span>
-<span class="r-in"><span><span class="fu">kde_bandwidth</span><span class="op">(</span><span class="va">oldfaithful</span><span class="op">[</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NAs introduced by coercion</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in FUN(x, aperm(array(STATS, dims[perm]), order(perm)), ...):</span> non-numeric argument to binary operator</span>
+<span class="r-in"><span><span class="fu">kde_bandwidth</span><span class="op">(</span><span class="va">oldfaithful</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"duration"</span>, <span class="st">"waiting"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           [,1]       [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  40.53793   349.3449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 349.34486 22918.0734</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
