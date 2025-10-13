@@ -9,7 +9,7 @@
 #' # Univariate bandwidth calculation
 #' kde_bandwidth(oldfaithful$duration)
 #' # Bivariate bandwidth calculation
-#' kde_bandwidth(oldfaithful[, 2:3])
+#' kde_bandwidth(oldfaithful[, c("duration", "waiting")])
 #' @export
 
 kde_bandwidth <- function(data, multiplier = 1) {
