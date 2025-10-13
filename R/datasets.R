@@ -34,20 +34,20 @@
 #'
 #' A data set containing data on recorded eruptions of the Old Faithful Geyser
 #' in Yellowstone National Park, Wyoming, USA, from
-#' 1 January 2015 to 31 December 2024.
+#' 14 January 2017 to 29 December 2023.
 #' Recordings are incomplete, especially during the winter months when observers
 #' may not be present.
 #'
-#' @format A data frame with 3280 rows and 3 columns:
+#' @format A data frame with 2097 rows and 4 columns:
 #' \describe{
 #'   \item{time}{Time eruption started}
+#'   \item{recorded_duration}{Duration of eruption as recorded}
 #'   \item{duration}{Duration of eruption in seconds}
-#'   \item{waiting}{Time to the following eruption}
+#'   \item{waiting}{Time to the following eruption in seconds}
 #' }
 #' @return Data frame
 #' @examples
 #' oldfaithful |>
-#'   filter(duration < 7000, waiting < 7000) |>
 #'   ggplot(aes(x = duration, y = waiting)) +
 #'   geom_point()
 #' @source \url{https://geysertimes.org}

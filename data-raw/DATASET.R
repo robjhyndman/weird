@@ -15,25 +15,28 @@ cricket_batting <- bind_rows(
 usethis::use_data(cricket_batting, overwrite = TRUE)
 
 ## Old Faithful geyser data
-
-library(geysertimes)
-# Only do the following once
-gt_get_data(dest_folder = here::here("data-raw"))
-oldfaithful <- gt_load_eruptions(path = here::here("data-raw")) |>
-  filter(geyser == "Old Faithful", eruption_id == primary_id) |>
-  arrange(time) |>
+file <- tempfile("oldfaithful", fileext = ".tsv.gz")
+download.file(
+  "https://geysertimes.org/archive/geysers/Old_Faithful_eruptions.tsv.gz",
+  file
+)
+oldfaithful <- readr::read_tsv(file) |>
+  arrange(eruption_time_epoch) |>
   mutate(
+    # Convert epoch time to POSIXct
+    time = as.POSIXct(eruption_time_epoch, origin = "1970-01-01", tz = "UTC"),
     # Compute waiting times
-    waiting = as.numeric(lead(time) - time),
-    # Omit waiting time if more than 12 hours -- seems unlikely
-    # waiting = if_else(waiting > 12*60*60, NA_real_, waiting)
+    waiting = lead(eruption_time_epoch) - eruption_time_epoch
   ) |>
   filter(
-    as.Date(time) > "2015-01-01",
-    as.Date(time) < "2025-01-01",
-    !is.na(duration_seconds)
+    eruption_time_epoch > as.numeric(as.POSIXct("2017-01-01", tz = "UTC")),
+    eruption_time_epoch < as.numeric(as.POSIXct("2024-01-01", tz = "UTC")),
+    duration_seconds != "NULL",
+    waiting > 600,
+    waiting < 7200
   ) |>
-  select(time, duration = duration_seconds, waiting)
+  mutate(ds = readr::parse_number(duration_seconds)) |>
+  select(time, recorded_duration = duration, duration = ds, waiting)
 
 usethis::use_data(oldfaithful, overwrite = TRUE)
 
