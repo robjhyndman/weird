@@ -1,5 +1,5 @@
 library(cropcircles)
-# library(magick)
+library(magick)
 library(tibble)
 library(ggplot2)
 library(ggpath)
@@ -58,3 +58,10 @@ ggplot() +
   coord_fixed()
 
 ggsave("./man/figures/weird-hex.png", height = 6, width = 6)
+
+# Trim transparent edges
+img <- image_read("./man/figures/weird-hex.png")
+img_trim <- image_trim(img)
+
+image_write(img_trim, "./man/figures/weird-hex.png")
+
