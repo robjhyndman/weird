@@ -51,7 +51,7 @@ random values from the kde is equivalent to a smoothed bootstrap.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_kde</span><span class="op">(</span><span class="va">y</span>, h <span class="op">=</span> <span class="cn">NULL</span>, H <span class="op">=</span> <span class="cn">NULL</span>, multiplier <span class="op">=</span> <span class="fl">1</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dist_kde</span><span class="op">(</span><span class="va">y</span>, h <span class="op">=</span> <span class="cn">NULL</span>, H <span class="op">=</span> <span class="cn">NULL</span>, lookout <span class="op">=</span> <span class="cn">FALSE</span>, multiplier <span class="op">=</span> <span class="fl">1</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,6 +72,11 @@ all vectors, or all matrices with the same number of columns.</p></dd>
 <dt id="arg-h">H<a class="anchor" aria-label="anchor" href="#arg-h"></a></dt>
 <dd><p>Bandwidth matrix for multivariate distribution. If <code>NULL</code>, the
 <code><a href="kde_bandwidth.html">kde_bandwidth</a></code> function is used.</p></dd>
+
+
+<dt id="arg-lookout">lookout<a class="anchor" aria-label="anchor" href="#arg-lookout"></a></dt>
+<dd><p>A logical variable passed to <code><a href="kde_bandwidth.html">kde_bandwidth()</a></code> (set to
+<code>FALSE`` by default) indicating which bandwidth estimator to use. Ignored if </code>h<code>or</code>H` are specified.</p></dd>
 
 
 <dt id="arg-multiplier">multiplier<a class="anchor" aria-label="anchor" href="#arg-multiplier"></a></dt>

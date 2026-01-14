@@ -12,7 +12,7 @@ bootstrap.
 ## Usage
 
 ``` r
-dist_kde(y, h = NULL, H = NULL, multiplier = 1, ...)
+dist_kde(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...)
 ```
 
 ## Arguments
@@ -34,6 +34,14 @@ dist_kde(y, h = NULL, H = NULL, multiplier = 1, ...)
   Bandwidth matrix for multivariate distribution. If `NULL`, the
   [`kde_bandwidth`](https://pkg.robjhyndman.com/weird-package/reference/kde_bandwidth.md)
   function is used.
+
+- lookout:
+
+  A logical variable passed to
+  [`kde_bandwidth()`](https://pkg.robjhyndman.com/weird-package/reference/kde_bandwidth.md)
+  (set to
+  ``` FALSE`` by default) indicating which bandwidth estimator to use. Ignored if  ```h`or`H\`
+  are specified.
 
 - multiplier:
 
