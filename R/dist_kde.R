@@ -48,7 +48,7 @@ dist_kde <- function(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...
             h <- kde_bandwidth(u, lookout = lookout, multiplier = multiplier)
           }
         }
-        ks::kde(x = u, h = h, ...)
+        ks::kde(x = u, h = c(h), ...)
       } else {
         if (is.null(H)) {
           H <- kde_bandwidth(u, lookout = lookout, multiplier = multiplier)
