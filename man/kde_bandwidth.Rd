@@ -4,25 +4,43 @@
 \alias{kde_bandwidth}
 \title{Robust bandwidth estimation for kernel density estimation}
 \usage{
-kde_bandwidth(data, multiplier = 1)
+kde_bandwidth(data, lookout = FALSE, multiplier = 1, ...)
 }
 \arguments{
 \item{data}{A numeric matrix or data frame.}
 
-\item{multiplier}{Bandwidths are chosen using a robust version of the
-normal reference rule multiplied by a constant. The default is 1.}
+\item{lookout}{A logical variable (set to `FALSE`` by default) indicating
+that the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner (2026)
+is returned.}
+
+\item{multiplier}{Bandwidth scaling factor (squared if the data dimension is
+greater than 1).}
+
+\item{...}{Additional arguments are ignored if \code{lookout = FALSE} and passed to
+\code{\link[lookout:find_tda_bw]{lookout::find_tda_bw()}} otherwise.}
 }
 \value{
-A matrix of bandwidths (or scalar in the case of univariate data).
+A matrix of bandwidths (or a scalar in the case of univariate data).
 }
 \description{
-Robust bandwidth estimation for kernel density estimation
+By default, bandwidths are chosen using a robust version of the normal reference
+rule. Alternatively, they can be estimated using the approach of
+Hyndman, Kandanaarachchi & Turner (2026) if \code{lookout = TRUE}. The resulting
+bandwidth is scaled by \code{multiplier} (set to 1 by default).
 }
 \examples{
 # Univariate bandwidth calculation
 kde_bandwidth(oldfaithful$duration)
 # Bivariate bandwidth calculation
 kde_bandwidth(oldfaithful[, c("duration", "waiting")])
+}
+\references{
+Rob J Hyndman, Sevvandi Kandanaarachchi & Katharine Turner (2026)
+"When lookout sees crackle: Anomaly detection via kernel density estimation",
+unpublished. \url{https://robjhyndman.com/publications/lookout2/}
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R",
+\url{https://OTexts.com/weird/}
 }
 \author{
 Rob J Hyndman

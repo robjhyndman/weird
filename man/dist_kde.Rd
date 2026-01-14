@@ -4,7 +4,7 @@
 \alias{dist_kde}
 \title{Create distributional object based on a kernel density estimate}
 \usage{
-dist_kde(y, h = NULL, H = NULL, multiplier = 1, ...)
+dist_kde(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data, or a list of such objects. If a
@@ -16,6 +16,9 @@ all vectors, or all matrices with the same number of columns.}
 
 \item{H}{Bandwidth matrix for multivariate distribution. If \code{NULL}, the
 \code{\link{kde_bandwidth}} function is used.}
+
+\item{lookout}{A logical variable passed to \code{\link[=kde_bandwidth]{kde_bandwidth()}} (set to
+\verb{FALSE`` by default) indicating which bandwidth estimator to use. Ignored if }h\code{or}H` are specified.}
 
 \item{multiplier}{Multiplier for bandwidth passed to \code{\link{kde_bandwidth}}.
 Ignored if \code{h} or \code{H} are specified.}

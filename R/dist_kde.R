@@ -13,6 +13,9 @@
 #' \code{\link{kde_bandwidth}} function is used.
 #' @param H Bandwidth matrix for multivariate distribution. If `NULL`, the
 #' \code{\link{kde_bandwidth}} function is used.
+#' @param lookout A logical variable passed to [kde_bandwidth()] (set to
+#' `FALSE`` by default) indicating which bandwidth estimator to use. Ignored
+#' if `h` or `H` are specified.
 #' @param multiplier Multiplier for bandwidth passed to \code{\link{kde_bandwidth}}.
 #' Ignored if `h` or `H` are specified.
 #' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
@@ -22,7 +25,7 @@
 #'
 #' @export
 
-dist_kde <- function(y, h = NULL, H = NULL, multiplier = 1, ...) {
+dist_kde <- function(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...) {
   if (!is.list(y)) {
     y <- list(y)
   } else if (is.data.frame(y)) {
@@ -42,13 +45,13 @@ dist_kde <- function(y, h = NULL, H = NULL, multiplier = 1, ...) {
           if (!is.null(H)) {
             h <- sqrt(H)
           } else {
-            h <- kde_bandwidth(u, multiplier = multiplier)
+            h <- kde_bandwidth(u, lookout = lookout, multiplier = multiplier)
           }
         }
         ks::kde(x = u, h = h, ...)
       } else {
         if (is.null(H)) {
-          H <- kde_bandwidth(u, multiplier = multiplier)
+          H <- kde_bandwidth(u, lookout = lookout, multiplier = multiplier)
         }
         ks::kde(x = u, H = H, ...)
       }
