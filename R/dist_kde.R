@@ -9,10 +9,10 @@
 #' @param y Numerical vector or matrix of data, or a list of such objects. If a
 #' list is provided, then all objects should be of the same dimension. e.g.,
 #' all vectors, or all matrices with the same number of columns.
-#' @param h Bandwidth for univariate distribution. If `NULL`, the
-#' \code{\link{kde_bandwidth}} function is used.
-#' @param H Bandwidth matrix for multivariate distribution. If `NULL`, the
-#' \code{\link{kde_bandwidth}} function is used.
+#' @param h Bandwidth for univariate distribution. Ignored if `y` has 2 or more
+#' columns. If `NULL`, the \code{\link{kde_bandwidth}} function is used.
+#' @param H Bandwidth matrix for multivariate distribution. If `NULL`,
+#' the \code{\link{kde_bandwidth}} function is used.
 #' @param lookout A logical variable passed to [kde_bandwidth()] (set to
 #' `FALSE`` by default) indicating which bandwidth estimator to use. Ignored
 #' if `h` or `H` are specified.
@@ -43,6 +43,9 @@ dist_kde <- function(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...
       if (NCOL(u) == 1L) {
         if (is.null(h)) {
           if (!is.null(H)) {
+            if(!identical(dim(H), c(1L,1L))) {
+              stop("H must be a 1x1 matrix for univariate data")
+            }
             h <- sqrt(H)
           } else {
             h <- kde_bandwidth(u, lookout = lookout, multiplier = multiplier)
@@ -52,6 +55,10 @@ dist_kde <- function(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...
       } else {
         if (is.null(H)) {
           H <- kde_bandwidth(u, lookout = lookout, multiplier = multiplier)
+        } else {
+          if (!identical(dim(H), c(NCOL(u), NCOL(u)))) {
+            stop("H must be a square matrix with dimension equal to the number of columns of y")
+          }
         }
         ks::kde(x = u, H = H, ...)
       }
