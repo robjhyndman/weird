@@ -12,7 +12,13 @@ bootstrap.
 ## Usage
 
 ``` r
-dist_kde(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...)
+dist_kde(
+  y,
+  h = NULL,
+  H = NULL,
+  method = c("normal", "robust", "plugin", "lookout"),
+  ...
+)
 ```
 
 ## Arguments
@@ -25,7 +31,8 @@ dist_kde(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...)
 
 - h:
 
-  Bandwidth for univariate distribution. If `NULL`, the
+  Bandwidth for univariate distribution. Ignored if `y` has 2 or more
+  columns. If `NULL`, the
   [`kde_bandwidth`](https://pkg.robjhyndman.com/weird-package/reference/kde_bandwidth.md)
   function is used.
 
@@ -35,19 +42,11 @@ dist_kde(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...)
   [`kde_bandwidth`](https://pkg.robjhyndman.com/weird-package/reference/kde_bandwidth.md)
   function is used.
 
-- lookout:
+- method:
 
-  A logical variable passed to
+  The method of bandwidth estimation to use. See
   [`kde_bandwidth()`](https://pkg.robjhyndman.com/weird-package/reference/kde_bandwidth.md)
-  (set to
-  ``` FALSE`` by default) indicating which bandwidth estimator to use. Ignored if  ```h`or`H\`
-  are specified.
-
-- multiplier:
-
-  Multiplier for bandwidth passed to
-  [`kde_bandwidth`](https://pkg.robjhyndman.com/weird-package/reference/kde_bandwidth.md).
-  Ignored if `h` or `H` are specified.
+  for details. Ignored if `h` or `H` are specified.
 
 - ...:
 
@@ -57,10 +56,10 @@ dist_kde(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...)
 ## Examples
 
 ``` r
-dist_kde(c(rnorm(200), rnorm(100, 5)), multiplier = 2)
+dist_kde(c(rnorm(200), rnorm(100, 5)))
 #> <distribution[1]>
-#> [1] kde[1d, h=1.3]
+#> [1] kde[1d, h=0.85]
 dist_kde(cbind(rnorm(200), rnorm(200, 5)))
 #> <distribution[1]>
-#> [1] kde[2d, H={(0.19, 0.022)', (0.022, 0.16)'}]
+#> [1] kde[2d, H={(0.18, 0.019)', (0.019, 0.16)'}]
 ```

@@ -1,14 +1,13 @@
 # Robust bandwidth estimation for kernel density estimation
 
-By default, bandwidths are chosen using a robust version of the normal
-reference rule. Alternatively, they can be estimated using the approach
-of Hyndman, Kandanaarachchi & Turner (2026) if `lookout = TRUE`. The
-resulting bandwidth is scaled by `multiplier` (set to 1 by default).
+Bandwidth matrices are estimated using either a robust version of the
+normal reference rule, or using the approach of Hyndman, Kandanaarachchi
+& Turner (2026).
 
 ## Usage
 
 ``` r
-kde_bandwidth(data, lookout = FALSE, multiplier = 1, ...)
+kde_bandwidth(data, method = c("robust", "normal", "plugin", "lookout"), ...)
 ```
 
 ## Arguments
@@ -17,22 +16,19 @@ kde_bandwidth(data, lookout = FALSE, multiplier = 1, ...)
 
   A numeric matrix or data frame.
 
-- lookout:
+- method:
 
-  A logical variable (set to \`FALSE“ by default) indicating that the
-  bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner (2026)
-  is returned.
-
-- multiplier:
-
-  Bandwidth scaling factor (squared if the data dimension is greater
-  than 1).
+  A character string giving the method to use. Possibilities are:
+  `"normal"` (normal reference rule), `"robust"` (a robust version of
+  the normal reference rule, the default), `"plugin"` (a plugin
+  estimator), and `"lookout"` (the bandwidth matrix estimate of Hyndman,
+  Kandanaarachchi & Turner, 2026).
 
 - ...:
 
-  Additional arguments are ignored if `lookout = FALSE` and passed to
-  [`lookout::find_tda_bw()`](https://sevvandi.github.io/lookout/reference/find_tda_bw.html)
-  otherwise.
+  Additional arguments are ignored unless `method = "lookout"`, when
+  they are passed to
+  [`lookout::find_tda_bw()`](https://sevvandi.github.io/lookout/reference/find_tda_bw.html).
 
 ## Value
 
