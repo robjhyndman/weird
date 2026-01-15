@@ -22,7 +22,13 @@
 #'
 #' @export
 
-dist_kde <- function(y, h = NULL, H = NULL, method = c("normal", "robust", "plugin", "lookout"), ...) {
+dist_kde <- function(
+  y,
+  h = NULL,
+  H = NULL,
+  method = c("normal", "robust", "plugin", "lookout"),
+  ...
+) {
   method <- match.arg(method)
   if (!is.list(y)) {
     y <- list(y)
@@ -41,7 +47,7 @@ dist_kde <- function(y, h = NULL, H = NULL, method = c("normal", "robust", "plug
       if (NCOL(u) == 1L) {
         if (is.null(h)) {
           if (!is.null(H)) {
-            if(!identical(dim(H), c(1L,1L))) {
+            if (!identical(dim(H), c(1L, 1L))) {
               stop("H must be a 1x1 matrix for univariate data")
             }
             h <- sqrt(H)
@@ -49,13 +55,15 @@ dist_kde <- function(y, h = NULL, H = NULL, method = c("normal", "robust", "plug
             h <- kde_bandwidth(u, method = method)
           }
         }
-        ks::kde(x = u, h = c(h), ...)
+        ks::kde(x = u, h = as.vector(h), ...)
       } else {
         if (is.null(H)) {
           H <- kde_bandwidth(u, method = method)
         } else {
           if (!identical(dim(H), c(NCOL(u), NCOL(u)))) {
-            stop("H must be a square matrix with dimension equal to the number of columns of y")
+            stop(
+              "H must be a square matrix with dimension equal to the number of columns of y"
+            )
           }
         }
         ks::kde(x = u, H = H, ...)
