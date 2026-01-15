@@ -13,19 +13,17 @@
 #' columns. If `NULL`, the \code{\link{kde_bandwidth}} function is used.
 #' @param H Bandwidth matrix for multivariate distribution. If `NULL`,
 #' the \code{\link{kde_bandwidth}} function is used.
-#' @param lookout A logical variable passed to [kde_bandwidth()] (set to
-#' `FALSE`` by default) indicating which bandwidth estimator to use. Ignored
-#' if `h` or `H` are specified.
-#' @param multiplier Multiplier for bandwidth passed to \code{\link{kde_bandwidth}}.
-#' Ignored if `h` or `H` are specified.
+#' @param method The method of bandwidth estimation to use. See [kde_bandwidth()]
+#' for details. Ignored if `h` or `H` are specified.
 #' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
 #' @examples
-#' dist_kde(c(rnorm(200), rnorm(100, 5)), multiplier = 2)
+#' dist_kde(c(rnorm(200), rnorm(100, 5)))
 #' dist_kde(cbind(rnorm(200), rnorm(200, 5)))
 #'
 #' @export
 
-dist_kde <- function(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...) {
+dist_kde <- function(y, h = NULL, H = NULL, method = c("rnrr", "lookout"), ...) {
+  method <- match.arg(method)
   if (!is.list(y)) {
     y <- list(y)
   } else if (is.data.frame(y)) {
@@ -48,13 +46,13 @@ dist_kde <- function(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...
             }
             h <- sqrt(H)
           } else {
-            h <- kde_bandwidth(u, lookout = lookout, multiplier = multiplier)
+            h <- kde_bandwidth(u, method = method)
           }
         }
         ks::kde(x = u, h = c(h), ...)
       } else {
         if (is.null(H)) {
-          H <- kde_bandwidth(u, lookout = lookout, multiplier = multiplier)
+          H <- kde_bandwidth(u, method = method)
         } else {
           if (!identical(dim(H), c(NCOL(u), NCOL(u)))) {
             stop("H must be a square matrix with dimension equal to the number of columns of y")

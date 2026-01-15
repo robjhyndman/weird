@@ -18,7 +18,7 @@ surprisals(
   probability = TRUE,
   approximation = c("none", "gpd", "empirical"),
   threshold_probability = 0.1,
-  distribution = dist_kde(object, multiplier = 2, ...),
+  distribution = dist_kde(object, ...),
   loo = FALSE,
   ...
 )

@@ -1,17 +1,14 @@
 #' Robust bandwidth estimation for kernel density estimation
 #'
-#' By default, bandwidths are chosen using a robust version of the normal reference
-#' rule. Alternatively, they can be estimated using the approach of
-#' Hyndman, Kandanaarachchi & Turner (2026) if `lookout = TRUE`. The resulting
-#' bandwidth is scaled by `multiplier` (set to 1 by default).
+#' Bandwidth matrices are estimated using either a robust version of the normal
+#' reference rule, or using the approach of Hyndman, Kandanaarachchi & Turner (2026).
 #'
 #' @param data A numeric matrix or data frame.
-#' @param lookout A logical variable (set to `FALSE`` by default) indicating
-#' that the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner (2026)
+#' @param method A character string giving the method to use. If equal to `rnrr`,
+#' a robust version of the normal reference rule is used. If equal to `lookout`,
+#' the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner (2026)
 #' is returned.
-#' @param multiplier Bandwidth scaling factor (squared if the data dimension is
-#' greater than 1).
-#' @param ... Additional arguments are ignored if `lookout = FALSE` and passed to
+#' @param ... Additional arguments are ignored if `method = "lookout"` and passed to
 #' [lookout::find_tda_bw()] otherwise.
 #' @references Rob J Hyndman, Sevvandi Kandanaarachchi & Katharine Turner (2026)
 #' "When lookout sees crackle: Anomaly detection via kernel density estimation",
@@ -27,10 +24,11 @@
 #' kde_bandwidth(oldfaithful[, c("duration", "waiting")])
 #' @export
 
-kde_bandwidth <- function(data, lookout = FALSE, multiplier = 1, ...) {
+kde_bandwidth <- function(data, method = c("rnrr","lookout"), ...) {
+  method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
-  if (lookout) {
+  if (method == "lookout") {
     cc <- lookout::find_tda_bw(mvscale(data), ...)
   } else {
     cc <- (4 / (n * (d + 2)))^(2 / (d + 4))
@@ -39,8 +37,7 @@ kde_bandwidth <- function(data, lookout = FALSE, multiplier = 1, ...) {
     cc <- sqrt(cc)
     S <- robustbase::s_Qn(data)
   } else {
-    multipler <- multiplier^2
     S <- robustbase::covOGK(data, sigmamu = robustbase::s_Qn)$cov
   }
-  return(multiplier * cc * S)
+  return(cc * S)
 }

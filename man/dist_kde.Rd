@@ -4,24 +4,21 @@
 \alias{dist_kde}
 \title{Create distributional object based on a kernel density estimate}
 \usage{
-dist_kde(y, h = NULL, H = NULL, lookout = FALSE, multiplier = 1, ...)
+dist_kde(y, h = NULL, H = NULL, method = c("rnrr", "lookout"), ...)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data, or a list of such objects. If a
 list is provided, then all objects should be of the same dimension. e.g.,
 all vectors, or all matrices with the same number of columns.}
 
-\item{h}{Bandwidth for univariate distribution. If \code{NULL}, the
-\code{\link{kde_bandwidth}} function is used.}
+\item{h}{Bandwidth for univariate distribution. Ignored if \code{y} has 2 or more
+columns. If \code{NULL}, the \code{\link{kde_bandwidth}} function is used.}
 
-\item{H}{Bandwidth matrix for multivariate distribution. If \code{NULL}, the
-\code{\link{kde_bandwidth}} function is used.}
+\item{H}{Bandwidth matrix for multivariate distribution. If \code{NULL},
+the \code{\link{kde_bandwidth}} function is used.}
 
-\item{lookout}{A logical variable passed to \code{\link[=kde_bandwidth]{kde_bandwidth()}} (set to
-\verb{FALSE`` by default) indicating which bandwidth estimator to use. Ignored if }h\code{or}H` are specified.}
-
-\item{multiplier}{Multiplier for bandwidth passed to \code{\link{kde_bandwidth}}.
-Ignored if \code{h} or \code{H} are specified.}
+\item{method}{The method of bandwidth estimation to use. See \code{\link[=kde_bandwidth]{kde_bandwidth()}}
+for details. Ignored if \code{h} or \code{H} are specified.}
 
 \item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
 }
@@ -33,7 +30,7 @@ The cdf, quantiles and moments are consistent with the kde. Generating
 random values from the kde is equivalent to a smoothed bootstrap.
 }
 \examples{
-dist_kde(c(rnorm(200), rnorm(100, 5)), multiplier = 2)
+dist_kde(c(rnorm(200), rnorm(100, 5)))
 dist_kde(cbind(rnorm(200), rnorm(200, 5)))
 
 }

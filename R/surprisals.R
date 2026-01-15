@@ -95,7 +95,7 @@ surprisals.default <- function(
   probability = TRUE,
   approximation = c("none", "gpd", "empirical"),
   threshold_probability = 0.10,
-  distribution = dist_kde(object, multiplier = 2, ...),
+  distribution = dist_kde(object, ...),
   loo = FALSE,
   ...
 ) {
@@ -139,7 +139,7 @@ surprisals_from_den <- function(
   probability = TRUE,
   approximation = c("none", "gpd", "empirical"),
   threshold_probability = 0.10,
-  distribution = dist_kde(object, multiplier = 2, ...),
+  distribution = dist_kde(object, ...),
   loo = FALSE,
   ...
 ) {

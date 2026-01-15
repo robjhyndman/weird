@@ -73,7 +73,7 @@ gg_hdrboxplot <- function(
     d <- 2L
     data <- data |> select({{ var1 }}, {{ var2 }})
   }
-  dist <- dist_kde(data[, seq(d)], multiplier = 2, ...)
+  dist <- dist_kde(data[, seq(d)], ...)
   hdr <- dplyr::if_else(show_points | scatterplot, "points", "fill")
 
   # Set up color palette

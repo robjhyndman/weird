@@ -4,29 +4,25 @@
 \alias{kde_bandwidth}
 \title{Robust bandwidth estimation for kernel density estimation}
 \usage{
-kde_bandwidth(data, lookout = FALSE, multiplier = 1, ...)
+kde_bandwidth(data, method = c("rnrr", "lookout"), ...)
 }
 \arguments{
 \item{data}{A numeric matrix or data frame.}
 
-\item{lookout}{A logical variable (set to `FALSE`` by default) indicating
-that the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner (2026)
+\item{method}{A character string giving the method to use. If equal to \code{rnrr},
+a robust version of the normal reference rule is used. If equal to \code{lookout},
+the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner (2026)
 is returned.}
 
-\item{multiplier}{Bandwidth scaling factor (squared if the data dimension is
-greater than 1).}
-
-\item{...}{Additional arguments are ignored if \code{lookout = FALSE} and passed to
+\item{...}{Additional arguments are ignored if \code{method = "lookout"} and passed to
 \code{\link[lookout:find_tda_bw]{lookout::find_tda_bw()}} otherwise.}
 }
 \value{
 A matrix of bandwidths (or a scalar in the case of univariate data).
 }
 \description{
-By default, bandwidths are chosen using a robust version of the normal reference
-rule. Alternatively, they can be estimated using the approach of
-Hyndman, Kandanaarachchi & Turner (2026) if \code{lookout = TRUE}. The resulting
-bandwidth is scaled by \code{multiplier} (set to 1 by default).
+Bandwidth matrices are estimated using either a robust version of the normal
+reference rule, or using the approach of Hyndman, Kandanaarachchi & Turner (2026).
 }
 \examples{
 # Univariate bandwidth calculation
