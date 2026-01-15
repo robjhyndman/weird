@@ -135,13 +135,13 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
       at <- matrix(at, ncol = d)
     }
     # Bivariate interpolation
-    grid <- expand.grid(x$kde$eval.points[[1]], x$kde$eval.points[[2]])
-    ifun <- interpolation::interpfun(
-      x = grid[, 1],
-      y = grid[, 2],
-      z = c(x$kde$estimate)
+    d <- bilinear_interpolation(
+      x = x$kde$eval.points[[1]],
+      y = x$kde$eval.points[[2]],
+      z = x$kde$estimate,
+      x0 = at[, 1],
+      y0 = at[, 2]
     )
-    d <- ifun(at[, 1], at[, 2])
   }
   d[is.na(d)] <- 0
   return(d)
