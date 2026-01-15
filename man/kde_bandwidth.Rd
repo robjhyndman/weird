@@ -4,18 +4,19 @@
 \alias{kde_bandwidth}
 \title{Robust bandwidth estimation for kernel density estimation}
 \usage{
-kde_bandwidth(data, method = c("rnrr", "lookout"), ...)
+kde_bandwidth(data, method = c("robust", "normal", "plugin", "lookout"), ...)
 }
 \arguments{
 \item{data}{A numeric matrix or data frame.}
 
-\item{method}{A character string giving the method to use. If equal to \code{rnrr},
-a robust version of the normal reference rule is used. If equal to \code{lookout},
-the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner (2026)
-is returned.}
+\item{method}{A character string giving the method to use. Possibilities are:
+\code{"normal"} (normal reference rule),
+\code{"robust"} (a robust version of the normal reference rule, the default),
+\code{"plugin"} (a plugin estimator), and
+\code{"lookout"} (the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner, 2026).}
 
-\item{...}{Additional arguments are ignored if \code{method = "lookout"} and passed to
-\code{\link[lookout:find_tda_bw]{lookout::find_tda_bw()}} otherwise.}
+\item{...}{Additional arguments are ignored unless \code{method = "lookout"}, when
+they are passed to \code{\link[lookout:find_tda_bw]{lookout::find_tda_bw()}}.}
 }
 \value{
 A matrix of bandwidths (or a scalar in the case of univariate data).

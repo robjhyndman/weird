@@ -4,7 +4,13 @@
 \alias{dist_kde}
 \title{Create distributional object based on a kernel density estimate}
 \usage{
-dist_kde(y, h = NULL, H = NULL, method = c("rnrr", "lookout"), ...)
+dist_kde(
+  y,
+  h = NULL,
+  H = NULL,
+  method = c("normal", "robust", "plugin", "lookout"),
+  ...
+)
 }
 \arguments{
 \item{y}{Numerical vector or matrix of data, or a list of such objects. If a

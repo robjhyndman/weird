@@ -22,7 +22,7 @@
 #'
 #' @export
 
-dist_kde <- function(y, h = NULL, H = NULL, method = c("rnrr", "lookout"), ...) {
+dist_kde <- function(y, h = NULL, H = NULL, method = c("normal", "robust", "plugin", "lookout"), ...) {
   method <- match.arg(method)
   if (!is.list(y)) {
     y <- list(y)

@@ -4,12 +4,13 @@
 #' reference rule, or using the approach of Hyndman, Kandanaarachchi & Turner (2026).
 #'
 #' @param data A numeric matrix or data frame.
-#' @param method A character string giving the method to use. If equal to `rnrr`,
-#' a robust version of the normal reference rule is used. If equal to `lookout`,
-#' the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner (2026)
-#' is returned.
-#' @param ... Additional arguments are ignored if `method = "lookout"` and passed to
-#' [lookout::find_tda_bw()] otherwise.
+#' @param method A character string giving the method to use. Possibilities are:
+#' `"normal"` (normal reference rule),
+#' `"robust"` (a robust version of the normal reference rule, the default),
+#' `"plugin"` (a plugin estimator), and
+#' `"lookout"` (the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner, 2026).
+#' @param ... Additional arguments are ignored unless `method = "lookout"`, when
+#' they are passed to [lookout::find_tda_bw()].
 #' @references Rob J Hyndman, Sevvandi Kandanaarachchi & Katharine Turner (2026)
 #' "When lookout sees crackle: Anomaly detection via kernel density estimation",
 #' unpublished. \url{https://robjhyndman.com/publications/lookout2/}
@@ -24,10 +25,21 @@
 #' kde_bandwidth(oldfaithful[, c("duration", "waiting")])
 #' @export
 
-kde_bandwidth <- function(data, method = c("rnrr","lookout"), ...) {
+kde_bandwidth <- function(
+  data,
+  method = c("robust", "normal", "plugin", "lookout"),
+  ...
+) {
   method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
+  if (method == "plugin") {
+    if (d == 1L) {
+      return(stats::bw.SJ(data))
+    } else {
+      return(ks::Hpi(data))
+    }
+  }
   if (method == "lookout") {
     cc <- lookout::find_tda_bw(mvscale(data), ...)
   } else {
@@ -35,9 +47,17 @@ kde_bandwidth <- function(data, method = c("rnrr","lookout"), ...) {
   }
   if (d == 1L) {
     cc <- sqrt(cc)
-    S <- robustbase::s_Qn(data)
+    if (method == "normal") {
+      S <- stats::sd(data)
+    } else {
+      S <- robustbase::s_Qn(data)
+    }
   } else {
-    S <- robustbase::covOGK(data, sigmamu = robustbase::s_Qn)$cov
+    if (method == "normal") {
+      S <- stats::cov(data)
+    } else {
+      S <- robustbase::covOGK(data, sigmamu = robustbase::s_Qn)$cov
+    }
   }
   return(cc * S)
 }
