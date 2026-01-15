@@ -24,8 +24,7 @@ A character vector of package names.
 weird_packages()
 #>  [1] "aplpack"        "broom"          "cli"            "crayon"        
 #>  [5] "dbscan"         "distributional" "dplyr"          "evd"           
-#>  [9] "ggplot2"        "grDevices"      "interpolation"  "ks"            
-#> [13] "lookout"        "mvtnorm"        "purrr"          "rlang"         
-#> [17] "robustbase"     "rstudioapi"     "stray"          "tibble"        
-#> [21] "vctrs"         
+#>  [9] "ggplot2"        "grDevices"      "ks"             "lookout"       
+#> [13] "mvtnorm"        "purrr"          "rlang"          "robustbase"    
+#> [17] "rstudioapi"     "stray"          "tibble"         "vctrs"         
 ```

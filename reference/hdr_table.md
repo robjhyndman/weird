@@ -57,5 +57,5 @@ dist_kde(oldfaithful[, c("duration", "waiting")]) |> hdr_table(0.90)
 #> # A tibble: 1 × 3
 #>   distribution                                           prob    density
 #>   <chr>                                                 <dbl>      <dbl>
-#> 1 kde[2d, H={(1.7e+02, 2.1e+03)', (2.1e+03, 4.1e+04)'}]   0.9 0.00000114
+#> 1 kde[2d, H={(1.7e+02, 2.1e+03)', (2.1e+03, 4.1e+04)'}]   0.9 0.00000113
 ```
