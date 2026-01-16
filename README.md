@@ -7,7 +7,7 @@
 <!-- badges: start -->
 
 [![R build
-status](https://github.com/robjhyndman/weird-package/workflows/R-CMD-check/badge.svg)](https://github.com/robjhyndman/weird-package/actions)
+status](https://github.com/robjhyndman/weird/workflows/R-CMD-check/badge.svg)](https://github.com/robjhyndman/weird/actions)
 <!-- badges: end -->
 
 ## Overview
@@ -27,11 +27,11 @@ install.packages("weird")
 ```
 
 You can install the **development** version of weird from
-[GitHub](https://github.com/robjhyndman/weird-package) with:
+[GitHub](https://github.com/robjhyndman/weird) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("robjhyndman/weird-package")
+# install.packages("pak")
+pak::pak("robjhyndman/weird")
 ```
 
 ## Usage
@@ -50,7 +50,7 @@ have loaded:
 library(weird)
 #> ── Attaching packages ────────────────────────────────────────────────────────── weird 1.0.2.9000 ──
 #> ✔ dplyr          1.1.4     ✔ distributional 0.5.0
-#> ✔ ggplot2        4.0.0
+#> ✔ ggplot2        4.0.1
 #> ── Conflicts ──────────────────────────────────────────────────────────────────── weird_conflicts ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
@@ -64,7 +64,7 @@ to 1 October 2021. The data were obtained from the
 [geysertimes.org](https://geysertimes.org) website. Recordings are
 incomplete, especially during the winter months when observers may not
 be present. There also appear to be some recording errors. The data set
-contains 2261 observations of 3 variables: `time` giving the time at
+contains 2097 observations of 3 variables: `time` giving the time at
 which each eruption began, `duration` giving the length of the eruption
 in seconds, and `waiting` giving the time to the next eruption in
 seconds. In the analysis below, we omit the eruption with `duration`
@@ -74,20 +74,20 @@ we also omit eruptions with `waiting` greater than 2 hours.
 
 ``` r
 oldfaithful
-#> # A tibble: 2,261 × 3
-#>    time                duration waiting
-#>    <dttm>                 <dbl>   <dbl>
-#>  1 2015-01-02 14:53:00      271    5040
-#>  2 2015-01-09 23:55:00      247    6060
-#>  3 2015-02-07 00:49:00      203    5460
-#>  4 2015-02-14 01:09:00      195    5221
-#>  5 2015-02-21 01:12:00      210    5401
-#>  6 2015-02-28 01:11:00      185    5520
-#>  7 2015-03-07 00:50:00      160    5281
-#>  8 2015-03-13 21:57:00      226    6000
-#>  9 2015-03-13 23:37:00      190    5341
-#> 10 2015-03-20 22:26:00      102    3961
-#> # ℹ 2,251 more rows
+#> # A tibble: 2,097 × 4
+#>    time                recorded_duration duration waiting
+#>    <dttm>              <chr>                <dbl>   <dbl>
+#>  1 2017-01-14 00:06:00 3m 16s                 196    5940
+#>  2 2017-01-26 14:27:00 ~4m                    240    5820
+#>  3 2017-01-27 23:57:00 2m 1s                  121    3900
+#>  4 2017-01-30 15:09:00 ~4m                    240    5280
+#>  5 2017-01-31 13:27:00 ~3.5m                  210    5580
+#>  6 2017-01-31 15:00:00 ~4m                    240    5760
+#>  7 2017-02-03 23:13:00 3m 25s                 205    5160
+#>  8 2017-02-04 22:14:00 3m 34s                 214    5400
+#>  9 2017-02-05 17:19:00 4m 0s                  240    6060
+#> 10 2017-02-05 19:00:00 4m 2s                  242    6060
+#> # ℹ 2,087 more rows
 ```
 
 ## Kernel density estimates
@@ -129,25 +129,25 @@ in the package for comparison purposes.
 
 ``` r
 of |> filter(peirce_anomalies(duration))
-#> # A tibble: 1 × 3
-#>   time                duration waiting
-#>   <dttm>                 <dbl>   <dbl>
-#> 1 2018-04-25 19:08:00        1    5700
+#> # A tibble: 2 × 4
+#>   time                recorded_duration duration waiting
+#>   <dttm>              <chr>                <dbl>   <dbl>
+#> 1 2018-04-25 19:08:00 1s                       1    5700
+#> 2 2022-12-07 17:19:00 ~4 30s                  30    5220
 of |> filter(chauvenet_anomalies(duration))
-#> # A tibble: 1 × 3
-#>   time                duration waiting
-#>   <dttm>                 <dbl>   <dbl>
-#> 1 2018-04-25 19:08:00        1    5700
+#> # A tibble: 2 × 4
+#>   time                recorded_duration duration waiting
+#>   <dttm>              <chr>                <dbl>   <dbl>
+#> 1 2018-04-25 19:08:00 1s                       1    5700
+#> 2 2022-12-07 17:19:00 ~4 30s                  30    5220
 of |> filter(grubbs_anomalies(duration))
-#> # A tibble: 1 × 3
-#>   time                duration waiting
-#>   <dttm>                 <dbl>   <dbl>
-#> 1 2018-04-25 19:08:00        1    5700
+#> # A tibble: 1 × 4
+#>   time                recorded_duration duration waiting
+#>   <dttm>              <chr>                <dbl>   <dbl>
+#> 1 2018-04-25 19:08:00 1s                       1    5700
 of |> filter(dixon_anomalies(duration))
-#> # A tibble: 1 × 3
-#>   time                duration waiting
-#>   <dttm>                 <dbl>   <dbl>
-#> 1 2018-04-25 19:08:00        1    5700
+#> # A tibble: 0 × 4
+#> # ℹ 4 variables: time <dttm>, recorded_duration <chr>, duration <dbl>, waiting <dbl>
 ```
 
 In this example, they only detect the tiny 1-second duration, which is
@@ -272,23 +272,20 @@ of |>
       lookout < 0.002
   ) |>
   arrange(lookout)
-#> # A tibble: 14 × 8
-#>    time                duration waiting surprisal strayscore lofscore gloshscore  lookout
-#>    <dttm>                 <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>    <dbl>
-#>  1 2018-04-25 19:08:00        1    5700      17.9     0.380      3.78      1     0       
-#>  2 2020-06-01 21:04:00      120    6060      17.8     0.132      1.88      1     1.15e-11
-#>  3 2021-01-22 18:35:00      170    3600      16.9     0.0606     1.09      0.860 1.31e- 6
-#>  4 2020-08-31 09:56:00      170    3840      16.7     0.0606     1.01      0.816 3.80e- 5
-#>  5 2020-09-16 14:44:00      160    6120      16.1     0.0362     1.29      1     2.49e- 4
-#>  6 2015-11-21 20:27:00      150    3420      16.2     0.0772     1.27      0.948 8.56e- 4
-#>  7 2017-05-03 06:19:00       90    4740      16.2     0.0495     1.68      1     9.18e- 4
-#>  8 2016-11-11 14:23:00      180    6480      15.8     0.0447     1.10      1     1.36e- 3
-#>  9 2020-09-15 18:01:00      160    5880      15.9     0.0362     1.40      1     1.71e- 3
-#> 10 2020-10-15 17:11:00      220    7080      15.7     0.0429     2.42      1     5.66e- 3
-#> 11 2017-08-12 13:14:00      120    4920      15.0     0.0690     1.53      1     1.65e- 2
-#> 12 2017-09-22 18:51:00      281    7140      15.0     0.0333     2.64      1     2.03e- 2
-#> 13 2020-05-18 21:21:00      272    7080      14.5     0.0333     2.42      1     4.10e- 2
-#> 14 2018-09-22 16:37:00      253    7140      14.6     0.0200     2.63      1     4.13e- 2
+#> # A tibble: 10 × 9
+#>    time                recorded_duration   duration waiting surprisal strayscore lofscore gloshscore
+#>    <dttm>              <chr>                  <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>
+#>  1 2018-04-25 19:08:00 1s                         1    5700      17.4     0.150      3.78          1
+#>  2 2022-12-03 16:20:00 ~4m                      240    3060      17.4     0.265      2.05          1
+#>  3 2022-12-07 17:19:00 ~4 30s                    30    5220      17.1     0.273      1.89          1
+#>  4 2020-09-04 01:38:00 >1m 50s                  110    6240      17.1     0.167      1.84          1
+#>  5 2023-07-04 12:03:00 ~1 minute 55ish se…       60    4920      17.1     0.122      1.62          1
+#>  6 2020-06-01 21:04:00 2 minutes                120    6060      16.8     0.132      2.01          1
+#>  7 2023-05-26 00:53:00 4m45s                    285    7140      15.2     0.0761     2.57          1
+#>  8 2017-09-22 18:51:00 ~281s                    281    7140      15.0     0.0683     2.57          1
+#>  9 2023-08-09 20:52:00 4m39s                    279    7140      14.9     0.0651     2.57          1
+#> 10 2018-09-22 16:37:00 ~4m13s                   253    7140      14.7     0.0194     2.57          1
+#> # ℹ 1 more variable: lookout <dbl>
 ```
 
 The `surprisals()` function can also compute the probability of
@@ -302,20 +299,20 @@ of |>
     prob = surprisals(cbind(duration, waiting))
   ) |>
   arrange(prob)
-#> # A tibble: 2,197 × 5
-#>    time                duration waiting surprisal     prob
-#>    <dttm>                 <dbl>   <dbl>     <dbl>    <dbl>
-#>  1 2018-04-25 19:08:00        1    5700      17.9 0.000455
-#>  2 2020-06-01 21:04:00      120    6060      17.8 0.000910
-#>  3 2021-01-22 18:35:00      170    3600      16.9 0.00137 
-#>  4 2020-08-31 09:56:00      170    3840      16.7 0.00182 
-#>  5 2015-11-21 20:27:00      150    3420      16.2 0.00228 
-#>  6 2017-05-03 06:19:00       90    4740      16.2 0.00273 
-#>  7 2020-09-16 14:44:00      160    6120      16.1 0.00319 
-#>  8 2020-07-23 23:17:00      186    4320      16.1 0.00364 
-#>  9 2019-07-25 06:32:00      300    5280      15.9 0.00410 
-#> 10 2020-09-15 18:01:00      160    5880      15.9 0.00455 
-#> # ℹ 2,187 more rows
+#> # A tibble: 2,097 × 6
+#>    time                recorded_duration       duration waiting surprisal     prob
+#>    <dttm>              <chr>                      <dbl>   <dbl>     <dbl>    <dbl>
+#>  1 2018-04-25 19:08:00 1s                             1    5700      17.4 0.000477
+#>  2 2022-12-03 16:20:00 ~4m                          240    3060      17.4 0.000954
+#>  3 2023-07-04 12:03:00 ~1 minute 55ish seconds       60    4920      17.1 0.00143 
+#>  4 2022-12-07 17:19:00 ~4 30s                        30    5220      17.1 0.00191 
+#>  5 2020-09-04 01:38:00 >1m 50s                      110    6240      17.1 0.00238 
+#>  6 2020-06-01 21:04:00 2 minutes                    120    6060      16.8 0.00286 
+#>  7 2021-01-22 18:35:00 2m50s                        170    3600      16.7 0.00334 
+#>  8 2022-11-29 14:51:00 ~3m                          180    3840      16.4 0.00381 
+#>  9 2020-08-31 09:56:00 ~2m50s                       170    3840      16.4 0.00429 
+#> 10 2020-07-23 23:17:00 3m06s                        186    4320      16.3 0.00477 
+#> # ℹ 2,087 more rows
 ```
 
 ## Robust multivariate scaling
@@ -335,35 +332,35 @@ renamed as `z1`, `z2`, etc. Non-rotated scaling is possible by setting
 
 ``` r
 mvscale(of)
-#> Warning in mvscale(of): Ignoring non-numeric columns: time
-#> # A tibble: 2,197 × 3
-#>    time                     z1     z2
-#>    <dttm>                <dbl>  <dbl>
-#>  1 2015-01-02 14:53:00  2.02   -1.33 
-#>  2 2015-01-09 23:55:00  0.0758  0.728
-#>  3 2015-02-07 00:49:00 -1.64   -0.485
-#>  4 2015-02-14 01:09:00 -1.86   -0.968
-#>  5 2015-02-21 01:12:00 -1.25   -0.604
-#>  6 2015-02-28 01:11:00 -2.57   -0.364
-#>  7 2015-03-07 00:50:00 -3.63   -0.847
-#>  8 2015-03-13 21:57:00 -0.913   0.606
-#>  9 2015-03-13 23:37:00 -2.19   -0.726
-#> 10 2015-03-20 22:26:00 -5.50   -3.51 
-#> # ℹ 2,187 more rows
+#> Warning in mvscale(of): Ignoring non-numeric columns: time, recorded_duration
+#> # A tibble: 2,097 × 4
+#>    time                recorded_duration      z1     z2
+#>    <dttm>              <chr>               <dbl>  <dbl>
+#>  1 2017-01-14 00:06:00 3m 16s            -2.20    0.332
+#>  2 2017-01-26 14:27:00 ~4m               -0.0431  0.111
+#>  3 2017-01-27 23:57:00 2m 1s             -4.27   -3.43 
+#>  4 2017-01-30 15:09:00 ~4m                0.345  -0.886
+#>  5 2017-01-31 13:27:00 ~3.5m             -1.28   -0.332
+#>  6 2017-01-31 15:00:00 ~4m                0       0    
+#>  7 2017-02-03 23:13:00 3m 25s            -1.22   -1.11 
+#>  8 2017-02-04 22:14:00 3m 34s            -0.966  -0.665
+#>  9 2017-02-05 17:19:00 4m 0s             -0.215   0.554
+#> 10 2017-02-05 19:00:00 4m 2s             -0.121   0.554
+#> # ℹ 2,087 more rows
 mvscale(of, cov = NULL)
-#> Warning in mvscale(of, cov = NULL): Ignoring non-numeric columns: time
-#> # A tibble: 2,197 × 3
-#>    time                duration waiting
-#>    <dttm>                 <dbl>   <dbl>
-#>  1 2015-01-02 14:53:00    1.40   -1.24 
-#>  2 2015-01-09 23:55:00    0.316   0.676
-#>  3 2015-02-07 00:49:00   -1.67   -0.451
-#>  4 2015-02-14 01:09:00   -2.03   -0.900
-#>  5 2015-02-21 01:12:00   -1.35   -0.562
-#>  6 2015-02-28 01:11:00   -2.48   -0.338
-#>  7 2015-03-07 00:50:00   -3.61   -0.787
-#>  8 2015-03-13 21:57:00   -0.631   0.564
-#>  9 2015-03-13 23:37:00   -2.25   -0.675
-#> 10 2015-03-20 22:26:00   -6.22   -3.27 
-#> # ℹ 2,187 more rows
+#> Warning in mvscale(of, cov = NULL): Ignoring non-numeric columns: time, recorded_duration
+#> # A tibble: 2,097 × 4
+#>    time                recorded_duration duration waiting
+#>    <dttm>              <chr>                <dbl>   <dbl>
+#>  1 2017-01-14 00:06:00 3m 16s             -1.98     0.338
+#>  2 2017-01-26 14:27:00 ~4m                 0        0.113
+#>  3 2017-01-27 23:57:00 2m 1s              -5.37    -3.50 
+#>  4 2017-01-30 15:09:00 ~4m                 0       -0.902
+#>  5 2017-01-31 13:27:00 ~3.5m              -1.35    -0.338
+#>  6 2017-01-31 15:00:00 ~4m                 0        0    
+#>  7 2017-02-03 23:13:00 3m 25s             -1.58    -1.13 
+#>  8 2017-02-04 22:14:00 3m 34s             -1.17    -0.676
+#>  9 2017-02-05 17:19:00 4m 0s               0        0.564
+#> 10 2017-02-05 19:00:00 4m 2s               0.0902   0.564
+#> # ℹ 2,087 more rows
 ```
