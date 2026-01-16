@@ -3,12 +3,13 @@
 * Added fr_mortality data set
 * Updated oldfaithful and cricket_batting data sets
 * Refactored package to use distributional objects
+* Added dist_kde() and dist_density()
 * Removed as_kde() and autoplot.kde()
-* Added gg_density() and gg_density_layer()
-* Added surprisals() and surprisal_prob()
-* Renamed lookout() to lookout_prob()
 * Rewrote kde_bandwidth() to handle more methods
-* Added hampel_anomalies() 
+* Added gg_density() and gg_density_layer()
+* Replaced density_scores() with surprisals()
+* Renamed lookout() to lookout_prob()
+* Added hampel_anomalies()
 * mvscale() moved to lookout package
 * Dropped interpolation dependency
 
