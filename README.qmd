@@ -17,7 +17,7 @@ options(width = 100)
 # weird  <img src="man/figures/weird-hex.png" align="right" width = 150 />
 
 <!-- badges: start -->
-[![R build status](https://github.com/robjhyndman/weird-package/workflows/R-CMD-check/badge.svg)](https://github.com/robjhyndman/weird-package/actions)
+[![R build status](https://github.com/robjhyndman/weird/workflows/R-CMD-check/badge.svg)](https://github.com/robjhyndman/weird/actions)
 <!-- badges: end -->
 
 ## Overview
@@ -32,11 +32,11 @@ You can install the **stable** version from [CRAN](https://cran.r-project.org/pa
 install.packages("weird")
 ```
 
-You can install the **development** version of weird from [GitHub](https://github.com/robjhyndman/weird-package) with:
+You can install the **development** version of weird from [GitHub](https://github.com/robjhyndman/weird) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("robjhyndman/weird-package")
+# install.packages("pak")
+pak::pak("robjhyndman/weird")
 ```
 
 ## Usage

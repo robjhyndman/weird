@@ -11,9 +11,9 @@ All functions and data sets required for the examples in the book Hyndman (2024)
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://pkg.robjhyndman.com/weird-package/}
-  \item \url{https://github.com/robjhyndman/weird-package}
-  \item Report bugs at \url{https://github.com/robjhyndman/weird-package/issues}
+  \item \url{https://pkg.robjhyndman.com/weird/}
+  \item \url{https://github.com/robjhyndman/weird}
+  \item Report bugs at \url{https://github.com/robjhyndman/weird/issues}
 }
 
 }

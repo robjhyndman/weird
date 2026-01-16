@@ -13,7 +13,7 @@ bibentry(bibtype = "Manual",
   author = c(as.person("Rob J Hyndman")),
   year   = year,
   note   = vers,
-  url    = "https://pkg.robjhyndman.com/weird-package/"
+  url    = "https://pkg.robjhyndman.com/weird/"
 )
 
 bibentry(bibtype = "Book",

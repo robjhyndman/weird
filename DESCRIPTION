@@ -47,6 +47,6 @@ Suggests:
     testthat (>= 3.0.0),
     tidyr
 Config/testthat/edition: 3
-URL: https://pkg.robjhyndman.com/weird-package/, https://github.com/robjhyndman/weird-package
-BugReports: https://github.com/robjhyndman/weird-package/issues
+URL: https://pkg.robjhyndman.com/weird/, https://github.com/robjhyndman/weird
+BugReports: https://github.com/robjhyndman/weird/issues
 Remotes: sevvandi/lookout

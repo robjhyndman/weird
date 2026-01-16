@@ -32,7 +32,7 @@ fetch_wine_reviews <- function() {
   dest_file <- paste0(dest_folder, "/wine_reviews.rds")
   if (!file.exists(dest_file)) {
     utils::download.file(
-      url = "https://github.com/robjhyndman/weird-package/raw/main/data-raw/wine_reviews.rds",
+      url = "https://github.com/robjhyndman/weird/raw/main/data-raw/wine_reviews.rds",
       destfile = dest_file
     )
   }
