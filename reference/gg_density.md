@@ -26,7 +26,7 @@ gg_density(
 - object:
 
   distribution object from the distributional package or
-  [`dist_kde`](https://pkg.robjhyndman.com/weird-package/reference/dist_kde.md)()
+  [`dist_kde`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)()
 
 - prob:
 

@@ -19,7 +19,7 @@
 CRAN release: 2024-01-24
 
 - Removed wine_reviews dataset and created
-  [`fetch_wine_reviews()`](https://pkg.robjhyndman.com/weird-package/reference/fetch_wine_reviews.md)
+  [`fetch_wine_reviews()`](https://pkg.robjhyndman.com/weird/reference/fetch_wine_reviews.md)
   function.
 - Bug fixes.
 

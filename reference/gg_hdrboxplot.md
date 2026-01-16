@@ -65,7 +65,7 @@ gg_hdrboxplot(
 - scatterplot:
 
   Equivalent to `show_points`. Included for compatibility with
-  [`gg_bagplot()`](https://pkg.robjhyndman.com/weird-package/reference/bagplot.md).
+  [`gg_bagplot()`](https://pkg.robjhyndman.com/weird/reference/bagplot.md).
 
 - alpha:
 
@@ -84,7 +84,7 @@ gg_hdrboxplot(
 - ...:
 
   Other arguments passed to
-  [`dist_kde`](https://pkg.robjhyndman.com/weird-package/reference/dist_kde.md).
+  [`dist_kde`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md).
 
 ## Value
 
@@ -104,8 +104,8 @@ American Statistician*, **50**(2), 120–126.
 
 ## See also
 
-[`surprisals`](https://pkg.robjhyndman.com/weird-package/reference/surprisals.md),
-[`hdr_table`](https://pkg.robjhyndman.com/weird-package/reference/hdr_table.md)
+[`surprisals`](https://pkg.robjhyndman.com/weird/reference/surprisals.md),
+[`hdr_table`](https://pkg.robjhyndman.com/weird/reference/hdr_table.md)
 
 ## Author
 

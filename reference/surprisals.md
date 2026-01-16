@@ -102,7 +102,7 @@ estimating the kernel density estimate using all other observations.
 
 ## See also
 
-[`dist_kde`](https://pkg.robjhyndman.com/weird-package/reference/dist_kde.md)
+[`dist_kde`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)
 
 ## Author
 

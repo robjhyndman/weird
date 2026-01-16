@@ -5,7 +5,7 @@ leave-one-out surprisal probabilities from a kernel density estimate
 using a Generalized Pareto distribution. The kernel density estimate
 uses a bandwidth based on topological data analysis and a quadratic
 kernel. So it is similar but not identical to using
-[`surprisals`](https://pkg.robjhyndman.com/weird-package/reference/surprisals.md)
+[`surprisals`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
 with `loo = TRUE` and `approximation = "gdp"`. A low probability
 indicates a likely anomaly.
 

@@ -18,7 +18,7 @@ hdr_table(object, prob)
 - object:
 
   Distributional object such as that returned by
-  [`dist_kde()`](https://pkg.robjhyndman.com/weird-package/reference/dist_kde.md)
+  [`dist_kde()`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)
 
 - prob:
 

@@ -10,18 +10,18 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/robjhyndman/weird-package/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/robjhyndman/weird/blob/main/inst/CITATION)
 
 Hyndman RJ (2026). *weird: Functions and Data Sets for "That's Weird:
 Anomaly Detection Using R" by Rob J Hyndman*. R package version
-1.0.2.9000, <https://pkg.robjhyndman.com/weird-package/>.
+1.0.2.9000, <https://pkg.robjhyndman.com/weird/>.
 
     @Manual{,
       title = {{weird: Functions and Data Sets for "That's Weird: Anomaly Detection Using R" by Rob J Hyndman}},
       author = {Rob J Hyndman},
       year = {2026},
       note = {R package version 1.0.2.9000},
-      url = {https://pkg.robjhyndman.com/weird-package/},
+      url = {https://pkg.robjhyndman.com/weird/},
     }
 
 Hyndman RJ (2026). *That's Weird: Anomaly Detection Using R*. OTexts,

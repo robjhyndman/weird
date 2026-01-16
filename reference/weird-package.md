@@ -9,11 +9,11 @@ also loaded.
 
 Useful links:
 
-- <https://pkg.robjhyndman.com/weird-package/>
+- <https://pkg.robjhyndman.com/weird/>
 
-- <https://github.com/robjhyndman/weird-package>
+- <https://github.com/robjhyndman/weird>
 
-- Report bugs at <https://github.com/robjhyndman/weird-package/issues>
+- Report bugs at <https://github.com/robjhyndman/weird/issues>
 
 ## Author
 
