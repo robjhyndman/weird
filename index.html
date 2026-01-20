@@ -74,7 +74,7 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p><code><a href="https://pkg.robjhyndman.com/weird/">library(weird)</a></code> will load the following packages:</p>
+<p><code><a href="https://pkg.robjhyndman.com/weird/">library(weird)</a></code> will also load the following packages:</p>
 <ul>
 <li>
 <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>, for data manipulation.</li>
@@ -157,7 +157,7 @@
 <span><span class="va">oldfaithful</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="reference/grubbs_anomalies.html">dixon_anomalies</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 0 × 4</span></span>
 <span><span class="co">#&gt; # ℹ 4 variables: time &lt;dttm&gt;, recorded_duration &lt;chr&gt;, duration &lt;dbl&gt;, waiting &lt;dbl&gt;</span></span></code></pre></div>
-<p>In this example, they only detect (at most) the tiny 1-second duration, and the 30 second duration, both of which are almost certainly recording errors. An explanation of these tests is provided in <a href="https://otexts.com/weird/04-tests.html" class="external-link">Chapter 4 of the book</a></p>
+<p>There are at least three anomalies in this example (due to recording errors), but none of these methods detect them all. An explanation of these tests is provided in <a href="https://otexts.com/weird/04-tests.html" class="external-link">Chapter 4 of the book</a></p>
 </div>
 <div class="section level2">
 <h2 id="boxplots">Boxplots<a class="anchor" aria-label="anchor" href="#boxplots"></a>
@@ -212,7 +212,8 @@
 </h2>
 <p>Several functions are provided for providing anomaly scores for all observations.</p>
 <ul>
-<li>The <code><a href="reference/surprisals.html">surprisals()</a></code> function uses either a fitted statistical model, or a kernel density estimate, to compute density scores.</li>
+<li>The <code><a href="reference/surprisals.html">surprisals()</a></code> function uses either a fitted statistical model, or a kernel density estimate, to compute surprisals.</li>
+<li>The <code><a href="reference/surprisals.html">surprisals_prob()</a></code> function computes the probability of obtaining surprisal values at least as extreme as those observed.</li>
 <li>The <code><a href="reference/stray_scores.html">stray_scores()</a></code> function uses the stray algorithm to compute anomaly scores.</li>
 <li>The <code><a href="reference/lof_scores.html">lof_scores()</a></code> function uses local outlier factors to compute anomaly scores.</li>
 <li>The <code><a href="reference/glosh_scores.html">glosh_scores()</a></code> function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.</li>
@@ -223,61 +224,40 @@
 <code class="sourceCode R"><span><span class="va">oldfaithful</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    surprisal <span class="op">=</span> <span class="fu"><a href="reference/surprisals.html">surprisals</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    surprisal_prob <span class="op">=</span> <span class="fu"><a href="reference/surprisals.html">surprisals_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    strayscore <span class="op">=</span> <span class="fu"><a href="reference/stray_scores.html">stray_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    lofscore <span class="op">=</span> <span class="fu"><a href="reference/lof_scores.html">lof_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">150</span><span class="op">)</span>,</span>
 <span>    gloshscore <span class="op">=</span> <span class="fu"><a href="reference/glosh_scores.html">glosh_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    lookout <span class="op">=</span> <span class="fu"><a href="reference/lookout_prob.html">lookout_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
-<span>    <span class="va">surprisal</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">surprisal</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
+<span>    <span class="va">surprisal_prob</span> <span class="op">&lt;</span> <span class="fl">0.002</span> <span class="op">|</span></span>
 <span>      <span class="va">strayscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">strayscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
 <span>      <span class="va">lofscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">lofscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
 <span>      <span class="va">gloshscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">gloshscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
 <span>      <span class="va">lookout</span> <span class="op">&lt;</span> <span class="fl">0.002</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">lookout</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 10 × 9</span></span>
-<span><span class="co">#&gt;    time                recorded_duration   duration waiting surprisal strayscore lofscore gloshscore</span></span>
-<span><span class="co">#&gt;    &lt;dttm&gt;              &lt;chr&gt;                  &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2018-04-25 19:08:00 1s                         1    5700      16.9     0.150      3.78          1</span></span>
-<span><span class="co">#&gt;  2 2022-12-03 16:20:00 ~4m                      240    3060      16.9     0.265      2.05          1</span></span>
-<span><span class="co">#&gt;  3 2022-12-07 17:19:00 ~4 30s                    30    5220      16.9     0.273      1.89          1</span></span>
-<span><span class="co">#&gt;  4 2020-09-04 01:38:00 &gt;1m 50s                  110    6240      16.9     0.167      1.84          1</span></span>
-<span><span class="co">#&gt;  5 2023-07-04 12:03:00 ~1 minute 55ish se…       60    4920      16.9     0.122      1.62          1</span></span>
-<span><span class="co">#&gt;  6 2020-06-01 21:04:00 2 minutes                120    6060      16.9     0.132      2.01          1</span></span>
-<span><span class="co">#&gt;  7 2023-05-26 00:53:00 4m45s                    285    7140      14.6     0.0761     2.57          1</span></span>
-<span><span class="co">#&gt;  8 2017-09-22 18:51:00 ~281s                    281    7140      14.5     0.0683     2.57          1</span></span>
-<span><span class="co">#&gt;  9 2023-08-09 20:52:00 4m39s                    279    7140      14.5     0.0651     2.57          1</span></span>
-<span><span class="co">#&gt; 10 2018-09-22 16:37:00 ~4m13s                   253    7140      14.6     0.0194     2.57          1</span></span>
-<span><span class="co">#&gt; # ℹ 1 more variable: lookout &lt;dbl&gt;</span></span></code></pre></div>
-<p>The <code><a href="reference/surprisals.html">surprisals_prob()</a></code> function computes the probability of obtaining surprisal values at least as extreme as those observed.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">oldfaithful</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span></span>
-<span>    surprisal <span class="op">=</span> <span class="fu"><a href="reference/surprisals.html">surprisals</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    prob <span class="op">=</span> <span class="fu"><a href="reference/surprisals.html">surprisals_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2,097 × 6</span></span>
-<span><span class="co">#&gt;    time                recorded_duration duration waiting surprisal  prob</span></span>
-<span><span class="co">#&gt;    &lt;dttm&gt;              &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2021-08-17 22:39:44 4m07s                  247    5833      11.1  11.1</span></span>
-<span><span class="co">#&gt;  2 2020-06-19 18:50:00 4m07s                  247    5820      11.1  11.1</span></span>
-<span><span class="co">#&gt;  3 2020-06-24 01:07:00 4m07s                  247    5820      11.1  11.1</span></span>
-<span><span class="co">#&gt;  4 2020-07-12 21:02:00 4m07s                  247    5820      11.1  11.1</span></span>
-<span><span class="co">#&gt;  5 2023-10-23 20:46:00 4m07s                  247    5820      11.1  11.1</span></span>
-<span><span class="co">#&gt;  6 2021-09-07 19:08:07 4m07s                  247    5838      11.1  11.1</span></span>
-<span><span class="co">#&gt;  7 2017-02-12 17:55:00 4m 6s                  246    5820      11.1  11.1</span></span>
-<span><span class="co">#&gt;  8 2020-06-12 22:18:00 4m06s                  246    5820      11.1  11.1</span></span>
-<span><span class="co">#&gt;  9 2021-05-01 21:54:12 4m07s                  247    5808      11.1  11.1</span></span>
-<span><span class="co">#&gt; 10 2017-12-02 19:54:00 4m08s                  248    5820      11.1  11.1</span></span>
-<span><span class="co">#&gt; # ℹ 2,087 more rows</span></span></code></pre></div>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">surprisal_prob</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 10</span></span>
+<span><span class="co">#&gt;    time                recorded_duration       duration waiting surprisal surprisal_prob strayscore</span></span>
+<span><span class="co">#&gt;    &lt;dttm&gt;              &lt;chr&gt;                      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2022-12-03 16:20:00 ~4m                          240    3060      16.9       0.000477     0.265 </span></span>
+<span><span class="co">#&gt;  2 2018-04-25 19:08:00 1s                             1    5700      16.9       0.000954     0.150 </span></span>
+<span><span class="co">#&gt;  3 2023-07-04 12:03:00 ~1 minute 55ish seconds       60    4920      16.9       0.00143      0.122 </span></span>
+<span><span class="co">#&gt;  4 2022-12-07 17:19:00 ~4 30s                        30    5220      16.9       0.00191      0.273 </span></span>
+<span><span class="co">#&gt;  5 2020-06-01 21:04:00 2 minutes                    120    6060      16.9       0.00238      0.132 </span></span>
+<span><span class="co">#&gt;  6 2020-09-04 01:38:00 &gt;1m 50s                      110    6240      16.9       0.00286      0.167 </span></span>
+<span><span class="co">#&gt;  7 2018-09-22 16:37:00 ~4m13s                       253    7140      14.6       0.0343       0.0194</span></span>
+<span><span class="co">#&gt;  8 2023-05-26 00:53:00 4m45s                        285    7140      14.6       0.0348       0.0761</span></span>
+<span><span class="co">#&gt;  9 2017-09-22 18:51:00 ~281s                        281    7140      14.5       0.0391       0.0683</span></span>
+<span><span class="co">#&gt; 10 2023-08-09 20:52:00 4m39s                        279    7140      14.5       0.0401       0.0651</span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: lofscore &lt;dbl&gt;, gloshscore &lt;dbl&gt;, lookout &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="robust-multivariate-scaling">Robust multivariate scaling<a class="anchor" aria-label="anchor" href="#robust-multivariate-scaling"></a>
 </h2>
 <p>Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The <code><a href="https://sevvandi.github.io/lookout/reference/mvscale.html" class="external-link">mvscale()</a></code> function provides a multivariate robust scaling method, that optionally takes account of the relationships betwen variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as <code>z1</code>, <code>z2</code>, etc. Non-rotated scaling is possible by setting <code>cov = NULL</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://sevvandi.github.io/lookout/reference/mvscale.html" class="external-link">mvscale</a></span><span class="op">(</span><span class="va">oldfaithful</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in mvscale(oldfaithful): Ignoring non-numeric columns: time, recorded_duration</span></span>
 <span><span class="co">#&gt; # A tibble: 2,097 × 4</span></span>

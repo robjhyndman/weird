@@ -26,8 +26,8 @@ pak::pak("robjhyndman/weird")
 
 ## Usage
 
-[`library(weird)`](https://pkg.robjhyndman.com/weird/) will load the
-following packages:
+[`library(weird)`](https://pkg.robjhyndman.com/weird/) will also load
+the following packages:
 
 - [dplyr](https://dplyr.tidyverse.org), for data manipulation.
 - [ggplot2](https://ggplot2.tidyverse.org), for data visualisation.
@@ -140,9 +140,9 @@ oldfaithful |> filter(dixon_anomalies(duration))
 #> # ℹ 4 variables: time <dttm>, recorded_duration <chr>, duration <dbl>, waiting <dbl>
 ```
 
-In this example, they only detect (at most) the tiny 1-second duration,
-and the 30 second duration, both of which are almost certainly recording
-errors. An explanation of these tests is provided in [Chapter 4 of the
+There are at least three anomalies in this example (due to recording
+errors), but none of these methods detect them all. An explanation of
+these tests is provided in [Chapter 4 of the
 book](https://otexts.com/weird/04-tests.html)
 
 ## Boxplots
@@ -236,7 +236,11 @@ observations.
 - The
   [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   function uses either a fitted statistical model, or a kernel density
-  estimate, to compute density scores.
+  estimate, to compute surprisals.
+- The
+  [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
+  function computes the probability of obtaining surprisal values at
+  least as extreme as those observed.
 - The
   [`stray_scores()`](https://pkg.robjhyndman.com/weird/reference/stray_scores.md)
   function uses the stray algorithm to compute anomaly scores.
@@ -260,61 +264,34 @@ the methods.
 oldfaithful |>
   mutate(
     surprisal = surprisals(cbind(duration, waiting)),
+    surprisal_prob = surprisals_prob(cbind(duration, waiting)),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting)),
     lookout = lookout_prob(cbind(duration, waiting))
   ) |>
   filter(
-    surprisal > quantile(surprisal, prob = 0.998) |
+    surprisal_prob < 0.002 |
       strayscore > quantile(strayscore, prob = 0.998) |
       lofscore > quantile(lofscore, prob = 0.998) |
       gloshscore > quantile(gloshscore, prob = 0.998) |
       lookout < 0.002
   ) |>
-  arrange(lookout)
-#> # A tibble: 10 × 9
-#>    time                recorded_duration   duration waiting surprisal strayscore lofscore gloshscore
-#>    <dttm>              <chr>                  <dbl>   <dbl>     <dbl>      <dbl>    <dbl>      <dbl>
-#>  1 2018-04-25 19:08:00 1s                         1    5700      16.9     0.150      3.78          1
-#>  2 2022-12-03 16:20:00 ~4m                      240    3060      16.9     0.265      2.05          1
-#>  3 2022-12-07 17:19:00 ~4 30s                    30    5220      16.9     0.273      1.89          1
-#>  4 2020-09-04 01:38:00 >1m 50s                  110    6240      16.9     0.167      1.84          1
-#>  5 2023-07-04 12:03:00 ~1 minute 55ish se…       60    4920      16.9     0.122      1.62          1
-#>  6 2020-06-01 21:04:00 2 minutes                120    6060      16.9     0.132      2.01          1
-#>  7 2023-05-26 00:53:00 4m45s                    285    7140      14.6     0.0761     2.57          1
-#>  8 2017-09-22 18:51:00 ~281s                    281    7140      14.5     0.0683     2.57          1
-#>  9 2023-08-09 20:52:00 4m39s                    279    7140      14.5     0.0651     2.57          1
-#> 10 2018-09-22 16:37:00 ~4m13s                   253    7140      14.6     0.0194     2.57          1
-#> # ℹ 1 more variable: lookout <dbl>
-```
-
-The
-[`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
-function computes the probability of obtaining surprisal values at least
-as extreme as those observed.
-
-``` r
-oldfaithful |>
-  mutate(
-    surprisal = surprisals(cbind(duration, waiting)),
-    prob = surprisals_prob(cbind(duration, waiting))
-  ) |>
-  arrange(prob)
-#> # A tibble: 2,097 × 6
-#>    time                recorded_duration duration waiting surprisal  prob
-#>    <dttm>              <chr>                <dbl>   <dbl>     <dbl> <dbl>
-#>  1 2021-08-17 22:39:44 4m07s                  247    5833      11.1  11.1
-#>  2 2020-06-19 18:50:00 4m07s                  247    5820      11.1  11.1
-#>  3 2020-06-24 01:07:00 4m07s                  247    5820      11.1  11.1
-#>  4 2020-07-12 21:02:00 4m07s                  247    5820      11.1  11.1
-#>  5 2023-10-23 20:46:00 4m07s                  247    5820      11.1  11.1
-#>  6 2021-09-07 19:08:07 4m07s                  247    5838      11.1  11.1
-#>  7 2017-02-12 17:55:00 4m 6s                  246    5820      11.1  11.1
-#>  8 2020-06-12 22:18:00 4m06s                  246    5820      11.1  11.1
-#>  9 2021-05-01 21:54:12 4m07s                  247    5808      11.1  11.1
-#> 10 2017-12-02 19:54:00 4m08s                  248    5820      11.1  11.1
-#> # ℹ 2,087 more rows
+  arrange(surprisal_prob)
+#> # A tibble: 10 × 10
+#>    time                recorded_duration       duration waiting surprisal surprisal_prob strayscore
+#>    <dttm>              <chr>                      <dbl>   <dbl>     <dbl>          <dbl>      <dbl>
+#>  1 2022-12-03 16:20:00 ~4m                          240    3060      16.9       0.000477     0.265 
+#>  2 2018-04-25 19:08:00 1s                             1    5700      16.9       0.000954     0.150 
+#>  3 2023-07-04 12:03:00 ~1 minute 55ish seconds       60    4920      16.9       0.00143      0.122 
+#>  4 2022-12-07 17:19:00 ~4 30s                        30    5220      16.9       0.00191      0.273 
+#>  5 2020-06-01 21:04:00 2 minutes                    120    6060      16.9       0.00238      0.132 
+#>  6 2020-09-04 01:38:00 >1m 50s                      110    6240      16.9       0.00286      0.167 
+#>  7 2018-09-22 16:37:00 ~4m13s                       253    7140      14.6       0.0343       0.0194
+#>  8 2023-05-26 00:53:00 4m45s                        285    7140      14.6       0.0348       0.0761
+#>  9 2017-09-22 18:51:00 ~281s                        281    7140      14.5       0.0391       0.0683
+#> 10 2023-08-09 20:52:00 4m39s                        279    7140      14.5       0.0401       0.0651
+#> # ℹ 3 more variables: lofscore <dbl>, gloshscore <dbl>, lookout <dbl>
 ```
 
 ## Robust multivariate scaling
