@@ -9,7 +9,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  dev = "ragg_png",
+  dpi = 200
 )
 options(width = 100)
 set.seed(1967)
@@ -94,7 +96,7 @@ oldfaithful |> filter(grubbs_anomalies(duration))
 oldfaithful |> filter(dixon_anomalies(duration))
 ```
 
-In this example, they only detect the tiny 1-second duration, which is almost certainly a recording error. An explanation of these tests is provided in [Chapter 4 of the book](https://otexts.com/weird/04-tests.html)
+In this example, they only detect (at most) the tiny 1-second duration, and the 30 second duration, both of which are almost certainly recording errors. An explanation of these tests is provided in [Chapter 4 of the book](https://otexts.com/weird/04-tests.html)
 
 ## Boxplots
 
