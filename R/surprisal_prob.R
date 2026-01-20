@@ -2,7 +2,7 @@
 # Note that each value of s may come from a different distribution
 # so distribution may be a vector
 
-surprisal_prob <- function(
+surprisal_prob_from_s <- function(
   s,
   distribution,
   approximation = c("none", "gpd", "empirical"),
@@ -37,7 +37,7 @@ surprisal_prob <- function(
       }
       p <- numeric(n)
       for (i in seq(n)) {
-        p[i] <- surprisal_prob(
+        p[i] <- surprisal_prob_from_s(
           s[i],
           distribution[i],
           y = y[i],

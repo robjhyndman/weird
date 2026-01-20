@@ -43,13 +43,13 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
       function(u, dist) {
         d <- NCOL(u) - 2
         data <- as.matrix(u[, seq(d)])
-        u$prob <- surprisals_from_den(
+        s <- surprisals_from_den(
           data,
           den = log(u$den),
           distribution = dist,
-          loo = TRUE,
-          probablity = TRUE
+          loo = TRUE
         )
+        u$prob <- surprisal_prob_from_s(s, distribution=dist)
         return(u)
       },
       u = show_x,
