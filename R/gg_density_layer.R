@@ -106,7 +106,7 @@ make_density_df <- function(object, ngrid = 501) {
   }
   # Convert to long form
   names(df)[-seq(d)] <- names_dist(object, unique = TRUE)
-  tibble::as_tibble(df) |>
+  dplyr::as_tibble(df) |>
     tidyr::pivot_longer(
       cols = -seq(d),
       names_to = "Distribution",

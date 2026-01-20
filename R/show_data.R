@@ -20,7 +20,7 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
     x,
     names(x),
     function(u, dist) {
-      tmp <- tibble::as_tibble(u) |> dplyr::mutate(Distribution = dist)
+      tmp <- dplyr::as_tibble(u) |> dplyr::mutate(Distribution = dist)
       d <- NCOL(u)
       colnames(tmp)[seq(d)] <- c("x", "y")[seq(d)]
       return(tmp)

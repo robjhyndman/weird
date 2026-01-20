@@ -239,7 +239,7 @@ hdr_palette <- function(n, color = "#0072b2", prob = NULL) {
 }
 
 #' @importFrom utils head tail
-#' @importFrom tibble tibble
+#' @importFrom dplyr tibble
 
 utils::globalVariables(c("ends", "type", "lower", "upper", "group"))
 utils::globalVariables(c("x", "y", "y1", "y2", "distribution"))

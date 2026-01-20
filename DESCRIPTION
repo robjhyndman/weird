@@ -31,7 +31,6 @@ Imports:
   robustbase,
   rstudioapi (>= 0.7),
   stray,
-  tibble (>= 1.4.2),
   vctrs
 License: GPL-3
 Encoding: UTF-8
@@ -43,10 +42,8 @@ Depends:
     R (>= 4.1.0)
 Suggests:
     mgcv,
-    outliers,
     testthat (>= 3.0.0),
     tidyr
 Config/testthat/edition: 3
 URL: https://pkg.robjhyndman.com/weird/, https://github.com/robjhyndman/weird
 BugReports: https://github.com/robjhyndman/weird/issues
-Remotes: sevvandi/lookout

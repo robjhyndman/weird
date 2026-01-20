@@ -135,4 +135,4 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
 }
 
 #' @importFrom stats lm predict qt
-#' @importFrom tibble tibble
+#' @importFrom dplyr tibble
