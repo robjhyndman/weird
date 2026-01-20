@@ -44,7 +44,7 @@ pak::pak("robjhyndman/weird")
 
 ## Usage
 
-`library(weird)` will load the following packages:
+`library(weird)` will also load the following packages:
 
 * [dplyr](https://dplyr.tidyverse.org), for data manipulation.
 * [ggplot2](https://ggplot2.tidyverse.org), for data visualisation.
@@ -96,7 +96,7 @@ oldfaithful |> filter(grubbs_anomalies(duration))
 oldfaithful |> filter(dixon_anomalies(duration))
 ```
 
-In this example, they only detect (at most) the tiny 1-second duration, and the 30 second duration, both of which are almost certainly recording errors. An explanation of these tests is provided in [Chapter 4 of the book](https://otexts.com/weird/04-tests.html)
+There are at least three anomalies in this example (due to recording errors), but none of these methods detect them all. An explanation of these tests is provided in [Chapter 4 of the book](https://otexts.com/weird/04-tests.html)
 
 ## Boxplots
 
@@ -145,7 +145,8 @@ The latter two plots show possible outliers in black (again, defined as points o
 
 Several functions are provided for providing anomaly scores for all observations.
 
-* The `surprisals()` function uses either a fitted statistical model, or a kernel density estimate, to compute density scores.
+* The `surprisals()` function uses either a fitted statistical model, or a kernel density estimate, to compute surprisals.
+* The `surprisals_prob()` function computes the probability of obtaining surprisal values at least as extreme as those observed.
 * The `stray_scores()` function uses the stray algorithm to compute anomaly scores.
 * The `lof_scores()` function uses local outlier factors to compute anomaly scores.
 * The `glosh_scores()` function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.
@@ -157,30 +158,20 @@ Here are the top 0.02% most anomalous observations identified by each of the met
 oldfaithful |>
   mutate(
     surprisal = surprisals(cbind(duration, waiting)),
+    surprisal_prob = surprisals_prob(cbind(duration, waiting)),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting)),
     lookout = lookout_prob(cbind(duration, waiting))
   ) |>
   filter(
-    surprisal > quantile(surprisal, prob = 0.998) |
+    surprisal_prob < 0.002 |
       strayscore > quantile(strayscore, prob = 0.998) |
       lofscore > quantile(lofscore, prob = 0.998) |
       gloshscore > quantile(gloshscore, prob = 0.998) |
       lookout < 0.002
   ) |>
-  arrange(lookout)
-```
-
-The `surprisals_prob()` function computes the probability of obtaining surprisal values at least as extreme as those observed.
-
-```{r}
-oldfaithful |>
-  mutate(
-    surprisal = surprisals(cbind(duration, waiting)),
-    prob = surprisals_prob(cbind(duration, waiting))
-  ) |>
-  arrange(prob)
+  arrange(surprisal_prob)
 ```
 
 ## Robust multivariate scaling
