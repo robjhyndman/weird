@@ -73,7 +73,6 @@ cricket_batting |>
   filter(Innings > 20) |>
   gg_hdrboxplot(Average)
 oldfaithful |>
-  filter(duration < 7000, waiting < 7000) |>
   gg_hdrboxplot(duration, waiting, show_points = TRUE)
 
 }

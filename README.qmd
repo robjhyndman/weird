@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 options(width = 100)
+set.seed(1967)
 ```
 
 # weird  <img src="man/figures/weird-hex.png" align="right" width = 150 />
@@ -56,7 +57,7 @@ library(weird)
 
 ## Example: Old Faithful Geyser data
 
-The `oldfaithful` data set contains eruption data from the Old Faithful Geyser in Yellowstone National Park, Wyoming, USA, from 1 January 2015 to 1 October 2021. The data were obtained from the [geysertimes.org](https://geysertimes.org) website. Recordings are incomplete, especially during the winter months when observers may not be present. There also appear to be some recording errors. The data set contains `r NROW(oldfaithful)` observations of 3 variables: `time` giving the time at which each eruption began, `duration` giving the length of the eruption in seconds, and `waiting` giving the time to the next eruption in seconds. In the analysis below, we omit the eruption with `duration` greater than 1 hour as this is likely to be a recording error. Some of the long `waiting` values are probably due to omitted eruptions, and so we also omit eruptions with `waiting` greater than 2 hours.
+The `oldfaithful` data set contains eruption data from the Old Faithful Geyser in Yellowstone National Park, Wyoming, USA, from 2017 to 2023. The data were obtained from the [geysertimes.org](https://geysertimes.org) website. Recordings are incomplete, especially during the winter months when observers may not be present. There also appear to be some recording errors. The data set contains `r NROW(oldfaithful)` observations of 3 variables: `time` giving the time at which each eruption began, `recorded_duration` giving the length of the eruption as recorded, `duration` giving the length of the eruption in seconds, and `waiting` giving the time to the next eruption in seconds.
 
 ```{r oldfaithful}
 oldfaithful
@@ -106,9 +107,9 @@ oldfaithful |>
   geom_boxplot() +
   scale_y_discrete() +
   labs(y = "", x = "Duration (seconds)")
-oldfaithful |> gg_hdrboxplot(duration) +
-  labs(x = "Duration (seconds)")
-oldfaithful |> gg_hdrboxplot(duration, show_points = TRUE) +
+oldfaithful |> gg_hdrboxplot(duration) + labs(x = "Duration (seconds)")
+oldfaithful |>
+  gg_hdrboxplot(duration, show_points = TRUE) +
   labs(x = "Duration (seconds)")
 ```
 
@@ -153,7 +154,7 @@ Here are the top 0.02% most anomalous observations identified by each of the met
 ```{r of-scores}
 oldfaithful |>
   mutate(
-    surprisal = surprisals(cbind(duration, waiting), probability = FALSE),
+    surprisal = surprisals(cbind(duration, waiting)),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting)),
@@ -169,14 +170,13 @@ oldfaithful |>
   arrange(lookout)
 ```
 
-The `surprisals()` function can also compute the probability of obtaining surprisal values at least as extreme as those observed. In fact, this is the default behaviour, obtained
-when `probability = TRUE`.
+The `surprisals_prob()` function computes the probability of obtaining surprisal values at least as extreme as those observed.
 
 ```{r}
 oldfaithful |>
   mutate(
-    surprisal = surprisals(cbind(duration, waiting), probability = FALSE),
-    prob = surprisals(cbind(duration, waiting))
+    surprisal = surprisals(cbind(duration, waiting)),
+    prob = surprisals_prob(cbind(duration, waiting))
   ) |>
   arrange(prob)
 ```

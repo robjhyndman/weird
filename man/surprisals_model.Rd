@@ -2,24 +2,27 @@
 % Please edit documentation in R/surprisals.R
 \name{surprisals.lm}
 \alias{surprisals.lm}
+\alias{surprisals_prob.lm}
 \alias{surprisals.gam}
-\title{Surprisals computed from a model}
+\alias{surprisals_prob.gam}
+\title{Surprisals and surprisal probabilities computed from a model}
 \usage{
-\method{surprisals}{lm}(
+\method{surprisals}{lm}(object, loo = FALSE, ...)
+
+\method{surprisals_prob}{lm}(
   object,
-  probability = TRUE,
   approximation = c("none", "gpd", "empirical"),
   threshold_probability = 0.1,
   loo = FALSE,
   ...
 )
 
-\method{surprisals}{gam}(
+\method{surprisals}{gam}(object, ...)
+
+\method{surprisals_prob}{gam}(
   object,
-  probability = TRUE,
   approximation = c("none", "gpd", "empirical"),
   threshold_probability = 0.1,
-  loo = FALSE,
   ...
 )
 }
@@ -27,36 +30,57 @@
 \item{object}{A model object such as returned by \code{\link[stats]{lm}},
 or \code{\link[mgcv]{gam}}.}
 
-\item{probability}{Should surprisal probabilities be computed, or the
-surprisal values?}
-
-\item{approximation}{Character string specifying the approximation to use in
-computing the surprisal probabilities. Ignored if \code{probability = FALSE}. :
-\code{none} specifies that no approximation is to be used;
-\code{gpd} specifies that  the Generalized Pareto distribution should be used;
-while \code{empirical} specifies that the probabilities should be estimated empirically.}
-
-\item{threshold_probability}{Probability threshold when computing the GPD
-approximation. This is the probability below which the GPD is fitted. Only
-used if \code{approximation = "gpd"}).}
-
 \item{loo}{Should leave-one-out surprisals be computed?}
 
 \item{...}{Other arguments are ignored.}
+
+\item{approximation}{Character string specifying the approximation to use in
+computing the surprisal probabilities. Ignored if \code{probability = FALSE}.
+\code{approximation = "none"} specifies that no approximation is to be used;
+\code{approximation = "gpd"} specifies that  the Generalized Pareto distribution should be used;
+while \code{approximation = "empirical"} specifies that the probabilities should be estimated empirically.}
+
+\item{threshold_probability}{Probability threshold when computing the GPD
+approximation. This is the probability below which the GPD is fitted. Only
+used if \code{approximation = "gpd"} and \code{probability = TRUE}).}
+}
+\value{
+A numerical vector containing the surprisals or surprisal probabilities.
 }
 \description{
-Surprisals computed from a model
+A surprisal is given by \eqn{s = -\log f(y)} where \eqn{f} is the
+density or probability mass function of the estimated or assumed distribution,
+and \eqn{y} is an observation. This is returned by \code{surprisals()}.
+A surprisal probability is the probability of a surprisal at least as extreme
+as \eqn{s}. This is returned by \code{surprisals_prob()}
+
+The surprisal probabilities may be computed in three different ways.
+\enumerate{
+\item Given the same distribution that was used to compute the surprisal values.
+Under this option, surprisal probabilities are equal to 1 minus the
+coverage probability of the largest HDR that contains each value. Surprisal
+probabilities smaller than 1e-6 are returned as 1e-6.
+\item Using a Generalized Pareto Distribution fitted to the most extreme
+surprisal values (those with probability less than \code{threshold_probability}).
+This option is used if \code{approximation = "gpd"}. For surprisal probabilities
+greater than \code{threshold_probability}, the value of
+\code{threshold_probability} is returned. Under this option, the distribution is
+used for computing the surprisal values but not for determining their
+probabilities. Due to extreme value theory, the resulting probabilities should
+be relatively insensitive to the distribution used in computing the surprisal
+values.
+\item Empirically as the proportion of observations with greater surprisal values.
+This option is used when \code{approxiation = "empirical"}. This is also
+insensitive to the distribution used in computing the surprisal values.
+}
 }
 \examples{
 # surprisals computed from linear model
-of <- oldfaithful |>
-  filter(duration < 7200, waiting < 7200)
-lm_of <- lm(waiting ~ duration, data = of)
-of |>
+lm_of <- lm(waiting ~ duration, data = oldfaithful)
+oldfaithful |>
   mutate(
-    fscore = surprisals(lm_of),
-    loo_fscore = surprisals(lm_of, loo = TRUE),
-    # lookout_prob = lookout(surprisals = fscore, loo_scores = loo_fscore)
+    fscore = surprisals_prob(lm_of),
+    loo_fscore = surprisals_prob(lm_of, loo = TRUE),
   ) |>
   ggplot(aes(
     x = duration, y = waiting,
@@ -64,9 +88,10 @@ of |>
   )) +
   geom_point()
 # surprisals computed from GAM
-of <- oldfaithful |>
-  filter(duration > 1, duration < 7200, waiting < 7200)
-gam_of <- mgcv::gam(waiting ~ s(duration), data = of)
-of |>
+gam_of <- mgcv::gam(waiting ~ s(duration), data = oldfaithful)
+oldfaithful |>
   mutate(fscore = surprisals(gam_of))
+}
+\author{
+Rob J Hyndman
 }
