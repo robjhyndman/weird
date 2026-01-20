@@ -27,7 +27,7 @@
 #'   filter(Innings > 20) |>
 #'   select(Player, Country, Matches, Runs, Average, Hundreds, Fifties, Ducks) |>
 #'   arrange(desc(Average))
-#' @source \url{https://www.espncricinfo.com}
+#' @source \url{https://www.espncricinfo.com/}
 "cricket_batting"
 
 #' Old faithful eruption data
