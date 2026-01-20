@@ -140,9 +140,9 @@ oldfaithful |> filter(dixon_anomalies(duration))
 #> # ℹ 4 variables: time <dttm>, recorded_duration <chr>, duration <dbl>, waiting <dbl>
 ```
 
-In this example, they only detect the tiny 1-second duration, which is
-almost certainly a recording error. An explanation of these tests is
-provided in [Chapter 4 of the
+In this example, they only detect (at most) the tiny 1-second duration,
+and the 30 second duration, both of which are almost certainly recording
+errors. An explanation of these tests is provided in [Chapter 4 of the
 book](https://otexts.com/weird/04-tests.html)
 
 ## Boxplots

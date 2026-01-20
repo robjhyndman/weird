@@ -75,7 +75,7 @@ A data frame with 3968 rows and 15 variables:
 
 ## Source
 
-<https://www.espncricinfo.com>
+<https://www.espncricinfo.com/>
 
 ## Value
 

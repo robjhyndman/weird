@@ -38,7 +38,7 @@ A matrix of bandwidths (or a scalar in the case of univariate data).
 
 Rob J Hyndman, Sevvandi Kandanaarachchi & Katharine Turner (2026) "When
 lookout sees crackle: Anomaly detection via kernel density estimation",
-unpublished. <https://robjhyndman.com/publications/lookout2/>
+unpublished. <https://robjhyndman.com/publications/lookout2.html>
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R",
 <https://OTexts.com/weird/>

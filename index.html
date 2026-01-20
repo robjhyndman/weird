@@ -157,7 +157,7 @@
 <span><span class="va">oldfaithful</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="reference/grubbs_anomalies.html">dixon_anomalies</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 0 × 4</span></span>
 <span><span class="co">#&gt; # ℹ 4 variables: time &lt;dttm&gt;, recorded_duration &lt;chr&gt;, duration &lt;dbl&gt;, waiting &lt;dbl&gt;</span></span></code></pre></div>
-<p>In this example, they only detect the tiny 1-second duration, which is almost certainly a recording error. An explanation of these tests is provided in <a href="https://otexts.com/weird/04-tests.html" class="external-link">Chapter 4 of the book</a></p>
+<p>In this example, they only detect (at most) the tiny 1-second duration, and the 30 second duration, both of which are almost certainly recording errors. An explanation of these tests is provided in <a href="https://otexts.com/weird/04-tests.html" class="external-link">Chapter 4 of the book</a></p>
 </div>
 <div class="section level2">
 <h2 id="boxplots">Boxplots<a class="anchor" aria-label="anchor" href="#boxplots"></a>

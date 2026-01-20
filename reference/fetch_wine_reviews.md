@@ -48,7 +48,7 @@ A data frame with 110,203 rows and 8 columns:
 
 ## Source
 
-<https://www.kaggle.com>
+<https://www.kaggle.com/>
 
 ## Value
 
