@@ -34,7 +34,7 @@ kde_bandwidth(oldfaithful[, c("duration", "waiting")])
 \references{
 Rob J Hyndman, Sevvandi Kandanaarachchi & Katharine Turner (2026)
 "When lookout sees crackle: Anomaly detection via kernel density estimation",
-unpublished. \url{https://robjhyndman.com/publications/lookout2/}
+unpublished. \url{https://robjhyndman.com/publications/lookout2.html}
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R",
 \url{https://OTexts.com/weird/}
