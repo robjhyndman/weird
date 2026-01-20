@@ -1,7 +1,7 @@
 # weird: Functions and Data Sets for "That's Weird: Anomaly Detection Using R" by Rob J Hyndman
 
 All functions and data sets required for the examples in the book
-Hyndman (2024) "That's Weird: Anomaly Detection Using R"
+Hyndman (2026) "That's Weird: Anomaly Detection Using R"
 <https://OTexts.com/weird/>. All packages needed to run the examples are
 also loaded.
 

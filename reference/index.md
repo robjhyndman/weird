@@ -31,10 +31,16 @@ Data sets included in the package
 - [`stray_scores()`](https://pkg.robjhyndman.com/weird/reference/stray_scores.md)
   : Stray scores
 - [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
-  : Surprisals
+  [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
+  : Surprisals and surprisal probabilities
+- [`surprisals(`*`<default>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals.default.md)
+  [`surprisals_prob(`*`<default>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals.default.md)
+  : Surprisals and surprisal probabilities
 - [`surprisals(`*`<lm>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
+  [`surprisals_prob(`*`<lm>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   [`surprisals(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
-  : Surprisals computed from a model
+  [`surprisals_prob(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
+  : Surprisals and surprisal probabilities computed from a model
 - [`lookout_prob()`](https://pkg.robjhyndman.com/weird/reference/lookout_prob.md)
   : Lookout probabilities
 

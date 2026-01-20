@@ -43,8 +43,7 @@ value. A vector of logical values is returned, where `TRUE` indicates an
 anomaly. This version of Grubbs' test looks for outliers anywhere in the
 sample. Grubbs' original test came in several variations which looked
 for one outlier, or two outliers in one tail, or two outliers on
-opposite tails. These variations are implemented in the
-[`grubbs.test`](https://rdrr.io/pkg/outliers/man/grubbs.test.html)
+opposite tails. These variations are implemented in the `grubbs.test`
 function. Dixon's test only considers the maximum (and possibly the
 minimum) as potential outliers.
 
@@ -57,8 +56,7 @@ Analysis of extreme values. *Annals of Mathematical Statistics*, 21(4),
 
 ## See also
 
-[`grubbs.test`](https://rdrr.io/pkg/outliers/man/grubbs.test.html),
-[`dixon.test`](https://rdrr.io/pkg/outliers/man/dixon.test.html)
+`grubbs.test`, `dixon.test`
 
 ## Author
 

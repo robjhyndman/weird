@@ -122,7 +122,7 @@ cricket_batting |>
   gg_hdrboxplot(Average)
 
 oldfaithful |>
-  filter(duration < 7000, waiting < 7000) |>
   gg_hdrboxplot(duration, waiting, show_points = TRUE)
+#> Warning: Using an empirical approximation for multivariate data
 
 ```

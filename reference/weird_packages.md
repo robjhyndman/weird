@@ -26,5 +26,5 @@ weird_packages()
 #>  [5] "dbscan"         "distributional" "dplyr"          "evd"           
 #>  [9] "ggplot2"        "grDevices"      "ks"             "lookout"       
 #> [13] "mvtnorm"        "purrr"          "rlang"          "robustbase"    
-#> [17] "rstudioapi"     "stray"          "tibble"         "vctrs"         
+#> [17] "rstudioapi"     "stray"          "vctrs"         
 ```
