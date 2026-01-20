@@ -22,7 +22,7 @@ options(width = 100)
 
 ## Overview
 
-The weird package contains functions and data used in the book [*That's Weird: Anomaly Detection Using R*](https://OTexts.com/weird/) by Rob J Hyndman. It also loads several packages needed to do the analysis described in the book. 
+The weird package contains functions and data used in the book [*That's Weird: Anomaly Detection Using R*](https://OTexts.com/weird/) by Rob J Hyndman. It also loads several packages needed to do the analysis described in the book.
 
 ## Installation
 
@@ -64,12 +64,10 @@ oldfaithful
 
 ## Kernel density estimates
 
-The package provides the `kde_bandwidth()` function for estimating the bandwidth of a kernel density estimate, `dist_kde()` for constructing the distribution, and `gg_density()` for plotting the resulting density. The figure below shows the kernel density estimate of the `duration` variable obtained using these functions. 
+The package provides the `kde_bandwidth()` function for estimating the bandwidth of a kernel density estimate, `dist_kde()` for constructing the distribution, and `gg_density()` for plotting the resulting density. The figure below shows the kernel density estimate of the `duration` variable obtained using these functions.
 
 ```{r of-density}
-of <- oldfaithful |>
-  filter(duration < 3600, waiting < 7200)
-dist_kde(of$duration) |>
+dist_kde(oldfaithful$duration) |>
   gg_density(show_points = TRUE, jitter = TRUE) +
   labs(x = "Duration (seconds)")
 ```
@@ -77,7 +75,7 @@ dist_kde(of$duration) |>
 The same functions also work with bivariate data. The figure below shows the kernel density estimate of the `duration` and `waiting` variables.
 
 ```{r of-density2}
-of |>
+oldfaithful |>
   select(duration, waiting) |>
   dist_kde() |>
   gg_density(show_points = TRUE, alpha = 0.15) +
@@ -89,10 +87,10 @@ of |>
 Some old methods of anomaly detection used statistical tests. While these are not recommended, they are still widely used, and are provided in the package for comparison purposes.
 
 ```{r of-test}
-of |> filter(peirce_anomalies(duration))
-of |> filter(chauvenet_anomalies(duration))
-of |> filter(grubbs_anomalies(duration))
-of |> filter(dixon_anomalies(duration))
+oldfaithful |> filter(peirce_anomalies(duration))
+oldfaithful |> filter(chauvenet_anomalies(duration))
+oldfaithful |> filter(grubbs_anomalies(duration))
+oldfaithful |> filter(dixon_anomalies(duration))
 ```
 
 In this example, they only detect the tiny 1-second duration, which is almost certainly a recording error. An explanation of these tests is provided in [Chapter 4 of the book](https://otexts.com/weird/04-tests.html)
@@ -103,14 +101,14 @@ Boxplots are widely used for anomaly detection. Here are three variations of box
 
 ```{r of-boxplot}
 #| fig-height: 1.5
-of |>
+oldfaithful |>
   ggplot(aes(x = duration)) +
   geom_boxplot() +
   scale_y_discrete() +
   labs(y = "", x = "Duration (seconds)")
-of |> gg_hdrboxplot(duration) +
+oldfaithful |> gg_hdrboxplot(duration) +
   labs(x = "Duration (seconds)")
-of |> gg_hdrboxplot(duration, show_points = TRUE) +
+oldfaithful |> gg_hdrboxplot(duration, show_points = TRUE) +
   labs(x = "Duration (seconds)")
 ```
 
@@ -119,10 +117,10 @@ The latter two plots are highest density region (HDR) boxplots, which allow the 
 It is also possible to produce bivariate boxplots. Several variations are provided in the package. Here are two types of bagplot.
 
 ```{r of-boxplot2}
-of |>
+oldfaithful |>
   gg_bagplot(duration, waiting) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
-of |>
+oldfaithful |>
   gg_bagplot(duration, waiting, scatterplot = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
@@ -130,10 +128,10 @@ of |>
 And here are two types of HDR boxplot
 
 ```{r of-boxplot3}
-of |>
+oldfaithful |>
   gg_hdrboxplot(duration, waiting) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
-of |>
+oldfaithful |>
   gg_hdrboxplot(duration, waiting, scatterplot = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
@@ -142,7 +140,7 @@ The latter two plots show possible outliers in black (again, defined as points o
 
 ## Scoring functions
 
-Several functions are provided for providing anomaly scores for all observations. 
+Several functions are provided for providing anomaly scores for all observations.
 
 * The `surprisals()` function uses either a fitted statistical model, or a kernel density estimate, to compute density scores.
 * The `stray_scores()` function uses the stray algorithm to compute anomaly scores.
@@ -153,7 +151,7 @@ Several functions are provided for providing anomaly scores for all observations
 Here are the top 0.02% most anomalous observations identified by each of the methods.
 
 ```{r of-scores}
-of |>
+oldfaithful |>
   mutate(
     surprisal = surprisals(cbind(duration, waiting), probability = FALSE),
     strayscore = stray_scores(cbind(duration, waiting)),
@@ -175,7 +173,7 @@ The `surprisals()` function can also compute the probability of obtaining surpri
 when `probability = TRUE`.
 
 ```{r}
-of |>
+oldfaithful |>
   mutate(
     surprisal = surprisals(cbind(duration, waiting), probability = FALSE),
     prob = surprisals(cbind(duration, waiting))
@@ -188,6 +186,6 @@ of |>
 Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The `mvscale()` function provides a multivariate robust scaling method, that optionally takes account of the relationships betwen variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as `z1`, `z2`, etc. Non-rotated scaling is possible by setting `cov = NULL`.
 
 ```{r of-mvscale}
-mvscale(of)
-mvscale(of, cov = NULL)
+mvscale(oldfaithful)
+mvscale(oldfaithful, cov = NULL)
 ```

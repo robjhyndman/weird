@@ -38,7 +38,6 @@
 #' @examples
 #' # surprisals computed from bivariate data set
 #' oldfaithful |>
-#'   filter(duration < 7000, waiting < 7000) |>
 #'   mutate(
 #'     loo_fscores = surprisals_prob(cbind(duration, waiting), loo = TRUE)
 #'   )
@@ -197,10 +196,8 @@ surprisals_from_den <- function(
 #' @param ... Other arguments are ignored.
 #' @examples
 #' # surprisals computed from linear model
-#' of <- oldfaithful |>
-#'   filter(duration < 7200, waiting < 7200)
-#' lm_of <- lm(waiting ~ duration, data = of)
-#' of |>
+#' lm_of <- lm(waiting ~ duration, data = oldfaithful)
+#' oldfaithful |>
 #'   mutate(
 #'     fscore = surprisals_prob(lm_of),
 #'     loo_fscore = surprisals_prob(lm_of, loo = TRUE),
@@ -249,10 +246,8 @@ surprisals_prob.lm <- function(
 #' @rdname surprisals_model
 #' @examples
 #' # surprisals computed from GAM
-#' of <- oldfaithful |>
-#'   filter(duration > 1, duration < 7200, waiting < 7200)
-#' gam_of <- mgcv::gam(waiting ~ s(duration), data = of)
-#' of |>
+#' gam_of <- mgcv::gam(waiting ~ s(duration), data = oldfaithful)
+#' oldfaithful |>
 #'   mutate(fscore = surprisals(gam_of))
 #' @importFrom stats approx dbinom density dnorm dpois na.omit
 #' @export

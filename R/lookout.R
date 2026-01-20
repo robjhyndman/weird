@@ -26,8 +26,7 @@
 #'   lookout = lookout_prob(cbind(x, y))
 #' )
 #' # Using a regression model
-#' of <- oldfaithful |> filter(duration < 7200, waiting < 7200)
-#' fit_of <- lm(waiting ~ duration, data = of)
+#' fit_of <- lm(waiting ~ duration, data = oldfaithful)
 #' broom::augment(fit_of) |>
 #'   mutate(lookout = lookout_prob(.std.resid)) |>
 #'   arrange(lookout)
