@@ -213,8 +213,6 @@ And here are two types of HDR boxplot
 oldfaithful |>
   gg_hdrboxplot(duration, waiting) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
-#> Warning in surprisal_prob_from_s(s, distribution = dist): Using an empirical approximation for
-#> multivariate data
 ```
 
 <img src="man/figures/README-of-boxplot3-1.png" style="width:100.0%" />
@@ -223,8 +221,6 @@ oldfaithful |>
 oldfaithful |>
   gg_hdrboxplot(duration, waiting, scatterplot = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
-#> Warning in surprisal_prob_from_s(s, distribution = dist): Using an empirical approximation for
-#> multivariate data
 ```
 
 <img src="man/figures/README-of-boxplot3-2.png" style="width:100.0%" />
@@ -260,7 +256,7 @@ the methods.
 oldfaithful |>
   mutate(
     surprisal = surprisals(cbind(duration, waiting)),
-    surprisal_prob = surprisals_prob(cbind(duration, waiting)),
+    surprisal_prob = surprisals_prob(cbind(duration, waiting), approximation = "empirical"),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting)),
