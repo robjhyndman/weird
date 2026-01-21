@@ -49,7 +49,11 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
           distribution = dist,
           loo = TRUE
         )
-        u$prob <- surprisal_prob_from_s(s, distribution=dist)
+        u$prob <- surprisal_prob_from_s(
+          s,
+          distribution = dist,
+          approximation = ifelse(d == 1L, "none", "empirical")
+        )
         return(u)
       },
       u = show_x,
