@@ -1,6 +1,6 @@
 Package: weird
 Title: Functions and Data Sets for "That's Weird: Anomaly Detection Using R" by Rob J Hyndman
-Version: 1.0.2.9000
+Version: 2.0.0
 Authors@R:
   c(person(given = "Rob",
            family = "Hyndman",
