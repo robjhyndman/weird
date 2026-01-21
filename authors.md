@@ -13,14 +13,14 @@ Source:
 [`inst/CITATION`](https://github.com/robjhyndman/weird/blob/main/inst/CITATION)
 
 Hyndman RJ (2026). *weird: Functions and Data Sets for "That's Weird:
-Anomaly Detection Using R" by Rob J Hyndman*. R package version
-1.0.2.9000, <https://pkg.robjhyndman.com/weird/>.
+Anomaly Detection Using R" by Rob J Hyndman*. R package version 2.0.0,
+<https://pkg.robjhyndman.com/weird/>.
 
     @Manual{,
       title = {{weird: Functions and Data Sets for "That's Weird: Anomaly Detection Using R" by Rob J Hyndman}},
       author = {Rob J Hyndman},
       year = {2026},
-      note = {R package version 1.0.2.9000},
+      note = {R package version 2.0.0},
       url = {https://pkg.robjhyndman.com/weird/},
     }
 

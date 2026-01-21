@@ -1,6 +1,6 @@
 # Changelog
 
-## weird (development version)
+## weird 2.0.0
 
 - Added fr_mortality data set
 - Updated oldfaithful and cricket_batting data sets
