@@ -286,7 +286,7 @@ Some anomaly detection methods require the data to be scaled first, so
 all observations are on the same scale. However, many scaling methods
 are not robust to anomalies. The `mvscale()` function provides a
 multivariate robust scaling method, that optionally takes account of the
-relationships betwen variables, and uses robust estimates of center,
+relationships between variables, and uses robust estimates of center,
 scale and covariance by default. The centers are removed using medians,
 the scale function is the IQR, and the covariance matrix is estimated
 using a robust OGK estimate. The data are scaled using the Cholesky
