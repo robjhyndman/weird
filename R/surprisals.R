@@ -150,8 +150,7 @@ surprisals_prob.default <- function(
     approximation = approximation,
     threshold_probability = threshold_probability,
     y = y
-  ) |>
-    suppressWarnings()
+  )
 }
 
 # Surprisals function that uses pre-calculated densities
