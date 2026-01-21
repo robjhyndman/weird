@@ -123,6 +123,5 @@ cricket_batting |>
 
 oldfaithful |>
   gg_hdrboxplot(duration, waiting, show_points = TRUE)
-#> Warning: Using an empirical approximation for multivariate data
 
 ```

@@ -157,6 +157,11 @@ used if <code>approximation = "gpd"</code> and <code>probability = TRUE</code>).
 <span class="r-in"><span>  <span class="fu">mutate</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    loo_fscores <span class="op">=</span> <span class="fu">surprisals_prob</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span>, loo <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `mutate()`.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `loo_fscores = surprisals_prob(cbind(duration, waiting), loo =</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   TRUE)`.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning in `surprisal_prob_from_s()`:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Using an empirical approximation for multivariate data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,097 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    time                recorded_duration duration waiting loo_fscores</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>

@@ -84,6 +84,11 @@ oldfaithful |>
   mutate(
     loo_fscores = surprisals_prob(cbind(duration, waiting), loo = TRUE)
   )
+#> Warning: There was 1 warning in `mutate()`.
+#> ℹ In argument: `loo_fscores = surprisals_prob(cbind(duration, waiting), loo =
+#>   TRUE)`.
+#> Caused by warning in `surprisal_prob_from_s()`:
+#> ! Using an empirical approximation for multivariate data
 #> # A tibble: 2,097 × 5
 #>    time                recorded_duration duration waiting loo_fscores
 #>    <dttm>              <chr>                <dbl>   <dbl>       <dbl>
