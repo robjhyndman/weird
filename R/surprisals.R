@@ -89,8 +89,7 @@ surprisals_prob <- function(
 #' tibble(
 #'   x = rnorm(50),
 #'   y = c(5, rnorm(49)),
-#'   prob = surprisals(cbind(x, y)),
-#'   lookout = lookout_prob(cbind(x, y))
+#'   prob = surprisals_prob(cbind(x, y))
 #' )
 #' @export
 surprisals.default <- function(

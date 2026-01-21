@@ -40,7 +40,6 @@ reference:
       - surprisals
       - surprisals.default
       - surprisals.lm
-      - lookout_prob
   - title: Functions for identifying anomalies
     contents:
       - chauvenet_anomalies

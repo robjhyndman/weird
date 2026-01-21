@@ -244,10 +244,6 @@ observations.
   anomaly scores.
 - The `glosh_scores()` function uses the Global-Local Outlier Score from
   Hierarchies algorithm to compute anomaly scores.
-- The `lookout_prob()` function uses the lookout algorithm of
-  [Kandanaarachchi & Hyndman
-  (2022)](https://robjhyndman.com/publications/lookout/) to compute
-  anomaly probabilities.
 
 Here are the top 0.02% most anomalous observations identified by each of
 the methods.
@@ -259,18 +255,16 @@ oldfaithful |>
     surprisal_prob = surprisals_prob(cbind(duration, waiting), approximation = "empirical"),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
-    gloshscore = glosh_scores(cbind(duration, waiting)),
-    lookout = lookout_prob(cbind(duration, waiting))
+    gloshscore = glosh_scores(cbind(duration, waiting))
   ) |>
   filter(
     surprisal_prob < 0.002 |
       strayscore > quantile(strayscore, prob = 0.998) |
       lofscore > quantile(lofscore, prob = 0.998) |
-      gloshscore > quantile(gloshscore, prob = 0.998) |
-      lookout < 0.002
+      gloshscore > quantile(gloshscore, prob = 0.998) 
   ) |>
   arrange(surprisal_prob)
-#> # A tibble: 10 × 10
+#> # A tibble: 10 × 9
 #>    time                recorded_duration       duration waiting surprisal surprisal_prob strayscore
 #>    <dttm>              <chr>                      <dbl>   <dbl>     <dbl>          <dbl>      <dbl>
 #>  1 2022-12-03 16:20:00 ~4m                          240    3060      16.9       0.000477     0.265 
@@ -283,7 +277,7 @@ oldfaithful |>
 #>  8 2023-05-26 00:53:00 4m45s                        285    7140      14.6       0.0348       0.0761
 #>  9 2017-09-22 18:51:00 ~281s                        281    7140      14.5       0.0391       0.0683
 #> 10 2023-08-09 20:52:00 4m39s                        279    7140      14.5       0.0401       0.0651
-#> # ℹ 3 more variables: lofscore <dbl>, gloshscore <dbl>, lookout <dbl>
+#> # ℹ 2 more variables: lofscore <dbl>, gloshscore <dbl>
 ```
 
 ## Robust multivariate scaling

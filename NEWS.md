@@ -8,7 +8,7 @@
 * Rewrote kde_bandwidth() to handle more methods
 * Added gg_density() and gg_density_layer()
 * Replaced density_scores() with surprisals()
-* Renamed lookout() to lookout_prob()
+* Removed lookout()
 * Added hampel_anomalies()
 * mvscale() moved to lookout package
 * Dropped interpolation dependency
