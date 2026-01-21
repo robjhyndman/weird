@@ -208,8 +208,6 @@ And here are two types of HDR boxplot
 oldfaithful |>
   gg_hdrboxplot(duration, waiting) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
-#> Warning in surprisal_prob_from_s(s, distribution = dist): Using an empirical approximation for
-#> multivariate data
 ```
 
 ![](reference/figures/README-of-boxplot3-1.png)
@@ -218,8 +216,6 @@ oldfaithful |>
 oldfaithful |>
   gg_hdrboxplot(duration, waiting, scatterplot = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
-#> Warning in surprisal_prob_from_s(s, distribution = dist): Using an empirical approximation for
-#> multivariate data
 ```
 
 ![](reference/figures/README-of-boxplot3-2.png)
@@ -251,11 +247,6 @@ observations.
   [`glosh_scores()`](https://pkg.robjhyndman.com/weird/reference/glosh_scores.md)
   function uses the Global-Local Outlier Score from Hierarchies
   algorithm to compute anomaly scores.
-- The
-  [`lookout_prob()`](https://pkg.robjhyndman.com/weird/reference/lookout_prob.md)
-  function uses the lookout algorithm of [Kandanaarachchi & Hyndman
-  (2022)](https://robjhyndman.com/publications/lookout/) to compute
-  anomaly probabilities.
 
 Here are the top 0.02% most anomalous observations identified by each of
 the methods.
@@ -264,21 +255,19 @@ the methods.
 oldfaithful |>
   mutate(
     surprisal = surprisals(cbind(duration, waiting)),
-    surprisal_prob = surprisals_prob(cbind(duration, waiting)),
+    surprisal_prob = surprisals_prob(cbind(duration, waiting), approximation = "empirical"),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
-    gloshscore = glosh_scores(cbind(duration, waiting)),
-    lookout = lookout_prob(cbind(duration, waiting))
+    gloshscore = glosh_scores(cbind(duration, waiting))
   ) |>
   filter(
     surprisal_prob < 0.002 |
       strayscore > quantile(strayscore, prob = 0.998) |
       lofscore > quantile(lofscore, prob = 0.998) |
-      gloshscore > quantile(gloshscore, prob = 0.998) |
-      lookout < 0.002
+      gloshscore > quantile(gloshscore, prob = 0.998) 
   ) |>
   arrange(surprisal_prob)
-#> # A tibble: 10 × 10
+#> # A tibble: 10 × 9
 #>    time                recorded_duration       duration waiting surprisal surprisal_prob strayscore
 #>    <dttm>              <chr>                      <dbl>   <dbl>     <dbl>          <dbl>      <dbl>
 #>  1 2022-12-03 16:20:00 ~4m                          240    3060      16.9       0.000477     0.265 
@@ -291,7 +280,7 @@ oldfaithful |>
 #>  8 2023-05-26 00:53:00 4m45s                        285    7140      14.6       0.0348       0.0761
 #>  9 2017-09-22 18:51:00 ~281s                        281    7140      14.5       0.0391       0.0683
 #> 10 2023-08-09 20:52:00 4m39s                        279    7140      14.5       0.0401       0.0651
-#> # ℹ 3 more variables: lofscore <dbl>, gloshscore <dbl>, lookout <dbl>
+#> # ℹ 2 more variables: lofscore <dbl>, gloshscore <dbl>
 ```
 
 ## Robust multivariate scaling
@@ -301,7 +290,7 @@ all observations are on the same scale. However, many scaling methods
 are not robust to anomalies. The
 [`mvscale()`](https://sevvandi.github.io/lookout/reference/mvscale.html)
 function provides a multivariate robust scaling method, that optionally
-takes account of the relationships betwen variables, and uses robust
+takes account of the relationships between variables, and uses robust
 estimates of center, scale and covariance by default. The centers are
 removed using medians, the scale function is the IQR, and the covariance
 matrix is estimated using a robust OGK estimate. The data are scaled
@@ -388,8 +377,6 @@ Data sets included in the package
   [`surprisals(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   [`surprisals_prob(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   : Surprisals and surprisal probabilities computed from a model
-- [`lookout_prob()`](https://pkg.robjhyndman.com/weird/reference/lookout_prob.md)
-  : Lookout probabilities
 
 ## Functions for identifying anomalies
 

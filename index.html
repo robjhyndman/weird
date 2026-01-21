@@ -194,16 +194,12 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">oldfaithful</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/gg_hdrboxplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in surprisal_prob_from_s(s, distribution = dist): Using an empirical approximation for</span></span>
-<span><span class="co">#&gt; multivariate data</span></span></code></pre></div>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot3-1.png" style="width:100.0%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">oldfaithful</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/gg_hdrboxplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in surprisal_prob_from_s(s, distribution = dist): Using an empirical approximation for</span></span>
-<span><span class="co">#&gt; multivariate data</span></span></code></pre></div>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot3-2.png" style="width:100.0%"></p>
 <p>The latter two plots show possible outliers in black (again, defined as points outside the 99% HDR which have surprisal probability less than 0.0005).</p>
 </div>
@@ -217,28 +213,25 @@
 <li>The <code><a href="reference/stray_scores.html">stray_scores()</a></code> function uses the stray algorithm to compute anomaly scores.</li>
 <li>The <code><a href="reference/lof_scores.html">lof_scores()</a></code> function uses local outlier factors to compute anomaly scores.</li>
 <li>The <code><a href="reference/glosh_scores.html">glosh_scores()</a></code> function uses the Global-Local Outlier Score from Hierarchies algorithm to compute anomaly scores.</li>
-<li>The <code><a href="reference/lookout_prob.html">lookout_prob()</a></code> function uses the lookout algorithm of <a href="https://robjhyndman.com/publications/lookout/" class="external-link">Kandanaarachchi &amp; Hyndman (2022)</a> to compute anomaly probabilities.</li>
 </ul>
 <p>Here are the top 0.02% most anomalous observations identified by each of the methods.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">oldfaithful</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    surprisal <span class="op">=</span> <span class="fu"><a href="reference/surprisals.html">surprisals</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    surprisal_prob <span class="op">=</span> <span class="fu"><a href="reference/surprisals.html">surprisals_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    surprisal_prob <span class="op">=</span> <span class="fu"><a href="reference/surprisals.html">surprisals_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span>, approximation <span class="op">=</span> <span class="st">"empirical"</span><span class="op">)</span>,</span>
 <span>    strayscore <span class="op">=</span> <span class="fu"><a href="reference/stray_scores.html">stray_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    lofscore <span class="op">=</span> <span class="fu"><a href="reference/lof_scores.html">lof_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span>, k <span class="op">=</span> <span class="fl">150</span><span class="op">)</span>,</span>
-<span>    gloshscore <span class="op">=</span> <span class="fu"><a href="reference/glosh_scores.html">glosh_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    lookout <span class="op">=</span> <span class="fu"><a href="reference/lookout_prob.html">lookout_prob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
+<span>    gloshscore <span class="op">=</span> <span class="fu"><a href="reference/glosh_scores.html">glosh_scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>    <span class="va">surprisal_prob</span> <span class="op">&lt;</span> <span class="fl">0.002</span> <span class="op">|</span></span>
 <span>      <span class="va">strayscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">strayscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
 <span>      <span class="va">lofscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">lofscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
-<span>      <span class="va">gloshscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">gloshscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> <span class="op">|</span></span>
-<span>      <span class="va">lookout</span> <span class="op">&lt;</span> <span class="fl">0.002</span></span>
+<span>      <span class="va">gloshscore</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">gloshscore</span>, prob <span class="op">=</span> <span class="fl">0.998</span><span class="op">)</span> </span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">surprisal_prob</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 10 × 10</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 9</span></span>
 <span><span class="co">#&gt;    time                recorded_duration       duration waiting surprisal surprisal_prob strayscore</span></span>
 <span><span class="co">#&gt;    &lt;dttm&gt;              &lt;chr&gt;                      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt;  1 2022-12-03 16:20:00 ~4m                          240    3060      16.9       0.000477     0.265 </span></span>
@@ -251,12 +244,12 @@
 <span><span class="co">#&gt;  8 2023-05-26 00:53:00 4m45s                        285    7140      14.6       0.0348       0.0761</span></span>
 <span><span class="co">#&gt;  9 2017-09-22 18:51:00 ~281s                        281    7140      14.5       0.0391       0.0683</span></span>
 <span><span class="co">#&gt; 10 2023-08-09 20:52:00 4m39s                        279    7140      14.5       0.0401       0.0651</span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: lofscore &lt;dbl&gt;, gloshscore &lt;dbl&gt;, lookout &lt;dbl&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; # ℹ 2 more variables: lofscore &lt;dbl&gt;, gloshscore &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="robust-multivariate-scaling">Robust multivariate scaling<a class="anchor" aria-label="anchor" href="#robust-multivariate-scaling"></a>
 </h2>
-<p>Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The <code><a href="https://sevvandi.github.io/lookout/reference/mvscale.html" class="external-link">mvscale()</a></code> function provides a multivariate robust scaling method, that optionally takes account of the relationships betwen variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as <code>z1</code>, <code>z2</code>, etc. Non-rotated scaling is possible by setting <code>cov = NULL</code>.</p>
+<p>Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The <code><a href="https://sevvandi.github.io/lookout/reference/mvscale.html" class="external-link">mvscale()</a></code> function provides a multivariate robust scaling method, that optionally takes account of the relationships between variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as <code>z1</code>, <code>z2</code>, etc. Non-rotated scaling is possible by setting <code>cov = NULL</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://sevvandi.github.io/lookout/reference/mvscale.html" class="external-link">mvscale</a></span><span class="op">(</span><span class="va">oldfaithful</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in mvscale(oldfaithful): Ignoring non-numeric columns: time, recorded_duration</span></span>

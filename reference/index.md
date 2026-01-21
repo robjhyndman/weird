@@ -41,8 +41,6 @@ Data sets included in the package
   [`surprisals(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   [`surprisals_prob(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   : Surprisals and surprisal probabilities computed from a model
-- [`lookout_prob()`](https://pkg.robjhyndman.com/weird/reference/lookout_prob.md)
-  : Lookout probabilities
 
 ## Functions for identifying anomalies
 
