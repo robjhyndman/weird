@@ -72,6 +72,11 @@ surprisals_prob(
 
 A numerical vector containing the surprisals or surprisal probabilities.
 
+## References
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter
+6, <https://otexts.com/weird/>.
+
 ## Author
 
 Rob J Hyndman

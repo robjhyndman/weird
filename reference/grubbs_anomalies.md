@@ -50,9 +50,13 @@ minimum) as potential outliers.
 ## References
 
 Grubbs, F. E. (1950). Sample criteria for testing outlying observations.
-*Annals of Mathematical Statistics*, 21(1), 27–58. Dixon, W. J. (1950).
-Analysis of extreme values. *Annals of Mathematical Statistics*, 21(4),
-488–506.
+*Annals of Mathematical Statistics*, 21(1), 27–58.
+
+Dixon, W. J. (1950). Analysis of extreme values. *Annals of Mathematical
+Statistics*, 21(4), 488–506.
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+4.4, <https://otexts.com/weird/>.
 
 ## See also
 
@@ -86,8 +90,6 @@ tibble(y = y) |> filter(grubbs_anomalies(y))
 #>   <dbl>
 #> 1     5
 tibble(y = y) |> filter(dixon_anomalies(y))
-#> # A tibble: 1 × 1
-#>       y
-#>   <dbl>
-#> 1     5
+#> # A tibble: 0 × 1
+#> # ℹ 1 variable: y <dbl>
 ```

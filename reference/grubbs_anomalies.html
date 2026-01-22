@@ -95,9 +95,11 @@ Dixon's test only considers the maximum (and possibly the minimum) as potential 
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Grubbs, F. E. (1950). Sample criteria for testing outlying observations.
-<em>Annals of Mathematical Statistics</em>, 21(1), 27–58.
-Dixon, W. J. (1950). Analysis of extreme values.
+<em>Annals of Mathematical Statistics</em>, 21(1), 27–58.</p>
+<p>Dixon, W. J. (1950). Analysis of extreme values.
 <em>Annals of Mathematical Statistics</em>, 21(4), 488–506.</p>
+<p>Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 4.4,
+<a href="https://otexts.com/weird/" class="external-link">https://otexts.com/weird/</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -131,10 +133,8 @@ Dixon, W. J. (1950). Analysis of extreme values.
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     5</span>
 <span class="r-in"><span><span class="fu">tibble</span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">dixon_anomalies</span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 1</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 variable: y &lt;dbl&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

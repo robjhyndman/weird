@@ -40,8 +40,8 @@ Rob J Hyndman, Sevvandi Kandanaarachchi & Katharine Turner (2026) "When
 lookout sees crackle: Anomaly detection via kernel density estimation",
 unpublished. <https://robjhyndman.com/publications/lookout2.html>
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R",
-<https://OTexts.com/weird/>
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+2.7 and 3.9, <https://otexts.com/weird/>.
 
 ## Author
 

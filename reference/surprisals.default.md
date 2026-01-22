@@ -93,6 +93,11 @@ If no distribution is provided, a kernel density estimate is computed.
 The leave-one-out surprisals (or LOO surprisals) are obtained by
 estimating the kernel density estimate using all other observations.
 
+## References
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter
+6, <https://otexts.com/weird/>.
+
 ## See also
 
 [`dist_kde`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)

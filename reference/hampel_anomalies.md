@@ -38,6 +38,11 @@ deviations. The MAD is converted to a standard deviation using MAD \*
 `bandwidth` and last `bandwidth` observations cannot be declared
 anomalies.
 
+## References
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+9.2, <https://otexts.com/weird/>.
+
 ## Author
 
 Rob J Hyndman

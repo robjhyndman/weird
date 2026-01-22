@@ -50,7 +50,7 @@ gg_density(
 - show_anomalies:
 
   If `TRUE`, then the observations with surprisal probabilities less
-  than 0.005 are shown in black.
+  than 0.005 (using a GPD approximation) are shown in black.
 
 - colors:
 

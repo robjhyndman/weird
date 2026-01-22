@@ -98,7 +98,7 @@ by whitening this color.</p></dd>
 
 <dt id="arg-show-anomalies">show_anomalies<a class="anchor" aria-label="anchor" href="#arg-show-anomalies"></a></dt>
 <dd><p>A logical argument indicating if the surprisal anomalies should be shown (in black).
-These are points with leave-one-out surprisal probability values less than 0.005,
+These are points with leave-one-out surprisal probability values less than 0.005 (using a GPD approximation),
 and which lie outside the 99% HDR region.</p></dd>
 
 
@@ -134,6 +134,8 @@ arguments set to their defaults.</p>
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
 <em>The American Statistician</em>, <strong>50</strong>(2), 120–126. <a href="https://robjhyndman.com/publications/hdr/" class="external-link">https://robjhyndman.com/publications/hdr/</a></p>
+<p>Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 5.7,
+<a href="https://otexts.com/weird/" class="external-link">https://otexts.com/weird/</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

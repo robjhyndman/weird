@@ -39,6 +39,11 @@ A data frame with 2097 rows and 4 columns:
 
 Data frame
 
+## References
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+1.4, <https://otexts.com/weird/>.
+
 ## Examples
 
 ``` r

@@ -31,6 +31,11 @@ lof_scores(y, k = 10, ...)
 
 Numerical vector containing LOF values
 
+## References
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+7.3, <https://otexts.com/weird/>.
+
 ## See also
 
 `dbscan::`[`lof`](https://rdrr.io/pkg/dbscan/man/lof.html)

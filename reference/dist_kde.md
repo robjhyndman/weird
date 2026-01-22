@@ -53,6 +53,11 @@ dist_kde(
   Other arguments are passed to
   [`kde`](https://rdrr.io/pkg/ks/man/kde.html).
 
+## References
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+2.7 and 3.9, <https://otexts.com/weird/>.
+
 ## Examples
 
 ``` r

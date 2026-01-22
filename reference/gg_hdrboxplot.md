@@ -58,8 +58,8 @@ gg_hdrboxplot(
 
   A logical argument indicating if the surprisal anomalies should be
   shown (in black). These are points with leave-one-out surprisal
-  probability values less than 0.005, and which lie outside the 99% HDR
-  region.
+  probability values less than 0.005 (using a GPD approximation), and
+  which lie outside the 99% HDR region.
 
 - alpha:
 
@@ -95,6 +95,9 @@ other arguments set to their defaults.
 Hyndman, R J (1996) Computing and Graphing Highest Density Regions, *The
 American Statistician*, **50**(2), 120–126.
 <https://robjhyndman.com/publications/hdr/>
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+5.7, <https://otexts.com/weird/>.
 
 ## See also
 
