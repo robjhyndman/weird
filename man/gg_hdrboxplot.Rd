@@ -34,7 +34,7 @@ by whitening this color.}
 (\code{FALSE}), or whether to show the individual observations in the same colors (\code{TRUE}).}
 
 \item{show_anomalies}{A logical argument indicating if the surprisal anomalies should be shown (in black).
-These are points with leave-one-out surprisal probability values less than 0.005,
+These are points with leave-one-out surprisal probability values less than 0.005 (using a GPD approximation),
 and which lie outside the 99\% HDR region.}
 
 \item{alpha}{Transparency of points. Ignored if \code{show_points} is \code{FALSE}.

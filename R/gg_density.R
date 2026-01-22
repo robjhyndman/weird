@@ -21,7 +21,7 @@
 #' @param show_mode If `TRUE`, then the mode of the distribution is shown as a
 #' point.
 #' @param show_anomalies If `TRUE`, then the observations with surprisal
-#' probabilities less than 0.005 are shown in black.
+#' probabilities less than 0.005 (using a GPD approximation) are shown in black.
 #' @param colors Color palette to use. If there are more than
 #' `length(colors)` distributions, they are recycled. Default is the
 #' Okabe-Ito color palette.
