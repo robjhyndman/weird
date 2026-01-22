@@ -45,9 +45,9 @@ reference:
       - chauvenet_anomalies
       - dixon_anomalies
       - grubbs_anomalies
+      - hampel_anomalies
       - peirce_anomalies
       - stray_anomalies
-      - hampel_anomalies
   - title: Functions for working with kernel density estimates
     contents:
       - dist_kde
