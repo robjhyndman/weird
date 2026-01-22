@@ -4,7 +4,7 @@
 \alias{gg_bagplot}
 \title{Bagplot}
 \usage{
-gg_bagplot(data, var1, var2, color = "#00659e", scatterplot = FALSE, ...)
+gg_bagplot(data, var1, var2, color = "#00659e", show_points = FALSE, ...)
 }
 \arguments{
 \item{data}{A data frame or matrix containing the data.}
@@ -16,7 +16,7 @@ gg_bagplot(data, var1, var2, color = "#00659e", scatterplot = FALSE, ...)
 \item{color}{The base color to use for the median. Other colors are generated
 as a mixture of \code{color} with white.}
 
-\item{scatterplot}{A logical argument indicating if a regular bagplot is required
+\item{show_points}{A logical argument indicating if a regular bagplot is required
 (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).}
 
 \item{...}{Other arguments are passed to the \code{\link[aplpack]{compute.bagplot}} function.}
@@ -32,7 +32,7 @@ showing the remaining observations other than outliers, and any outliers.
 }
 \examples{
 gg_bagplot(n01, v1, v2)
-gg_bagplot(n01, v1, v2, scatterplot = TRUE)
+gg_bagplot(n01, v1, v2, show_points = TRUE)
 }
 \references{
 Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999).

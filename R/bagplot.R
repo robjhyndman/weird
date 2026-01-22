@@ -7,7 +7,7 @@
 #' @param data A data frame or matrix containing the data.
 #' @param var1 The name of the first variable to plot (a bare expression).
 #' @param var2 The name of the second variable to plot (a bare expression).
-#' @param scatterplot A logical argument indicating if a regular bagplot is required
+#' @param show_points A logical argument indicating if a regular bagplot is required
 #' (\code{FALSE}), or if a scatterplot in the same colors is required (\code{TRUE}).
 #' @param color The base color to use for the median. Other colors are generated
 #' as a mixture of `color` with white.
@@ -18,7 +18,7 @@
 #'   The bagplot: A bivariate boxplot. \emph{The American Statistician}, \bold{52}(4), 382–387.
 #' @examples
 #' gg_bagplot(n01, v1, v2)
-#' gg_bagplot(n01, v1, v2, scatterplot = TRUE)
+#' gg_bagplot(n01, v1, v2, show_points = TRUE)
 #' @rdname bagplot
 #' @seealso
 #'  \code{\link[aplpack]{bagplot}}
@@ -32,7 +32,7 @@ gg_bagplot <- function(
   var1,
   var2,
   color = "#00659e",
-  scatterplot = FALSE,
+  show_points = FALSE,
   ...
 ) {
   col <- c(hdr_palette(color = color, prob = c(0.5, 0.99)), "#000000")
@@ -46,7 +46,7 @@ gg_bagplot <- function(
   cn <- colnames(data)
   p <- data |>
     ggplot(aes(x = {{ var1 }}, y = {{ var2 }}))
-  if (scatterplot) {
+  if (show_points) {
     # Bag points
     if (!is.null(bp$pxy.bag)) {
       p <- p +
@@ -110,7 +110,7 @@ gg_bagplot <- function(
         col = col[4]
       )
   }
-  if (!scatterplot) {
+  if (!show_points) {
     # Show median
     p <- p +
       geom_point(

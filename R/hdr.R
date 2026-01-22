@@ -22,8 +22,6 @@
 #' Defaults to min(1, 500/n), where n is the number of observations plotted.
 #' @param jitter A logical value indicating if the points should be vertically jittered
 #' for the 1d box plots to reduce overplotting.
-#' @param scatterplot Equivalent to `show_points`. Included for compatibility
-#' with \code{\link{gg_bagplot}()}.
 #' @param ngrid Number of grid points to use for the density function.
 #' @param ... Other arguments passed to \code{\link{dist_kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
@@ -50,7 +48,6 @@ gg_hdrboxplot <- function(
   color = "#0072b2",
   show_points = FALSE,
   show_anomalies = TRUE,
-  scatterplot = show_points,
   alpha = NULL,
   jitter = TRUE,
   ngrid = 501,
@@ -73,7 +70,7 @@ gg_hdrboxplot <- function(
     data <- data |> select({{ var1 }}, {{ var2 }})
   }
   dist <- dist_kde(data[, seq(d)], ...)
-  hdr <- dplyr::if_else(show_points | scatterplot, "points", "fill")
+  hdr <- dplyr::if_else(show_points, "points", "fill")
 
   # Set up color palette
   prob <- sort(prob)

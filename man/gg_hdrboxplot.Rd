@@ -12,7 +12,6 @@ gg_hdrboxplot(
   color = "#0072b2",
   show_points = FALSE,
   show_anomalies = TRUE,
-  scatterplot = show_points,
   alpha = NULL,
   jitter = TRUE,
   ngrid = 501,
@@ -37,9 +36,6 @@ by whitening this color.}
 \item{show_anomalies}{A logical argument indicating if the surprisal anomalies should be shown (in black).
 These are points with leave-one-out surprisal probability values less than 0.005,
 and which lie outside the 99\% HDR region.}
-
-\item{scatterplot}{Equivalent to \code{show_points}. Included for compatibility
-with \code{\link{gg_bagplot}()}.}
 
 \item{alpha}{Transparency of points. Ignored if \code{show_points} is \code{FALSE}.
 Defaults to min(1, 500/n), where n is the number of observations plotted.}
