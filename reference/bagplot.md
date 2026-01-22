@@ -8,7 +8,7 @@ the remaining observations other than outliers, and any outliers.
 ## Usage
 
 ``` r
-gg_bagplot(data, var1, var2, color = "#00659e", scatterplot = FALSE, ...)
+gg_bagplot(data, var1, var2, color = "#00659e", show_points = FALSE, ...)
 ```
 
 ## Arguments
@@ -30,7 +30,7 @@ gg_bagplot(data, var1, var2, color = "#00659e", scatterplot = FALSE, ...)
   The base color to use for the median. Other colors are generated as a
   mixture of `color` with white.
 
-- scatterplot:
+- show_points:
 
   A logical argument indicating if a regular bagplot is required
   (`FALSE`), or if a scatterplot in the same colors is required
@@ -64,5 +64,5 @@ Rob J Hyndman
 ``` r
 gg_bagplot(n01, v1, v2)
 
-gg_bagplot(n01, v1, v2, scatterplot = TRUE)
+gg_bagplot(n01, v1, v2, show_points = TRUE)
 ```

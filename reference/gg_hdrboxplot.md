@@ -17,7 +17,6 @@ gg_hdrboxplot(
   color = "#0072b2",
   show_points = FALSE,
   show_anomalies = TRUE,
-  scatterplot = show_points,
   alpha = NULL,
   jitter = TRUE,
   ngrid = 501,
@@ -61,11 +60,6 @@ gg_hdrboxplot(
   shown (in black). These are points with leave-one-out surprisal
   probability values less than 0.005, and which lie outside the 99% HDR
   region.
-
-- scatterplot:
-
-  Equivalent to `show_points`. Included for compatibility with
-  [`gg_bagplot()`](https://pkg.robjhyndman.com/weird/reference/bagplot.md).
 
 - alpha:
 
