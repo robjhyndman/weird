@@ -41,7 +41,7 @@ anomalies.
 ## References
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
-9.2, <https://otexts.com/weird/>.
+9.2, <https://OTexts.com/weird/>.
 
 ## Author
 

@@ -38,7 +38,7 @@ Spherical and Practical Astronomy*, Vol.2, Lippincott, Philadelphia,
 pp.469-566.
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
-4.3, <https://otexts.com/weird/>.
+4.3, <https://OTexts.com/weird/>.
 
 ## Author
 

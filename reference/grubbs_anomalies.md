@@ -56,7 +56,7 @@ Dixon, W. J. (1950). Analysis of extreme values. *Annals of Mathematical
 Statistics*, 21(4), 488–506.
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
-4.4, <https://otexts.com/weird/>.
+4.4, <https://OTexts.com/weird/>.
 
 ## See also
 

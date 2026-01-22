@@ -97,7 +97,7 @@ American Statistician*, **50**(2), 120–126.
 <https://robjhyndman.com/publications/hdr/>
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
-5.7, <https://otexts.com/weird/>.
+5.7, <https://OTexts.com/weird/>.
 
 ## See also
 

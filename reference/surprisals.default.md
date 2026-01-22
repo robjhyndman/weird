@@ -96,7 +96,7 @@ estimating the kernel density estimate using all other observations.
 ## References
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter
-6, <https://otexts.com/weird/>.
+6, <https://OTexts.com/weird/>.
 
 ## See also
 
