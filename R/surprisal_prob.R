@@ -91,9 +91,9 @@ surprisal_gpd_prob <- function(s, threshold_p) {
     return(rep(1, n))
   }
   finite <- s < Inf
-  if (any(!finite, na.rm = TRUE)) {
-    warning("Infinite surprisals will be ignored in GPD")
-  }
+  #if (any(!finite, na.rm = TRUE)) {
+  #  warning("Infinite surprisals will be ignored in GPD")
+  #}
   gpd <- evd::fpot(s[finite], threshold = threshold_q, std.err = FALSE)$estimate
   p <- threshold_p *
     evd::pgpd(
