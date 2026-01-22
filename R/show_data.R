@@ -52,7 +52,7 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
         u$prob <- surprisal_prob_from_s(
           s,
           distribution = dist,
-          approximation = ifelse(d == 1L, "none", "empirical")
+          approximation = "gpd"
         )
         return(u)
       },
