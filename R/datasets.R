@@ -21,6 +21,8 @@
 #'   \item{Ducks}{Total number of 0s scored}
 #'   \item{Gender}{"Men" or "Women"}
 #' }
+#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 1.4,
+#' \url{https://otexts.com/weird/}.
 #' @return Data frame
 #' @examples
 #' cricket_batting |>
@@ -50,6 +52,8 @@
 #' oldfaithful |>
 #'   ggplot(aes(x = duration, y = waiting)) +
 #'   geom_point()
+#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 1.4,
+#' \url{https://otexts.com/weird/}.
 #' @source \url{https://geysertimes.org}
 "oldfaithful"
 
@@ -61,6 +65,8 @@
 #'
 #' @format A data frame with 1000 rows and 10 columns.
 #' @return Data frame
+#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 1.4,
+#' \url{https://otexts.com/weird/}.
 #' @examples
 #' n01
 "n01"
@@ -72,6 +78,8 @@
 #'
 #' @format A data frame with 31,648 rows and 4 columns.
 #' @source Human Mortality Database \url{https://www.mortality.org}
+#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 1.4,
+#' \url{https://otexts.com/weird/}.
 #' @return Data frame
 #' @examples
 #' fr_mortality

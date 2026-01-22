@@ -26,6 +26,10 @@ The function uses \code{dbscan::\link[dbscan]{lof}} to do the calculation.
 y <- c(rnorm(49), 5)
 lof_scores(y)
 }
+\references{
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 7.3,
+\url{https://otexts.com/weird/}.
+}
 \seealso{
 \code{dbscan::\link[dbscan]{lof}}
 }

@@ -75,6 +75,9 @@ oldfaithful |>
 \references{
 Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
 \emph{The American Statistician}, \strong{50}(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
+
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 5.7,
+\url{https://otexts.com/weird/}.
 }
 \seealso{
 \code{\link{surprisals}}, \code{\link{hdr_table}}

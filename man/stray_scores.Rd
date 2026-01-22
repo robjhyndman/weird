@@ -24,6 +24,10 @@ scores <- stray_scores(y)
 threshold <- stray::find_threshold(scores, alpha = 0.01, outtail = "max", p = 0.5, tn = 50)
 which(scores > threshold)
 }
+\references{
+P D Talagala, R J Hyndman and K Smith-Miles (2021) Anomaly detection
+in high-dimensional data, \emph{Journal of Computational and Graphical Statistics}, \strong{30}(2), 360-374.
+}
 \author{
 Rob J Hyndman
 }

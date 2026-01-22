@@ -16,6 +16,8 @@
 #' @param method The method of bandwidth estimation to use. See [kde_bandwidth()]
 #' for details. Ignored if `h` or `H` are specified.
 #' @param ... Other arguments are passed to \code{\link[ks]{kde}}.
+#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.7 and 3.9,
+#' \url{https://otexts.com/weird/}.
 #' @examples
 #' dist_kde(c(rnorm(200), rnorm(100, 5)))
 #' dist_kde(cbind(rnorm(200), rnorm(200, 5)))

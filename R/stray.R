@@ -3,6 +3,8 @@
 #' @param y A vector, matrix, or data frame consisting of numerical variables.
 #' @param ... Other arguments are passed to \code{\link[stray]{find_HDoutliers}}.
 #' @return Numerical vector containing stray scores.
+#' @references P D Talagala, R J Hyndman and K Smith-Miles (2021) Anomaly detection
+#' in high-dimensional data, *Journal of Computational and Graphical Statistics*, **30**(2), 360-374.
 #' @author Rob J Hyndman
 #' @examples
 #' # Univariate data
@@ -20,6 +22,8 @@ stray_scores <- function(y, ...) {
 #' @description Test if observations are anomalies according to the stray algorithm.
 #' @param y A vector, matrix, or data frame consisting of numerical variables.
 #' @param ... Other arguments are passed to \code{\link[stray]{find_HDoutliers}}.
+#' @references P D Talagala, R J Hyndman and K Smith-Miles (2021) Anomaly detection
+#' in high-dimensional data, *Journal of Computational and Graphical Statistics*, **30**(2), 360-374.
 #' @author Rob J Hyndman
 #' @examples
 #' # Univariate data

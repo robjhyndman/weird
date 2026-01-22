@@ -94,6 +94,10 @@ tibble(
   prob = surprisals_prob(cbind(x, y))
 )
 }
+\references{
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,
+\url{https://otexts.com/weird/}.
+}
 \seealso{
 \code{\link{dist_kde}}
 }

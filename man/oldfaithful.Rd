@@ -34,4 +34,8 @@ oldfaithful |>
   ggplot(aes(x = duration, y = waiting)) +
   geom_point()
 }
+\references{
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 1.4,
+\url{https://otexts.com/weird/}.
+}
 \keyword{datasets}

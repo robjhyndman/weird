@@ -92,6 +92,10 @@ gam_of <- mgcv::gam(waiting ~ s(duration), data = oldfaithful)
 oldfaithful |>
   mutate(fscore = surprisals(gam_of))
 }
+\references{
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,
+\url{https://otexts.com/weird/}.
+}
 \author{
 Rob J Hyndman
 }

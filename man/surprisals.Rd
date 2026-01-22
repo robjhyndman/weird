@@ -66,6 +66,10 @@ oldfaithful |>
     loo_fscores = surprisals_prob(cbind(duration, waiting), loo = TRUE)
   )
 }
+\references{
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,
+\url{https://otexts.com/weird/}.
+}
 \author{
 Rob J Hyndman
 }

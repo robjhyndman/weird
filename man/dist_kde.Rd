@@ -40,3 +40,7 @@ dist_kde(c(rnorm(200), rnorm(100, 5)))
 dist_kde(cbind(rnorm(200), rnorm(200, 5)))
 
 }
+\references{
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.7 and 3.9,
+\url{https://otexts.com/weird/}.
+}

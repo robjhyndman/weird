@@ -16,6 +16,8 @@
 #' @author Rob J Hyndman
 #' @references Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999).
 #'   The bagplot: A bivariate boxplot. \emph{The American Statistician}, \bold{52}(4), 382–387.
+#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 5.6,
+#' \url{https://otexts.com/weird/}.
 #' @examples
 #' gg_bagplot(n01, v1, v2)
 #' gg_bagplot(n01, v1, v2, show_points = TRUE)
