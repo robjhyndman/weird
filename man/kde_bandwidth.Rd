@@ -37,7 +37,7 @@ Rob J Hyndman, Sevvandi Kandanaarachchi & Katharine Turner (2026)
 unpublished. \url{https://robjhyndman.com/publications/lookout2.html}
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.7 and 3.9,
-\url{https://otexts.com/weird/}.
+\url{https://OTexts.com/weird/}.
 }
 \author{
 Rob J Hyndman

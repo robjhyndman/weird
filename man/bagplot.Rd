@@ -39,7 +39,7 @@ Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999).
 The bagplot: A bivariate boxplot. \emph{The American Statistician}, \bold{52}(4), 382–387.
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 5.6,
-\url{https://otexts.com/weird/}.
+\url{https://OTexts.com/weird/}.
 }
 \seealso{
 \code{\link[aplpack]{bagplot}}

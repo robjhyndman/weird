@@ -148,7 +148,7 @@ oldfaithful |> filter(dixon_anomalies(duration))
 There are at least three anomalies in this example (due to recording
 errors), but none of these methods detect them all. An explanation of
 these tests is provided in [Chapter 4 of the
-book](https://otexts.com/weird/04-tests.html)
+book](https://OTexts.com/weird/04-tests.html)
 
 ## Boxplots
 
@@ -186,7 +186,7 @@ contains 99% of the observations. The plots use vertical jittering to
 reduce overplotting, and highlight potential outliers (those points
 lying outside the 99% HDR which have surprisal probability less than
 0.0005). An explanation of these plots is provided in [Chapter 5 of the
-book](https://otexts.com/weird/05-boxplots.html).
+book](https://OTexts.com/weird/05-boxplots.html).
 
 It is also possible to produce bivariate boxplots. Several variations
 are provided in the package. Here are two types of bagplot.
@@ -261,18 +261,18 @@ oldfaithful |>
     surprisal_prob < 0.002 |
       strayscore > quantile(strayscore, prob = 0.998) |
       lofscore > quantile(lofscore, prob = 0.998) |
-      gloshscore > quantile(gloshscore, prob = 0.998) 
+      gloshscore > quantile(gloshscore, prob = 0.998)
   ) |>
   arrange(surprisal_prob)
 #> # A tibble: 10 × 9
 #>    time                recorded_duration       duration waiting surprisal surprisal_prob strayscore
 #>    <dttm>              <chr>                      <dbl>   <dbl>     <dbl>          <dbl>      <dbl>
-#>  1 2022-12-03 16:20:00 ~4m                          240    3060      16.9       0.000477     0.265 
-#>  2 2018-04-25 19:08:00 1s                             1    5700      16.9       0.000954     0.150 
-#>  3 2023-07-04 12:03:00 ~1 minute 55ish seconds       60    4920      16.9       0.00143      0.122 
-#>  4 2022-12-07 17:19:00 ~4 30s                        30    5220      16.9       0.00191      0.273 
-#>  5 2020-06-01 21:04:00 2 minutes                    120    6060      16.9       0.00238      0.132 
-#>  6 2020-09-04 01:38:00 >1m 50s                      110    6240      16.9       0.00286      0.167 
+#>  1 2022-12-03 16:20:00 ~4m                          240    3060      16.9       0.000477     0.265
+#>  2 2018-04-25 19:08:00 1s                             1    5700      16.9       0.000954     0.150
+#>  3 2023-07-04 12:03:00 ~1 minute 55ish seconds       60    4920      16.9       0.00143      0.122
+#>  4 2022-12-07 17:19:00 ~4 30s                        30    5220      16.9       0.00191      0.273
+#>  5 2020-06-01 21:04:00 2 minutes                    120    6060      16.9       0.00238      0.132
+#>  6 2020-09-04 01:38:00 >1m 50s                      110    6240      16.9       0.00286      0.167
 #>  7 2018-09-22 16:37:00 ~4m13s                       253    7140      14.6       0.0343       0.0194
 #>  8 2023-05-26 00:53:00 4m45s                        285    7140      14.6       0.0348       0.0761
 #>  9 2017-09-22 18:51:00 ~281s                        281    7140      14.5       0.0391       0.0683
@@ -303,11 +303,11 @@ mvscale(oldfaithful)
 #>    <dttm>              <chr>               <dbl>  <dbl>
 #>  1 2017-01-14 00:06:00 3m 16s            -2.20    0.332
 #>  2 2017-01-26 14:27:00 ~4m               -0.0431  0.111
-#>  3 2017-01-27 23:57:00 2m 1s             -4.27   -3.43 
+#>  3 2017-01-27 23:57:00 2m 1s             -4.27   -3.43
 #>  4 2017-01-30 15:09:00 ~4m                0.345  -0.886
 #>  5 2017-01-31 13:27:00 ~3.5m             -1.28   -0.332
-#>  6 2017-01-31 15:00:00 ~4m                0       0    
-#>  7 2017-02-03 23:13:00 3m 25s            -1.22   -1.11 
+#>  6 2017-01-31 15:00:00 ~4m                0       0
+#>  7 2017-02-03 23:13:00 3m 25s            -1.22   -1.11
 #>  8 2017-02-04 22:14:00 3m 34s            -0.966  -0.665
 #>  9 2017-02-05 17:19:00 4m 0s             -0.215   0.554
 #> 10 2017-02-05 19:00:00 4m 2s             -0.121   0.554
@@ -319,11 +319,11 @@ mvscale(oldfaithful, cov = NULL)
 #>    <dttm>              <chr>                <dbl>   <dbl>
 #>  1 2017-01-14 00:06:00 3m 16s             -1.98     0.338
 #>  2 2017-01-26 14:27:00 ~4m                 0        0.113
-#>  3 2017-01-27 23:57:00 2m 1s              -5.37    -3.50 
+#>  3 2017-01-27 23:57:00 2m 1s              -5.37    -3.50
 #>  4 2017-01-30 15:09:00 ~4m                 0       -0.902
 #>  5 2017-01-31 13:27:00 ~3.5m              -1.35    -0.338
-#>  6 2017-01-31 15:00:00 ~4m                 0        0    
-#>  7 2017-02-03 23:13:00 3m 25s             -1.58    -1.13 
+#>  6 2017-01-31 15:00:00 ~4m                 0        0
+#>  7 2017-02-03 23:13:00 3m 25s             -1.58    -1.13
 #>  8 2017-02-04 22:14:00 3m 34s             -1.17    -0.676
 #>  9 2017-02-05 17:19:00 4m 0s               0        0.564
 #> 10 2017-02-05 19:00:00 4m 2s               0.0902   0.564

@@ -96,7 +96,7 @@ oldfaithful |> filter(grubbs_anomalies(duration))
 oldfaithful |> filter(dixon_anomalies(duration))
 ```
 
-There are at least three anomalies in this example (due to recording errors), but none of these methods detect them all. An explanation of these tests is provided in [Chapter 4 of the book](https://otexts.com/weird/04-tests.html)
+There are at least three anomalies in this example (due to recording errors), but none of these methods detect them all. An explanation of these tests is provided in [Chapter 4 of the book](https://OTexts.com/weird/04-tests.html)
 
 ## Boxplots
 
@@ -115,7 +115,7 @@ oldfaithful |>
   labs(x = "Duration (seconds)")
 ```
 
-The latter two plots are highest density region (HDR) boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers (those points lying outside the 99% HDR which have surprisal probability less than 0.0005). An explanation of these plots is provided in [Chapter 5 of the book](https://otexts.com/weird/05-boxplots.html).
+The latter two plots are highest density region (HDR) boxplots, which allow the bimodality of the data to be seen. The dark shaded region contains 50% of the observations, while the lighter shaded region contains 99% of the observations. The plots use vertical jittering to reduce overplotting, and highlight potential outliers (those points lying outside the 99% HDR which have surprisal probability less than 0.0005). An explanation of these plots is provided in [Chapter 5 of the book](https://OTexts.com/weird/05-boxplots.html).
 
 It is also possible to produce bivariate boxplots. Several variations are provided in the package. Here are two types of bagplot.
 
@@ -166,7 +166,7 @@ oldfaithful |>
     surprisal_prob < 0.002 |
       strayscore > quantile(strayscore, prob = 0.998) |
       lofscore > quantile(lofscore, prob = 0.998) |
-      gloshscore > quantile(gloshscore, prob = 0.998) 
+      gloshscore > quantile(gloshscore, prob = 0.998)
   ) |>
   arrange(surprisal_prob)
 ```

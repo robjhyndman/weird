@@ -25,6 +25,6 @@ fr_mortality
 }
 \references{
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 1.4,
-\url{https://otexts.com/weird/}.
+\url{https://OTexts.com/weird/}.
 }
 \keyword{datasets}

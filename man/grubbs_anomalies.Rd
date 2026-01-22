@@ -55,7 +55,7 @@ Dixon, W. J. (1950). Analysis of extreme values.
 \emph{Annals of Mathematical Statistics}, 21(4), 488–506.
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 4.4,
-\url{https://otexts.com/weird/}.
+\url{https://OTexts.com/weird/}.
 }
 \seealso{
 \code{\link[outliers]{grubbs.test}}, \code{\link[outliers]{dixon.test}}

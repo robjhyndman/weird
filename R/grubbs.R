@@ -20,7 +20,7 @@
 #' @references  Dixon, W. J. (1950). Analysis of extreme values.
 #' *Annals of Mathematical Statistics*, 21(4), 488–506.
 #' @references  Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 4.4,
-#' \url{https://otexts.com/weird/}.
+#' \url{https://OTexts.com/weird/}.
 
 #' @return A logical vector
 #' @author Rob J Hyndman

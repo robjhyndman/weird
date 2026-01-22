@@ -37,7 +37,7 @@ Chauvenet, W. (1863). 'Method of least squares'. Appendix to
 \emph{Manual of Spherical and Practical Astronomy}, Vol.2, Lippincott, Philadelphia, pp.469-566.
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 4.3,
-\url{https://otexts.com/weird/}.
+\url{https://OTexts.com/weird/}.
 }
 \author{
 Rob J Hyndman

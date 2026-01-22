@@ -15,7 +15,7 @@
 #' @param k numeric number of standard deviations to declare an outlier
 #' @return logical vector identifying which observations are anomalies.
 #' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 9.2,
-#' \url{https://otexts.com/weird/}.
+#' \url{https://OTexts.com/weird/}.
 #' @author Rob J Hyndman
 #' @examples
 #' set.seed(1)

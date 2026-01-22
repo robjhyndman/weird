@@ -8,7 +8,7 @@
 #' @param ... Additional arguments passed to \code{dbscan::\link[dbscan]{lof}}
 #' @return Numerical vector containing LOF values
 #' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 7.3,
-#' \url{https://otexts.com/weird/}.
+#' \url{https://OTexts.com/weird/}.
 #' @author Rob J Hyndman
 #' @examples
 #' y <- c(rnorm(49), 5)

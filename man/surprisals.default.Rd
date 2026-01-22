@@ -96,7 +96,7 @@ tibble(
 }
 \references{
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,
-\url{https://otexts.com/weird/}.
+\url{https://OTexts.com/weird/}.
 }
 \seealso{
 \code{\link{dist_kde}}
