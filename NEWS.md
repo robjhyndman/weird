@@ -13,6 +13,7 @@
 * Added hampel_anomalies()
 * mvscale() moved to lookout package
 * Dropped interpolation dependency
+* No longer exporting weird_packges() and weird_conflicts()
 
 # weird 1.0.2
 

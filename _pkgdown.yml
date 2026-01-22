@@ -62,7 +62,3 @@ reference:
       - gg_density_layer
       - gg_bagplot
       - gg_hdrboxplot
-  - title: "Other Functions"
-    contents:
-      - weird_conflicts
-      - weird_packages

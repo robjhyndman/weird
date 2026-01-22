@@ -1,20 +1,20 @@
 # Based on conflicts.R from the tidyverse package
 
-#' Conflicts between weird packages and other packages
-#'
-#' This function lists all the conflicts between packages in the weird collection
-#' and other packages that you have loaded.
-#'
-#' Some conflicts are deliberately ignored: \code{intersect}, \code{union},
-#' \code{setequal}, and \code{setdiff} from dplyr; and \code{intersect},
-#' \code{union}, \code{setdiff}, and \code{as.difftime} from lubridate.
-#' These functions make the base equivalents generic, so shouldn't negatively affect any
-#' existing code.
-#'
-#' @return A list object of class \code{weird_conflicts}.
-#' @export
-#' @examples
-#' weird_conflicts()
+# Conflicts between weird packages and other packages
+#
+# This function lists all the conflicts between packages in the weird collection
+# and other packages that you have loaded.
+#
+# Some conflicts are deliberately ignored: \code{intersect}, \code{union},
+# \code{setequal}, and \code{setdiff} from dplyr; and \code{intersect},
+# \code{union}, \code{setdiff}, and \code{as.difftime} from lubridate.
+# These functions make the base equivalents generic, so shouldn't negatively affect any
+# existing code.
+#
+# @return A list object of class \code{weird_conflicts}.
+# @export
+# @examples
+# weird_conflicts()
 weird_conflicts <- function() {
   envs <- grep("^package:", search(), value = TRUE)
   envs <- purrr::set_names(envs)

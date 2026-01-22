@@ -25,13 +25,13 @@ text_col <- function(x) {
   if (isTRUE(theme$dark)) crayon::white(x) else crayon::black(x)
 }
 
-#' List all packages loaded by weird
-#'
-#' @param include_self Include weird in the list?
-#' @return A character vector of package names.
-#' @export
-#' @examples
-#' weird_packages()
+# List all packages loaded by weird
+#
+# @param include_self Include weird in the list?
+# @return A character vector of package names.
+# @export
+# @examples
+# weird_packages()
 weird_packages <- function(include_self = FALSE) {
   raw <- utils::packageDescription("weird")$Imports
   imports <- strsplit(raw, ",")[[1]]
