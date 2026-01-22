@@ -386,10 +386,10 @@ Data sets included in the package
 - [`grubbs_anomalies()`](https://pkg.robjhyndman.com/weird/reference/grubbs_anomalies.md)
   [`dixon_anomalies()`](https://pkg.robjhyndman.com/weird/reference/grubbs_anomalies.md)
   : Statistical tests for anomalies using Grubbs' test and Dixon's test
-- [`stray_anomalies()`](https://pkg.robjhyndman.com/weird/reference/stray_anomalies.md)
-  : Stray anomalies
 - [`hampel_anomalies()`](https://pkg.robjhyndman.com/weird/reference/hampel_anomalies.md)
   : Identify anomalies using the Hampel filter
+- [`stray_anomalies()`](https://pkg.robjhyndman.com/weird/reference/stray_anomalies.md)
+  : Stray anomalies
 
 ## Functions for working with kernel density estimates
 
@@ -417,11 +417,4 @@ Data sets included in the package
   : Bagplot
 - [`gg_hdrboxplot()`](https://pkg.robjhyndman.com/weird/reference/gg_hdrboxplot.md)
   : HDR plot
-
-## Other Functions
-
-- [`weird_conflicts()`](https://pkg.robjhyndman.com/weird/reference/weird_conflicts.md)
-  : Conflicts between weird packages and other packages
-- [`weird_packages()`](https://pkg.robjhyndman.com/weird/reference/weird_packages.md)
-  : List all packages loaded by weird
 
