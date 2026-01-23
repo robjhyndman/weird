@@ -17,8 +17,8 @@
 #' )
 #' tibble(
 #'   y = n01$v1,
-#'   prob1 = surprisals_prob(y, loo = TRUE),
-#'   prob2 = surprisals_prob(y, approximation = "gpd"),
+#'   prob1 = surprisals_prob(y),
+#'   prob2 = surprisals_prob(y, loo = TRUE),
 #'   prob3 = surprisals_prob(y, distribution = dist_normal(), approximation = "none"),
 #'   prob4 = surprisals_prob(y, distribution = dist_normal(), approximation = "gpd")
 #' ) |>
@@ -31,8 +31,10 @@
 #' )
 #' oldfaithful |>
 #'   mutate(
-#'     loo_fscores = surprisals_prob(cbind(duration, waiting), loo = TRUE)
-#'   )
+#'     s = surprisals(cbind(duration, waiting), loo = TRUE),
+#'     p = surprisals_prob(cbind(duration, waiting), loo = TRUE)
+#'   ) |>
+#'   arrange(p)
 #' @export
 surprisals.numeric <- function(
   object,
