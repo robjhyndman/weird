@@ -38,8 +38,8 @@ reference:
       - lof_scores
       - stray_scores
       - surprisals
-      - surprisals.default
       - surprisals.lm
+      - surprisals.numeric
   - title: Functions for identifying anomalies
     contents:
       - chauvenet_anomalies

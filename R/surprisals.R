@@ -7,31 +7,33 @@
 #' as \eqn{s}. This is returned by `surprisals_prob()`
 #'
 #' The surprisal probabilities may be computed in three different ways.
-#' 1. Given the same distribution that was used to compute the surprisal values.
+#' 1. Given the same distribution that was used to compute the surprisal values
+#' (when `approximation = "none"`).
 #' Under this option, surprisal probabilities are equal to 1 minus the
 #' coverage probability of the largest HDR that contains each value. Surprisal
 #' probabilities smaller than 1e-6 are returned as 1e-6.
 #' 2. Using a Generalized Pareto Distribution fitted to the most extreme
 #' surprisal values (those with probability less than `threshold_probability`).
-#' This option is used if `approximation = "gpd"`. For surprisal probabilities
-#' greater than `threshold_probability`, the value of
+#' This option is used when `approximation = "gdp"`.
+#' For surprisal probabilities greater than `threshold_probability`, the value of
 #' `threshold_probability` is returned. Under this option, the distribution is
 #' used for computing the surprisal values but not for determining their
 #' probabilities. Due to extreme value theory, the resulting probabilities should
 #' be relatively insensitive to the distribution used in computing the surprisal
 #' values.
-#' 3. Empirically as the proportion of observations with greater surprisal values.
-#' This option is used when `approxiation = "empirical"`. This is also
-#' insensitive to the distribution used in computing the surprisal values.
+#' 3. Using ranks (`approximation = "rank"`), the approximate probability is
+#' the proportion of observations with greater surprisal values.
+#' This is also insensitive to the distribution used in computing the surprisal values.
 #' @param object A model or numerical data set
 #' @param approximation Character string specifying the approximation to use in
 #' computing the surprisal probabilities. Ignored if `probability = FALSE`.
 #' `approximation = "none"` specifies that no approximation is to be used;
-#' `approximation = "gpd"` specifies that  the Generalized Pareto distribution should be used;
-#' while `approximation = "empirical"` specifies that the probabilities should be estimated empirically.
+#' `approximation = "gpd"` (default) specifies that the Generalized Pareto distribution should be used;
+#' while `approximation = "rank"` specifies that the probabilities should be estimated
+#' based on the rank of the surprisal values.
 #' @param threshold_probability Probability threshold when computing the GPD
 #' approximation. This is the probability below which the GPD is fitted. Only
-#' used if `approximation = "gpd"` and `probability = TRUE`).
+#' used if `approximation = "gpd"` and `probability = TRUE`.
 #' @param ... Other arguments are passed to the appropriate method.
 #' @author Rob J Hyndman
 #' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,
@@ -55,18 +57,18 @@ surprisals <- function(
 #' @export
 surprisals_prob <- function(
   object,
-  approximation = c("none", "gpd", "empirical"),
+  approximation = c("gpd", "rank", "none"),
   threshold_probability = 0.10,
   ...
 ) {
   UseMethod("surprisals_prob")
 }
 
+#' @rdname surprisals_data
 #' @inherit surprisals
 #' @details If no distribution is provided, a kernel density estimate is
 #' computed. The leave-one-out surprisals (or LOO surprisals) are obtained by
 #' estimating the kernel density estimate using all other observations.
-#'
 #' @param distribution A distribution object. If not provided, a kernel density
 #' estimate is computed from the data `object`.
 #' @param loo Should leave-one-out surprisals be computed?
@@ -151,7 +153,7 @@ surprisals.matrix <- function(
 #' @export
 surprisals_prob.numeric <- function(
   object,
-  approximation = c("none", "gpd", "empirical"),
+  approximation = c("gpd", "rank", "none"),
   threshold_probability = 0.10,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -192,6 +194,7 @@ surprisals_prob.matrix <- function(
     ...
   )
 }
+
 # Surprisals function that uses pre-calculated densities
 # Same arguments as surprisals.numeric except den is numerical vector of log densities
 surprisals_from_den <- function(
@@ -266,7 +269,7 @@ surprisals.lm <- function(
 #' @export
 surprisals_prob.lm <- function(
   object,
-  approximation = c("none", "gpd", "empirical"),
+  approximation = c("gpd", "rank", "none"),
   threshold_probability = 0.10,
   loo = FALSE,
   ...
@@ -316,7 +319,7 @@ surprisals.gam <- function(
 #' @export
 surprisals_prob.gam <- function(
   object,
-  approximation = c("none", "gpd", "empirical"),
+  approximation = c("gpd", "rank", "none"),
   threshold_probability = 0.10,
   ...
 ) {

@@ -11,7 +11,7 @@
 
 \method{surprisals_prob}{lm}(
   object,
-  approximation = c("none", "gpd", "empirical"),
+  approximation = c("gpd", "rank", "none"),
   threshold_probability = 0.1,
   loo = FALSE,
   ...
@@ -21,7 +21,7 @@
 
 \method{surprisals_prob}{gam}(
   object,
-  approximation = c("none", "gpd", "empirical"),
+  approximation = c("gpd", "rank", "none"),
   threshold_probability = 0.1,
   ...
 )
@@ -37,12 +37,13 @@ or \code{\link[mgcv]{gam}}.}
 \item{approximation}{Character string specifying the approximation to use in
 computing the surprisal probabilities. Ignored if \code{probability = FALSE}.
 \code{approximation = "none"} specifies that no approximation is to be used;
-\code{approximation = "gpd"} specifies that  the Generalized Pareto distribution should be used;
-while \code{approximation = "empirical"} specifies that the probabilities should be estimated empirically.}
+\code{approximation = "gpd"} (default) specifies that the Generalized Pareto distribution should be used;
+while \code{approximation = "rank"} specifies that the probabilities should be estimated
+based on the rank of the surprisal values.}
 
 \item{threshold_probability}{Probability threshold when computing the GPD
 approximation. This is the probability below which the GPD is fitted. Only
-used if \code{approximation = "gpd"} and \code{probability = TRUE}).}
+used if \code{approximation = "gpd"} and \code{probability = TRUE}.}
 }
 \value{
 A numerical vector containing the surprisals or surprisal probabilities.
@@ -56,22 +57,23 @@ as \eqn{s}. This is returned by \code{surprisals_prob()}
 
 The surprisal probabilities may be computed in three different ways.
 \enumerate{
-\item Given the same distribution that was used to compute the surprisal values.
+\item Given the same distribution that was used to compute the surprisal values
+(when \code{approximation = "none"}).
 Under this option, surprisal probabilities are equal to 1 minus the
 coverage probability of the largest HDR that contains each value. Surprisal
 probabilities smaller than 1e-6 are returned as 1e-6.
 \item Using a Generalized Pareto Distribution fitted to the most extreme
 surprisal values (those with probability less than \code{threshold_probability}).
-This option is used if \code{approximation = "gpd"}. For surprisal probabilities
-greater than \code{threshold_probability}, the value of
+This option is used when \code{approximation = "gdp"}.
+For surprisal probabilities greater than \code{threshold_probability}, the value of
 \code{threshold_probability} is returned. Under this option, the distribution is
 used for computing the surprisal values but not for determining their
 probabilities. Due to extreme value theory, the resulting probabilities should
 be relatively insensitive to the distribution used in computing the surprisal
 values.
-\item Empirically as the proportion of observations with greater surprisal values.
-This option is used when \code{approxiation = "empirical"}. This is also
-insensitive to the distribution used in computing the surprisal values.
+\item Using ranks (\code{approximation = "rank"}), the approximate probability is
+the proportion of observations with greater surprisal values.
+This is also insensitive to the distribution used in computing the surprisal values.
 }
 }
 \examples{

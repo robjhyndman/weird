@@ -52,7 +52,8 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
         u$prob <- surprisal_prob_from_s(
           s,
           distribution = dist,
-          approximation = "gpd"
+          approximation = "gpd",
+          threshold_probability = 0.10
         )
         return(u)
       },

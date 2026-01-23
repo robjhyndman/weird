@@ -5,11 +5,10 @@
 surprisal_prob_from_s <- function(
   s,
   distribution,
-  approximation = c("none", "gpd", "empirical"),
+  approximation,
   threshold_probability = 0.10,
   y = NULL
 ) {
-  approximation <- match.arg(approximation)
   n <- length(s)
   if (all(is.na(s))) {
     return(rep(NA_real_, n))
@@ -17,8 +16,8 @@ surprisal_prob_from_s <- function(
 
   if (approximation == "none") {
     if (dimension_dist(distribution) > 1) {
-      warning("Using an empirical approximation for multivariate data")
-      approximation <- "empirical"
+      warning("Using a rank approximation for multivariate data")
+      approximation <- "rank"
     } else if (identical(unique(stats::family(distribution)), "normal")) {
       approximation <- "normal"
     } else if (is_symmetric(distribution)) {
@@ -51,7 +50,7 @@ surprisal_prob_from_s <- function(
 
   if (approximation == "gpd") {
     p <- surprisal_gpd_prob(s, threshold_probability)
-  } else if (approximation == "empirical") {
+  } else if (approximation == "rank") {
     p <- rank(-s) / n
   } else if (approximation == "normal") {
     p <- surprisal_normal_prob(s, distribution)
