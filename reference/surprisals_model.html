@@ -112,23 +112,26 @@ used if <code>approximation = "gpd"</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The surprisal probabilities may be computed in three different ways.</p><ol><li><p>Given the same distribution that was used to compute the surprisal values
-(when <code>approximation = "none"</code>).
+    <p>The surprisal probabilities may be computed in three different ways.</p><ol><li><p>When <code>approximation = "none"</code>, the surprisal probabilities are computed
+using the same distribution that was used to compute the surprisal values.
 Under this option, surprisal probabilities are equal to 1 minus the
 coverage probability of the largest HDR that contains each value. Surprisal
 probabilities smaller than 1e-6 are returned as 1e-6.</p></li>
-<li><p>Using a Generalized Pareto Distribution fitted to the most extreme
+<li><p>When <code>approximation = "gdp"</code> (the default), the surprisal probabilities are
+computed using a Generalized Pareto Distribution fitted to the most extreme
 surprisal values (those with probability less than <code>threshold_probability</code>).
-This option is used when <code>approximation = "gdp"</code>, and is the default.
 For surprisal probabilities greater than <code>threshold_probability</code>, the value of
 <code>threshold_probability</code> is returned. Under this option, the distribution is
 used for computing the surprisal values but not for determining their
 probabilities. Due to extreme value theory, the resulting probabilities should
 be relatively insensitive to the distribution used in computing the surprisal
 values.</p></li>
-<li><p>Using ranks (<code>approximation = "rank"</code>), the approximate probability is
-the proportion of observations with greater surprisal values.
-This is also insensitive to the distribution used in computing the surprisal values.</p></li>
+<li><p>When <code>approximation = "rank"</code>, the surprisal probability of each
+observation is estimated using the proportion of observations with
+greater surprisal values; i.e., 1 - rank(s)/n where <code>rank(s)</code> is the rank
+of the surprisal value <code>s</code> among all surprisal values, and <code>n</code> is the
+number of observations. This is a nonparametric approach that is also
+insensitive to the distribution used in computing the surprisal values.</p></li>
 </ol></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
