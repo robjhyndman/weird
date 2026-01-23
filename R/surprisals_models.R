@@ -32,7 +32,7 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
   h <- stats::hatvalues(object)
   sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
   if (loo) {
-    if (inherits("glm")) {
+    if (inherits(object, "glm")) {
       stop("LOO surprisals are not implemented for glm objects.")
     } else {
       resdf <- object$df.residual
