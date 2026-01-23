@@ -136,7 +136,7 @@ format.dist_kde <- function(x, ...) {
 density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
   d <- NCOL(x$kde$x)
   if (d == 1) {
-    d <- stats::approx(x$kde$eval.points, x$kde$estimate, xout = at)$y
+    den <- stats::approx(x$kde$eval.points, x$kde$estimate, xout = at)$y
   } else {
     # Turn at into a matrix
     if (is.list(at)) {
@@ -145,16 +145,26 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
       at <- matrix(at, ncol = d)
     }
     # Bivariate interpolation
-    d <- bilinear_interpolation(
-      x = x$kde$eval.points[[1]],
-      y = x$kde$eval.points[[2]],
-      z = x$kde$estimate,
-      x0 = at[, 1],
-      y0 = at[, 2]
-    )
+    if (d == 2L) {
+      den <- bilinear_interpolation(
+        x = x$kde$eval.points[[1]],
+        y = x$kde$eval.points[[2]],
+        z = x$kde$estimate,
+        x0 = at[, 1],
+        y0 = at[, 2]
+      )
+    } else {
+      # Use nearest neighbours for d >= 3
+      idx <- RANN::nn2(
+        data = expand.grid(x$kde$eval.points),
+        query = at,
+        k = 1L
+      )$nn.idx
+      den <- as.vector(x$kde$estimate)[idx]
+    }
   }
-  d[is.na(d)] <- 0
-  return(d)
+  den[is.na(den)] <- 0
+  return(den)
 }
 
 #' @exportS3Method distributional::log_density
