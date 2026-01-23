@@ -86,7 +86,7 @@
 <p>You also get a condensed summary of conflicts with other packages you have loaded:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/weird/">weird</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; ── Attaching packages ────────────────────────────────────────────────────────── weird 1.0.2.9000 ──</span></span>
+<span><span class="co">#&gt; ── Attaching packages ─────────────────────────────────────────────────────────────── weird 2.0.0 ──</span></span>
 <span><span class="co">#&gt; ✔ dplyr          1.1.4     ✔ distributional 0.6.0</span></span>
 <span><span class="co">#&gt; ✔ ggplot2        4.0.1</span></span>
 <span><span class="co">#&gt; ── Conflicts ──────────────────────────────────────────────────────────────────── weird_conflicts ──</span></span>
@@ -187,7 +187,7 @@
 <p><img src="reference/figures/README-of-boxplot2-1.png" style="width:100.0%"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">oldfaithful</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/bagplot.html">gg_bagplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/bagplot.html">gg_bagplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot2-2.png" style="width:100.0%"></p>
 <p>And here are two types of HDR boxplot</p>
@@ -198,7 +198,7 @@
 <p><img src="reference/figures/README-of-boxplot3-1.png" style="width:100.0%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">oldfaithful</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/gg_hdrboxplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, scatterplot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/gg_hdrboxplot.html">gg_hdrboxplot</a></span><span class="op">(</span><span class="va">duration</span>, <span class="va">waiting</span>, show_points <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Duration (seconds)"</span>, y <span class="op">=</span> <span class="st">"Waiting time (seconds)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-of-boxplot3-2.png" style="width:100.0%"></p>
 <p>The latter two plots show possible outliers in black (again, defined as points outside the 99% HDR which have surprisal probability less than 0.0005).</p>
@@ -234,16 +234,16 @@
 <span><span class="co">#&gt; # A tibble: 10 × 9</span></span>
 <span><span class="co">#&gt;    time                recorded_duration       duration waiting surprisal surprisal_prob strayscore</span></span>
 <span><span class="co">#&gt;    &lt;dttm&gt;              &lt;chr&gt;                      &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2022-12-03 16:20:00 ~4m                          240    3060      16.9       0.000477     0.265</span></span>
-<span><span class="co">#&gt;  2 2018-04-25 19:08:00 1s                             1    5700      16.9       0.000954     0.150</span></span>
-<span><span class="co">#&gt;  3 2023-07-04 12:03:00 ~1 minute 55ish seconds       60    4920      16.9       0.00143      0.122</span></span>
-<span><span class="co">#&gt;  4 2022-12-07 17:19:00 ~4 30s                        30    5220      16.9       0.00191      0.273</span></span>
-<span><span class="co">#&gt;  5 2020-06-01 21:04:00 2 minutes                    120    6060      16.9       0.00238      0.132</span></span>
-<span><span class="co">#&gt;  6 2020-09-04 01:38:00 &gt;1m 50s                      110    6240      16.9       0.00286      0.167</span></span>
-<span><span class="co">#&gt;  7 2018-09-22 16:37:00 ~4m13s                       253    7140      14.6       0.0343       0.0194</span></span>
-<span><span class="co">#&gt;  8 2023-05-26 00:53:00 4m45s                        285    7140      14.6       0.0348       0.0761</span></span>
-<span><span class="co">#&gt;  9 2017-09-22 18:51:00 ~281s                        281    7140      14.5       0.0391       0.0683</span></span>
-<span><span class="co">#&gt; 10 2023-08-09 20:52:00 4m39s                        279    7140      14.5       0.0401       0.0651</span></span>
+<span><span class="co">#&gt;  1 2022-12-03 16:20:00 ~4m                          240    3060      16.9        0.00131     0.265 </span></span>
+<span><span class="co">#&gt;  2 2018-04-25 19:08:00 1s                             1    5700      16.9        0.00136     0.150 </span></span>
+<span><span class="co">#&gt;  3 2023-07-04 12:03:00 ~1 minute 55ish seconds       60    4920      16.9        0.00138     0.122 </span></span>
+<span><span class="co">#&gt;  4 2022-12-07 17:19:00 ~4 30s                        30    5220      16.9        0.00140     0.273 </span></span>
+<span><span class="co">#&gt;  5 2020-06-01 21:04:00 2 minutes                    120    6060      16.9        0.00143     0.132 </span></span>
+<span><span class="co">#&gt;  6 2020-09-04 01:38:00 &gt;1m 50s                      110    6240      16.9        0.00148     0.167 </span></span>
+<span><span class="co">#&gt;  7 2018-09-22 16:37:00 ~4m13s                       253    7140      14.6        0.0355      0.0194</span></span>
+<span><span class="co">#&gt;  8 2023-05-26 00:53:00 4m45s                        285    7140      14.6        0.0369      0.0761</span></span>
+<span><span class="co">#&gt;  9 2017-09-22 18:51:00 ~281s                        281    7140      14.5        0.0419      0.0683</span></span>
+<span><span class="co">#&gt; 10 2023-08-09 20:52:00 4m39s                        279    7140      14.5        0.0428      0.0651</span></span>
 <span><span class="co">#&gt; # ℹ 2 more variables: lofscore &lt;dbl&gt;, gloshscore &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -258,11 +258,11 @@
 <span><span class="co">#&gt;    &lt;dttm&gt;              &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt;  1 2017-01-14 00:06:00 3m 16s            -2.20    0.332</span></span>
 <span><span class="co">#&gt;  2 2017-01-26 14:27:00 ~4m               -0.0431  0.111</span></span>
-<span><span class="co">#&gt;  3 2017-01-27 23:57:00 2m 1s             -4.27   -3.43</span></span>
+<span><span class="co">#&gt;  3 2017-01-27 23:57:00 2m 1s             -4.27   -3.43 </span></span>
 <span><span class="co">#&gt;  4 2017-01-30 15:09:00 ~4m                0.345  -0.886</span></span>
 <span><span class="co">#&gt;  5 2017-01-31 13:27:00 ~3.5m             -1.28   -0.332</span></span>
-<span><span class="co">#&gt;  6 2017-01-31 15:00:00 ~4m                0       0</span></span>
-<span><span class="co">#&gt;  7 2017-02-03 23:13:00 3m 25s            -1.22   -1.11</span></span>
+<span><span class="co">#&gt;  6 2017-01-31 15:00:00 ~4m                0       0    </span></span>
+<span><span class="co">#&gt;  7 2017-02-03 23:13:00 3m 25s            -1.22   -1.11 </span></span>
 <span><span class="co">#&gt;  8 2017-02-04 22:14:00 3m 34s            -0.966  -0.665</span></span>
 <span><span class="co">#&gt;  9 2017-02-05 17:19:00 4m 0s             -0.215   0.554</span></span>
 <span><span class="co">#&gt; 10 2017-02-05 19:00:00 4m 2s             -0.121   0.554</span></span>
@@ -274,11 +274,11 @@
 <span><span class="co">#&gt;    &lt;dttm&gt;              &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt;  1 2017-01-14 00:06:00 3m 16s             -1.98     0.338</span></span>
 <span><span class="co">#&gt;  2 2017-01-26 14:27:00 ~4m                 0        0.113</span></span>
-<span><span class="co">#&gt;  3 2017-01-27 23:57:00 2m 1s              -5.37    -3.50</span></span>
+<span><span class="co">#&gt;  3 2017-01-27 23:57:00 2m 1s              -5.37    -3.50 </span></span>
 <span><span class="co">#&gt;  4 2017-01-30 15:09:00 ~4m                 0       -0.902</span></span>
 <span><span class="co">#&gt;  5 2017-01-31 13:27:00 ~3.5m              -1.35    -0.338</span></span>
-<span><span class="co">#&gt;  6 2017-01-31 15:00:00 ~4m                 0        0</span></span>
-<span><span class="co">#&gt;  7 2017-02-03 23:13:00 3m 25s             -1.58    -1.13</span></span>
+<span><span class="co">#&gt;  6 2017-01-31 15:00:00 ~4m                 0        0    </span></span>
+<span><span class="co">#&gt;  7 2017-02-03 23:13:00 3m 25s             -1.58    -1.13 </span></span>
 <span><span class="co">#&gt;  8 2017-02-04 22:14:00 3m 34s             -1.17    -0.676</span></span>
 <span><span class="co">#&gt;  9 2017-02-05 17:19:00 4m 0s               0        0.564</span></span>
 <span><span class="co">#&gt; 10 2017-02-05 19:00:00 4m 2s               0.0902   0.564</span></span>
