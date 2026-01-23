@@ -124,7 +124,7 @@ oldfaithful |>
   gg_bagplot(duration, waiting) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 oldfaithful |>
-  gg_bagplot(duration, waiting, scatterplot = TRUE) +
+  gg_bagplot(duration, waiting, show_points = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
@@ -135,7 +135,7 @@ oldfaithful |>
   gg_hdrboxplot(duration, waiting) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 oldfaithful |>
-  gg_hdrboxplot(duration, waiting, scatterplot = TRUE) +
+  gg_hdrboxplot(duration, waiting, show_points = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
 ```
 
