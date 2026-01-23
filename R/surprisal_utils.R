@@ -79,7 +79,7 @@ surprisal_prob_from_s <- function(
   if (approximation == "gpd") {
     p <- surprisal_gpd_prob(s, threshold_probability)
   } else if (approximation == "rank") {
-    p <- 1 - rank(s)/ n
+    p <- 1 - rank(s) / n
   } else if (approximation == "normal") {
     p <- surprisal_normal_prob(s, distribution)
   } else if (approximation == "symmetric" & !is.null(y)) {
@@ -118,9 +118,9 @@ surprisal_gpd_prob <- function(s, threshold_p) {
     return(rep(1, n))
   }
   finite <- s < Inf
-  #if (any(!finite, na.rm = TRUE)) {
+  # if (any(!finite, na.rm = TRUE)) {
   #  warning("Infinite surprisals will be ignored in GPD")
-  #}
+  # }
   gpd <- evd::fpot(s[finite], threshold = threshold_q, std.err = FALSE)$estimate
   p <- threshold_p *
     evd::pgpd(

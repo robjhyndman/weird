@@ -35,10 +35,10 @@
 #'   )
 #' @export
 surprisals.numeric <- function(
-    object,
-    distribution = dist_kde(object, ...),
-    loo = FALSE,
-    ...
+  object,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
 ) {
   object <- as.matrix(object)
   if (NCOL(object) == 1L) {
@@ -66,10 +66,10 @@ surprisals.numeric <- function(
 #' @rdname surprisals_data
 #' @export
 surprisals.matrix <- function(
-    object,
-    distribution = dist_kde(object, ...),
-    loo = FALSE,
-    ...
+  object,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
 ) {
   if (!is.numeric(object)) {
     stop("matrix must be numeric")
@@ -80,10 +80,10 @@ surprisals.matrix <- function(
 #' @rdname surprisals_data
 #' @export
 surprisals.data.frame <- function(
-    object,
-    distribution = dist_kde(object, ...),
-    loo = FALSE,
-    ...
+  object,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
 ) {
   object <- as.matrix(object)
   surprisals.matrix(
@@ -98,12 +98,12 @@ surprisals.data.frame <- function(
 #' @rdname surprisals_data
 #' @export
 surprisals_prob.numeric <- function(
-    object,
-    approximation = c("gpd", "rank", "none"),
-    threshold_probability = 0.10,
-    distribution = dist_kde(object, ...),
-    loo = FALSE,
-    ...
+  object,
+  approximation = c("gpd", "rank", "none"),
+  threshold_probability = 0.10,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
 ) {
   approximation <- match.arg(approximation)
   s <- surprisals.numeric(object, distribution = distribution, loo = loo)
@@ -124,12 +124,12 @@ surprisals_prob.numeric <- function(
 #' @rdname surprisals_data
 #' @export
 surprisals_prob.matrix <- function(
-    object,
-    approximation = c("gpd", "rank", "none"),
-    threshold_probability = 0.10,
-    distribution = dist_kde(object, ...),
-    loo = FALSE,
-    ...
+  object,
+  approximation = c("gpd", "rank", "none"),
+  threshold_probability = 0.10,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
 ) {
   if (!is.numeric(object)) {
     stop("matrix must be numeric")
@@ -147,12 +147,12 @@ surprisals_prob.matrix <- function(
 #' @rdname surprisals_data
 #' @export
 surprisals_prob.data.frame <- function(
-    object,
-    approximation = c("gpd", "rank", "none"),
-    threshold_probability = 0.10,
-    distribution = dist_kde(object, ...),
-    loo = FALSE,
-    ...
+  object,
+  approximation = c("gpd", "rank", "none"),
+  threshold_probability = 0.10,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
 ) {
   object <- as.matrix(object)
   surprisals_prob.matrix(
@@ -164,4 +164,3 @@ surprisals_prob.data.frame <- function(
     ...
   )
 }
-

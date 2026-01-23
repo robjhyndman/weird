@@ -64,4 +64,3 @@ img <- image_read("./man/figures/weird-hex.png")
 img_trim <- image_trim(img)
 
 image_write(img_trim, "./man/figures/weird-hex.png")
-

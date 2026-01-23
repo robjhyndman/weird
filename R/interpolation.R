@@ -28,7 +28,9 @@ bilinear_interpolation <- function(x, y, z, x0, y0) {
   ez <- rep(NA_real_, n)
   ex <- (x0[!outside] - x[ii]) / (x[ii + 1] - x[ii])
   ey <- (y0[!outside] - y[jj]) / (y[jj + 1] - y[jj])
-  ez[!outside] <- (1 - ex) * (1 - ey) * z11 +
+  ez[!outside] <- (1 - ex) *
+    (1 - ey) *
+    z11 +
     (1 - ex) * (ey) * z12 +
     (ex) * (1 - ey) * z21 +
     (ex) * (ey) * z22

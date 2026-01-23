@@ -46,11 +46,11 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
 #' @rdname surprisals_model
 #' @export
 surprisals_prob.lm <- function(
-    object,
-    approximation = c("gpd", "rank", "none"),
-    threshold_probability = 0.10,
-    loo = FALSE,
-    ...
+  object,
+  approximation = c("gpd", "rank", "none"),
+  threshold_probability = 0.10,
+  loo = FALSE,
+  ...
 ) {
   approximation <- match.arg(approximation)
   s <- surprisals.lm(object, loo = loo)
@@ -88,10 +88,10 @@ surprisals.gam <- function(object, ...) {
 #' @rdname surprisals_model
 #' @export
 surprisals_prob.gam <- function(
-    object,
-    approximation = c("gpd", "rank", "none"),
-    threshold_probability = 0.10,
-    ...
+  object,
+  approximation = c("gpd", "rank", "none"),
+  threshold_probability = 0.10,
+  ...
 ) {
   approximation <- match.arg(approximation)
   if (object$family$family == "gaussian") {

@@ -50,4 +50,3 @@ surprisals_prob <- function(
 ) {
   UseMethod("surprisals_prob")
 }
-
