@@ -16,8 +16,8 @@ surprisal_prob_from_s <- function(
 
   if (approximation == "none") {
     if (dimension_dist(distribution) > 1) {
-      warning("Using a rank approximation for multivariate data")
-      approximation <- "rank"
+      warning("Using a gpd approximation for multivariate data")
+      approximation <- "gpd"
     } else if (identical(unique(stats::family(distribution)), "normal")) {
       approximation <- "normal"
     } else if (is_symmetric(distribution)) {
