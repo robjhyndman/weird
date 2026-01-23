@@ -19,16 +19,12 @@ surprisals_prob(
 
 \item{...}{Other arguments are passed to the appropriate method.}
 
-\item{approximation}{Character string specifying the approximation to use in
-computing the surprisal probabilities. Ignored if \code{probability = FALSE}.
-\code{approximation = "none"} specifies that no approximation is to be used;
-\code{approximation = "gpd"} (default) specifies that the Generalized Pareto distribution should be used;
-while \code{approximation = "rank"} specifies that the probabilities should be estimated
-based on the rank of the surprisal values.}
+\item{approximation}{Character string specifying the method to use in
+computing the surprisal probabilities. See Details below.}
 
 \item{threshold_probability}{Probability threshold when computing the GPD
 approximation. This is the probability below which the GPD is fitted. Only
-used if \code{approximation = "gpd"} and \code{probability = TRUE}.}
+used if \code{approximation = "gpd"}.}
 }
 \value{
 A numerical vector containing the surprisals or surprisal probabilities.
@@ -39,7 +35,8 @@ density or probability mass function of the estimated or assumed distribution,
 and \eqn{y} is an observation. This is returned by \code{surprisals()}.
 A surprisal probability is the probability of a surprisal at least as extreme
 as \eqn{s}. This is returned by \code{surprisals_prob()}
-
+}
+\details{
 The surprisal probabilities may be computed in three different ways.
 \enumerate{
 \item Given the same distribution that was used to compute the surprisal values
@@ -49,7 +46,7 @@ coverage probability of the largest HDR that contains each value. Surprisal
 probabilities smaller than 1e-6 are returned as 1e-6.
 \item Using a Generalized Pareto Distribution fitted to the most extreme
 surprisal values (those with probability less than \code{threshold_probability}).
-This option is used when \code{approximation = "gdp"}.
+This option is used when \code{approximation = "gdp"}, and is the default.
 For surprisal probabilities greater than \code{threshold_probability}, the value of
 \code{threshold_probability} is returned. Under this option, the distribution is
 used for computing the surprisal values but not for determining their
@@ -60,13 +57,6 @@ values.
 the proportion of observations with greater surprisal values.
 This is also insensitive to the distribution used in computing the surprisal values.
 }
-}
-\examples{
-# surprisals computed from bivariate data set
-oldfaithful |>
-  mutate(
-    loo_fscores = surprisals_prob(cbind(duration, waiting), loo = TRUE)
-  )
 }
 \references{
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,

@@ -1,3 +1,31 @@
+# Surprisals function that uses pre-calculated densities
+# Same arguments as surprisals.numeric except den is numerical vector of log densities
+surprisals_from_den <- function(object, den, distribution, loo) {
+  object <- as.matrix(object)
+  if (NCOL(object) == 1L) {
+    object <- c(object)
+  }
+  if (length(distribution) > 1 & length(object) > 1) {
+    if (length(distribution) != length(object)) {
+      stop("Length of distribution and object must be the same or equal to 1")
+    }
+  }
+  scores <- -den
+  if (loo & all(stats::family(distribution) == "kde")) {
+    n <- NROW(object)
+    d <- NCOL(object)
+    if (d == 1L) {
+      h <- vctrs::vec_data(distribution)[[1]]$kde$h
+      K0 <- 1 / (h * sqrt(2 * pi))
+    } else {
+      H <- vctrs::vec_data(distribution)[[1]]$kde$H
+      K0 <- det(H)^(-1 / 2) * (2 * pi)^(-d / 2)
+    }
+    scores <- -log(pmax(0, (n * exp(-scores) - K0) / (n - 1)))
+  }
+  return(scores)
+}
+
 # Compute probability of surprisals
 # Note that each value of s may come from a different distribution
 # so distribution may be a vector
