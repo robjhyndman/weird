@@ -3,13 +3,17 @@
 \name{surprisals.numeric}
 \alias{surprisals.numeric}
 \alias{surprisals.matrix}
+\alias{surprisals.data.frame}
 \alias{surprisals_prob.numeric}
 \alias{surprisals_prob.matrix}
+\alias{surprisals_prob.data.frame}
 \title{Surprisals and surprisal probabilities}
 \usage{
 \method{surprisals}{numeric}(object, distribution = dist_kde(object, ...), loo = FALSE, ...)
 
 \method{surprisals}{matrix}(object, distribution = dist_kde(object, ...), loo = FALSE, ...)
+
+\method{surprisals}{data.frame}(object, distribution = dist_kde(object, ...), loo = FALSE, ...)
 
 \method{surprisals_prob}{numeric}(
   object,
@@ -21,6 +25,15 @@
 )
 
 \method{surprisals_prob}{matrix}(
+  object,
+  approximation = c("gpd", "rank", "none"),
+  threshold_probability = 0.1,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
+)
+
+\method{surprisals_prob}{data.frame}(
   object,
   approximation = c("gpd", "rank", "none"),
   threshold_probability = 0.1,

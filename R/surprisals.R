@@ -46,10 +46,7 @@
 #'     loo_fscores = surprisals_prob(cbind(duration, waiting), loo = TRUE)
 #'   )
 #' @export
-surprisals <- function(
-  object,
-  ...
-) {
+surprisals <- function(object, ...) {
   UseMethod("surprisals")
 }
 
@@ -122,12 +119,7 @@ surprisals.numeric <- function(
       den <- den[[1]]
     }
   }
-  surprisals_from_den(
-    object,
-    den,
-    distribution,
-    loo
-  )
+  surprisals_from_den(object, den, distribution, loo)
 }
 
 #' @rdname surprisals_data
@@ -138,16 +130,31 @@ surprisals.matrix <- function(
   loo = FALSE,
   ...
 ) {
-  if(!is.numeric(object)) {
+  if (!is.numeric(object)) {
     stop("matrix must be numeric")
   }
-  surprisals.numeric(
+  surprisals.numeric(object, distribution = distribution, loo = loo, ...)
+}
+
+#' @rdname surprisals_data
+#' @export
+surprisals.data.frame <- function(
+  object,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
+) {
+  object <- as.matrix(object)
+  surprisals.matrix(
     object,
+    approximation = approximation,
+    threshold_probability = threshold_probability,
     distribution = distribution,
     loo = loo,
     ...
   )
 }
+
 
 #' @rdname surprisals_data
 #' @export
@@ -185,7 +192,31 @@ surprisals_prob.matrix <- function(
   loo = FALSE,
   ...
 ) {
+  if (!is.numeric(object)) {
+    stop("matrix must be numeric")
+  }
   surprisals_prob.numeric(
+    object,
+    approximation = approximation,
+    threshold_probability = threshold_probability,
+    distribution = distribution,
+    loo = loo,
+    ...
+  )
+}
+
+#' @rdname surprisals_data
+#' @export
+surprisals_prob.data.frame <- function(
+  object,
+  approximation = c("gpd", "rank", "none"),
+  threshold_probability = 0.10,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
+) {
+  object <- as.matrix(object)
+  surprisals_prob.matrix(
     object,
     approximation = approximation,
     threshold_probability = threshold_probability,
@@ -197,12 +228,7 @@ surprisals_prob.matrix <- function(
 
 # Surprisals function that uses pre-calculated densities
 # Same arguments as surprisals.numeric except den is numerical vector of log densities
-surprisals_from_den <- function(
-  object,
-  den,
-  distribution,
-  loo
-) {
+surprisals_from_den <- function(object, den, distribution, loo) {
   object <- as.matrix(object)
   if (NCOL(object) == 1L) {
     object <- c(object)
@@ -249,11 +275,7 @@ surprisals_from_den <- function(
 #'   )) +
 #'   geom_point()
 #' @export
-surprisals.lm <- function(
-  object,
-  loo = FALSE,
-  ...
-) {
+surprisals.lm <- function(object, loo = FALSE, ...) {
   e <- stats::residuals(object, type = "response")
   h <- stats::hatvalues(object)
   sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
@@ -292,10 +314,7 @@ surprisals_prob.lm <- function(
 #'   mutate(fscore = surprisals(gam_of))
 #' @importFrom stats approx dbinom density dnorm dpois na.omit
 #' @export
-surprisals.gam <- function(
-  object,
-  ...
-) {
+surprisals.gam <- function(object, ...) {
   fit_aug <- broom::augment(object, type.predict = "response")
   if (object$family$family == "gaussian") {
     std.resid <- c(scale(fit_aug$.resid / fit_aug$.se.fit))
@@ -349,12 +368,14 @@ surprisals_prob.gam <- function(
   )
 }
 
-utils::globalVariables(c(
-  ".resid",
-  ".se.fit",
-  ".std.resid",
-  ".resid",
-  ".sigma",
-  ".hat",
-  "studentized_residuals"
-))
+utils::globalVariables(
+  c(
+    ".resid",
+    ".se.fit",
+    ".std.resid",
+    ".resid",
+    ".sigma",
+    ".hat",
+    "studentized_residuals"
+  )
+)
