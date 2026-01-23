@@ -41,6 +41,9 @@ surprisals(object, distribution = dist_kde(object, ...), loo = FALSE, ...)
 # S3 method for class 'matrix'
 surprisals(object, distribution = dist_kde(object, ...), loo = FALSE, ...)
 
+# S3 method for class 'data.frame'
+surprisals(object, distribution = dist_kde(object, ...), loo = FALSE, ...)
+
 # S3 method for class 'numeric'
 surprisals_prob(
   object,
@@ -52,6 +55,16 @@ surprisals_prob(
 )
 
 # S3 method for class 'matrix'
+surprisals_prob(
+  object,
+  approximation = c("gpd", "rank", "none"),
+  threshold_probability = 0.1,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
+)
+
+# S3 method for class 'data.frame'
 surprisals_prob(
   object,
   approximation = c("gpd", "rank", "none"),
