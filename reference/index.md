@@ -33,14 +33,16 @@ Data sets included in the package
 - [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   : Surprisals and surprisal probabilities
-- [`surprisals(`*`<default>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals.default.md)
-  [`surprisals_prob(`*`<default>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals.default.md)
-  : Surprisals and surprisal probabilities
 - [`surprisals(`*`<lm>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   [`surprisals_prob(`*`<lm>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   [`surprisals(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   [`surprisals_prob(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   : Surprisals and surprisal probabilities computed from a model
+- [`surprisals(`*`<numeric>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_data.md)
+  [`surprisals(`*`<matrix>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_data.md)
+  [`surprisals_prob(`*`<numeric>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_data.md)
+  [`surprisals_prob(`*`<matrix>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_data.md)
+  : Surprisals and surprisal probabilities
 
 ## Functions for identifying anomalies
 
