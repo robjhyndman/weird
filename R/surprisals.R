@@ -147,8 +147,6 @@ surprisals.data.frame <- function(
   object <- as.matrix(object)
   surprisals.matrix(
     object,
-    approximation = approximation,
-    threshold_probability = threshold_probability,
     distribution = distribution,
     loo = loo,
     ...
