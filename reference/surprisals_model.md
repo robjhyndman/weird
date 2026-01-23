@@ -17,7 +17,7 @@ surprisals(object, loo = FALSE, ...)
 # S3 method for class 'lm'
 surprisals_prob(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.1,
   loo = FALSE,
   ...
@@ -29,7 +29,7 @@ surprisals(object, ...)
 # S3 method for class 'gam'
 surprisals_prob(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.1,
   ...
 )
@@ -74,23 +74,23 @@ A numerical vector containing the surprisals or surprisal probabilities.
 
 The surprisal probabilities may be computed in three different ways.
 
-1.  When `approximation = "none"`, the surprisal probabilities are
-    computed using the same distribution that was used to compute the
-    surprisal values. Under this option, surprisal probabilities are
-    equal to 1 minus the coverage probability of the largest HDR that
-    contains each value. Surprisal probabilities smaller than 1e-6 are
-    returned as 1e-6.
+1.  When `approximation = "none"` (the default), the surprisal
+    probabilities are computed using the same distribution that was used
+    to compute the surprisal values. Under this option, surprisal
+    probabilities are equal to 1 minus the coverage probability of the
+    largest HDR that contains each value. Surprisal probabilities
+    smaller than 1e-6 are returned as 1e-6.
 
-2.  When `approximation = "gdp"` (the default), the surprisal
-    probabilities are computed using a Generalized Pareto Distribution
-    fitted to the most extreme surprisal values (those with probability
-    less than `threshold_probability`). For surprisal probabilities
-    greater than `threshold_probability`, the value of
-    `threshold_probability` is returned. Under this option, the
-    distribution is used for computing the surprisal values but not for
-    determining their probabilities. Due to extreme value theory, the
-    resulting probabilities should be relatively insensitive to the
-    distribution used in computing the surprisal values.
+2.  When `approximation = "gdp"`, the surprisal probabilities are
+    computed using a Generalized Pareto Distribution fitted to the most
+    extreme surprisal values (those with probability less than
+    `threshold_probability`). For surprisal probabilities greater than
+    `threshold_probability`, the value of `threshold_probability` is
+    returned. Under this option, the distribution is used for computing
+    the surprisal values but not for determining their probabilities.
+    Due to extreme value theory, the resulting probabilities should be
+    relatively insensitive to the distribution used in computing the
+    surprisal values.
 
 3.  When `approximation = "rank"`, the surprisal probability of each
     observation is estimated using the proportion of observations with
@@ -105,6 +105,12 @@ The surprisal probabilities may be computed in three different ways.
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter
 6, <https://OTexts.com/weird/>.
 
+## See also
+
+For specific methods, see
+[`surprisals.numeric()`](https://pkg.robjhyndman.com/weird/reference/surprisals_data.md)
+and `surprisals.lm()`,
+
 ## Author
 
 Rob J Hyndman
@@ -116,8 +122,8 @@ Rob J Hyndman
 lm_of <- lm(waiting ~ duration, data = oldfaithful)
 oldfaithful |>
   mutate(
-    fscore = surprisals_prob(lm_of, approximation = "none"),
-    prob = surprisals_prob(lm_of, loo = TRUE, approximation = "none"),
+    fscore = surprisals_prob(lm_of),
+    prob = surprisals_prob(lm_of, loo = TRUE),
   ) |>
   ggplot(aes(
     x = duration, y = waiting,
@@ -128,7 +134,7 @@ oldfaithful |>
 # A Poisson GLM
 glm_breaks <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
 warpbreaks |>
-  mutate(prob = surprisals_prob(glm_breaks, approximation = "none")) |>
+  mutate(prob = surprisals_prob(glm_breaks)) |>
   filter(prob < 0.05)
 #>   breaks wool tension        prob
 #> 1     70    A       L 0.006519066
