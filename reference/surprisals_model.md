@@ -120,7 +120,10 @@ oldfaithful |>
     color = prob < 0.01
   )) +
   geom_point()
-
+#> Error in mutate(oldfaithful, fscore = surprisals_prob(lm_of, approximation = "none"),     prob = surprisals_prob(lm_of, loo = TRUE, approximation = "none"),     ): ℹ In argument: `prob = surprisals_prob(lm_of, loo = TRUE, approximation
+#>   = "none")`.
+#> Caused by error in `inherits()`:
+#> ! argument "what" is missing, with no default
 # A Poisson GLM
 glm_breaks <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
 warpbreaks |>
