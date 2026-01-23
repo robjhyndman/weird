@@ -94,7 +94,7 @@ surprisals_prob <- function(
 #'   prob = surprisals_prob(cbind(x, y))
 #' )
 #' @export
-surprisals.default <- function(
+surprisals.numeric <- function(
   object,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -128,9 +128,28 @@ surprisals.default <- function(
   )
 }
 
-#' @rdname surprisals.default
+#' @rdname surprisals_data
 #' @export
-surprisals_prob.default <- function(
+surprisals.matrix <- function(
+  object,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
+) {
+  if(!is.numeric(object)) {
+    stop("matrix must be numeric")
+  }
+  surprisals.numeric(
+    object,
+    distribution = distribution,
+    loo = loo,
+    ...
+  )
+}
+
+#' @rdname surprisals_data
+#' @export
+surprisals_prob.numeric <- function(
   object,
   approximation = c("none", "gpd", "empirical"),
   threshold_probability = 0.10,
@@ -139,7 +158,7 @@ surprisals_prob.default <- function(
   ...
 ) {
   approximation <- match.arg(approximation)
-  s <- surprisals.default(object, distribution = distribution, loo = loo)
+  s <- surprisals.numeric(object, distribution = distribution, loo = loo)
   if (loo & all(stats::family(distribution) == "kde")) {
     y <- object
   } else {
@@ -154,8 +173,27 @@ surprisals_prob.default <- function(
   )
 }
 
+#' @rdname surprisals_data
+#' @export
+surprisals_prob.matrix <- function(
+  object,
+  approximation = c("gpd", "rank", "none"),
+  threshold_probability = 0.10,
+  distribution = dist_kde(object, ...),
+  loo = FALSE,
+  ...
+) {
+  surprisals_prob.numeric(
+    object,
+    approximation = approximation,
+    threshold_probability = threshold_probability,
+    distribution = distribution,
+    loo = loo,
+    ...
+  )
+}
 # Surprisals function that uses pre-calculated densities
-# Same arguments as surprisals.default except den is numerical vector of log densities
+# Same arguments as surprisals.numeric except den is numerical vector of log densities
 surprisals_from_den <- function(
   object,
   den,
