@@ -13,8 +13,8 @@
 #' lm_of <- lm(waiting ~ duration, data = oldfaithful)
 #' oldfaithful |>
 #'   mutate(
-#'     fscore = surprisals_prob(lm_of, approximation = "none"),
-#'     prob = surprisals_prob(lm_of, loo = TRUE, approximation = "none"),
+#'     fscore = surprisals_prob(lm_of),
+#'     prob = surprisals_prob(lm_of, loo = TRUE),
 #'   ) |>
 #'   ggplot(aes(
 #'     x = duration, y = waiting,
@@ -24,7 +24,7 @@
 #' # A Poisson GLM
 #' glm_breaks <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
 #' warpbreaks |>
-#'   mutate(prob = surprisals_prob(glm_breaks, approximation = "none")) |>
+#'   mutate(prob = surprisals_prob(glm_breaks)) |>
 #'   filter(prob < 0.05)
 #' @export
 surprisals.lm <- function(object, loo = FALSE, ...) {
@@ -47,7 +47,7 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
 #' @export
 surprisals_prob.lm <- function(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.10,
   loo = FALSE,
   ...
@@ -89,7 +89,7 @@ surprisals.gam <- function(object, ...) {
 #' @export
 surprisals_prob.gam <- function(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.10,
   ...
 ) {

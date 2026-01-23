@@ -17,7 +17,7 @@
 
 \method{surprisals_prob}{numeric}(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.1,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -26,7 +26,7 @@
 
 \method{surprisals_prob}{matrix}(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.1,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -35,7 +35,7 @@
 
 \method{surprisals_prob}{data.frame}(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.1,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -54,7 +54,8 @@ estimate is computed from the data \code{object}.}
 \item{...}{Other arguments are passed to the appropriate method.}
 
 \item{approximation}{Character string specifying the method to use in
-computing the surprisal probabilities. See Details below.}
+computing the surprisal probabilities. See Details below. For a multivariate
+data set, it needs to be set to either "gpd" or "rank".}
 
 \item{threshold_probability}{Probability threshold when computing the GPD
 approximation. This is the probability below which the GPD is fitted. Only
@@ -73,12 +74,12 @@ as \eqn{s}. This is returned by \code{surprisals_prob()}
 \details{
 The surprisal probabilities may be computed in three different ways.
 \enumerate{
-\item When \code{approximation = "none"}, the surprisal probabilities are computed
+\item When \code{approximation = "none"} (the default), the surprisal probabilities are computed
 using the same distribution that was used to compute the surprisal values.
 Under this option, surprisal probabilities are equal to 1 minus the
 coverage probability of the largest HDR that contains each value. Surprisal
 probabilities smaller than 1e-6 are returned as 1e-6.
-\item When \code{approximation = "gdp"} (the default), the surprisal probabilities are
+\item When \code{approximation = "gdp"}, the surprisal probabilities are
 computed using a Generalized Pareto Distribution fitted to the most extreme
 surprisal values (those with probability less than \code{threshold_probability}).
 For surprisal probabilities greater than \code{threshold_probability}, the value of
@@ -107,7 +108,7 @@ tibble(
   y = n01$v1,
   prob1 = surprisals_prob(y),
   prob2 = surprisals_prob(y, loo = TRUE),
-  prob3 = surprisals_prob(y, distribution = dist_normal(), approximation = "none"),
+  prob3 = surprisals_prob(y, distribution = dist_normal()),
   prob4 = surprisals_prob(y, distribution = dist_normal(), approximation = "gpd")
 ) |>
   arrange(prob1)
@@ -115,12 +116,12 @@ tibble(
 tibble(
   x = rnorm(50),
   y = c(5, rnorm(49)),
-  prob = surprisals_prob(cbind(x, y))
+  prob = surprisals_prob(cbind(x, y), approximation = "gpd")
 )
 oldfaithful |>
   mutate(
     s = surprisals(cbind(duration, waiting), loo = TRUE),
-    p = surprisals_prob(cbind(duration, waiting), loo = TRUE)
+    p = surprisals_prob(cbind(duration, waiting), loo = TRUE, approximation = "gpd")
   ) |>
   arrange(p)
 }

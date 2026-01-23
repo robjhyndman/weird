@@ -5,6 +5,9 @@
 #' containing only numerical columns).
 #' @param distribution A distribution object. By default, a kernel density
 #' estimate is computed from the data `object`.
+#' @param approximation Character string specifying the method to use in
+#' computing the surprisal probabilities. See Details below. For a multivariate
+#' data set, it needs to be set to either "gpd" or "rank".
 #' @param loo Should leave-one-out surprisals be computed?
 #' @seealso \code{\link{dist_kde}}
 #' @examples
@@ -19,7 +22,7 @@
 #'   y = n01$v1,
 #'   prob1 = surprisals_prob(y),
 #'   prob2 = surprisals_prob(y, loo = TRUE),
-#'   prob3 = surprisals_prob(y, distribution = dist_normal(), approximation = "none"),
+#'   prob3 = surprisals_prob(y, distribution = dist_normal()),
 #'   prob4 = surprisals_prob(y, distribution = dist_normal(), approximation = "gpd")
 #' ) |>
 #'   arrange(prob1)
@@ -27,12 +30,12 @@
 #' tibble(
 #'   x = rnorm(50),
 #'   y = c(5, rnorm(49)),
-#'   prob = surprisals_prob(cbind(x, y))
+#'   prob = surprisals_prob(cbind(x, y), approximation = "gpd")
 #' )
 #' oldfaithful |>
 #'   mutate(
 #'     s = surprisals(cbind(duration, waiting), loo = TRUE),
-#'     p = surprisals_prob(cbind(duration, waiting), loo = TRUE)
+#'     p = surprisals_prob(cbind(duration, waiting), loo = TRUE, approximation = "gpd")
 #'   ) |>
 #'   arrange(p)
 #' @export
@@ -96,12 +99,11 @@ surprisals.data.frame <- function(
   )
 }
 
-
 #' @rdname surprisals_data
 #' @export
 surprisals_prob.numeric <- function(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.10,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -127,7 +129,7 @@ surprisals_prob.numeric <- function(
 #' @export
 surprisals_prob.matrix <- function(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.10,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -150,7 +152,7 @@ surprisals_prob.matrix <- function(
 #' @export
 surprisals_prob.data.frame <- function(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.10,
   distribution = dist_kde(object, ...),
   loo = FALSE,

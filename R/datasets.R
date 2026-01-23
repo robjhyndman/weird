@@ -57,7 +57,6 @@
 #' @source \url{https://geysertimes.org}
 "oldfaithful"
 
-
 #' Multivariate standard normal data
 #'
 #' A synthetic data set containing 1000 observations on 10 variables generated

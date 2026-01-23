@@ -56,7 +56,6 @@ You also get a condensed summary of conflicts with other packages you have loade
 library(weird)
 ```
 
-
 ## Example: Old Faithful Geyser data
 
 The `oldfaithful` data set contains eruption data from the Old Faithful Geyser in Yellowstone National Park, Wyoming, USA, from 2017 to 2023. The data were obtained from the [geysertimes.org](https://geysertimes.org) website. Recordings are incomplete, especially during the winter months when observers may not be present. There also appear to be some recording errors. The data set contains `r NROW(oldfaithful)` observations of 3 variables: `time` giving the time at which each eruption began, `recorded_duration` giving the length of the eruption as recorded, `duration` giving the length of the eruption in seconds, and `waiting` giving the time to the next eruption in seconds.
@@ -157,7 +156,7 @@ Here are the top 0.02% most anomalous observations identified by each of the met
 oldfaithful |>
   mutate(
     surprisal = surprisals(cbind(duration, waiting)),
-    surprisal_prob = surprisals_prob(cbind(duration, waiting)),
+    surprisal_prob = surprisals_prob(cbind(duration, waiting), approximation = "gpd"),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting))

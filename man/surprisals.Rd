@@ -9,7 +9,7 @@ surprisals(object, ...)
 
 surprisals_prob(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.1,
   ...
 )
@@ -39,12 +39,12 @@ as \eqn{s}. This is returned by \code{surprisals_prob()}
 \details{
 The surprisal probabilities may be computed in three different ways.
 \enumerate{
-\item When \code{approximation = "none"}, the surprisal probabilities are computed
+\item When \code{approximation = "none"} (the default), the surprisal probabilities are computed
 using the same distribution that was used to compute the surprisal values.
 Under this option, surprisal probabilities are equal to 1 minus the
 coverage probability of the largest HDR that contains each value. Surprisal
 probabilities smaller than 1e-6 are returned as 1e-6.
-\item When \code{approximation = "gdp"} (the default), the surprisal probabilities are
+\item When \code{approximation = "gdp"}, the surprisal probabilities are
 computed using a Generalized Pareto Distribution fitted to the most extreme
 surprisal values (those with probability less than \code{threshold_probability}).
 For surprisal probabilities greater than \code{threshold_probability}, the value of
@@ -64,6 +64,9 @@ insensitive to the distribution used in computing the surprisal values.
 \references{
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,
 \url{https://OTexts.com/weird/}.
+}
+\seealso{
+For specific methods, see \code{\link[=surprisals.numeric]{surprisals.numeric()}} and \code{\link[=surprisals.lm]{surprisals.lm()}},
 }
 \author{
 Rob J Hyndman

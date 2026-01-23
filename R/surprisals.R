@@ -7,12 +7,12 @@
 #' as \eqn{s}. This is returned by `surprisals_prob()`
 #'
 #' @details The surprisal probabilities may be computed in three different ways.
-#' 1. When `approximation = "none"`, the surprisal probabilities are computed
+#' 1. When `approximation = "none"` (the default), the surprisal probabilities are computed
 #' using the same distribution that was used to compute the surprisal values.
 #' Under this option, surprisal probabilities are equal to 1 minus the
 #' coverage probability of the largest HDR that contains each value. Surprisal
 #' probabilities smaller than 1e-6 are returned as 1e-6.
-#' 2. When `approximation = "gdp"` (the default), the surprisal probabilities are
+#' 2. When `approximation = "gdp"`, the surprisal probabilities are
 #' computed using a Generalized Pareto Distribution fitted to the most extreme
 #' surprisal values (those with probability less than `threshold_probability`).
 #' For surprisal probabilities greater than `threshold_probability`, the value of
@@ -38,6 +38,7 @@
 #' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,
 #' \url{https://OTexts.com/weird/}.
 #' @return A numerical vector containing the surprisals or surprisal probabilities.
+#' @seealso For specific methods, see [surprisals.numeric()] and [surprisals.lm()],
 #' @export
 surprisals <- function(object, ...) {
   UseMethod("surprisals")
@@ -47,7 +48,7 @@ surprisals <- function(object, ...) {
 #' @export
 surprisals_prob <- function(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.10,
   ...
 ) {

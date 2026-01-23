@@ -11,7 +11,7 @@
 
 \method{surprisals_prob}{lm}(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.1,
   loo = FALSE,
   ...
@@ -21,7 +21,7 @@
 
 \method{surprisals_prob}{gam}(
   object,
-  approximation = c("gpd", "rank", "none"),
+  approximation = c("none", "gpd", "rank"),
   threshold_probability = 0.1,
   ...
 )
@@ -57,12 +57,12 @@ as \eqn{s}. This is returned by \code{surprisals_prob()}
 \details{
 The surprisal probabilities may be computed in three different ways.
 \enumerate{
-\item When \code{approximation = "none"}, the surprisal probabilities are computed
+\item When \code{approximation = "none"} (the default), the surprisal probabilities are computed
 using the same distribution that was used to compute the surprisal values.
 Under this option, surprisal probabilities are equal to 1 minus the
 coverage probability of the largest HDR that contains each value. Surprisal
 probabilities smaller than 1e-6 are returned as 1e-6.
-\item When \code{approximation = "gdp"} (the default), the surprisal probabilities are
+\item When \code{approximation = "gdp"}, the surprisal probabilities are
 computed using a Generalized Pareto Distribution fitted to the most extreme
 surprisal values (those with probability less than \code{threshold_probability}).
 For surprisal probabilities greater than \code{threshold_probability}, the value of
@@ -84,8 +84,8 @@ insensitive to the distribution used in computing the surprisal values.
 lm_of <- lm(waiting ~ duration, data = oldfaithful)
 oldfaithful |>
   mutate(
-    fscore = surprisals_prob(lm_of, approximation = "none"),
-    prob = surprisals_prob(lm_of, loo = TRUE, approximation = "none"),
+    fscore = surprisals_prob(lm_of),
+    prob = surprisals_prob(lm_of, loo = TRUE),
   ) |>
   ggplot(aes(
     x = duration, y = waiting,
@@ -95,12 +95,15 @@ oldfaithful |>
 # A Poisson GLM
 glm_breaks <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
 warpbreaks |>
-  mutate(prob = surprisals_prob(glm_breaks, approximation = "none")) |>
+  mutate(prob = surprisals_prob(glm_breaks)) |>
   filter(prob < 0.05)
 }
 \references{
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,
 \url{https://OTexts.com/weird/}.
+}
+\seealso{
+For specific methods, see \code{\link[=surprisals.numeric]{surprisals.numeric()}} and \code{\link[=surprisals.lm]{surprisals.lm()}},
 }
 \author{
 Rob J Hyndman
