@@ -76,7 +76,7 @@ gg_hdrboxplot <- function(
 
   # Set up color palette
   prob <- sort(prob)
-  hdr_colors <- list(hdr_palette(color = color, prob = c(prob, 0.995)))
+  hdr_colors <- list(hdr_palette(color = color, prob = c(prob, 1)))
   names(hdr_colors) <- names_dist(dist)
 
   # HDR thresholds
@@ -228,11 +228,11 @@ hdr_table <- function(object, prob) {
 hdr_palette <- function(n, color = "#0072b2", prob = NULL) {
   if (missing(prob)) {
     prob <- seq(n - 1) / n
-  } else if (min(prob) <= 0 | max(prob) >= 1) {
+  } else if (min(prob) <= 0 | max(prob) > 1+1e-6) {
     stop("prob must be between 0 and 1")
   }
-  pc_colors <- grDevices::colorRampPalette(c(color, "white"))(180)[32:130]
-  idx <- approx(seq(99) / 100, seq(99), prob, rule = 2)$y
+  pc_colors <- grDevices::colorRampPalette(c(color, "white"))(150)[c(seq(99),115)]
+  idx <- approx(seq(0.01, 1, by=0.01), seq(100), prob, rule = 2)$y
   c(color, pc_colors[idx])
 }
 

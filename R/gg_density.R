@@ -109,7 +109,7 @@ gg_density <- function(
     hdr_colors <- lapply(
       colors,
       function(u) {
-        hdr_palette(color = u, prob = c(prob, 0.995))
+        hdr_palette(color = u, prob = c(prob, 1))
       }
     )
     names(hdr_colors) <- names_dist(object, unique = TRUE)
