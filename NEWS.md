@@ -7,7 +7,7 @@
 * Removed as_kde() and autoplot.kde()
 * Rewrote kde_bandwidth() to handle more methods
 * Added gg_density() and gg_density_layer()
-* Replaced density_scores() with surprisals()
+* Replaced density_scores() with surprisals() and added surprisals_prob()
 * Updated gg_bagplot() and gg_hdrboxplot() to use show_points argument
 * Removed lookout()
 * Added hampel_anomalies()
