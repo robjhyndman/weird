@@ -85,7 +85,7 @@ surprisal_prob_from_s <- function(
   } else if (approximation == "symmetric" & !is.null(y)) {
     centre <- stats::median(distribution)
     p <- 2 *
-      (1 - distributional::cdf(distribution, q = centre + abs(y - centre)))
+      (1 - distributional::cdf(distribution, q = centre + abs(y - centre))[[1]])
   } else {
     # Slower computation, but more general (although approximate)
     dist_x <- stats::quantile(
