@@ -11,7 +11,7 @@
 
 \method{surprisals_prob}{lm}(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.1,
   loo = FALSE,
   ...
@@ -21,7 +21,7 @@
 
 \method{surprisals_prob}{gam}(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.1,
   ...
 )
@@ -71,11 +71,9 @@ used for computing the surprisal values but not for determining their
 probabilities. Due to extreme value theory, the resulting probabilities should
 be relatively insensitive to the distribution used in computing the surprisal
 values.
-\item When \code{approximation = "rank"}, the surprisal probability of each
+\item When \code{approximation = "empirical"} (or \code{"rank"}), the surprisal probability of each
 observation is estimated using the proportion of observations with
-greater surprisal values; i.e., 1 - rank(s)/n where \code{rank(s)} is the rank
-of the surprisal value \code{s} among all surprisal values, and \code{n} is the
-number of observations. This is a nonparametric approach that is also
+greater or equal surprisal values. This is a nonparametric approach that is also
 insensitive to the distribution used in computing the surprisal values.
 }
 }

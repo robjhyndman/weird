@@ -47,12 +47,15 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
 #' @export
 surprisals_prob.lm <- function(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.10,
   loo = FALSE,
   ...
 ) {
   approximation <- match.arg(approximation)
+  if(approximation == "rank") {
+    approximation <- "empirical"
+  }
   s <- surprisals.lm(object, loo = loo)
   surprisal_prob_from_s(
     s,
@@ -89,11 +92,14 @@ surprisals.gam <- function(object, ...) {
 #' @export
 surprisals_prob.gam <- function(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.10,
   ...
 ) {
   approximation <- match.arg(approximation)
+  if(approximation == "rank") {
+    approximation <- "empirical"
+  }
   if (object$family$family == "gaussian") {
     dist <- distributional::dist_normal()
   } else {

@@ -17,7 +17,7 @@
 
 \method{surprisals_prob}{numeric}(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.1,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -26,7 +26,7 @@
 
 \method{surprisals_prob}{matrix}(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.1,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -35,7 +35,7 @@
 
 \method{surprisals_prob}{data.frame}(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.1,
   distribution = dist_kde(object, ...),
   loo = FALSE,
@@ -55,7 +55,7 @@ estimate is computed from the data \code{object}.}
 
 \item{approximation}{Character string specifying the method to use in
 computing the surprisal probabilities. See Details below. For a multivariate
-data set, it needs to be set to either "gpd" or "rank".}
+data set, it needs to be set to either "gpd" or "empirical".}
 
 \item{threshold_probability}{Probability threshold when computing the GPD
 approximation. This is the probability below which the GPD is fitted. Only
@@ -88,11 +88,9 @@ used for computing the surprisal values but not for determining their
 probabilities. Due to extreme value theory, the resulting probabilities should
 be relatively insensitive to the distribution used in computing the surprisal
 values.
-\item When \code{approximation = "rank"}, the surprisal probability of each
+\item When \code{approximation = "empirical"} (or \code{"rank"}), the surprisal probability of each
 observation is estimated using the proportion of observations with
-greater surprisal values; i.e., 1 - rank(s)/n where \code{rank(s)} is the rank
-of the surprisal value \code{s} among all surprisal values, and \code{n} is the
-number of observations. This is a nonparametric approach that is also
+greater or equal surprisal values. This is a nonparametric approach that is also
 insensitive to the distribution used in computing the surprisal values.
 }
 }

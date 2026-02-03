@@ -21,11 +21,9 @@
 #' probabilities. Due to extreme value theory, the resulting probabilities should
 #' be relatively insensitive to the distribution used in computing the surprisal
 #' values.
-#' 3. When `approximation = "rank"`, the surprisal probability of each
+#' 3. When `approximation = "empirical"` (or `"rank"`), the surprisal probability of each
 #' observation is estimated using the proportion of observations with
-#' greater surprisal values; i.e., 1 - rank(s)/n where `rank(s)` is the rank
-#' of the surprisal value `s` among all surprisal values, and `n` is the
-#' number of observations. This is a nonparametric approach that is also
+#' greater or equal surprisal values. This is a nonparametric approach that is also
 #' insensitive to the distribution used in computing the surprisal values.
 #' @param object A model or numerical data set
 #' @param approximation Character string specifying the method to use in
@@ -48,7 +46,7 @@ surprisals <- function(object, ...) {
 #' @export
 surprisals_prob <- function(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.10,
   ...
 ) {

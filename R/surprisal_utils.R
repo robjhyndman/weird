@@ -78,7 +78,7 @@ surprisal_prob_from_s <- function(
 
   if (approximation == "gpd") {
     p <- surprisal_gpd_prob(s, threshold_probability)
-  } else if (approximation == "rank") {
+  } else if (approximation == "empirical") {
     p <- 1 - rank(s) / n
   } else if (approximation == "normal") {
     p <- surprisal_normal_prob(s, distribution)
