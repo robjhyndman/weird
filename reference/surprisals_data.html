@@ -63,7 +63,7 @@ as \(s\). This is returned by <code><a href="surprisals.html">surprisals_prob()<
 <span><span class="co"># S3 method for class 'numeric'</span></span>
 <span><span class="fu"><a href="surprisals.html">surprisals_prob</a></span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
-<span>  approximation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"gpd"</span>, <span class="st">"rank"</span><span class="op">)</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"gpd"</span>, <span class="st">"empirical"</span>, <span class="st">"rank"</span><span class="op">)</span>,</span>
 <span>  threshold_probability <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  distribution <span class="op">=</span> <span class="fu"><a href="dist_kde.html">dist_kde</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>,</span>
 <span>  loo <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -73,7 +73,7 @@ as \(s\). This is returned by <code><a href="surprisals.html">surprisals_prob()<
 <span><span class="co"># S3 method for class 'matrix'</span></span>
 <span><span class="fu"><a href="surprisals.html">surprisals_prob</a></span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
-<span>  approximation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"gpd"</span>, <span class="st">"rank"</span><span class="op">)</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"gpd"</span>, <span class="st">"empirical"</span>, <span class="st">"rank"</span><span class="op">)</span>,</span>
 <span>  threshold_probability <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  distribution <span class="op">=</span> <span class="fu"><a href="dist_kde.html">dist_kde</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>,</span>
 <span>  loo <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -83,7 +83,7 @@ as \(s\). This is returned by <code><a href="surprisals.html">surprisals_prob()<
 <span><span class="co"># S3 method for class 'data.frame'</span></span>
 <span><span class="fu"><a href="surprisals.html">surprisals_prob</a></span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
-<span>  approximation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"gpd"</span>, <span class="st">"rank"</span><span class="op">)</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"gpd"</span>, <span class="st">"empirical"</span>, <span class="st">"rank"</span><span class="op">)</span>,</span>
 <span>  threshold_probability <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  distribution <span class="op">=</span> <span class="fu"><a href="dist_kde.html">dist_kde</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span>,</span>
 <span>  loo <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -116,7 +116,7 @@ estimate is computed from the data <code>object</code>.</p></dd>
 <dt id="arg-approximation">approximation<a class="anchor" aria-label="anchor" href="#arg-approximation"></a></dt>
 <dd><p>Character string specifying the method to use in
 computing the surprisal probabilities. See Details below. For a multivariate
-data set, it needs to be set to either "gpd" or "rank".</p></dd>
+data set, it needs to be set to either "gpd" or "empirical".</p></dd>
 
 
 <dt id="arg-threshold-probability">threshold_probability<a class="anchor" aria-label="anchor" href="#arg-threshold-probability"></a></dt>
@@ -145,11 +145,9 @@ used for computing the surprisal values but not for determining their
 probabilities. Due to extreme value theory, the resulting probabilities should
 be relatively insensitive to the distribution used in computing the surprisal
 values.</p></li>
-<li><p>When <code>approximation = "rank"</code>, the surprisal probability of each
+<li><p>When <code>approximation = "empirical"</code> (or <code>"rank"</code>), the surprisal probability of each
 observation is estimated using the proportion of observations with
-greater surprisal values; i.e., 1 - rank(s)/n where <code>rank(s)</code> is the rank
-of the surprisal value <code>s</code> among all surprisal values, and <code>n</code> is the
-number of observations. This is a nonparametric approach that is also
+greater or equal surprisal values. This is a nonparametric approach that is also
 insensitive to the distribution used in computing the surprisal values.</p></li>
 </ol></div>
     <div class="section level2">

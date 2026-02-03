@@ -4,6 +4,8 @@
 
 ## weird 2.0.0
 
+CRAN release: 2026-01-27
+
 - Added fr_mortality data set
 - Updated oldfaithful and cricket_batting data sets
 - Refactored package to use distributional objects

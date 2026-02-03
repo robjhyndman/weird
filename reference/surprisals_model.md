@@ -17,7 +17,7 @@ surprisals(object, loo = FALSE, ...)
 # S3 method for class 'lm'
 surprisals_prob(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.1,
   loo = FALSE,
   ...
@@ -29,7 +29,7 @@ surprisals(object, ...)
 # S3 method for class 'gam'
 surprisals_prob(
   object,
-  approximation = c("none", "gpd", "rank"),
+  approximation = c("none", "gpd", "empirical", "rank"),
   threshold_probability = 0.1,
   ...
 )
@@ -92,13 +92,11 @@ The surprisal probabilities may be computed in three different ways.
     relatively insensitive to the distribution used in computing the
     surprisal values.
 
-3.  When `approximation = "rank"`, the surprisal probability of each
-    observation is estimated using the proportion of observations with
-    greater surprisal values; i.e., 1 - rank(s)/n where `rank(s)` is the
-    rank of the surprisal value `s` among all surprisal values, and `n`
-    is the number of observations. This is a nonparametric approach that
-    is also insensitive to the distribution used in computing the
-    surprisal values.
+3.  When `approximation = "empirical"` (or `"rank"`), the surprisal
+    probability of each observation is estimated using the proportion of
+    observations with greater or equal surprisal values. This is a
+    nonparametric approach that is also insensitive to the distribution
+    used in computing the surprisal values.
 
 ## References
 
