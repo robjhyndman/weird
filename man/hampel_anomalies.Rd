@@ -25,7 +25,7 @@ First, a moving median is calculated using windows of size
 \code{2 * bandwidth + 1}. Then the median absolute deviations from
 this moving median are calculated in the same moving windows.
 A point is declared an anomaly if its MAD is value is more than \code{k} standard
-deviations. The MAD is converted to a standard deviation using MAD * 1.482602,
+deviations. The MAD is converted to a standard deviation using MAD * 1.4826,
 which holds for normally distributed data.
 The first \code{bandwidth} and last \code{bandwidth} observations cannot
 be declared anomalies.

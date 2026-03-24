@@ -97,8 +97,10 @@ warpbreaks |>
   filter(prob < 0.05)
 }
 \references{
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter 6,
-\url{https://OTexts.com/weird/}.
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R",
+Chapter 6, \url{https://OTexts.com/weird/}.
+Rob J Hyndman & David T Frazier (2026) "Anomaly detection using surprisals",
+\url{https://robjhyndman.com/publications/surprisals.html}.
 }
 \seealso{
 For specific methods, see \code{\link[=surprisals.numeric]{surprisals.numeric()}} and \code{\link[=surprisals.lm]{surprisals.lm()}},
