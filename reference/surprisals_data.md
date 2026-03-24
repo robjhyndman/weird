@@ -118,7 +118,9 @@ The surprisal probabilities may be computed in three different ways.
 ## References
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter
-6, <https://OTexts.com/weird/>.
+6, <https://OTexts.com/weird/>. Rob J Hyndman & David T Frazier (2026)
+"Anomaly detection using surprisals",
+<https://robjhyndman.com/publications/surprisals.html>.
 
 ## See also
 
@@ -139,18 +141,18 @@ tibble(
   p_zscore = 2 * (1 - pnorm(abs(y)))
 )
 #> # A tibble: 50 × 4
-#>         y p_kde    p_normal    p_zscore
-#>     <dbl> <dbl>       <dbl>       <dbl>
-#>  1  5     0     0.000000573 0.000000573
-#>  2  0.850 0.490 0.395       0.395      
-#>  3 -0.925 0.376 0.355       0.355      
-#>  4  0.894 0.471 0.372       0.372      
-#>  5 -0.941 0.368 0.347       0.347      
-#>  6  0.539 0.637 0.590       0.590      
-#>  7 -0.182 0.821 0.856       0.856      
-#>  8  0.892 0.472 0.373       0.373      
-#>  9  1.33  0.307 0.184       0.184      
-#> 10 -0.103 0.854 0.918       0.918      
+#>          y p_kde    p_normal    p_zscore
+#>      <dbl> <dbl>       <dbl>       <dbl>
+#>  1  5      0     0.000000573 0.000000573
+#>  2  0.869  0.363 0.385       0.385      
+#>  3 -1.62   0.215 0.104       0.104      
+#>  4  0.143  0.690 0.886       0.886      
+#>  5  0.710  0.422 0.477       0.477      
+#>  6 -0.0555 0.796 0.956       0.956      
+#>  7  0.172  0.674 0.864       0.864      
+#>  8 -0.639  0.729 0.523       0.523      
+#>  9 -0.663  0.715 0.508       0.508      
+#> 10  0.0788 0.725 0.937       0.937      
 #> # ℹ 40 more rows
 tibble(
   y = n01$v1,
@@ -181,18 +183,18 @@ tibble(
   prob = surprisals_prob(cbind(x, y), approximation = "gpd")
 )
 #> # A tibble: 50 × 3
-#>           x      y      prob
-#>       <dbl>  <dbl>     <dbl>
-#>  1 -0.00475  5     0.0000213
-#>  2 -1.56    -0.393 0.1      
-#>  3  0.700    0.165 0.1      
-#>  4  0.301   -0.274 0.1      
-#>  5 -1.66     0.476 0.1      
-#>  6 -0.491    0.731 0.1      
-#>  7 -0.360   -0.736 0.1      
-#>  8  1.67     1.30  0.1      
-#>  9  0.941    0.420 0.1      
-#> 10  1.62     1.51  0.1      
+#>           x       y      prob
+#>       <dbl>   <dbl>     <dbl>
+#>  1  0.107    5      0.0000601
+#>  2 -1.01     0.818  0.1      
+#>  3  1.18     0.519  0.1      
+#>  4 -1.84    -0.614  0.1      
+#>  5 -1.21     2.83   0.0161   
+#>  6 -0.772    1.50   0.1      
+#>  7 -0.350   -0.0382 0.1      
+#>  8  1.68    -0.833  0.1      
+#>  9 -2.29     0.442  0.0953   
+#> 10 -0.00475 -0.362  0.1      
 #> # ℹ 40 more rows
 oldfaithful |>
   mutate(

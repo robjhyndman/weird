@@ -90,6 +90,8 @@ tibble(y = y) |> filter(grubbs_anomalies(y))
 #>   <dbl>
 #> 1     5
 tibble(y = y) |> filter(dixon_anomalies(y))
-#> # A tibble: 0 × 1
-#> # ℹ 1 variable: y <dbl>
+#> # A tibble: 1 × 1
+#>       y
+#>   <dbl>
+#> 1     5
 ```

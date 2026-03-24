@@ -41,11 +41,11 @@ c(dist_normal(), dist_kde(c(rnorm(100), rnorm(100, 3, 1)))) |>
 #> # A tibble: 5 × 5
 #>    prob distribution     lower upper density
 #>   <dbl> <chr>            <dbl> <dbl>   <dbl>
-#> 1  0.5  N(0, 1)         -0.674 0.674  0.212 
-#> 2  0.95 N(0, 1)         -1.96  1.96   0.0517
-#> 3  0.5  kde[1d, h=0.65] -0.667 0.984  0.212 
-#> 4  0.5  kde[1d, h=0.65]  1.99  3.21   0.212 
-#> 5  0.95 kde[1d, h=0.65] -1.74  5.07   0.0517
+#> 1  0.5  N(0, 1)         -0.674 0.674  0.213 
+#> 2  0.95 N(0, 1)         -1.96  1.96   0.0521
+#> 3  0.5  kde[1d, h=0.65] -0.674 1.05   0.213 
+#> 4  0.5  kde[1d, h=0.65]  2.01  3.12   0.213 
+#> 5  0.95 kde[1d, h=0.65] -1.69  5.04   0.0521
 dist_kde(oldfaithful$duration) |> hdr_table(0.95)
 #> # A tibble: 2 × 5
 #>    prob distribution  lower upper density
