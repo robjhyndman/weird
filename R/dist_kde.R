@@ -258,3 +258,48 @@ kurtosis.dist_kde <- function(x, ..., na.rm = FALSE) {
     (mean((x$kde$x - mean(x$kde$x))^4) + 6 * h^2 * v - 3 * h^4) / v^2 - 3
   }
 }
+
+# hdr.dist_kde is a modification of distributional:::hdr.dist_default,
+# but uses the KDE at the data points to find falpha,
+# rather than the KDE at the quantiles of the distribution.
+# This avoids the problem of having surprisal anomalies that are inconsistent with the HDR
+# Number of observations required tentatively set to 200.
+
+#' @exportS3Method distributional::hdr
+hdr.dist_kde <- function(object, size, n = 4096) {
+  if(NROW(object$kde$x) < 200) {
+    # Just use the default. There is not enough data to get a good estimate of falpha
+    NextMethod()
+  } else {
+    dist_y <- density(object, at = object$kde$x)
+    falpha <- quantile(dist_y, probs = 1 - size/100, type = 8)
+    x <- quantile(object, seq(0.5/n, 1-0.5/n, length.out=n))
+    y <- density(object, at=x)
+    hdr <- crossing_alpha(falpha, x, y)
+    lower_hdr <- seq_along(hdr) %% 2 == 1
+    new_hdr(
+      lower = list(hdr[lower_hdr]),
+      upper = list(hdr[!lower_hdr]),
+      size = size
+    )
+  }
+}
+
+crossing_alpha <- function(alpha, x, y) {
+  it <- seq_len(length(y) - 1)
+  dd <- y - alpha
+  dd <- dd[it + 1] * dd[it]
+  index <- it[dd <= 0]
+  out <- unique(vapply(
+    index,
+    function(.x) {
+      stats::approx(
+        y[.x + c(0, 1)],
+        x[.x + c(0, 1)],
+        xout = alpha
+      )$y
+    },
+    numeric(1L)
+  ))
+  c(x[1][y[1] > alpha], out, x[length(x)][y[length(y)] > alpha])
+}
