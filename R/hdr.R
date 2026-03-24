@@ -160,7 +160,7 @@ hdr_table <- function(object, prob) {
     output <- lapply(
       prob,
       function(p) {
-        hdri <- distributional::hdr(object, size = p * 100, n = 1024)
+        hdri <- distributional::hdr(object, size = p * 100, n = 4096)
         # Extract limits
         hdri <- tibble(
           prob = p,

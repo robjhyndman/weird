@@ -207,7 +207,7 @@ gg_density1 <- function(
   if (hdr == "fill") {
     prob <- sort(unique(prob), decreasing = TRUE)
     hdrdf <- purrr::map_dfr(prob, function(u) {
-      hdri <- distributional::hdr(object, size = u * 100)
+      hdri <- distributional::hdr(object, size = u * 100, n = 4096)
       tibble(
         level = u * 100,
         Distribution = dist_names,
