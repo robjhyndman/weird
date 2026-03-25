@@ -32,6 +32,9 @@ reference:
       - oldfaithful
       - fetch_wine_reviews
       - fr_mortality
+  - title: Functions for scaling data
+    contents:
+      - mvscale
   - title: Functions for calculating anomaly scores
     contents:
       - glosh_scores
