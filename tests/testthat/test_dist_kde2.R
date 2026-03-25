@@ -1,4 +1,4 @@
-# Univariate kde tests
+# Bivariate kde tests
 test_that("dist_kde2", {
   set.seed(123)
   x <- rnorm(200)

@@ -36,7 +36,7 @@ test_that("dist_density", {
   # CDF
   expect_equal(
     distributional::cdf(dist, at),
-    list(as.integer(!(at < 2)), pnorm(at), pexp(at)),
+    list(as.integer(at >= 2), pnorm(at), pexp(at)),
     tolerance = 0.001
   )
   # Quantiles

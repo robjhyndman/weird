@@ -35,7 +35,7 @@
 #' @author Rob J Hyndman
 #' @examples
 #' # Univariate densities
-#' kde <- dist_kde(c(rnorm(500), rnorm(500, 4, .5)))
+#' kde <- dist_kde(c(rnorm(500), rnorm(500, 4, 0.5)))
 #' gg_density(kde,
 #'   hdr = "fill", prob = c(0.5, 0.95), color = "#c14b14",
 #'   show_mode = TRUE, show_points = TRUE, jitter = TRUE
