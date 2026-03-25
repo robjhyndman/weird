@@ -231,8 +231,7 @@ median.dist_kde <- function(x, na.rm = FALSE, ...) {
 covariance.dist_kde <- function(x, ...) {
   n <- NROW(x$kde$x)
   if (NCOL(x$kde$x) > 1) {
-    stop("Multivariate kde covariance is not yet implemented")
-    stats::cov(x$kde$x, ...) # Needs adjustment
+    (n - 1) / n * stats::cov(x$kde$x) + x$kde$H
   } else {
     (n - 1) / n * stats::var(x$kde$x, ...) + x$kde$h^2
   }
@@ -267,14 +266,14 @@ kurtosis.dist_kde <- function(x, ..., na.rm = FALSE) {
 
 #' @exportS3Method distributional::hdr
 hdr.dist_kde <- function(object, size, n = 4096) {
-  if(NROW(object$kde$x) < 200) {
+  if (NROW(object$kde$x) < 200) {
     # Just use the default. There is not enough data to get a good estimate of falpha
     NextMethod()
   } else {
     dist_y <- density(object, at = object$kde$x)
-    falpha <- quantile(dist_y, probs = 1 - size/100, type = 8)
-    x <- quantile(object, seq(0.5/n, 1-0.5/n, length.out=n))
-    y <- density(object, at=x)
+    falpha <- quantile(dist_y, probs = 1 - size / 100, type = 8)
+    x <- quantile(object, seq(0.5 / n, 1 - 0.5 / n, length.out = n))
+    y <- density(object, at = x)
     hdr <- crossing_alpha(falpha, x, y)
     lower_hdr <- seq_along(hdr) %% 2 == 1
     distributional::new_hdr(
