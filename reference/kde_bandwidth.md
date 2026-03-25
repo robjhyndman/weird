@@ -26,9 +26,7 @@ kde_bandwidth(data, method = c("robust", "normal", "plugin", "lookout"), ...)
 
 - ...:
 
-  Additional arguments are ignored unless `method = "lookout"`, when
-  they are passed to
-  [`lookout::find_tda_bw()`](https://sevvandi.github.io/lookout/reference/find_tda_bw.html).
+  Additional arguments are ignored.
 
 ## Value
 

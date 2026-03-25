@@ -288,7 +288,7 @@ oldfaithful |>
 Some anomaly detection methods require the data to be scaled first, so
 all observations are on the same scale. However, many scaling methods
 are not robust to anomalies. The
-[`mvscale()`](https://sevvandi.github.io/lookout/reference/mvscale.html)
+[`mvscale()`](https://pkg.robjhyndman.com/weird/reference/mvscale.md)
 function provides a multivariate robust scaling method, that optionally
 takes account of the relationships between variables, and uses robust
 estimates of center, scale and covariance by default. The centers are
@@ -357,6 +357,11 @@ Data sets included in the package
   : Wine prices and points
 - [`fr_mortality`](https://pkg.robjhyndman.com/weird/reference/fr_mortality.md)
   : French mortality rates by age and sex
+
+## Functions for scaling data
+
+- [`mvscale()`](https://pkg.robjhyndman.com/weird/reference/mvscale.md)
+  : Compute robust multivariate scaled data
 
 ## Functions for calculating anomaly scores
 

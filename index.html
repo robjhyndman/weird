@@ -249,9 +249,9 @@
 <div class="section level2">
 <h2 id="robust-multivariate-scaling">Robust multivariate scaling<a class="anchor" aria-label="anchor" href="#robust-multivariate-scaling"></a>
 </h2>
-<p>Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The <code><a href="https://sevvandi.github.io/lookout/reference/mvscale.html" class="external-link">mvscale()</a></code> function provides a multivariate robust scaling method, that optionally takes account of the relationships between variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as <code>z1</code>, <code>z2</code>, etc. Non-rotated scaling is possible by setting <code>cov = NULL</code>.</p>
+<p>Some anomaly detection methods require the data to be scaled first, so all observations are on the same scale. However, many scaling methods are not robust to anomalies. The <code><a href="reference/mvscale.html">mvscale()</a></code> function provides a multivariate robust scaling method, that optionally takes account of the relationships between variables, and uses robust estimates of center, scale and covariance by default. The centers are removed using medians, the scale function is the IQR, and the covariance matrix is estimated using a robust OGK estimate. The data are scaled using the Cholesky decomposition of the inverse covariance. Then the scaled data are returned. The scaled variables are rotated to be orthogonal, so are renamed as <code>z1</code>, <code>z2</code>, etc. Non-rotated scaling is possible by setting <code>cov = NULL</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://sevvandi.github.io/lookout/reference/mvscale.html" class="external-link">mvscale</a></span><span class="op">(</span><span class="va">oldfaithful</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/mvscale.html">mvscale</a></span><span class="op">(</span><span class="va">oldfaithful</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in mvscale(oldfaithful): Ignoring non-numeric columns: time, recorded_duration</span></span>
 <span><span class="co">#&gt; # A tibble: 2,097 × 4</span></span>
 <span><span class="co">#&gt;    time                recorded_duration      z1     z2</span></span>
@@ -267,7 +267,7 @@
 <span><span class="co">#&gt;  9 2017-02-05 17:19:00 4m 0s             -0.215   0.554</span></span>
 <span><span class="co">#&gt; 10 2017-02-05 19:00:00 4m 2s             -0.121   0.554</span></span>
 <span><span class="co">#&gt; # ℹ 2,087 more rows</span></span>
-<span><span class="fu"><a href="https://sevvandi.github.io/lookout/reference/mvscale.html" class="external-link">mvscale</a></span><span class="op">(</span><span class="va">oldfaithful</span>, cov <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/mvscale.html">mvscale</a></span><span class="op">(</span><span class="va">oldfaithful</span>, cov <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in mvscale(oldfaithful, cov = NULL): Ignoring non-numeric columns: time, recorded_duration</span></span>
 <span><span class="co">#&gt; # A tibble: 2,097 × 4</span></span>
 <span><span class="co">#&gt;    time                recorded_duration duration waiting</span></span>

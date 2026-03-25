@@ -22,6 +22,11 @@ Data sets included in the package
 - [`fr_mortality`](https://pkg.robjhyndman.com/weird/reference/fr_mortality.md)
   : French mortality rates by age and sex
 
+## Functions for scaling data
+
+- [`mvscale()`](https://pkg.robjhyndman.com/weird/reference/mvscale.md)
+  : Compute robust multivariate scaled data
+
 ## Functions for calculating anomaly scores
 
 - [`glosh_scores()`](https://pkg.robjhyndman.com/weird/reference/glosh_scores.md)

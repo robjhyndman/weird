@@ -6,7 +6,3 @@ to see their documentation.
 - ggplot2:
 
   [`autoplot`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-
-- lookout:
-
-  [`mvscale`](https://sevvandi.github.io/lookout/reference/mvscale.html)
