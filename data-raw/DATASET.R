@@ -18,8 +18,12 @@ cricket_batting_women <- fetch_cricinfo(
 cricket_batting <- bind_rows(
   cricket_batting_men |> mutate(Gender = "Men"),
   cricket_batting_women |> mutate(Gender = "Women")
-) |>
-  mutate(Player = stringr::str_trim(Player)) |>
+)
+cricket_batting <- cricket_batting |>
+  mutate(
+    Player = stringr::str_trim(Player),
+    HighScore = as.integer(HighScore),
+  ) |>
   arrange(Start, Country, Player)
 
 usethis::use_data(cricket_batting, overwrite = TRUE)
