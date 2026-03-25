@@ -14,7 +14,8 @@ n01
 Data frame
 }
 \description{
-A synthetic data set containing 1000 observations on 10 variables generated
+A synthetic data set containing 1000 observations on
+10 variables generated
 from independent standard normal distributions.
 }
 \examples{

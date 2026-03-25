@@ -5,7 +5,8 @@
 \alias{oldfaithful}
 \title{Old faithful eruption data}
 \format{
-A data frame with 2097 rows and 4 columns:
+A data frame with 2097 rows and
+4 columns:
 \describe{
 \item{time}{Time eruption started}
 \item{recorded_duration}{Duration of eruption as recorded}

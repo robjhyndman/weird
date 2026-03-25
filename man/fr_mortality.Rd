@@ -5,7 +5,8 @@
 \alias{fr_mortality}
 \title{French mortality rates by age and sex}
 \format{
-A data frame with 31,648 rows and 4 columns.
+A data frame with 31648 rows and
+4 columns.
 }
 \source{
 Human Mortality Database \url{https://www.mortality.org}

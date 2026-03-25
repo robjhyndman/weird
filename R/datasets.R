@@ -3,7 +3,8 @@
 #' A dataset containing career batting statistics for all international test
 #' players (men and women) up to 6 October 2025.
 #'
-#' @format A data frame with 3968 rows and 15 variables:
+#' @format A data frame with `r nrow(cricket_batting)` rows and
+#' `r ncol(cricket_batting)` variables:
 #' \describe{
 #'   \item{Player}{Player name in form of "initials surname"}
 #'   \item{Country}{Country played for}
@@ -40,7 +41,8 @@
 #' Recordings are incomplete, especially during the winter months when observers
 #' may not be present.
 #'
-#' @format A data frame with 2097 rows and 4 columns:
+#' @format A data frame with `r nrow(oldfaithful)` rows and
+#' `r ncol(oldfaithful)` columns:
 #' \describe{
 #'   \item{time}{Time eruption started}
 #'   \item{recorded_duration}{Duration of eruption as recorded}
@@ -59,10 +61,11 @@
 
 #' Multivariate standard normal data
 #'
-#' A synthetic data set containing 1000 observations on 10 variables generated
+#' A synthetic data set containing `r nrow(n01)` observations on
+#' `r ncol(n01)` variables generated
 #' from independent standard normal distributions.
 #'
-#' @format A data frame with 1000 rows and 10 columns.
+#' @format A data frame with `r nrow(n01)` rows and `r ncol(n01)` columns.
 #' @return Data frame
 #' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 1.4,
 #' \url{https://OTexts.com/weird/}.
@@ -75,7 +78,8 @@
 #' A data set containing French mortality rates between the years 1816 and 1999,
 #' by age and sex.
 #'
-#' @format A data frame with 31,648 rows and 4 columns.
+#' @format A data frame with `r nrow(fr_mortality)` rows and
+#' `r ncol(fr_mortality)` columns.
 #' @source Human Mortality Database \url{https://www.mortality.org}
 #' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 1.4,
 #' \url{https://OTexts.com/weird/}.
