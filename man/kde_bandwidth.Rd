@@ -15,8 +15,7 @@ kde_bandwidth(data, method = c("robust", "normal", "plugin", "lookout"), ...)
 \code{"plugin"} (a plugin estimator), and
 \code{"lookout"} (the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner, 2026).}
 
-\item{...}{Additional arguments are ignored unless \code{method = "lookout"}, when
-they are passed to \code{\link[lookout:find_tda_bw]{lookout::find_tda_bw()}}.}
+\item{...}{Additional arguments are ignored.}
 }
 \value{
 A matrix of bandwidths (or a scalar in the case of univariate data).

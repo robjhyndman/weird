@@ -277,7 +277,7 @@ hdr.dist_kde <- function(object, size, n = 4096) {
     y <- density(object, at=x)
     hdr <- crossing_alpha(falpha, x, y)
     lower_hdr <- seq_along(hdr) %% 2 == 1
-    new_hdr(
+    distributional::new_hdr(
       lower = list(hdr[lower_hdr]),
       upper = list(hdr[!lower_hdr]),
       size = size
