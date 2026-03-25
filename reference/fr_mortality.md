@@ -11,7 +11,7 @@ fr_mortality
 
 ## Format
 
-A data frame with 31,648 rows and 4 columns.
+A data frame with 31648 rows and 4 columns.
 
 ## Source
 
