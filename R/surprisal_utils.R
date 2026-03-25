@@ -54,20 +54,18 @@ surprisal_prob_from_s <- function(
   }
   if (approximation == "none") {
     # Univariate, not normal, not symmetric
-    if (length(unique(distribution)) == 1L) {
+    dd <- unique(distribution)
+    if(length(dd) == 1L) {
       distribution <- unique(distribution)
     } else {
-      # Need to compute probabilities one by one
-      dd <- length(distribution)
-      if (dd != n) {
-        stop("Length of distribution must be 1 or equal to length of s")
-      }
+      # Need to compute probabilities one distribution at a time
       p <- numeric(n)
-      for (i in seq(n)) {
-        p[i] <- surprisal_prob_from_s(
-          s[i],
-          distribution[i],
-          y = y[i],
+      for (i in seq_along(dd)) {
+        j <- which(distribution == dd[i])
+        p[j] <- surprisal_prob_from_s(
+          s[j],
+          dd[i],
+          y = y[j],
           approximation = approximation,
           threshold_probability = threshold_probability
         )
