@@ -310,3 +310,12 @@ crossing_alpha <- function(alpha, x, y) {
   ))
   c(x[1][y[1] > alpha], out, x[length(x)][y[length(y)] > alpha])
 }
+
+#' @exportS3Method distributional::parameters
+parameters.dist_kde <- function(x, ...) {
+  if (NCOL(x$kde$x) > 1) {
+    list(H = x$kde$H)
+  } else {
+    list(h = x$kde$h)
+  }
+}
