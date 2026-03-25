@@ -5,13 +5,13 @@ surprisals_from_den <- function(object, den, distribution, loo) {
   if (NCOL(object) == 1L) {
     object <- c(object)
   }
-  if (length(distribution) > 1 & length(object) > 1) {
+  if (length(distribution) > 1 && length(object) > 1) {
     if (length(distribution) != length(object)) {
       stop("Length of distribution and object must be the same or equal to 1")
     }
   }
   scores <- -den
-  if (loo & all(stats::family(distribution) == "kde")) {
+  if (loo && all(stats::family(distribution) == "kde")) {
     n <- NROW(object)
     d <- NCOL(object)
     if (d == 1L) {
@@ -55,7 +55,7 @@ surprisal_prob_from_s <- function(
   if (approximation == "none") {
     # Univariate, not normal, not symmetric
     dd <- unique(distribution)
-    if(length(dd) == 1L) {
+    if (length(dd) == 1L) {
       distribution <- unique(distribution)
     } else {
       # Need to compute probabilities one distribution at a time
@@ -80,7 +80,7 @@ surprisal_prob_from_s <- function(
     p <- rank(-s, ties.method = "max", na.last = "keep") / sum(!is.na(s))
   } else if (approximation == "normal") {
     p <- surprisal_normal_prob(s, distribution)
-  } else if (approximation == "symmetric" & !is.null(y)) {
+  } else if (approximation == "symmetric" && !is.null(y)) {
     centre <- stats::median(distribution)
     p <- 2 *
       (1 - distributional::cdf(distribution, q = centre + abs(y - centre))[[1]])
@@ -93,7 +93,7 @@ surprisal_prob_from_s <- function(
     dist_x <- unique(unlist(dist_x))
     dist_y <- -unlist(density(distribution, dist_x, log = TRUE))
     prob <- (rank(dist_y) - 1) / length(dist_y)
-    if (all(is.na(dist_y)) | all(is.na(prob))) {
+    if (all(is.na(dist_y)) || all(is.na(prob))) {
       return(rep(NA_real_, n))
     }
     p <- 1 - approx(dist_y, prob, xout = s, rule = 2, ties = mean)$y

@@ -49,7 +49,7 @@ surprisals.numeric <- function(
   if (NCOL(object) == 1L) {
     object <- c(object)
   }
-  if (length(distribution) > 1 & length(object) > 1) {
+  if (length(distribution) > 1 && length(object) > 1) {
     if (length(distribution) != length(object)) {
       stop("Length of distribution and object must be the same or equal to 1")
     }
@@ -110,11 +110,11 @@ surprisals_prob.numeric <- function(
   ...
 ) {
   approximation <- match.arg(approximation)
-  if(approximation == "rank") {
+  if (approximation == "rank") {
     approximation <- "empirical"
   }
   s <- surprisals.numeric(object, distribution = distribution, loo = loo)
-  if (loo & all(stats::family(distribution) == "kde")) {
+  if (loo && all(stats::family(distribution) == "kde")) {
     y <- object
   } else {
     y <- NULL

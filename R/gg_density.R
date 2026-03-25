@@ -69,7 +69,7 @@ gg_density <- function(
   jitter = FALSE,
   ngrid = 501
 ) {
-  if (min(prob) <= 0 | max(prob) >= 1) {
+  if (min(prob) <= 0 || max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
   prob <- sort(prob)
@@ -216,7 +216,7 @@ gg_density1 <- function(
       ) |>
         tidyr::unnest(c(lower, upper))
     })
-    hdrdf$id <- seq(NROW(hdrdf))
+    hdrdf$id <- seq_len(NROW(hdrdf))
     hdrdf$ymin <- -maxden *
       as.numeric(factor(hdrdf$Distribution, levels = dist_names)) /
       20

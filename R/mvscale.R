@@ -41,7 +41,9 @@ mvscale <- function(
 ) {
   d <- NCOL(object)
   # Check if input is a vector
-  is_vec <- d == 1L & !inherits(object, "matrix") & !inherits(object, "data.frame")
+  is_vec <- d == 1L &&
+    !inherits(object, "matrix") &&
+    !inherits(object, "data.frame")
   if (is_vec) {
     numeric_col <- is.numeric(object)
     if (!numeric_col) {
@@ -58,7 +60,7 @@ mvscale <- function(
   } else {
     # It must be a data frame. So let's find the numeric columns
     numeric_col <- unlist(lapply(object, is.numeric))
-    if (!all(numeric_col) & warning) {
+    if (!all(numeric_col) && warning) {
       warning(
         "Ignoring non-numeric columns: ",
         paste(names(object)[!numeric_col], collapse = ", ")

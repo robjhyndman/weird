@@ -179,8 +179,16 @@ cdf.dist_kde <- function(x, q, ..., na.rm = TRUE) {
     stop("Multivariate kde cdf not implemented")
   }
   # Integrate density
-  F <- cumintegral(x$kde$eval.points, x$kde$estimate)
-  stats::approx(F$x, F$y, xout = q, yleft = 0, yright = 1, ..., na.rm = na.rm)$y
+  CDF <- cumintegral(x$kde$eval.points, x$kde$estimate)
+  stats::approx(
+    CDF$x,
+    CDF$y,
+    xout = q,
+    yleft = 0,
+    yright = 1,
+    ...,
+    na.rm = na.rm
+  )$y
 }
 
 #' @export
@@ -189,13 +197,13 @@ quantile.dist_kde <- function(x, p, ..., na.rm = TRUE) {
     stop("Multivariate kde quantiles not implemented")
   }
   # Compute CDF at density ordinates
-  F <- cumintegral(x$kde$eval.points, x$kde$estimate)
+  CDF <- cumintegral(x$kde$eval.points, x$kde$estimate)
   stats::approx(
-    F$y,
-    F$x,
+    CDF$y,
+    CDF$x,
     xout = p,
-    yleft = min(F$x),
-    yright = max(F$x),
+    yleft = min(CDF$x),
+    yright = max(CDF$x),
     ties = mean,
     ...,
     na.rm = na.rm

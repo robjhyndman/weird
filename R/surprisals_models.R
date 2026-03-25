@@ -53,7 +53,7 @@ surprisals_prob.lm <- function(
   ...
 ) {
   approximation <- match.arg(approximation)
-  if(approximation == "rank") {
+  if (approximation == "rank") {
     approximation <- "empirical"
   }
   s <- surprisals.lm(object, loo = loo)
@@ -97,7 +97,7 @@ surprisals_prob.gam <- function(
   ...
 ) {
   approximation <- match.arg(approximation)
-  if(approximation == "rank") {
+  if (approximation == "rank") {
     approximation <- "empirical"
   }
   if (object$family$family == "gaussian") {

@@ -64,17 +64,25 @@ log_density.dist_density <- function(x, at, ..., na.rm = TRUE) {
 #' @exportS3Method distributional::cdf
 cdf.dist_density <- function(x, q, ..., na.rm = TRUE) {
   # Compute CDF at density ordinates
-  F <- cumintegral(x$x, x$f)
-  stats::approx(F$x, F$y, xout = q, yleft = 0, yright = 1, ..., na.rm = na.rm)$y
+  CDF <- cumintegral(x$x, x$f)
+  stats::approx(
+    CDF$x,
+    CDF$y,
+    xout = q,
+    yleft = 0,
+    yright = 1,
+    ...,
+    na.rm = na.rm
+  )$y
 }
 
 #' @export
 quantile.dist_density <- function(x, p, ..., na.rm = TRUE) {
   # Compute CDF at density ordinates
-  F <- cumintegral(x$x, x$f)
+  CDF <- cumintegral(x$x, x$f)
   stats::approx(
-    F$y,
-    F$x,
+    CDF$y,
+    CDF$x,
     xout = p,
     yleft = min(x$x),
     yright = max(x$x),

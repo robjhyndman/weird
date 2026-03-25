@@ -35,7 +35,8 @@ fetch_wine_reviews <- function() {
   if (!file.exists(dest_file)) {
     utils::download.file(
       url = "https://github.com/robjhyndman/weird/raw/main/data-raw/wine_reviews.rds",
-      destfile = dest_file
+      destfile = dest_file,
+      mode = "wb"
     )
   }
   readRDS(dest_file)

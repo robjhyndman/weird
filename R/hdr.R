@@ -228,11 +228,14 @@ hdr_table <- function(object, prob) {
 hdr_palette <- function(n, color = "#0072b2", prob = NULL) {
   if (missing(prob)) {
     prob <- seq(n - 1) / n
-  } else if (min(prob) <= 0 | max(prob) > 1+1e-6) {
+  } else if (min(prob) <= 0 || max(prob) > 1 + 1e-6) {
     stop("prob must be between 0 and 1")
   }
-  pc_colors <- grDevices::colorRampPalette(c(color, "white"))(150)[c(seq(99),115)]
-  idx <- approx(seq(0.01, 1, by=0.01), seq(100), prob, rule = 2)$y
+  pc_colors <- grDevices::colorRampPalette(c(color, "white"))(150)[c(
+    seq(99),
+    115
+  )]
+  idx <- approx(seq(0.01, 1, by = 0.01), seq(100), prob, rule = 2)$y
   c(color, pc_colors[idx])
 }
 
