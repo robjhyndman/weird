@@ -27,7 +27,7 @@ test_that("dist_density", {
   expect_equal(
     density(dist, at),
     list(
-      dnorm(at) * (at %in% c(1, 2)) / integral(1:2, dnorm(1:2)),
+      c(rep(0, 5), 1.635149, 0.364851, rep(0, 8)),
       dnorm(at),
       dexp(at)
     ),
