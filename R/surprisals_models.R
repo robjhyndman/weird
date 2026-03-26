@@ -71,7 +71,10 @@ surprisals_prob.lm <- function(
 surprisals.gam <- function(object, ...) {
   fit_aug <- broom::augment(object, type.predict = "response")
   if (object$family$family == "gaussian") {
-    std.resid <- c(scale(fit_aug$.resid / fit_aug$.se.fit))
+    e <- fit_aug$.resid
+    h <- fit_aug$.hat
+    sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
+    std.resid <- e / sqrt((1 - h) * sigma2)
     surprisals <- -dnorm(std.resid, log = TRUE)
   } else if (object$family$family == "binomial") {
     surprisals <- -dbinom(
