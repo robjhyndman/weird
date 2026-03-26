@@ -72,6 +72,62 @@ surprisals.glm <- function(object, ...) {
 }
 
 #' @rdname surprisals_model
+#' @importFrom stats approx dbinom density dnorm dpois na.omit
+#' @export
+surprisals.gam <- function(object, ...) {
+  fit_aug <- broom::augment(object, type.predict = "response")
+  if (object$family$family == "gaussian") {
+    e <- fit_aug$.resid
+    h <- fit_aug$.hat
+    sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
+    std.resid <- e / sqrt((1 - h) * sigma2)
+    surprisals <- -dnorm(std.resid, log = TRUE)
+  } else if (object$family$family == "binomial") {
+    surprisals <- -dbinom(
+      x = object$y * object$prior.weights,
+      size = object$prior.weights,
+      prob = fit_aug$.fitted,
+      log = TRUE
+    )
+  } else if (object$family$family == "poisson") {
+    surprisals <- -dpois(object$y, lambda = fit_aug$.fitted, log = TRUE)
+  } else if (object$family$family == "Gamma") {
+    shape <- 1 / object$sig2
+    surprisals <- -stats::dgamma(
+      object$y,
+      shape = shape,
+      rate = shape / fit_aug$.fitted,
+      log = TRUE
+    )
+  } else {
+    stop("Unsupported family")
+  }
+  unname(surprisals)
+}
+
+#' @rdname surprisals_model
+#' @export
+surprisals_prob.lm <- function(
+  object,
+  approximation = c("none", "gpd", "empirical", "rank"),
+  threshold_probability = 0.10,
+  loo = FALSE,
+  ...
+) {
+  approximation <- match.arg(approximation)
+  if (approximation == "rank") {
+    approximation <- "empirical"
+  }
+  s <- surprisals.lm(object, loo = loo)
+  surprisal_prob_from_s(
+    s,
+    distribution = distributional::dist_normal(),
+    approximation = approximation,
+    threshold_probability = threshold_probability
+  )
+}
+
+#' @rdname surprisals_model
 #' @export
 surprisals_prob.glm <- function(
   object,
@@ -109,62 +165,6 @@ surprisals_prob.glm <- function(
     threshold_probability = threshold_probability,
     y = y
   )
-}
-
-#' @rdname surprisals_model
-#' @export
-surprisals_prob.lm <- function(
-  object,
-  approximation = c("none", "gpd", "empirical", "rank"),
-  threshold_probability = 0.10,
-  loo = FALSE,
-  ...
-) {
-  approximation <- match.arg(approximation)
-  if (approximation == "rank") {
-    approximation <- "empirical"
-  }
-  s <- surprisals.lm(object, loo = loo)
-  surprisal_prob_from_s(
-    s,
-    distribution = distributional::dist_normal(),
-    approximation = approximation,
-    threshold_probability = threshold_probability
-  )
-}
-
-#' @rdname surprisals_model
-#' @importFrom stats approx dbinom density dnorm dpois na.omit
-#' @export
-surprisals.gam <- function(object, ...) {
-  fit_aug <- broom::augment(object, type.predict = "response")
-  if (object$family$family == "gaussian") {
-    e <- fit_aug$.resid
-    h <- fit_aug$.hat
-    sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
-    std.resid <- e / sqrt((1 - h) * sigma2)
-    surprisals <- -dnorm(std.resid, log = TRUE)
-  } else if (object$family$family == "binomial") {
-    surprisals <- -dbinom(
-      x = object$y * object$prior.weights,
-      size = object$prior.weights,
-      prob = fit_aug$.fitted,
-      log = TRUE
-    )
-  } else if (object$family$family == "poisson") {
-    surprisals <- -dpois(object$y, lambda = fit_aug$.fitted, log = TRUE)
-  } else if (object$family$family == "Gamma") {
-    shape <- 1 / object$sig2
-    surprisals <- -stats::dgamma(
-      object$y,
-      shape = shape,
-      rate = shape / fit_aug$.fitted,
-      log = TRUE
-    )
-  } else {
-    stop("Unsupported family")
-  }
-  unname(surprisals)
 }
 
 #' @rdname surprisals_model

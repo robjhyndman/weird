@@ -3,9 +3,9 @@
 \name{surprisals.lm}
 \alias{surprisals.lm}
 \alias{surprisals.glm}
-\alias{surprisals_prob.glm}
-\alias{surprisals_prob.lm}
 \alias{surprisals.gam}
+\alias{surprisals_prob.lm}
+\alias{surprisals_prob.glm}
 \alias{surprisals_prob.gam}
 \title{Surprisals and surprisal probabilities computed from a model}
 \usage{
@@ -13,12 +13,7 @@
 
 \method{surprisals}{glm}(object, ...)
 
-\method{surprisals_prob}{glm}(
-  object,
-  approximation = c("none", "gpd", "empirical", "rank"),
-  threshold_probability = 0.1,
-  ...
-)
+\method{surprisals}{gam}(object, ...)
 
 \method{surprisals_prob}{lm}(
   object,
@@ -28,7 +23,12 @@
   ...
 )
 
-\method{surprisals}{gam}(object, ...)
+\method{surprisals_prob}{glm}(
+  object,
+  approximation = c("none", "gpd", "empirical", "rank"),
+  threshold_probability = 0.1,
+  ...
+)
 
 \method{surprisals_prob}{gam}(
   object,
