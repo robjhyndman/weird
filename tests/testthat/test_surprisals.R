@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("surprisals returns Inf for obvious outlier", {
   set.seed(2)
   y <- c(rnorm(10), 100)
   expect_identical(max(surprisals(y, dist_normal())), Inf)
