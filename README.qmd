@@ -50,7 +50,7 @@ pak::pak("robjhyndman/weird")
 * [ggplot2](https://ggplot2.tidyverse.org), for data visualisation.
 * [distributional](https://cran.r-project.org/package=distributional), for handling probability distributions.
 
-You also get a condensed summary of conflicts with other packages you have loaded:
+When you load the weird package, you get a condensed summary of conflicts with other packages you have previously loaded:
 
 ```{r usage}
 library(weird)
