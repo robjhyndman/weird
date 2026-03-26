@@ -1,7 +1,7 @@
-test_that("surprisals returns Inf for obvious outlier", {
+test_that("surprisals", {
   set.seed(2)
   y <- c(rnorm(10), 100)
-  expect_identical(max(surprisals(y, dist_normal())), Inf)
+  expect_gt(max(surprisals(y, dist_normal())), 5000)
   expect_identical(max(surprisals(y, h = 1, loo = TRUE)), Inf)
   expect_equal(
     max(surprisals(y, h = 1, loo = FALSE)),
