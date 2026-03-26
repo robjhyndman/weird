@@ -34,14 +34,14 @@ the following packages:
 - [distributional](https://cran.r-project.org/package=distributional),
   for handling probability distributions.
 
-You also get a condensed summary of conflicts with other packages you
-have loaded:
+When you load the weird package, you get a condensed summary of
+conflicts with other packages you have previously loaded:
 
 ``` r
 library(weird)
-#> ── Attaching packages ─────────────────────────────────────────────────────────────── weird 2.0.0 ──
-#> ✔ dplyr          1.1.4     ✔ distributional 0.6.0
-#> ✔ ggplot2        4.0.1
+#> ── Attaching packages ────────────────────────────────────────────────────────── weird 2.0.0.9000 ──
+#> ✔ dplyr          1.2.0     ✔ distributional 0.7.0
+#> ✔ ggplot2        4.0.2
 #> ── Conflicts ──────────────────────────────────────────────────────────────────── weird_conflicts ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
