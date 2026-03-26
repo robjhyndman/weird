@@ -40,7 +40,7 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
     }
   }
   r2 <- e^2 / ((1 - h) * sigma2)
-  0.5 * (log(2 * pi) + r2)
+  unname(0.5 * (log(2 * pi) + r2))
 }
 
 #' @rdname surprisals_model
@@ -88,7 +88,7 @@ surprisals.gam <- function(object, ...) {
   } else {
     stop("Unsupported family")
   }
-  return(surprisals)
+  unname(surprisals)
 }
 
 #' @rdname surprisals_model
