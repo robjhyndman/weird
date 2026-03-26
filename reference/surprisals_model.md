@@ -14,6 +14,17 @@ extreme as \\s\\. This is returned by
 # S3 method for class 'lm'
 surprisals(object, loo = FALSE, ...)
 
+# S3 method for class 'glm'
+surprisals(object, ...)
+
+# S3 method for class 'glm'
+surprisals_prob(
+  object,
+  approximation = c("none", "gpd", "empirical", "rank"),
+  threshold_probability = 0.1,
+  ...
+)
+
 # S3 method for class 'lm'
 surprisals_prob(
   object,
@@ -136,7 +147,6 @@ glm_breaks <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
 warpbreaks |>
   mutate(prob = surprisals_prob(glm_breaks)) |>
   filter(prob < 0.05)
-#>   breaks wool tension        prob
-#> 1     70    A       L 0.006519066
-#> 2     67    A       L 0.014393443
+#>   breaks wool tension       prob
+#> 1     70    A       L 0.04923568
 ```

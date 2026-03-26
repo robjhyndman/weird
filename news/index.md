@@ -2,6 +2,17 @@
 
 ## weird (development version)
 
+- Added surprisals() and surprisals_prob() for glm objects
+- Faster calculation of surprisals_prob() for lm and gam objects
+- Faster calculation for kde_bandwidth(method = “lookout”)
+- Added covariance calculation for multivariate dist_kde objects
+- More accurate HDR calculations
+- More accurate rank-based surprisal calculation when ties and missings
+  present
+- Added lots of unit tests
+- Better docs
+- Bug fixes
+
 ## weird 2.0.0
 
 CRAN release: 2026-01-27

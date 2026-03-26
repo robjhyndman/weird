@@ -54,6 +54,17 @@ as \(s\). This is returned by <code><a href="surprisals.html">surprisals_prob()<
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'lm'</span></span>
 <span><span class="fu"><a href="surprisals.html">surprisals</a></span><span class="op">(</span><span class="va">object</span>, loo <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for class 'glm'</span></span>
+<span><span class="fu"><a href="surprisals.html">surprisals</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'glm'</span></span>
+<span><span class="fu"><a href="surprisals.html">surprisals_prob</a></span><span class="op">(</span></span>
+<span>  <span class="va">object</span>,</span>
+<span>  approximation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"gpd"</span>, <span class="st">"empirical"</span>, <span class="st">"rank"</span><span class="op">)</span>,</span>
+<span>  threshold_probability <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for class 'lm'</span></span>
 <span><span class="fu"><a href="surprisals.html">surprisals_prob</a></span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
@@ -167,9 +178,8 @@ Rob J Hyndman &amp; David T Frazier (2026) "Anomaly detection using surprisals",
 <span class="r-in"><span><span class="va">warpbreaks</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">mutate</span><span class="op">(</span>prob <span class="op">=</span> <span class="fu"><a href="surprisals.html">surprisals_prob</a></span><span class="op">(</span><span class="va">glm_breaks</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">prob</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   breaks wool tension        prob</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     70    A       L 0.006519066</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     67    A       L 0.014393443</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   breaks wool tension       prob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     70    A       L 0.04923568</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

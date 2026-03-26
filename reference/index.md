@@ -39,6 +39,8 @@ Data sets included in the package
   [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   : Surprisals and surprisal probabilities
 - [`surprisals(`*`<lm>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
+  [`surprisals(`*`<glm>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
+  [`surprisals_prob(`*`<glm>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   [`surprisals_prob(`*`<lm>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   [`surprisals(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
   [`surprisals_prob(`*`<gam>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_model.md)
