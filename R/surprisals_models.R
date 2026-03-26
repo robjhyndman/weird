@@ -32,15 +32,83 @@ surprisals.lm <- function(object, loo = FALSE, ...) {
   h <- stats::hatvalues(object)
   sigma2 <- sum(e^2, na.rm = TRUE) / object$df.residual
   if (loo) {
-    if (inherits(object, "glm")) {
-      stop("LOO surprisals are not implemented for glm objects.")
-    } else {
-      resdf <- object$df.residual
-      sigma2 <- (sigma2 * resdf - e^2 / (1 - h)) / (resdf - 1)
-    }
+    resdf <- object$df.residual
+    sigma2 <- (sigma2 * resdf - e^2 / (1 - h)) / (resdf - 1)
   }
   r2 <- e^2 / ((1 - h) * sigma2)
   unname(0.5 * (log(2 * pi) + r2))
+}
+
+#' @rdname surprisals_model
+#' @export
+surprisals.glm <- function(object, ...) {
+  fam <- object$family$family
+  mu <- stats::fitted(object)
+  y <- object$y
+  if (fam == "gaussian") {
+    # Use surprisals.lm()
+    return(NextMethod())
+  } else if (fam == "binomial") {
+    surprisals <- -dbinom(
+      x = y * object$prior.weights,
+      size = object$prior.weights,
+      prob = mu,
+      log = TRUE
+    )
+  } else if (fam == "poisson") {
+    surprisals <- -dpois(y, lambda = mu, log = TRUE)
+  } else if (fam == "Gamma") {
+    shape <- 1 / summary(object)$dispersion
+    surprisals <- -stats::dgamma(
+      y,
+      shape = shape,
+      rate = shape / mu,
+      log = TRUE
+    )
+  } else {
+    stop("Unsupported family: ", fam)
+  }
+  unname(surprisals)
+}
+
+#' @rdname surprisals_model
+#' @export
+surprisals_prob.glm <- function(
+  object,
+  approximation = c("none", "gpd", "empirical", "rank"),
+  threshold_probability = 0.10,
+  ...
+) {
+  approximation <- match.arg(approximation)
+  if (approximation == "rank") {
+    approximation <- "empirical"
+  }
+  fam <- object$family$family
+  mu <- stats::fitted(object)
+  if (fam == "gaussian") {
+    dist <- distributional::dist_normal()
+    y <- NULL
+  } else if (fam == "binomial") {
+    dist <- distributional::dist_binomial(object$prior.weights, mu)
+    y <- object$y * object$prior.weights
+  } else if (fam == "poisson") {
+    dist <- distributional::dist_poisson(lambda = mu)
+    y <- object$y
+  } else if (fam == "Gamma") {
+    shape <- 1 / summary(object)$dispersion
+    dist <- distributional::dist_gamma(shape = shape, rate = shape / mu)
+    y <- object$y
+  } else {
+    stop("Unsupported family: ", fam)
+  }
+  s <- surprisals.glm(object)
+  surprisal_prob_from_s(
+    s,
+    distribution = dist,
+    approximation = approximation,
+    threshold_probability = threshold_probability,
+    y = y
+  )
 }
 
 #' @rdname surprisals_model
@@ -85,6 +153,14 @@ surprisals.gam <- function(object, ...) {
     )
   } else if (object$family$family == "poisson") {
     surprisals <- -dpois(object$y, lambda = fit_aug$.fitted, log = TRUE)
+  } else if (object$family$family == "Gamma") {
+    shape <- 1 / object$sig2
+    surprisals <- -stats::dgamma(
+      object$y,
+      shape = shape,
+      rate = shape / fit_aug$.fitted,
+      log = TRUE
+    )
   } else {
     stop("Unsupported family")
   }
@@ -114,6 +190,12 @@ surprisals_prob.gam <- function(
       )
     } else if (object$family$family == "poisson") {
       dist <- distributional::dist_poisson(lambda = fit_aug$.fitted)
+    } else if (object$family$family == "Gamma") {
+      shape <- 1 / object$sig2
+      dist <- distributional::dist_gamma(
+        shape = shape,
+        rate = shape / fit_aug$.fitted
+      )
     } else {
       stop("Unsupported family")
     }

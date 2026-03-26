@@ -2,11 +2,17 @@
 
 # Shared fixtures -------------------------------------------------------
 lm_of <- lm(waiting ~ duration, data = oldfaithful)
+glm_of <- glm(waiting ~ duration, data = oldfaithful)
 glm_wb <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
 glm_bin <- glm(
   cbind(breaks, 100 - breaks) ~ wool + tension,
   data = warpbreaks,
   family = binomial
+)
+glm_gamma <- glm(
+  breaks ~ wool + tension,
+  data = warpbreaks,
+  family = Gamma
 )
 gam_gauss <- mgcv::gam(waiting ~ duration, data = oldfaithful)
 gam_pois <- mgcv::gam(
@@ -24,6 +30,7 @@ gam_gamma <- mgcv::gam(
   data = warpbreaks,
   family = Gamma
 )
+
 
 n_of <- nrow(oldfaithful)
 n_wb <- nrow(warpbreaks)
@@ -46,10 +53,6 @@ test_that("surprisals.lm loo = TRUE differs from loo = FALSE", {
   s_loo <- surprisals(lm_of, loo = TRUE)
   expect_length(s_loo, n_of)
   expect_false(isTRUE(all.equal(s, s_loo)))
-})
-
-test_that("surprisals.lm loo = TRUE errors for a glm object", {
-  expect_error(surprisals(glm_wb, loo = TRUE), "not implemented")
 })
 
 test_that("surprisals.lm works for a Poisson glm (via inheritance)", {
@@ -132,8 +135,18 @@ test_that("surprisals.gam binomial returns finite non-negative vector", {
   expect_true(all(s >= 0))
 })
 
-test_that("surprisals.gam errors on unsupported family", {
-  expect_error(surprisals(gam_gamma), "Unsupported family")
+test_that("surprisals.gam Gamma returns finite non-negative vector", {
+  s <- surprisals(gam_gamma)
+  expect_type(s, "double")
+  expect_length(s, n_wb)
+  expect_true(all(is.finite(s)))
+  expect_true(all(s >= 0))
+})
+
+test_that("surprisals.gam agrees with surprisals.glm for Poisson family", {
+  s_gam <- surprisals(gam_pois)
+  s_glm <- surprisals(glm_wb)
+  expect_equal(s_gam, s_glm)
 })
 
 # surprisals_prob.gam ---------------------------------------------------
@@ -159,14 +172,27 @@ test_that("surprisals_prob.gam binomial returns values in [0, 1]", {
   expect_true(all(p >= 0 & p <= 1, na.rm = TRUE))
 })
 
-test_that("surprisals_prob.gam errors on unsupported family", {
-  expect_error(surprisals_prob(gam_gamma), "Unsupported family")
+test_that("surprisals_prob.gam Gamma returns values in [0, 1]", {
+  p <- surprisals_prob(gam_gamma)
+  expect_type(p, "double")
+  expect_length(p, n_wb)
+  expect_true(all(p >= 0 & p <= 1, na.rm = TRUE))
 })
 
-# Consistency between lm and gam ----------------------------------------
-test_that("surprisals.lm and surprisals.gam Gaussian agree in order", {
-  s_lm <- surprisals(lm_of)
-  s_gam <- surprisals(gam_gauss)
-  # Both should rank the same observations as most anomalous
-  expect_equal(which.max(s_lm), which.max(s_gam))
+# Consistency between lm, glm and gam ----------------------------------------
+test_that("surprisals agree across lm/glm/gam for Gaussian family", {
+  expect_equal(surprisals(lm_of), surprisals(glm_of))
+  expect_equal(surprisals(lm_of), surprisals(gam_gauss))
+})
+
+test_that("surprisals agree across glm/gam for Poisson family", {
+  expect_equal(surprisals(glm_wb), surprisals(gam_pois))
+})
+
+test_that("surprisals agree across glm/gam for binomial family", {
+  expect_equal(surprisals(glm_bin), surprisals(gam_bin))
+})
+
+test_that("surprisals agree across glm/gam for Gamma family", {
+  expect_equal(surprisals(glm_gamma), surprisals(gam_gamma), tolerance = 1e-6)
 })
