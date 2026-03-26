@@ -17,13 +17,8 @@ surprisals(object, loo = FALSE, ...)
 # S3 method for class 'glm'
 surprisals(object, ...)
 
-# S3 method for class 'glm'
-surprisals_prob(
-  object,
-  approximation = c("none", "gpd", "empirical", "rank"),
-  threshold_probability = 0.1,
-  ...
-)
+# S3 method for class 'gam'
+surprisals(object, ...)
 
 # S3 method for class 'lm'
 surprisals_prob(
@@ -34,8 +29,13 @@ surprisals_prob(
   ...
 )
 
-# S3 method for class 'gam'
-surprisals(object, ...)
+# S3 method for class 'glm'
+surprisals_prob(
+  object,
+  approximation = c("none", "gpd", "empirical", "rank"),
+  threshold_probability = 0.1,
+  ...
+)
 
 # S3 method for class 'gam'
 surprisals_prob(
