@@ -95,8 +95,6 @@ test_that("fr_mortality years are in range 1816-1999", {
 })
 
 test_that("fr_mortality mortality rates are between 0 and 1", {
-  expect_true(all(fr_mortality$Male >= 0, na.rm = TRUE))
-  expect_true(all(fr_mortality$Male <= 1, na.rm = TRUE))
-  expect_true(all(fr_mortality$Female >= 0, na.rm = TRUE))
-  expect_true(all(fr_mortality$Female <= 1, na.rm = TRUE))
+  expect_true(all(fr_mortality$Mortality >= 0, na.rm = TRUE))
+  expect_true(all(fr_mortality$Mortality <= 1, na.rm = TRUE))
 })
