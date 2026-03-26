@@ -30,4 +30,11 @@ test_that("dist_kde2", {
     mean(dist),
     tolerance = 0.005
   )
+
+  expect_error(distributional::skewness(dist))
+  expect_error(distributional::kurtosis(dist))
+
+  fmt <- format(dist)
+  expect_true(grepl("^kde\\[2d", fmt))
+  expect_true(grepl("H=", fmt))
 })
