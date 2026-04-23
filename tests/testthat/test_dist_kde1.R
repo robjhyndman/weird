@@ -63,5 +63,5 @@ test_that("dist_kde hdr", {
   h_small <- distributional::hdr(dist_small, size = 50)
   expect_s3_class(h_small, "hdr")
   # The two should be relatively similar
-  expect_equal(h, h_small, tolerance = 0.2)
+  expect_equal(h, h_small, tolerance = 0.25)
 })

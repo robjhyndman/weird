@@ -100,3 +100,12 @@ test_that("kde_bandwidth works with oldfaithful data", {
   expect_true(is.matrix(h2))
   expect_equal(dim(h2), c(2L, 2L))
 })
+
+# Check default methods for dist_kde matches that for kde_bandwidth
+test_that(
+  "kde methods",
+  expect_identical(
+    formals(kde_bandwidth)$method,
+    formals(dist_kde)$method
+  )
+)
