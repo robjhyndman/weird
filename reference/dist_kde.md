@@ -16,7 +16,7 @@ dist_kde(
   y,
   h = NULL,
   H = NULL,
-  method = c("normal", "robust", "plugin", "lookout"),
+  method = c("robust", "normal", "plugin", "lookout"),
   ...
 )
 ```
