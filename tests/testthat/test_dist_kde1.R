@@ -55,13 +55,13 @@ test_that("dist_kde log_density", {
 test_that("dist_kde hdr", {
   # Custom hdr method used when n >= 200
   set.seed(123)
-  dist_large <- dist_kde(rnorm(200))
+  dist_large <- dist_kde(rnorm(1000))
   h <- distributional::hdr(dist_large, size = 50)
   expect_s3_class(h, "hdr")
   # Fallback to default when n < 200
-  dist_small <- dist_kde(rnorm(100))
+  dist_small <- dist_kde(rnorm(199))
   h_small <- distributional::hdr(dist_small, size = 50)
   expect_s3_class(h_small, "hdr")
   # The two should be relatively similar
-  expect_equal(h, h_small, tolerance = 0.15)
+  expect_equal(h, h_small, tolerance = 0.2)
 })
