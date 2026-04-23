@@ -10,3 +10,5 @@ _pkgdown.yml
 ^CRAN-SUBMISSION$
 .vscode
 Makefile
+^\.positai$
+^\.claude$

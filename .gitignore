@@ -10,3 +10,4 @@ docs/
 **/*.quarto_ipynb
 .vscode
 .claude
+.positai
