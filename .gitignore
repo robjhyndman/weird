@@ -8,3 +8,5 @@ docs/
 
 /.quarto/
 **/*.quarto_ipynb
+.vscode
+.claude
