@@ -5,63 +5,61 @@ template:
   bootswatch: flatly
   math-rendering: katex
   bslib:
-    base_font: {google: "Fira Sans"}
-    heading_font: {google: "Fira Sans"}
-    code_font: "Hack, mono"
-    primary: "#234460"
-    link-color: "#234460"
+    base_font:
+      google: Fira Sans
+    heading_font:
+      google: Fira Sans
+    code_font: Hack, mono
+    primary: '#234460'
+    link-color: '#234460'
   includes:
     in_header: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
-
 authors:
   Rob J Hyndman:
     href: http://robjhyndman.com
-
 navbar:
   type: light
-
 reference:
-  - title: "Package"
-    contents:
-      - weird-package
-  - title: Data
-    desc: Data sets included in the package
-    contents:
-      - cricket_batting
-      - n01
-      - oldfaithful
-      - fetch_wine_reviews
-      - fr_mortality
-  - title: Functions for scaling data
-    contents:
-      - mvscale
-  - title: Functions for calculating anomaly scores
-    contents:
-      - glosh_scores
-      - lof_scores
-      - stray_scores
-      - surprisals
-      - surprisals.lm
-      - surprisals.numeric
-  - title: Functions for identifying anomalies
-    contents:
-      - chauvenet_anomalies
-      - dixon_anomalies
-      - grubbs_anomalies
-      - hampel_anomalies
-      - peirce_anomalies
-      - stray_anomalies
-  - title: Functions for working with kernel density estimates
-    contents:
-      - dist_kde
-      - kde_bandwidth
-  - title: Functions for distributions
-    contents:
-      - dist_density
-      - hdr_table
-  - title: Functions for producing plots
-    contents:
-      - gg_density
-      - gg_density_layer
-      - gg_bagplot
-      - gg_hdrboxplot
+- title: Package
+  contents: weird-package
+- title: Data
+  desc: Data sets included in the package
+  contents:
+  - cricket_batting
+  - n01
+  - oldfaithful
+  - fetch_wine_reviews
+  - fr_mortality
+- title: Functions for scaling data
+  contents: mvscale
+- title: Functions for calculating anomaly scores
+  contents:
+  - glosh_scores
+  - lof_scores
+  - stray_scores
+  - surprisals
+  - surprisals.lm
+  - surprisals.numeric
+- title: Functions for identifying anomalies
+  contents:
+  - chauvenet_anomalies
+  - dixon_anomalies
+  - grubbs_anomalies
+  - hampel_anomalies
+  - peirce_anomalies
+  - stray_anomalies
+- title: Functions for working with kernel density estimates
+  contents:
+  - dist_kde
+  - kde_bandwidth
+- title: Functions for distributions
+  contents:
+  - dist_density
+  - hdr_table
+- title: Functions for producing plots
+  contents:
+  - gg_density
+  - gg_density_layer
+  - gg_bagplot
+  - gg_hdrboxplot
+

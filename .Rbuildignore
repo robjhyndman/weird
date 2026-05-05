@@ -13,3 +13,4 @@ Makefile
 ^\.positai$
 ^\.claude$
 CLAUDE.md
+^_pkgdown\.yml$
