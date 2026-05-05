@@ -20,6 +20,10 @@ dist_density(x, density)
 
   Numerical vector of density values, or a list of such vectors.
 
+## Value
+
+A distributional object of class `dist_density`.
+
 ## Examples
 
 ``` r

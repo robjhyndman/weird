@@ -1,6 +1,6 @@
 # Bagplot
 
-Produces a bivariate bagplot. A bagplot is analagous to a univariate
+Produces a bivariate bagplot. A bagplot is analogous to a univariate
 boxplot, except it is in two dimensions. Like a boxplot, it shows the
 median, a region containing 50% of the observations, a region showing
 the remaining observations other than outliers, and any outliers.

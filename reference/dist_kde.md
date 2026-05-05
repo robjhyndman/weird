@@ -53,6 +53,10 @@ dist_kde(
   Other arguments are passed to
   [`kde`](https://rdrr.io/pkg/ks/man/kde.html).
 
+## Value
+
+A distributional object of class `dist_kde`.
+
 ## References
 
 Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
