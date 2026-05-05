@@ -42,10 +42,10 @@ conflicts with other packages you have previously loaded:
 ``` r
 
 library(weird)
-#> ── Attaching packages ────────────────────────────────────────────────────────── weird 2.0.0.9000 ──
+#> ── Attaching packages ─────────────────────────────────────────── weird 2.0.0.9000 ──
 #> ✔ dplyr          1.2.1     ✔ distributional 0.7.0
 #> ✔ ggplot2        4.0.3
-#> ── Conflicts ──────────────────────────────────────────────────────────────────── weird_conflicts ──
+#> ── Conflicts ───────────────────────────────────────────────────── weird_conflicts ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -283,19 +283,19 @@ oldfaithful |>
   ) |>
   arrange(surprisal_prob)
 #> # A tibble: 10 × 9
-#>    time                recorded_duration       duration waiting surprisal surprisal_prob strayscore
-#>    <dttm>              <chr>                      <dbl>   <dbl>     <dbl>          <dbl>      <dbl>
-#>  1 2022-12-07 17:19:00 ~4 30s                        30    5220      16.4       0.000935     0.273
-#>  2 2023-07-04 12:03:00 ~1 minute 55ish seconds       60    4920      16.4       0.000967     0.122
-#>  3 2022-12-03 16:20:00 ~4m                          240    3060      16.4       0.000999     0.265
-#>  4 2018-04-25 19:08:00 1s                             1    5700      16.4       0.00110      0.150
-#>  5 2020-09-04 01:38:00 >1m 50s                      110    6240      16.4       0.00112      0.167
-#>  6 2020-06-01 21:04:00 2 minutes                    120    6060      16.3       0.00145      0.132
-#>  7 2023-05-26 00:53:00 4m45s                        285    7140      14.9       0.0288       0.0761
-#>  8 2017-09-22 18:51:00 ~281s                        281    7140      14.8       0.0341       0.0683
-#>  9 2023-08-09 20:52:00 4m39s                        279    7140      14.8       0.0345       0.0651
-#> 10 2018-09-22 16:37:00 ~4m13s                       253    7140      14.4       0.0528       0.0194
-#> # ℹ 2 more variables: lofscore <dbl>, gloshscore <dbl>
+#>    time                recorded_duration    duration waiting surprisal surprisal_prob
+#>    <dttm>              <chr>                   <dbl>   <dbl>     <dbl>          <dbl>
+#>  1 2022-12-07 17:19:00 ~4 30s                     30    5220      16.4       0.000935
+#>  2 2023-07-04 12:03:00 ~1 minute 55ish sec…       60    4920      16.4       0.000967
+#>  3 2022-12-03 16:20:00 ~4m                       240    3060      16.4       0.000999
+#>  4 2018-04-25 19:08:00 1s                          1    5700      16.4       0.00110 
+#>  5 2020-09-04 01:38:00 >1m 50s                   110    6240      16.4       0.00112 
+#>  6 2020-06-01 21:04:00 2 minutes                 120    6060      16.3       0.00145 
+#>  7 2023-05-26 00:53:00 4m45s                     285    7140      14.9       0.0288  
+#>  8 2017-09-22 18:51:00 ~281s                     281    7140      14.8       0.0341  
+#>  9 2023-08-09 20:52:00 4m39s                     279    7140      14.8       0.0345  
+#> 10 2018-09-22 16:37:00 ~4m13s                    253    7140      14.4       0.0528  
+#> # ℹ 3 more variables: strayscore <dbl>, lofscore <dbl>, gloshscore <dbl>
 ```
 
 ## Robust multivariate scaling
@@ -317,33 +317,35 @@ possible by setting `cov = NULL`.
 ``` r
 
 mvscale(oldfaithful)
-#> Warning in mvscale(oldfaithful): Ignoring non-numeric columns: time, recorded_duration
+#> Warning in mvscale(oldfaithful): Ignoring non-numeric columns: time,
+#> recorded_duration
 #> # A tibble: 2,097 × 4
 #>    time                recorded_duration      z1     z2
 #>    <dttm>              <chr>               <dbl>  <dbl>
 #>  1 2017-01-14 00:06:00 3m 16s            -2.20    0.332
 #>  2 2017-01-26 14:27:00 ~4m               -0.0431  0.111
-#>  3 2017-01-27 23:57:00 2m 1s             -4.27   -3.43
+#>  3 2017-01-27 23:57:00 2m 1s             -4.27   -3.43 
 #>  4 2017-01-30 15:09:00 ~4m                0.345  -0.886
 #>  5 2017-01-31 13:27:00 ~3.5m             -1.28   -0.332
-#>  6 2017-01-31 15:00:00 ~4m                0       0
-#>  7 2017-02-03 23:13:00 3m 25s            -1.22   -1.11
+#>  6 2017-01-31 15:00:00 ~4m                0       0    
+#>  7 2017-02-03 23:13:00 3m 25s            -1.22   -1.11 
 #>  8 2017-02-04 22:14:00 3m 34s            -0.966  -0.665
 #>  9 2017-02-05 17:19:00 4m 0s             -0.215   0.554
 #> 10 2017-02-05 19:00:00 4m 2s             -0.121   0.554
 #> # ℹ 2,087 more rows
 mvscale(oldfaithful, cov = NULL)
-#> Warning in mvscale(oldfaithful, cov = NULL): Ignoring non-numeric columns: time, recorded_duration
+#> Warning in mvscale(oldfaithful, cov = NULL): Ignoring non-numeric columns: time,
+#> recorded_duration
 #> # A tibble: 2,097 × 4
 #>    time                recorded_duration duration waiting
 #>    <dttm>              <chr>                <dbl>   <dbl>
 #>  1 2017-01-14 00:06:00 3m 16s             -1.98     0.338
 #>  2 2017-01-26 14:27:00 ~4m                 0        0.113
-#>  3 2017-01-27 23:57:00 2m 1s              -5.37    -3.50
+#>  3 2017-01-27 23:57:00 2m 1s              -5.37    -3.50 
 #>  4 2017-01-30 15:09:00 ~4m                 0       -0.902
 #>  5 2017-01-31 13:27:00 ~3.5m              -1.35    -0.338
-#>  6 2017-01-31 15:00:00 ~4m                 0        0
-#>  7 2017-02-03 23:13:00 3m 25s             -1.58    -1.13
+#>  6 2017-01-31 15:00:00 ~4m                 0        0    
+#>  7 2017-02-03 23:13:00 3m 25s             -1.58    -1.13 
 #>  8 2017-02-04 22:14:00 3m 34s             -1.17    -0.676
 #>  9 2017-02-05 17:19:00 4m 0s               0        0.564
 #> 10 2017-02-05 19:00:00 4m 2s               0.0902   0.564
