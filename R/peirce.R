@@ -40,7 +40,10 @@ peirce_threshold <- function(n) {
   # Eq (B) after taking logs
   LnQN <- (n - 1) * log(n - 1) - n * log(n)
   # Loop until convergence
-  while (abs(x - oldx) >= n * .Machine$double.eps) {
+  # Stop if no convergence after 100 iterations to avoid infinite loop
+  iter <- 0
+  while (abs(x - oldx) >= n * .Machine$double.eps && iter < 100) {
+    iter <- iter + 1
     # Eq (D)
     R1 <- 2 * exp(0.5 * (x^2 - 1)) * stats::pnorm(x, lower.tail = FALSE)
     # Eq (A') after taking logs and solving for R (plug in lambda from top of page)
@@ -51,6 +54,9 @@ peirce_threshold <- function(n) {
     # Update x accordingly
     oldx <- x
     x <- oldx - (R1 - R2) / (R1d - R2d)
+  }
+  if (iter == 100) {
+    warning("Peirce's criterion did not converge after 100 iterations")
   }
   return(x)
 }
