@@ -1,6 +1,6 @@
 # Changelog
 
-## weird (development version)
+## weird 2.1.0
 
 - Added
   [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
