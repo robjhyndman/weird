@@ -13,6 +13,7 @@ You can install the **stable** version from
 [CRAN](https://cran.r-project.org/package=weird) with:
 
 ``` r
+
 install.packages("weird")
 ```
 
@@ -20,6 +21,7 @@ You can install the **development** version of weird from
 [GitHub](https://github.com/robjhyndman/weird) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("robjhyndman/weird")
 ```
@@ -38,6 +40,7 @@ When you load the weird package, you get a condensed summary of
 conflicts with other packages you have previously loaded:
 
 ``` r
+
 library(weird)
 #> ── Attaching packages ────────────────────────────────────────────────────────── weird 2.0.0.9000 ──
 #> ✔ dplyr          1.2.1     ✔ distributional 0.7.0
@@ -61,6 +64,7 @@ eruption as recorded, `duration` giving the length of the eruption in
 seconds, and `waiting` giving the time to the next eruption in seconds.
 
 ``` r
+
 oldfaithful
 #> # A tibble: 2,097 × 4
 #>    time                recorded_duration duration waiting
@@ -91,6 +95,7 @@ density estimate of the `duration` variable obtained using these
 functions.
 
 ``` r
+
 dist_kde(oldfaithful$duration) |>
   gg_density(show_points = TRUE, jitter = TRUE) +
   labs(x = "Duration (seconds)")
@@ -102,6 +107,7 @@ The same functions also work with bivariate data. The figure below shows
 the kernel density estimate of the `duration` and `waiting` variables.
 
 ``` r
+
 oldfaithful |>
   select(duration, waiting) |>
   dist_kde() |>
@@ -118,6 +124,7 @@ these are not recommended, they are still widely used, and are provided
 in the package for comparison purposes.
 
 ``` r
+
 oldfaithful |> filter(peirce_anomalies(duration))
 #> # A tibble: 2 × 4
 #>   time                recorded_duration duration waiting
@@ -151,6 +158,7 @@ Boxplots are widely used for anomaly detection. Here are three
 variations of boxplots applied to the `duration` variable.
 
 ``` r
+
 oldfaithful |>
   ggplot(aes(x = duration)) +
   geom_boxplot() +
@@ -161,12 +169,14 @@ oldfaithful |>
 ![](reference/figures/README-of-boxplot-1.png)
 
 ``` r
+
 oldfaithful |> gg_hdrboxplot(duration) + labs(x = "Duration (seconds)")
 ```
 
 ![](reference/figures/README-of-boxplot-2.png)
 
 ``` r
+
 oldfaithful |>
   gg_hdrboxplot(duration, show_points = TRUE) +
   labs(x = "Duration (seconds)")
@@ -187,6 +197,7 @@ It is also possible to produce bivariate boxplots. Several variations
 are provided in the package. Here are two types of bagplot.
 
 ``` r
+
 oldfaithful |>
   gg_bagplot(duration, waiting) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
@@ -195,6 +206,7 @@ oldfaithful |>
 ![](reference/figures/README-of-boxplot2-1.png)
 
 ``` r
+
 oldfaithful |>
   gg_bagplot(duration, waiting, show_points = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
@@ -205,6 +217,7 @@ oldfaithful |>
 And here are two types of HDR boxplot
 
 ``` r
+
 oldfaithful |>
   gg_hdrboxplot(duration, waiting) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
@@ -213,6 +226,7 @@ oldfaithful |>
 ![](reference/figures/README-of-boxplot3-1.png)
 
 ``` r
+
 oldfaithful |>
   gg_hdrboxplot(duration, waiting, show_points = TRUE) +
   labs(x = "Duration (seconds)", y = "Waiting time (seconds)")
@@ -252,6 +266,7 @@ Here are the top 0.02% most anomalous observations identified by each of
 the methods.
 
 ``` r
+
 oldfaithful |>
   mutate(
     surprisal = surprisals(cbind(duration, waiting)),
@@ -300,6 +315,7 @@ orthogonal, so are renamed as `z1`, `z2`, etc. Non-rotated scaling is
 possible by setting `cov = NULL`.
 
 ``` r
+
 mvscale(oldfaithful)
 #> Warning in mvscale(oldfaithful): Ignoring non-numeric columns: time, recorded_duration
 #> # A tibble: 2,097 × 4

@@ -20,6 +20,11 @@ Useful links:
 **Maintainer**: Rob Hyndman <Rob.Hyndman@monash.edu>
 ([ORCID](https://orcid.org/0000-0002-2140-5352)) \[copyright holder\]
 
+Authors:
+
+- Rob Hyndman <Rob.Hyndman@monash.edu>
+  ([ORCID](https://orcid.org/0000-0002-2140-5352)) \[copyright holder\]
+
 Other contributors:
 
 - RStudio \[copyright holder\]
