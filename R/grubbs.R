@@ -71,17 +71,16 @@ grubbs_anomalies <- function(y, alpha = 0.05) {
 #' @export
 
 dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
-  if (two_sided) {
-    miny <- which.min(y)
-  }
   stopifnot(is.logical(two_sided) && length(two_sided) == 1)
   stopifnot(is.numeric(y))
   stopifnot(length(y) >= 3)
   stopifnot(is.numeric(alpha) && length(alpha) == 1 && alpha > 0 && alpha < 1)
+
   maxy <- which.max(y)
   sorty <- sort(y)
   n <- length(y)
   if (two_sided) {
+    miny <- which.min(y)
     Q <- max(sorty[2] - sorty[1], sorty[n] - sorty[n - 1]) /
       (sorty[n] - sorty[1])
   } else {
