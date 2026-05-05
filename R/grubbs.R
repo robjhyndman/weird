@@ -37,6 +37,9 @@
 #' @export
 
 grubbs_anomalies <- function(y, alpha = 0.05) {
+  stopifnot(is.numeric(y))
+  stopifnot(length(y) >= 3)
+  stopifnot(is.numeric(alpha) && length(alpha) == 1 && alpha > 0 && alpha < 1)
   z <- (y - mean(y, na.rm = TRUE)) / stats::sd(y, na.rm = TRUE)
   n <- length(y)
   t2 <- stats::qt(1 - alpha / (2 * n), n - 2)
@@ -71,6 +74,10 @@ dixon_anomalies <- function(y, alpha = 0.05, two_sided = TRUE) {
   if (two_sided) {
     miny <- which.min(y)
   }
+  stopifnot(is.logical(two_sided) && length(two_sided) == 1)
+  stopifnot(is.numeric(y))
+  stopifnot(length(y) >= 3)
+  stopifnot(is.numeric(alpha) && length(alpha) == 1 && alpha > 0 && alpha < 1)
   maxy <- which.max(y)
   sorty <- sort(y)
   n <- length(y)

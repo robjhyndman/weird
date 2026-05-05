@@ -46,17 +46,20 @@ dist_kde <- function(
   density <- lapply(
     y,
     function(u) {
+      stopifnot(NROW(u) > 0)
       if (NCOL(u) == 1L) {
         if (is.null(h)) {
           if (!is.null(H)) {
             if (!identical(dim(H), c(1L, 1L))) {
               stop("H must be a 1x1 matrix for univariate data")
             }
+            stopifnot(H > 0)
             h <- sqrt(H)
           } else {
             h <- kde_bandwidth(u, method = method)
           }
         }
+        stopifnot(h > 0)
         ks::kde(x = u, h = as.vector(h), ...)
       } else {
         if (is.null(H)) {
@@ -66,6 +69,10 @@ dist_kde <- function(
             stop(
               "H must be a square matrix with dimension equal to the number of columns of y"
             )
+          }
+          # Check H is positive definite
+          if (!all(eigen(H)$values > 0)) {
+            stop("H must be positive definite")
           }
         }
         ks::kde(x = u, H = H, ...)

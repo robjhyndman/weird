@@ -16,16 +16,22 @@ dist_density <- function(x, density) {
     x <- list(x)
     density <- list(density)
   }
-  if (length(x) != length(density)) {
-    stop("x and density must be lists of the same length")
-  }
+  stopifnot(length(x) == length(density))
+  stopifnot(all(unlist(lapply(x, is.numeric))))
+  stopifnot(all(unlist(lapply(density, is.numeric))))
   n <- lengths(x)
-  if (any(n != lengths(density))) {
-    stop("x and density must have the same length")
-  }
+  stopifnot(all(n == lengths(density)))
+  stopifnot(all(unlist(lapply(density, function(f) all(f >= 0)))))
+
   # Ensure density integrates to 1
   density <- mapply(
-    function(x, f) f / integral(x, f),
+    function(x, f) {
+      fint <- integral(x, f)
+      if (fint <= 0) {
+        stop("Density must have positive integral")
+      }
+      f / fint
+    },
     x,
     density,
     SIMPLIFY = FALSE

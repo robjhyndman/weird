@@ -30,6 +30,9 @@
 #' @export
 
 hampel_anomalies <- function(y, bandwidth, k = 3) {
+  stopifnot(is.numeric(y))
+  stopifnot(is.numeric(bandwidth) && length(bandwidth) == 1 && bandwidth >= 1)
+  stopifnot(is.numeric(k) && length(k) == 1 && k > 0)
   if (abs(bandwidth - round(bandwidth)) > 1e-8) {
     stop("Bandwidth must be an integer")
   }

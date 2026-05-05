@@ -32,6 +32,7 @@ kde_bandwidth <- function(
   method <- match.arg(method)
   d <- NCOL(data)
   n <- NROW(data)
+  stopifnot(n > 2)
   if (method == "plugin") {
     if (d == 1L) {
       return(stats::bw.SJ(data))
