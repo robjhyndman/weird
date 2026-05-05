@@ -89,3 +89,13 @@ test_that("dist_density", {
     tolerance = 0.01
   )
 })
+
+# --- Input validation errors --------------------------------------------------
+
+test_that("dist_density errors on negative density values", {
+  expect_error(dist_density(1:5, c(0, 1, 2, -1, 0)))
+})
+
+test_that("dist_density errors when density integrates to zero", {
+  expect_error(dist_density(1:5, c(0, 0, 0, 0, 0)))
+})
