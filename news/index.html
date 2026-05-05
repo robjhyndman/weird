@@ -34,39 +34,49 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="weird-development-version">weird (development version)<a class="anchor" aria-label="anchor" href="#weird-development-version"></a></h2>
-<ul><li>Added surprisals() and surprisals_prob() for glm objects</li>
-<li>Faster calculation of surprisals_prob() for lm and gam objects</li>
-<li>Faster calculation for kde_bandwidth(method = “lookout”)</li>
-<li>Added covariance calculation for multivariate dist_kde objects</li>
-<li>Added hdr() and parameters() methods for dist_kde objects</li>
+<ul><li>Added <code><a href="../reference/surprisals.html">surprisals()</a></code> and <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> for <code>glm</code> objects</li>
+<li>Faster calculation of <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> for <code>lm</code> and <code>gam</code> objects</li>
+<li>Faster calculation for <code>kde_bandwidth(method = "lookout")</code>
+</li>
+<li>Added covariance calculation for multivariate <code>dist_kde</code> objects</li>
+<li>Added <code>hdr()</code> and <code>parameters()</code> methods for <code>dist_kde</code> objects</li>
 <li>More accurate HDR calculations</li>
 <li>More accurate rank-based surprisal calculation when ties and missings present</li>
-<li>mvscale() re-added to weird (previously moved to lookout package), now using mlpack for merge distances</li>
-<li>Dropped lookout package dependency</li>
+<li>
+<code><a href="../reference/mvscale.html">mvscale()</a></code> re-added to <code>weird</code> (previously moved to <code>lookout</code> package), now using <code>mlpack</code> for merge distances</li>
+<li>Dropped <code>lookout</code> package dependency</li>
 <li>Added lots of unit tests</li>
 <li>Better docs</li>
 <li>Bug fixes</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.0.0" id="weird-200">weird 2.0.0<a class="anchor" aria-label="anchor" href="#weird-200"></a></h2><p class="text-muted">CRAN release: 2026-01-27</p>
-<ul><li>Added fr_mortality data set</li>
-<li>Updated oldfaithful and cricket_batting data sets</li>
-<li>Refactored package to use distributional objects</li>
-<li>Added dist_kde() and dist_density()</li>
-<li>Removed as_kde() and autoplot.kde()</li>
-<li>Rewrote kde_bandwidth() to handle more methods</li>
-<li>Added gg_density() and gg_density_layer()</li>
-<li>Replaced density_scores() with surprisals() and added surprisals_prob()</li>
-<li>Updated gg_bagplot() and gg_hdrboxplot() to use show_points argument</li>
-<li>Removed lookout()</li>
-<li>Added hampel_anomalies()</li>
-<li>mvscale() moved to lookout package</li>
+<ul><li>Added <code>fr_mortality</code> data set</li>
+<li>Updated <code>oldfaithful</code> and <code>cricket_batting</code> data sets</li>
+<li>Refactored package to use <code>distributional</code> objects</li>
+<li>Added <code><a href="../reference/dist_kde.html">dist_kde()</a></code> and <code><a href="../reference/dist_density.html">dist_density()</a></code>
+</li>
+<li>Removed <code>as_kde()</code> and <code>autoplot.kde()</code>
+</li>
+<li>Rewrote <code><a href="../reference/kde_bandwidth.html">kde_bandwidth()</a></code> to handle more methods</li>
+<li>Added <code><a href="../reference/gg_density.html">gg_density()</a></code> and <code><a href="../reference/gg_density_layer.html">gg_density_layer()</a></code>
+</li>
+<li>Replaced <code>density_scores()</code> with <code><a href="../reference/surprisals.html">surprisals()</a></code> and added <code><a href="../reference/surprisals.html">surprisals_prob()</a></code>
+</li>
+<li>Updated <code><a href="../reference/bagplot.html">gg_bagplot()</a></code> and <code><a href="../reference/gg_hdrboxplot.html">gg_hdrboxplot()</a></code> to use <code>show_points</code> argument</li>
+<li>Removed <code>lookout()</code>
+</li>
+<li>Added <code><a href="../reference/hampel_anomalies.html">hampel_anomalies()</a></code>
+</li>
+<li>
+<code><a href="../reference/mvscale.html">mvscale()</a></code> moved to lookout package</li>
 <li>Dropped interpolation dependency</li>
-<li>No longer exporting weird_packges() and weird_conflicts()</li>
+<li>No longer exporting <code>weird_packages()</code> and <code>weird_conflicts()</code>
+</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.2" id="weird-102">weird 1.0.2<a class="anchor" aria-label="anchor" href="#weird-102"></a></h2><p class="text-muted">CRAN release: 2024-01-24</p>
-<ul><li>Removed wine_reviews dataset and created <code><a href="../reference/fetch_wine_reviews.html">fetch_wine_reviews()</a></code> function.</li>
+<ul><li>Removed <code>wine_reviews</code> dataset and created <code><a href="../reference/fetch_wine_reviews.html">fetch_wine_reviews()</a></code> function.</li>
 <li>Bug fixes.</li>
 </ul></div>
     <div class="section level2">
