@@ -4,8 +4,11 @@
 * Faster calculation of surprisals_prob() for lm and gam objects
 * Faster calculation for kde_bandwidth(method = "lookout")
 * Added covariance calculation for multivariate dist_kde objects
+* Added hdr() and parameters() methods for dist_kde objects
 * More accurate HDR calculations
 * More accurate rank-based surprisal calculation when ties and missings present
+* mvscale() re-added to weird (previously moved to lookout package), now using mlpack for merge distances
+* Dropped lookout package dependency
 * Added lots of unit tests
 * Better docs
 * Bug fixes
