@@ -144,6 +144,9 @@ gg_hdrboxplot <- function(
 #' @param prob Vector of probabilities giving the HDR coverage (between 0 and 1)
 #' @return A tibble
 #' @author Rob J Hyndman
+#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.5, 3.4. \url{https://OTexts.com/weird/}.
+#' Rob J Hyndman (1996) "Computing and Graphing Highest Density Regions", *The American Statistician*, 50(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
+#' @seealso \code{\link{gg_hdrboxplot}}
 #' @examples
 #' # Univariate HDRs
 #' c(dist_normal(), dist_kde(c(rnorm(100), rnorm(100, 3, 1)))) |>

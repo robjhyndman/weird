@@ -2,10 +2,14 @@
 #'
 #' @description A multivariate version of [base::scale()], that takes account
 #' of the covariance matrix of the data, and uses robust estimates
-#' of center, scale and covariance by default. The centers are removed using medians, the
-#' scale function is the IQR, and the covariance matrix is estimated using a
-#' robust OGK estimate. The data are scaled using the Cholesky decomposition of
-#' the inverse covariance. Then the scaled data are returned.
+#' of center, scale and covariance by default.
+#' The centers are removed using medians,
+#' the scale function for univariate data is `s_Qn`,
+#' the covariance matrix for multivariate data is estimated using a robust OGK estimate.
+#' The data are scaled using the Cholesky decomposition of
+#' the inverse (co)variance. Then the scaled data are returned.
+#' Details of the methods are provided by Hyndman (2026).
+#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.6, 3.6 and 3.7.
 #'
 #' @details Optionally, the centering and scaling can be done for each variable
 #' separately, so there is no rotation of the data, by setting `cov = NULL`.

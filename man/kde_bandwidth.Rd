@@ -21,8 +21,12 @@ kde_bandwidth(data, method = c("robust", "normal", "plugin", "lookout"), ...)
 A matrix of bandwidths (or a scalar in the case of univariate data).
 }
 \description{
-Bandwidth matrices are estimated using either a robust version of the normal
-reference rule, or using the approach of Hyndman, Kandanaarachchi & Turner (2026).
+Bandwidth matrices are estimated in several ways including
+a normal reference rule,
+a robust version of the normal reference rule (default),
+a plugin estimator,
+or using the approach of Hyndman, Kandanaarachchi & Turner (2026).
+Details of each method are given in Hyndman (2026).
 }
 \examples{
 # Univariate bandwidth calculation

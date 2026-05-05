@@ -32,10 +32,13 @@ but with numerical variables replaced by scaled versions.
 \description{
 A multivariate version of \code{\link[base:scale]{base::scale()}}, that takes account
 of the covariance matrix of the data, and uses robust estimates
-of center, scale and covariance by default. The centers are removed using medians, the
-scale function is the IQR, and the covariance matrix is estimated using a
-robust OGK estimate. The data are scaled using the Cholesky decomposition of
-the inverse covariance. Then the scaled data are returned.
+of center, scale and covariance by default.
+The centers are removed using medians,
+the scale function for univariate data is \code{s_Qn},
+the covariance matrix for multivariate data is estimated using a robust OGK estimate.
+The data are scaled using the Cholesky decomposition of
+the inverse (co)variance. Then the scaled data are returned.
+Details of the methods are provided by Hyndman (2026).
 }
 \details{
 Optionally, the centering and scaling can be done for each variable
@@ -51,6 +54,9 @@ z <- mvscale(faithful, center = mean, scale = sd, cov = NULL, warning = FALSE)
 z <- mvscale(faithful, center = mean, cov = stats::cov, warning = FALSE)
 # Robust scaling and rotation
 z <- mvscale(faithful, warning = FALSE)
+}
+\references{
+Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.6, 3.6 and 3.7.
 }
 \seealso{
 \code{\link[base:scale]{base::scale()}}, \code{\link[stats:sd]{stats::sd()}}, \code{\link[stats:cov]{stats::cov()}}, \code{\link[robustbase:covOGK]{robustbase::covOGK()}}, \code{\link[robustbase:s_Qn]{robustbase::s_Qn()}}
