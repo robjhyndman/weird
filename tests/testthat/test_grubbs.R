@@ -41,6 +41,21 @@ test_that("grubbs_anomalies works with dplyr filter", {
   expect_true(10 %in% result$x)
 })
 
+test_that("grubbs_anomalies errors on non-numeric input", {
+  expect_error(grubbs_anomalies(letters[1:10]))
+})
+
+test_that("grubbs_anomalies errors when n < 3", {
+  expect_error(grubbs_anomalies(c(1, 2)))
+  expect_error(grubbs_anomalies(1))
+})
+
+test_that("grubbs_anomalies errors on invalid alpha", {
+  expect_error(grubbs_anomalies(y_clean, alpha = 0))
+  expect_error(grubbs_anomalies(y_clean, alpha = 1))
+  expect_error(grubbs_anomalies(y_clean, alpha = -0.1))
+})
+
 # --- dixon_anomalies ----------------------------------------------------------
 
 dixon_clean <- dixon_anomalies(y_clean)
@@ -81,4 +96,21 @@ test_that("dixon_anomalies works with dplyr filter", {
   result <- df_outlier |> dplyr::filter(dixon_anomalies(x))
   expect_true(nrow(result) == 1L)
   expect_equal(10, result$x)
+})
+
+test_that("dixon_anomalies errors on non-numeric input", {
+  expect_error(dixon_anomalies(letters[1:10]))
+})
+
+test_that("dixon_anomalies errors when n < 3", {
+  expect_error(dixon_anomalies(c(1, 2)))
+})
+
+test_that("dixon_anomalies errors on invalid alpha", {
+  expect_error(dixon_anomalies(y_clean, alpha = 0))
+  expect_error(dixon_anomalies(y_clean, alpha = 1.5))
+})
+
+test_that("dixon_anomalies errors on non-logical two_sided", {
+  expect_error(dixon_anomalies(y_clean, two_sided = "yes"))
 })
