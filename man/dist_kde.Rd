@@ -28,6 +28,9 @@ for details. Ignored if \code{h} or \code{H} are specified.}
 
 \item{...}{Other arguments are passed to \code{\link[ks]{kde}}.}
 }
+\value{
+A distributional object of class \code{dist_kde}.
+}
 \description{
 Creates a distributional object using a kernel density estimate with a
 Gaussian kernel obtained from the \code{\link[ks]{kde}()} function. The bandwidth

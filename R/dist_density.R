@@ -6,6 +6,7 @@
 #'
 #' @param x Numerical vector of ordinates, or a list of such vectors.
 #' @param density Numerical vector of density values, or a list of such vectors.
+#' @return A distributional object of class `dist_density`.
 #' @examples
 #' dist_density(seq(-4, 4, by = 0.01), dnorm(seq(-4, 4, by = 0.01)))
 #'

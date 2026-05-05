@@ -11,6 +11,9 @@ dist_density(x, density)
 
 \item{density}{Numerical vector of density values, or a list of such vectors.}
 }
+\value{
+A distributional object of class \code{dist_density}.
+}
 \description{
 Creates a distributional object using a density specified as pair of vectors
 giving (x, f(x)). The density is assumed to be piecewise linear between the

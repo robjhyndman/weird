@@ -59,7 +59,7 @@ Produce ggplot of densities from distributional objects in 1 or 2 dimensions
 This function produces a ggplot of a density from a distributional object.
 For univariate densities, it produces a line plot of the density function, with
 an optional ribbon showing some highest density regions (HDRs) and/or the observations.
-For bivariate densities, it produces ah HDR contour plot of the density function, with
+For bivariate densities, it produces an HDR contour plot of the density function, with
 the observations optionally shown as points.
 The mode can also be drawn as a point.
 The combination of \code{hdr = "fill"}, \code{show_points = TRUE},
