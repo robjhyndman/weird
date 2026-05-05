@@ -53,7 +53,7 @@ z <- mvscale(faithful, center = mean, cov = stats::cov, warning = FALSE)
 z <- mvscale(faithful, warning = FALSE)
 }
 \seealso{
-\code{\link[base:scale]{base::scale()}}, \code{\link[stats:sd]{stats::sd()}}, \code{\link[stats:cor]{stats::cov()}}, \code{\link[robustbase:covOGK]{robustbase::covOGK()}}, \code{\link[robustbase:Qn]{robustbase::s_Qn()}}
+\code{\link[base:scale]{base::scale()}}, \code{\link[stats:sd]{stats::sd()}}, \code{\link[stats:cov]{stats::cov()}}, \code{\link[robustbase:covOGK]{robustbase::covOGK()}}, \code{\link[robustbase:s_Qn]{robustbase::s_Qn()}}
 }
 \author{
 Rob J Hyndman
