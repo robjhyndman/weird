@@ -12,3 +12,4 @@ _pkgdown.yml
 Makefile
 ^\.positai$
 ^\.claude$
+CLAUDE.md
