@@ -16,12 +16,20 @@ knitr::opts_chunk$set(
 )
 options(width = 100)
 set.seed(1967)
+# Fira Sans font for graphics
+ggplot2::theme_set(
+  ggplot2::theme_get() +
+    ggplot2::theme(text = ggplot2::element_text(family = "Fira Sans"))
+)
 ```
 
 # weird  <img src="man/figures/weird-hex.png" align="right" width = 150 />
 
 <!-- badges: start -->
-[![R build status](https://github.com/robjhyndman/weird/workflows/R-CMD-check/badge.svg)](https://github.com/robjhyndman/weird/actions)
+[![R-CMD-check](https://github.com/robjhyndman/weird/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/robjhyndman/weird/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/weird)](https://CRAN.R-project.org/package=weird)
+[![Downloads](https://cranlogs.r-pkg.org/badges/weird)](https://cran.r-project.org/package=weird)
+[![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- badges: end -->
 
 ## Overview
