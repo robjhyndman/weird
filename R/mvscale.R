@@ -105,6 +105,7 @@ mvscale <- function(
         # Add a bigger ridge
         Sinv <- solve(S + diag(1e-2, nrow(S), ncol(S)))
       }
+      warning("Covariance matrix is singular. Adding a small ridge penalty.")
     }
     U <- chol(Sinv)
     z <- mat %*% t(U)
