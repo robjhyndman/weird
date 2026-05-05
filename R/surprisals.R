@@ -33,9 +33,9 @@
 #' used if `approximation = "gpd"`.
 #' @param ... Other arguments are passed to the appropriate method.
 #' @author Rob J Hyndman
-#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R",
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R",
 #' Chapter 6, \url{https://OTexts.com/weird/}.
-#' Rob J Hyndman & David T Frazier (2026) "Anomaly detection using surprisals",
+#' @references Hyndman, R J & Frazier, D T (2026) "Anomaly detection using surprisals",
 #' \url{https://robjhyndman.com/publications/surprisals.html}.
 #' @return A numerical vector containing the surprisals or surprisal probabilities.
 #' @seealso For specific methods, see [surprisals.numeric()] and [surprisals.lm()],

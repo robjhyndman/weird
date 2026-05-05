@@ -15,7 +15,7 @@
 #'   \item{year}{Year of wine extracted from `title`}
 #' }
 #' @return Data frame
-#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 1.4,
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 1.4,
 #' \url{https://OTexts.com/weird/}.
 #' @examples
 #' \dontrun{

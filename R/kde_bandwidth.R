@@ -14,10 +14,10 @@
 #' `"plugin"` (a plugin estimator), and
 #' `"lookout"` (the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner, 2026).
 #' @param ... Additional arguments are ignored.
-#' @references Rob J Hyndman, Sevvandi Kandanaarachchi & Katharine Turner (2026)
+#' @references Hyndman, R J, Kandanaarachchi, S & Turner, K (2026)
 #' "When lookout sees crackle: Anomaly detection via kernel density estimation",
 #' unpublished. \url{https://robjhyndman.com/publications/lookout2.html}
-#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.7 and 3.9,
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.7 and 3.9,
 #' \url{https://OTexts.com/weird/}.
 #' @return A matrix of bandwidths (or a scalar in the case of univariate data).
 #' @author Rob J Hyndman

@@ -44,6 +44,6 @@ dist_kde(cbind(rnorm(200), rnorm(200, 5)))
 
 }
 \references{
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.7 and 3.9,
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.7 and 3.9,
 \url{https://OTexts.com/weird/}.
 }

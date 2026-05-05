@@ -29,7 +29,7 @@
 #' @seealso \code{\link{surprisals}}, \code{\link{hdr_table}}
 #' @references Hyndman, R J (1996) Computing and Graphing Highest Density Regions,
 #' *The American Statistician*, **50**(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
-#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 5.7,
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 5.7,
 #' \url{https://OTexts.com/weird/}.
 #' @examples
 #' df <- data.frame(x = c(rnorm(1000), rnorm(1000, 5, 1), 10))
@@ -144,8 +144,8 @@ gg_hdrboxplot <- function(
 #' @param prob Vector of probabilities giving the HDR coverage (between 0 and 1)
 #' @return A tibble
 #' @author Rob J Hyndman
-#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.5, 3.4. \url{https://OTexts.com/weird/}.
-#' Rob J Hyndman (1996) "Computing and Graphing Highest Density Regions", *The American Statistician*, 50(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
+#' @references Hyndman, R J (1996) "Computing and Graphing Highest Density Regions", *The American Statistician*, 50(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.5, 3.4. \url{https://OTexts.com/weird/}.
 #' @seealso \code{\link{gg_hdrboxplot}}
 #' @examples
 #' # Univariate HDRs

@@ -27,7 +27,7 @@ y <- cbind(rnorm(50), c(5, rnorm(49)))
 stray_anomalies(y)
 }
 \references{
-P D Talagala, R J Hyndman and K Smith-Miles (2021) Anomaly detection
+Talagala, P D, Hyndman, R J, and Smith-Miles, K (2021) Anomaly detection
 in high-dimensional data, \emph{Journal of Computational and Graphical Statistics}, \strong{30}(2), 360-374.
 }
 \author{

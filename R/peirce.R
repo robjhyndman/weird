@@ -6,11 +6,11 @@
 #' @details These functions take a univariate sample `y` and return a logical
 #' vector indicating which observations should be considered anomalies according
 #' to either Peirce's criterion or Chauvenet's criterion.
-#' @references Peirce, B. (1852). Criterion for the rejection of doubtful observations.
+#' @references Peirce, B (1852). Criterion for the rejection of doubtful observations.
 #' *The Astronomical Journal*, 2(21), 161–163.
-#' @references Chauvenet, W. (1863). 'Method of least squares'. Appendix to
+#' @references Chauvenet, W (1863). 'Method of least squares'. Appendix to
 #' *Manual of Spherical and Practical Astronomy*, Vol.2, Lippincott, Philadelphia, pp.469-566.
-#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 4.3,
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 4.3,
 #' \url{https://OTexts.com/weird/}.
 #' @return A logical vector
 #' @author Rob J Hyndman

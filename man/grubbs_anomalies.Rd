@@ -48,13 +48,13 @@ tibble(y = y) |> filter(grubbs_anomalies(y))
 tibble(y = y) |> filter(dixon_anomalies(y))
 }
 \references{
-Grubbs, F. E. (1950). Sample criteria for testing outlying observations.
+Grubbs, F E (1950). Sample criteria for testing outlying observations.
 \emph{Annals of Mathematical Statistics}, 21(1), 27–58.
 
-Dixon, W. J. (1950). Analysis of extreme values.
+Dixon, W J (1950). Analysis of extreme values.
 \emph{Annals of Mathematical Statistics}, 21(4), 488–506.
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 4.4-4.5,
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 4.4-4.5,
 \url{https://OTexts.com/weird/}.
 }
 \seealso{

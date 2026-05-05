@@ -15,11 +15,11 @@
 #' or two outliers in one tail, or two outliers on opposite tails. These variations
 #' are implemented in the \code{\link[outliers]{grubbs.test}} function.
 #' Dixon's test only considers the maximum (and possibly the minimum) as potential outliers.
-#' @references Grubbs, F. E. (1950). Sample criteria for testing outlying observations.
+#' @references Grubbs, F E (1950). Sample criteria for testing outlying observations.
 #' *Annals of Mathematical Statistics*, 21(1), 27–58.
-#' @references  Dixon, W. J. (1950). Analysis of extreme values.
+#' @references  Dixon, W J (1950). Analysis of extreme values.
 #' *Annals of Mathematical Statistics*, 21(4), 488–506.
-#' @references  Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 4.4-4.5,
+#' @references  Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 4.4-4.5,
 #' \url{https://OTexts.com/weird/}.
 
 #' @return A logical vector

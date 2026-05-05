@@ -25,7 +25,7 @@ threshold <- stray::find_threshold(scores, alpha = 0.01, outtail = "max", p = 0.
 which(scores > threshold)
 }
 \references{
-P D Talagala, R J Hyndman and K Smith-Miles (2021) Anomaly detection
+Talagala, P D, Hyndman, R J, and Smith-Miles, K (2021) Anomaly detection
 in high-dimensional data, \emph{Journal of Computational and Graphical Statistics}, \strong{30}(2), 360-374.
 }
 \author{

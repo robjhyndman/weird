@@ -30,13 +30,13 @@ tibble(y = y) |> filter(peirce_anomalies(y))
 tibble(y = y) |> filter(chauvenet_anomalies(y))
 }
 \references{
-Peirce, B. (1852). Criterion for the rejection of doubtful observations.
+Peirce, B (1852). Criterion for the rejection of doubtful observations.
 \emph{The Astronomical Journal}, 2(21), 161–163.
 
-Chauvenet, W. (1863). 'Method of least squares'. Appendix to
+Chauvenet, W (1863). 'Method of least squares'. Appendix to
 \emph{Manual of Spherical and Practical Astronomy}, Vol.2, Lippincott, Philadelphia, pp.469-566.
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 4.3,
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 4.3,
 \url{https://OTexts.com/weird/}.
 }
 \author{

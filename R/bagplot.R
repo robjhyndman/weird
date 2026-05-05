@@ -14,9 +14,9 @@
 #' @param ... Other arguments are passed to the \code{\link[aplpack]{compute.bagplot}} function.
 #' @return A ggplot object showing a bagplot or scatterplot of the data.
 #' @author Rob J Hyndman
-#' @references Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999).
+#' @references Rousseeuw, P J, Ruts, I, & Tukey, J W (1999).
 #'   The bagplot: A bivariate boxplot. \emph{The American Statistician}, \bold{52}(4), 382–387.
-#' @references Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 5.6,
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 5.6,
 #' \url{https://OTexts.com/weird/}.
 #' @examples
 #' gg_bagplot(n01, v1, v2)

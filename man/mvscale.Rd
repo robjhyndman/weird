@@ -56,7 +56,7 @@ z <- mvscale(faithful, center = mean, cov = stats::cov, warning = FALSE)
 z <- mvscale(faithful, warning = FALSE)
 }
 \references{
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 2.6, 3.6 and 3.7.
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.6, 3.6 and 3.7.
 }
 \seealso{
 \code{\link[base:scale]{base::scale()}}, \code{\link[stats:sd]{stats::sd()}}, \code{\link[stats:cov]{stats::cov()}}, \code{\link[robustbase:covOGK]{robustbase::covOGK()}}, \code{\link[robustbase:s_Qn]{robustbase::s_Qn()}}

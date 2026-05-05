@@ -27,7 +27,7 @@ y <- c(rnorm(49), 5)
 lof_scores(y)
 }
 \references{
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section 7.3,
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 7.3,
 \url{https://OTexts.com/weird/}.
 }
 \seealso{
