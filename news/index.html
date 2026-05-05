@@ -36,15 +36,15 @@
 <h2 class="pkg-version" data-toc-text="development version" id="weird-development-version">weird (development version)<a class="anchor" aria-label="anchor" href="#weird-development-version"></a></h2>
 <ul><li>Added <code><a href="../reference/surprisals.html">surprisals()</a></code> and <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> for <code>glm</code> objects</li>
 <li>Faster calculation of <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> for <code>lm</code> and <code>gam</code> objects</li>
-<li>Faster calculation for <code>kde_bandwidth(method = "lookout")</code>
-</li>
-<li>Added covariance calculation for multivariate <code>dist_kde</code> objects</li>
-<li>Added <code>hdr()</code> and <code>parameters()</code> methods for <code>dist_kde</code> objects</li>
-<li>More accurate HDR calculations</li>
 <li>More accurate rank-based surprisal calculation when ties and missings present</li>
+<li>More accurate HDR calculations</li>
+<li>Added covariance calculation for multivariate <code>dist_kde</code> objects</li>
+<li>Added <code><a href="https://pkg.mitchelloharawild.com/distributional/reference/hdr.html" class="external-link">distributional::hdr()</a></code> and <code><a href="https://pkg.mitchelloharawild.com/distributional/reference/parameters.html" class="external-link">distributional::parameters()</a></code> methods for <code>dist_kde</code> objects</li>
+<li>Faster calculation for <code><a href="../reference/kde_bandwidth.html">kde_bandwidth()</a></code> with <code>method = "lookout"</code>, now using <a href="https://www.mlpack.org/" class="external-link">mlpack</a> for merge distances</li>
 <li>
-<code><a href="../reference/mvscale.html">mvscale()</a></code> re-added to <code>weird</code> (previously moved to <code>lookout</code> package), now using <code>mlpack</code> for merge distances</li>
-<li>Dropped <code>lookout</code> package dependency</li>
+<code><a href="../reference/mvscale.html">mvscale()</a></code> re-added to <a href="https://pkg.robjhyndman.com/weird/">weird</a>
+</li>
+<li>Dropped <a href="https://sevvandi.github.io/lookout/" class="external-link">lookout</a> package dependency</li>
 <li>Added lots of unit tests</li>
 <li>Better docs</li>
 <li>Bug fixes</li>
@@ -53,7 +53,7 @@
 <h2 class="pkg-version" data-toc-text="2.0.0" id="weird-200">weird 2.0.0<a class="anchor" aria-label="anchor" href="#weird-200"></a></h2><p class="text-muted">CRAN release: 2026-01-27</p>
 <ul><li>Added <code>fr_mortality</code> data set</li>
 <li>Updated <code>oldfaithful</code> and <code>cricket_batting</code> data sets</li>
-<li>Refactored package to use <code>distributional</code> objects</li>
+<li>Refactored package to use <a href="https://pkg.robjhyndman.com/distributional/" class="external-link">distributional</a> objects</li>
 <li>Added <code><a href="../reference/dist_kde.html">dist_kde()</a></code> and <code><a href="../reference/dist_density.html">dist_density()</a></code>
 </li>
 <li>Removed <code>as_kde()</code> and <code>autoplot.kde()</code>
@@ -69,8 +69,8 @@
 <li>Added <code><a href="../reference/hampel_anomalies.html">hampel_anomalies()</a></code>
 </li>
 <li>
-<code><a href="../reference/mvscale.html">mvscale()</a></code> moved to lookout package</li>
-<li>Dropped interpolation dependency</li>
+<code><a href="../reference/mvscale.html">mvscale()</a></code> moved to <a href="https://sevvandi.github.io/lookout/" class="external-link">lookout</a> package</li>
+<li>Dropped <code>interpolation</code> dependency</li>
 <li>No longer exporting <code>weird_packages()</code> and <code>weird_conflicts()</code>
 </li>
 </ul></div>

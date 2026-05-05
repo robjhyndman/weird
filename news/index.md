@@ -10,16 +10,23 @@
 - Faster calculation of
   [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   for `lm` and `gam` objects
-- Faster calculation for `kde_bandwidth(method = "lookout")`
-- Added covariance calculation for multivariate `dist_kde` objects
-- Added `hdr()` and `parameters()` methods for `dist_kde` objects
-- More accurate HDR calculations
 - More accurate rank-based surprisal calculation when ties and missings
   present
+- More accurate HDR calculations
+- Added covariance calculation for multivariate `dist_kde` objects
+- Added
+  [`distributional::hdr()`](https://pkg.mitchelloharawild.com/distributional/reference/hdr.html)
+  and
+  [`distributional::parameters()`](https://pkg.mitchelloharawild.com/distributional/reference/parameters.html)
+  methods for `dist_kde` objects
+- Faster calculation for
+  [`kde_bandwidth()`](https://pkg.robjhyndman.com/weird/reference/kde_bandwidth.md)
+  with `method = "lookout"`, now using [mlpack](https://www.mlpack.org/)
+  for merge distances
 - [`mvscale()`](https://pkg.robjhyndman.com/weird/reference/mvscale.md)
-  re-added to `weird` (previously moved to `lookout` package), now using
-  `mlpack` for merge distances
-- Dropped `lookout` package dependency
+  re-added to [weird](https://pkg.robjhyndman.com/weird/)
+- Dropped [lookout](https://sevvandi.github.io/lookout/) package
+  dependency
 - Added lots of unit tests
 - Better docs
 - Bug fixes
@@ -30,7 +37,8 @@ CRAN release: 2026-01-27
 
 - Added `fr_mortality` data set
 - Updated `oldfaithful` and `cricket_batting` data sets
-- Refactored package to use `distributional` objects
+- Refactored package to use
+  [distributional](https://pkg.robjhyndman.com/distributional/) objects
 - Added
   [`dist_kde()`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)
   and
@@ -56,8 +64,8 @@ CRAN release: 2026-01-27
 - Added
   [`hampel_anomalies()`](https://pkg.robjhyndman.com/weird/reference/hampel_anomalies.md)
 - [`mvscale()`](https://pkg.robjhyndman.com/weird/reference/mvscale.md)
-  moved to lookout package
-- Dropped interpolation dependency
+  moved to [lookout](https://sevvandi.github.io/lookout/) package
+- Dropped `interpolation` dependency
 - No longer exporting `weird_packages()` and `weird_conflicts()`
 
 ## weird 1.0.2
