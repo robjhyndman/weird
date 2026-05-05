@@ -1,4 +1,4 @@
-# weird (development version)
+# weird 2.1.0
 
 * Added `surprisals()` and `surprisals_prob()` for `glm` objects
 * Faster calculation of `surprisals_prob()` for `lm` and `gam` objects
