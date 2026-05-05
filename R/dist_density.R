@@ -40,8 +40,18 @@ dist_density <- function(x, density) {
   idx <- lapply(x, order)
   x <- mapply(function(u, i) u[i], x, idx, SIMPLIFY = FALSE)
   density <- mapply(function(f, idx) f[idx], density, idx, SIMPLIFY = FALSE)
+  # Precompute CDF grid once and store it alongside x and f
+  cdfs <- mapply(cumintegral, x, density, SIMPLIFY = FALSE)
+  cdf_x <- lapply(cdfs, `[[`, "x")
+  cdf_y <- lapply(cdfs, `[[`, "y")
   # Construct result
-  output <- distributional::new_dist(x = x, f = density, class = "dist_density")
+  output <- distributional::new_dist(
+    x = x,
+    f = density,
+    cdf_x = cdf_x,
+    cdf_y = cdf_y,
+    class = "dist_density"
+  )
   # Replace degenerate distributions
   degenerate <- (n == 1L)
   if (any(degenerate)) {
@@ -69,11 +79,9 @@ log_density.dist_density <- function(x, at, ..., na.rm = TRUE) {
 
 #' @exportS3Method distributional::cdf
 cdf.dist_density <- function(x, q, ..., na.rm = TRUE) {
-  # Compute CDF at density ordinates
-  CDF <- cumintegral(x$x, x$f)
   stats::approx(
-    CDF$x,
-    CDF$y,
+    x$cdf_x,
+    x$cdf_y,
     xout = q,
     yleft = 0,
     yright = 1,
@@ -84,11 +92,9 @@ cdf.dist_density <- function(x, q, ..., na.rm = TRUE) {
 
 #' @export
 quantile.dist_density <- function(x, p, ..., na.rm = TRUE) {
-  # Compute CDF at density ordinates
-  CDF <- cumintegral(x$x, x$f)
   stats::approx(
-    CDF$y,
-    CDF$x,
+    x$cdf_y,
+    x$cdf_x,
     xout = p,
     yleft = min(x$x),
     yright = max(x$x),
