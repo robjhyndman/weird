@@ -75,3 +75,37 @@ test_that("gg_bagplot works when data is a matrix coerced to data frame", {
   ))
   expect_s3_class(gg_bagplot(mat, v1, v2), "ggplot")
 })
+
+# Outlier rendering -----------------------------------------------------------
+
+test_that("gg_bagplot renders clear outliers as a black geom_point layer", {
+  set.seed(1)
+  df_out <- data.frame(
+    v1 = c(rnorm(100), 15, -15),
+    v2 = c(rnorm(100), 15, -15)
+  )
+  p <- gg_bagplot(df_out, v1, v2)
+  # Fixed colour is stored as aes_params$colour after ggplot2 alias normalisation
+  point_colours <- vapply(
+    Filter(function(l) inherits(l$geom, "GeomPoint"), p$layers),
+    function(l) l$aes_params$colour,
+    character(1)
+  )
+  expect_true("#000000" %in% point_colours)
+})
+
+# NA values -------------------------------------------------------------------
+
+test_that("gg_bagplot handles NA values without error", {
+  set.seed(1)
+  df_na <- data.frame(v1 = c(rnorm(50), NA), v2 = c(rnorm(50), NA))
+  expect_no_error(gg_bagplot(df_na, v1, v2))
+  expect_s3_class(gg_bagplot(df_na, v1, v2), "ggplot")
+})
+
+# Very small n ----------------------------------------------------------------
+
+test_that("gg_bagplot errors gracefully with fewer than 4 observations", {
+  df_tiny <- data.frame(v1 = 1:3, v2 = 1:3)
+  expect_error(gg_bagplot(df_tiny, v1, v2))
+})
