@@ -45,11 +45,14 @@ make_density_df <- function(object, ngrid = 501) {
   }
   if (d == 1) {
     # Find range of support values to use
-    rand <- unlist(distributional::generate(object, times = 1e5))
+    rand <- unlist(distributional::generate(object, times = 1))
     if (is.logical(rand)) {
       y <- c(FALSE, TRUE)
     } else if (is.integer(rand)) {
-      qq <- as.integer(round(quantile(rand, p = c(0.002, 0.998))))
+      qq <- quantile(object, p = c(0.002, 0.998)) |>
+        unlist() |>
+        round() |>
+        as.integer()
       y <- seq(qq[1], qq[2], by = 1L)
     } else {
       # Appears to be continuous
