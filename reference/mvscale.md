@@ -63,7 +63,7 @@ warning.
 
 ## References
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
 2.6, 3.6 and 3.7.
 
 ## See also

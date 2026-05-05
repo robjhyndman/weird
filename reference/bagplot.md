@@ -48,10 +48,10 @@ A ggplot object showing a bagplot or scatterplot of the data.
 
 ## References
 
-Rousseeuw, P. J., Ruts, I., & Tukey, J. W. (1999). The bagplot: A
-bivariate boxplot. *The American Statistician*, **52**(4), 382–387.
+Rousseeuw, P J, Ruts, I, & Tukey, J W (1999). The bagplot: A bivariate
+boxplot. *The American Statistician*, **52**(4), 382–387.
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
 5.6, <https://OTexts.com/weird/>.
 
 ## See also

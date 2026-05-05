@@ -59,7 +59,7 @@ A distributional object of class `dist_kde`.
 
 ## References
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
 2.7 and 3.9, <https://OTexts.com/weird/>.
 
 ## Examples

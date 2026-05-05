@@ -49,13 +49,13 @@ minimum) as potential outliers.
 
 ## References
 
-Grubbs, F. E. (1950). Sample criteria for testing outlying observations.
+Grubbs, F E (1950). Sample criteria for testing outlying observations.
 *Annals of Mathematical Statistics*, 21(1), 27–58.
 
-Dixon, W. J. (1950). Analysis of extreme values. *Annals of Mathematical
+Dixon, W J (1950). Analysis of extreme values. *Annals of Mathematical
 Statistics*, 21(4), 488–506.
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
 4.4-4.5, <https://OTexts.com/weird/>.
 
 ## See also

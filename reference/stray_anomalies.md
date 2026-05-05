@@ -26,8 +26,8 @@ is identified as an anomaly using the stray algorithm.
 
 ## References
 
-P D Talagala, R J Hyndman and K Smith-Miles (2021) Anomaly detection in
-high-dimensional data, *Journal of Computational and Graphical
+Talagala, P D, Hyndman, R J, and Smith-Miles, K (2021) Anomaly detection
+in high-dimensional data, *Journal of Computational and Graphical
 Statistics*, **30**(2), 360-374.
 
 ## Author

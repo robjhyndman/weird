@@ -111,9 +111,10 @@ The surprisal probabilities may be computed in three different ways.
 
 ## References
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Chapter
-6, <https://OTexts.com/weird/>. Rob J Hyndman & David T Frazier (2026)
-"Anomaly detection using surprisals",
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
+6, <https://OTexts.com/weird/>.
+
+Hyndman, R J & Frazier, D T (2026) "Anomaly detection using surprisals",
 <https://robjhyndman.com/publications/surprisals.html>.
 
 ## See also

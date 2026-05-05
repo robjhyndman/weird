@@ -30,14 +30,14 @@ to either Peirce's criterion or Chauvenet's criterion.
 
 ## References
 
-Peirce, B. (1852). Criterion for the rejection of doubtful observations.
+Peirce, B (1852). Criterion for the rejection of doubtful observations.
 *The Astronomical Journal*, 2(21), 161–163.
 
-Chauvenet, W. (1863). 'Method of least squares'. Appendix to *Manual of
+Chauvenet, W (1863). 'Method of least squares'. Appendix to *Manual of
 Spherical and Practical Astronomy*, Vol.2, Lippincott, Philadelphia,
 pp.469-566.
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
 4.3, <https://OTexts.com/weird/>.
 
 ## Author

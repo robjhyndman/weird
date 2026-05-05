@@ -30,10 +30,12 @@ A tibble
 
 ## References
 
-Rob J Hyndman (2026) "That's weird: Anomaly detection using R", Section
-2.5, 3.4. <https://OTexts.com/weird/>. Rob J Hyndman (1996) "Computing
-and Graphing Highest Density Regions", *The American Statistician*,
-50(2), 120–126. <https://robjhyndman.com/publications/hdr/>
+Hyndman, R J (1996) "Computing and Graphing Highest Density Regions",
+*The American Statistician*, 50(2), 120–126.
+<https://robjhyndman.com/publications/hdr/>
+
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
+2.5, 3.4. <https://OTexts.com/weird/>.
 
 ## See also
 
