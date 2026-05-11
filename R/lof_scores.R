@@ -20,7 +20,7 @@
 lof_scores <- function(y, k = 10, ...) {
   y <- na.omit(y)
   lof <- dbscan::lof(as.matrix(y), minPts = k, ...)
-  lof[lof == Inf] <- 0
+  lof[lof == Inf] <- 1
   return(lof)
 }
 
