@@ -4,6 +4,8 @@
 
 ## weird 2.1.0
 
+CRAN release: 2026-05-05
+
 - Added
   [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   and

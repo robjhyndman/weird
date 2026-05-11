@@ -2,8 +2,8 @@
 
 Creates a distributional object using a kernel density estimate with a
 Gaussian kernel obtained from the
-[`kde()`](https://rdrr.io/pkg/ks/man/kde.html) function. The bandwidth
-can be specified; otherwise the
+[`kde()`](https://mvstat.net/ks/reference/kde.html) function. The
+bandwidth can be specified; otherwise the
 [`kde_bandwidth()`](https://pkg.robjhyndman.com/weird/reference/kde_bandwidth.md)
 function is used. The cdf, quantiles and moments are consistent with the
 kde. Generating random values from the kde is equivalent to a smoothed
@@ -51,7 +51,7 @@ dist_kde(
 - ...:
 
   Other arguments are passed to
-  [`kde`](https://rdrr.io/pkg/ks/man/kde.html).
+  [`kde`](https://mvstat.net/ks/reference/kde.html).
 
 ## Value
 
