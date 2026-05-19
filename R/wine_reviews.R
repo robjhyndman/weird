@@ -10,9 +10,9 @@
 #'   \item{region}{Region of origin}
 #'   \item{winery}{Name of vineyard that made the wine}
 #'   \item{variety}{Variety of grape}
+#'   \item{year}{Year of wine}
 #'   \item{points}{Points allocated by WineEnthusiast reviewer on a scale of 0-100}
 #'   \item{price}{Price of a bottle of wine in $US}
-#'   \item{year}{Year of wine extracted from `title`}
 #' }
 #' @return Data frame
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 1.4,

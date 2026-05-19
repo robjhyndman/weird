@@ -70,9 +70,9 @@ wine_reviews <- readr::read_csv(here::here(
     region = region_1,
     winery,
     variety,
+    year,
     points,
-    price,
-    year
+    price
   ) |>
   distinct()
 
