@@ -12,9 +12,9 @@ A data frame with 110,203 rows and 8 columns:
 \item{region}{Region of origin}
 \item{winery}{Name of vineyard that made the wine}
 \item{variety}{Variety of grape}
+\item{year}{Year of wine}
 \item{points}{Points allocated by WineEnthusiast reviewer on a scale of 0-100}
 \item{price}{Price of a bottle of wine in $US}
-\item{year}{Year of wine extracted from \code{title}}
 }
 }
 \source{

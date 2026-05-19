@@ -9,9 +9,9 @@ A data frame with 77 rows and
 4 columns:
 \describe{
 \item{country}{Country name}
+\item{region}{World region according to Our World in Data}
 \item{gun_ownership_rate}{Gun ownership rate (number of guns owned by civilians per 100 people)}
 \item{homicide_rate}{Homicide rate (number of homicides per 100,000 people where the weapon was a firearm)}
-\item{region}{World region according to Our World in Data}
 }
 }
 \source{

@@ -7,6 +7,7 @@
 \format{
 A data frame with 420,768 rows and 17 columns:
 \describe{
+\item{station}{Name of the monitoring station}
 \item{year}{Year of measurement}
 \item{month}{Month of measurement}
 \item{day}{Day of measurement}
@@ -25,7 +26,6 @@ A data frame with 420,768 rows and 17 columns:
 \item{rainfall}{Rainfall (millimeters)}
 \item{wind_direction}{Wind direction}
 \item{wind_speed}{Wind speed (meters per second)}
-\item{station}{Name of the monitoring station}
 }
 }
 \source{
