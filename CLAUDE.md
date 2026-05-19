@@ -25,13 +25,13 @@ devtools::test(filter = "surprisals_data")
 devtools::check()
 ```
 
-Via Makefile (shortcuts for the above):
+Via justfile (shortcuts for the above):
 ```bash
-make docs     # devtools::document()
-make test     # devtools::test()
-make check    # devtools::check()
-make install  # devtools::install()
-make pkgdown  # pkgdown::build_site()
+just docs     # devtools::document()
+just test     # devtools::test()
+just check    # devtools::check()
+just install  # devtools::install()
+just pkgdown  # pkgdown::build_site()
 ```
 
 README is generated from `README.qmd` (Quarto), not edited directly.

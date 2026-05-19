@@ -9,7 +9,7 @@ _pkgdown.yml
 ^pkgdown$
 ^CRAN-SUBMISSION$
 .vscode
-Makefile
+justfile
 ^\.positai$
 ^\.claude$
 CLAUDE.md
