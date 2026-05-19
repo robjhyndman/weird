@@ -1,6 +1,5 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://pkg.robjhyndman.com/weird/404.html</loc></url>
-<url><loc>https://pkg.robjhyndman.com/weird/CLAUDE.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/authors.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/index.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/news/index.html</loc></url>
@@ -8,6 +7,7 @@
 <url><loc>https://pkg.robjhyndman.com/weird/reference/cricket_batting.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/dist_density.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/dist_kde.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird/reference/fetch_air_quality.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/fetch_wine_reviews.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/fr_mortality.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/gg_density.html</loc></url>
@@ -15,6 +15,7 @@
 <url><loc>https://pkg.robjhyndman.com/weird/reference/gg_hdrboxplot.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/glosh_scores.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/grubbs_anomalies.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird/reference/gun_deaths.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/hampel_anomalies.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/hdr_table.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/index.html</loc></url>

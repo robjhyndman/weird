@@ -365,16 +365,21 @@ mvscale(oldfaithful, cov = NULL)
 
 Data sets included in the package
 
-- [`cricket_batting`](https://pkg.robjhyndman.com/weird/reference/cricket_batting.md)
-  : Cricket batting data for international test players
 - [`n01`](https://pkg.robjhyndman.com/weird/reference/n01.md) :
   Multivariate standard normal data
+- [`cricket_batting`](https://pkg.robjhyndman.com/weird/reference/cricket_batting.md)
+  : Cricket batting data for international test players
+- [`gun_deaths`](https://pkg.robjhyndman.com/weird/reference/gun_deaths.md)
+  : Gun ownership and homicide rates by country
 - [`oldfaithful`](https://pkg.robjhyndman.com/weird/reference/oldfaithful.md)
   : Old faithful eruption data
-- [`fetch_wine_reviews()`](https://pkg.robjhyndman.com/weird/reference/fetch_wine_reviews.md)
-  : Wine prices and points
 - [`fr_mortality`](https://pkg.robjhyndman.com/weird/reference/fr_mortality.md)
   : French mortality rates by age and sex
+- [`fetch_air_quality()`](https://pkg.robjhyndman.com/weird/reference/fetch_air_quality.md)
+  : Air quality data for 12 Beijing monitoring stations from 2013 to
+  2017
+- [`fetch_wine_reviews()`](https://pkg.robjhyndman.com/weird/reference/fetch_wine_reviews.md)
+  : Wine prices and points
 
 ## Functions for scaling data
 
