@@ -48,17 +48,17 @@ Data frame
 ``` r
 gun_deaths
 #> # A tibble: 77 × 4
-#>    country                gun_ownership_rate homicide_rate region       
-#>    <chr>                               <dbl>         <dbl> <chr>        
-#>  1 United States                       120.          3.32  North America
-#>  2 Serbia                               39.1         0.438 Europe       
-#>  3 Montenegro                           39.1         1.77  Europe       
-#>  4 Canada                               34.7         0.725 North America
-#>  5 Uruguay                              34.7         5.02  South America
-#>  6 Cyprus                               34           0.159 Europe       
-#>  7 Finland                              32.4         0.109 Europe       
-#>  8 Iceland                              31.7         0     Europe       
-#>  9 Bosnia and Herzegovina               31.2         0.671 Europe       
-#> 10 Austria                              30           0.182 Europe       
+#>    country             region        gun_ownership_rate homicide_rate
+#>    <chr>               <chr>                      <dbl>         <dbl>
+#>  1 Albania             Europe                      12          1.52  
+#>  2 Algeria             Africa                       2.1        0.127 
+#>  3 Antigua and Barbuda North America                5.4       11.1   
+#>  4 Argentina           South America                7.4        2.81  
+#>  5 Armenia             Asia                         6.1        0.618 
+#>  6 Australia           Oceania                     14.5        0.0930
+#>  7 Austria             Europe                      30          0.182 
+#>  8 Azerbaijan          Asia                         3.6        0.181 
+#>  9 Bahamas             North America               18.8       27.4   
+#> 10 Barbados            North America                3.5        8.21  
 #> # ℹ 67 more rows
 ```
