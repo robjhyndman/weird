@@ -25,11 +25,13 @@ reference:
 - title: Data
   desc: Data sets included in the package
   contents:
-  - cricket_batting
   - n01
+  - cricket_batting
+  - gun_deaths
   - oldfaithful
-  - fetch_wine_reviews
   - fr_mortality
+  - fetch_air_quality
+  - fetch_wine_reviews
 - title: Functions for scaling data
   contents: mvscale
 - title: Functions for calculating anomaly scores
@@ -62,4 +64,3 @@ reference:
   - gg_density_layer
   - gg_bagplot
   - gg_hdrboxplot
-
