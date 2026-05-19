@@ -120,3 +120,51 @@ test_that("mvscale with a constant column in a matrix does not error", {
   mat_const <- cbind(rnorm(50), rep(5, 50))
   expect_no_error(mvscale(mat_const, cov = NULL, warning = FALSE))
 })
+
+# Missing values --------------------------------------------------------
+
+test_that("mvscale propagates NA to all columns in the same row (default cov)", {
+  mat_na <- mat2
+  mat_na[3, 1] <- NA
+  z <- mvscale(mat_na, warning = FALSE)
+  expect_true(is.na(z[3, 1]))
+  expect_true(is.na(z[3, 2]))
+  expect_false(anyNA(z[-3, ]))
+})
+
+test_that("mvscale preserves NA positions in vector input", {
+  v_na <- v_num
+  v_na[c(2, 10)] <- NA
+  z <- mvscale(v_na, warning = FALSE)
+  expect_true(all(is.na(z[c(2, 10)])))
+  expect_false(anyNA(z[-c(2, 10)]))
+})
+
+test_that("mvscale propagates NA to all numeric columns in the same row (data frame)", {
+  df_na <- df_mix
+  df_na[5, "x"] <- NA
+  z <- suppressWarnings(mvscale(df_na))
+  expect_true(is.na(z[5, "z1"]))
+  expect_true(is.na(z[5, "z2"]))
+  expect_equal(z[5, "label"], df_na[5, "label"])
+})
+
+# Infinite values -------------------------------------------------------
+
+test_that("mvscale errors on Inf in a vector", {
+  v_inf <- v_num
+  v_inf[5] <- Inf
+  expect_snapshot(mvscale(v_inf, warning = FALSE), error = TRUE)
+})
+
+test_that("mvscale errors on Inf in a matrix", {
+  mat_inf <- mat2
+  mat_inf[1, 2] <- Inf
+  expect_snapshot(mvscale(mat_inf, warning = FALSE), error = TRUE)
+})
+
+test_that("mvscale errors on Inf in a data frame", {
+  df_inf <- df_num
+  df_inf[1, 1] <- Inf
+  expect_snapshot(mvscale(df_inf, warning = FALSE), error = TRUE)
+})
