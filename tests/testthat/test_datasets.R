@@ -98,3 +98,47 @@ test_that("fr_mortality mortality rates are between 0 and 1", {
   expect_true(all(fr_mortality$Mortality >= 0, na.rm = TRUE))
   expect_true(all(fr_mortality$Mortality <= 1, na.rm = TRUE))
 })
+
+# --- gun_deaths -------------------------------------------------------------
+
+test_that("gun_deaths has expected column names", {
+  expect_named(
+    gun_deaths,
+    c("country", "gun_ownership_rate", "homicide_rate", "region")
+  )
+})
+
+test_that("gun_deaths has expected column types", {
+  expect_type(gun_deaths$country, "character")
+  expect_type(gun_deaths$gun_ownership_rate, "double")
+  expect_type(gun_deaths$homicide_rate, "double")
+  expect_type(gun_deaths$region, "character")
+})
+
+test_that("gun_deaths has no missing values", {
+  expect_false(anyNA(gun_deaths))
+})
+
+test_that("gun_deaths countries are unique", {
+  expect_equal(length(unique(gun_deaths$country)), nrow(gun_deaths))
+})
+
+test_that("gun_deaths ownership rates are positive", {
+  expect_all_true(gun_deaths$gun_ownership_rate > 0)
+})
+
+test_that("gun_deaths homicide rates are non-negative", {
+  expect_all_true(gun_deaths$homicide_rate >= 0)
+})
+
+test_that("gun_deaths region values are valid", {
+  valid_regions <- c(
+    "Africa",
+    "Asia",
+    "Europe",
+    "North America",
+    "Oceania",
+    "South America"
+  )
+  expect_in(gun_deaths$region, valid_regions)
+})
