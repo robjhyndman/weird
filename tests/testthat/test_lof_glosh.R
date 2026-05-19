@@ -2,10 +2,10 @@
 
 # Shared fixtures -------------------------------------------------------
 set.seed(42)
-y_uni   <- rnorm(100)
-y_out   <- c(y_uni, 100)          # one gross outlier appended
-y_na    <- c(y_uni[1:10], NA, y_uni[11:20])
-y_mat   <- matrix(rnorm(200), ncol = 2)
+y_uni <- rnorm(100)
+y_out <- c(y_uni, 100) # one gross outlier appended
+y_na <- c(y_uni[1:10], NA, y_uni[11:20])
+y_mat <- matrix(rnorm(200), ncol = 2)
 y_mat_out <- rbind(y_mat, c(100, 100))
 
 # lof_scores() ----------------------------------------------------------
@@ -46,9 +46,9 @@ test_that("lof_scores assigns highest score to the outlier row in a matrix", {
 })
 
 test_that("lof_scores respects the k argument", {
-  scores_k5  <- lof_scores(y_uni, k = 5)
+  scores_k5 <- lof_scores(y_uni, k = 5)
   scores_k20 <- lof_scores(y_uni, k = 20)
-  expect_length(scores_k5,  length(y_uni))
+  expect_length(scores_k5, length(y_uni))
   expect_length(scores_k20, length(y_uni))
   expect_false(isTRUE(all.equal(scores_k5, scores_k20)))
 })
@@ -86,9 +86,9 @@ test_that("glosh_scores assigns highest score to the outlier row in a matrix", {
 })
 
 test_that("glosh_scores respects the k argument", {
-  scores_k5  <- glosh_scores(y_uni, k = 5)
+  scores_k5 <- glosh_scores(y_uni, k = 5)
   scores_k20 <- glosh_scores(y_uni, k = 20)
-  expect_length(scores_k5,  length(y_uni))
+  expect_length(scores_k5, length(y_uni))
   expect_length(scores_k20, length(y_uni))
   expect_false(isTRUE(all.equal(scores_k5, scores_k20)))
 })

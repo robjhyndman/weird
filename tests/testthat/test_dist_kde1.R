@@ -56,7 +56,7 @@ test_that("dist_kde respects explicit h bandwidth", {
   set.seed(1)
   x <- rnorm(100)
   d_narrow <- dist_kde(x, h = 0.1)
-  d_wide   <- dist_kde(x, h = 2.0)
+  d_wide <- dist_kde(x, h = 2.0)
   # Wider bandwidth inflates the variance of the KDE
   expect_gt(
     distributional::variance(d_wide)[[1]],

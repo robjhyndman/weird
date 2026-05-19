@@ -2,11 +2,11 @@
 
 # Shared fixtures -------------------------------------------------------
 set.seed(1)
-n       <- 50
+n <- 50
 y_clean <- rnorm(n)
-y_out   <- c(rnorm(n - 1), 20)          # gross outlier at position n
+y_out <- c(rnorm(n - 1), 20) # gross outlier at position n
 mat_clean <- cbind(rnorm(n), rnorm(n))
-mat_out   <- cbind(rnorm(n), c(10, rnorm(n - 1)))  # outlier at row 1
+mat_out <- cbind(rnorm(n), c(10, rnorm(n - 1))) # outlier at row 1
 
 # stray_scores() --------------------------------------------------------
 
@@ -69,16 +69,16 @@ test_that("stray_anomalies flags the outlier row in a matrix", {
 # Consistency between functions -----------------------------------------
 
 test_that("stray_anomalies TRUE positions have higher scores than FALSE positions", {
-  scores  <- stray_scores(y_out)
-  flags   <- stray_anomalies(y_out)
+  scores <- stray_scores(y_out)
+  flags <- stray_anomalies(y_out)
   if (any(flags) && any(!flags)) {
     expect_gt(min(scores[flags]), max(scores[!flags]))
   }
 })
 
 test_that("stray_scores and stray_anomalies agree on number of outliers", {
-  scores  <- stray_scores(y_out)
-  flags   <- stray_anomalies(y_out)
+  scores <- stray_scores(y_out)
+  flags <- stray_anomalies(y_out)
   # The single outlier index reported by find_HDoutliers should be flagged
   out_idx <- stray::find_HDoutliers(data = y_out)$outliers
   expect_true(all(flags[out_idx]))
