@@ -72,22 +72,23 @@ mvscale <- function(
     }
     mat <- as.matrix(object[, numeric_col])
   }
+  if(any(mat == Inf & !is.na(mat))) {
+    stop("object contains infinite values")
+  }
   # Remove centers
   if (!is.null(center)) {
-    med <- apply(mat, 2, center)
+    med <- apply(mat, 2, \(x) center(na.omit(x)))
     mat <- sweep(mat, 2L, med)
   }
   # Create more resilient version of scale function
   if (!is.null(scale)) {
-    my_scale <- function(x, ..., na.rm = TRUE) {
-      s <- scale(x, ..., na.rm = na.rm)
+    my_scale <- function(x, ...) {
+      s <- scale(na.omit(x), ...)
       s[s == 0] <- 1 # Avoid division by zero
       return(s)
     }
   } else {
-    my_scale <- function(x, ..., na.rm = TRUE) {
-      1
-    }
+    my_scale <- function(x, ...) 1
   }
   # Scale
   if (d == 1L) {
@@ -96,10 +97,12 @@ mvscale <- function(
       return(as.vector(z))
     }
   } else if (!is.null(cov)) {
+    # Remove missing values
+    mat_nomissing <- mat[complete.cases(mat), , drop = FALSE]
     if (identical(cov, robustbase::covOGK)) {
-      S <- cov(mat, sigmamu = my_scale)$cov
+      S <- cov(mat_nomissing, sigmamu = my_scale)$cov
     } else {
-      S <- cov(mat)
+      S <- cov(mat_nomissing)
     }
     Sinv <- try(solve(S), silent = TRUE)
     if (inherits(Sinv, "try-error")) {
