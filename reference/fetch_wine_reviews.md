@@ -34,6 +34,10 @@ A data frame with 110,203 rows and 8 columns:
 
   Variety of grape
 
+- year:
+
+  Year of wine
+
 - points:
 
   Points allocated by WineEnthusiast reviewer on a scale of 0-100
@@ -41,10 +45,6 @@ A data frame with 110,203 rows and 8 columns:
 - price:
 
   Price of a bottle of wine in \$US
-
-- year:
-
-  Year of wine extracted from `title`
 
 ## Source
 

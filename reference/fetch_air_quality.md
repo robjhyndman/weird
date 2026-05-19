@@ -14,6 +14,10 @@ fetch_air_quality()
 
 A data frame with 420,768 rows and 17 columns:
 
+- station:
+
+  Name of the monitoring station
+
 - year:
 
   Year of measurement
@@ -79,10 +83,6 @@ A data frame with 420,768 rows and 17 columns:
 - wind_speed:
 
   Wind speed (meters per second)
-
-- station:
-
-  Name of the monitoring station
 
 ## Source
 

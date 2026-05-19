@@ -20,6 +20,10 @@ A data frame with 77 rows and 4 columns:
 
   Country name
 
+- region:
+
+  World region according to Our World in Data
+
 - gun_ownership_rate:
 
   Gun ownership rate (number of guns owned by civilians per 100 people)
@@ -28,10 +32,6 @@ A data frame with 77 rows and 4 columns:
 
   Homicide rate (number of homicides per 100,000 people where the weapon
   was a firearm)
-
-- region:
-
-  World region according to Our World in Data
 
 ## Source
 
