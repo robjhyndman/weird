@@ -16,6 +16,8 @@ homicide_rates <- read_csv(here::here(
   )
 
 gun_deaths <- gun_owners |>
-  inner_join(homicide_rates, by = "country")
+  inner_join(homicide_rates, by = "country") |>
+  arrange(country) |>
+  select(country, region, gun_ownership_rate, homicide_rate)
 
 usethis::use_data(gun_deaths, overwrite = TRUE)
