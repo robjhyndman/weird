@@ -104,7 +104,7 @@ test_that("fr_mortality mortality rates are between 0 and 1", {
 test_that("gun_deaths has expected column names", {
   expect_named(
     gun_deaths,
-    c("country", "gun_ownership_rate", "homicide_rate", "region")
+    c("country", "region", "gun_ownership_rate", "homicide_rate")
   )
 })
 

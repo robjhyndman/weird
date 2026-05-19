@@ -8,9 +8,9 @@ test_that("wine_reviews has expected column names", {
       "region",
       "winery",
       "variety",
+      "year",
       "points",
-      "price",
-      "year"
+      "price"
     )
   )
 })
