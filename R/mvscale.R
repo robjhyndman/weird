@@ -72,7 +72,7 @@ mvscale <- function(
     }
     mat <- as.matrix(object[, numeric_col])
   }
-  if(any(mat == Inf & !is.na(mat))) {
+  if (any(mat == Inf & !is.na(mat))) {
     stop("object contains infinite values")
   }
   # Remove centers
@@ -98,7 +98,7 @@ mvscale <- function(
     }
   } else if (!is.null(cov)) {
     # Remove missing values
-    mat_nomissing <- mat[complete.cases(mat), , drop = FALSE]
+    mat_nomissing <- mat[stats::complete.cases(mat), , drop = FALSE]
     if (identical(cov, robustbase::covOGK)) {
       S <- cov(mat_nomissing, sigmamu = my_scale)$cov
     } else {

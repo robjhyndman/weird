@@ -2,7 +2,16 @@ test_that("wine_reviews has expected column names", {
   skip_if(is.null(wine_reviews_raw))
   expect_named(
     wine_reviews_raw,
-    c("country", "state", "region", "winery", "variety", "points", "price", "year")
+    c(
+      "country",
+      "state",
+      "region",
+      "winery",
+      "variety",
+      "points",
+      "price",
+      "year"
+    )
   )
 })
 

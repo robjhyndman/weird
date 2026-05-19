@@ -3,10 +3,23 @@ test_that("air_quality has expected column names", {
   expect_named(
     air_quality_raw,
     c(
-      "station", "year", "month", "day", "hour",
-      "pm2_5", "pm10", "so2", "no2", "co", "o3",
-      "temperature", "pressure", "dew_point", "rainfall",
-      "wind_direction", "wind_speed"
+      "station",
+      "year",
+      "month",
+      "day",
+      "hour",
+      "pm2_5",
+      "pm10",
+      "so2",
+      "no2",
+      "co",
+      "o3",
+      "temperature",
+      "pressure",
+      "dew_point",
+      "rainfall",
+      "wind_direction",
+      "wind_speed"
     )
   )
 })
@@ -29,9 +42,18 @@ test_that("air_quality has expected column types", {
 test_that("air_quality has expected stations", {
   skip_if(is.null(air_quality_raw))
   expected_stations <- c(
-    "Aotizhongxin", "Changping", "Dingling", "Dongsi", "Guanyuan",
-    "Gucheng", "Huairou", "Nongzhanguan", "Shunyi", "Tiantan",
-    "Wanliu", "Wanshouxigong"
+    "Aotizhongxin",
+    "Changping",
+    "Dingling",
+    "Dongsi",
+    "Guanyuan",
+    "Gucheng",
+    "Huairou",
+    "Nongzhanguan",
+    "Shunyi",
+    "Tiantan",
+    "Wanliu",
+    "Wanshouxigong"
   )
   expect_setequal(unique(air_quality_raw$station), expected_stations)
 })
