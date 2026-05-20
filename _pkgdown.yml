@@ -60,7 +60,8 @@ reference:
   - hdr_table
 - title: Functions for producing plots
   contents:
+  - geom_pdf
+  - geom_pdf_2d
   - gg_density
-  - gg_density_layer
   - gg_bagplot
   - gg_hdrboxplot
