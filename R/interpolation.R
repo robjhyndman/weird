@@ -19,6 +19,7 @@ bilinear_interpolation <- function(x, y, z, x0, y0) {
   i <- floor((x0 - x[1]) / (x[2] - x[1])) + 1L
   j <- floor((y0 - y[1]) / (y[2] - y[1])) + 1L
   outside <- (i < 1 | i > nx - 1 | j < 1 | j > ny - 1)
+  outside[is.na(outside)] <- FALSE
   ii <- i[!outside]
   jj <- j[!outside]
   z11 <- as.vector(z)[ii + (jj - 1) * nx]

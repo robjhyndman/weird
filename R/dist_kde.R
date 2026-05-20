@@ -47,6 +47,7 @@ dist_kde <- function(
   density <- lapply(
     y,
     function(u) {
+      u <- na.omit(u)
       stopifnot(NROW(u) > 0)
       if (NCOL(u) == 1L) {
         if (is.null(h)) {
@@ -171,7 +172,9 @@ density.dist_kde <- function(x, at, ..., na.rm = TRUE) {
       den <- as.vector(x$kde$estimate)[idx]
     }
   }
+  # Separate genuine missing from unable to be computed
   den[is.na(den)] <- 0
+  den[!stats::complete.cases(at)] <- NA
   return(den)
 }
 
