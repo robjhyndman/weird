@@ -84,17 +84,19 @@
 #'   coord_equal()
 #' }
 #' @export
-geom_pdf <- function(mapping = NULL,
-                     data = NULL,
-                     dist,
-                     scale = 1,
-                     ngrid = 501,
-                     geom = "line",
-                     position = "identity",
-                     ...,
-                     na.rm = FALSE,
-                     show.legend = NA,
-                     inherit.aes = TRUE) {
+geom_pdf <- function(
+  mapping = NULL,
+  data = NULL,
+  dist,
+  scale = 1,
+  ngrid = 501,
+  geom = "line",
+  position = "identity",
+  ...,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
+) {
   if (missing(dist)) {
     stop("`dist` must be supplied (a distributional object).", call. = FALSE)
   }
@@ -104,15 +106,15 @@ geom_pdf <- function(mapping = NULL,
   }
 
   ggplot2::layer(
-    data        = data %||% data.frame(.pdf_dummy = NA_real_),
-    mapping     = mapping,
-    stat        = StatPdf,
-    geom        = geom,
-    position    = position,
+    data = data %||% data.frame(.pdf_dummy = NA_real_),
+    mapping = mapping,
+    stat = StatPdf,
+    geom = geom,
+    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params      = list(
-      dist  = dist,
+    params = list(
+      dist = dist,
       scale = scale,
       ngrid = ngrid,
       na.rm = na.rm,
@@ -126,7 +128,8 @@ geom_pdf <- function(mapping = NULL,
 #' @usage NULL
 #' @export
 StatPdf <- ggplot2::ggproto(
-  "StatPdf", ggplot2::Stat,
+  "StatPdf",
+  ggplot2::Stat,
 
   default_aes = ggplot2::aes(
     x = ggplot2::after_stat(x),
@@ -139,12 +142,14 @@ StatPdf <- ggplot2::ggproto(
 
   compute_layer = function(self, data, params, layout) {
     object <- params$dist
-    ngrid  <- params$ngrid %||% 501
-    scale  <- params$scale %||% 1
+    ngrid <- params$ngrid %||% 501
+    scale <- params$scale %||% 1
 
     if (is.null(object)) {
-      stop("`dist` is NULL inside StatPdf$compute_layer(); this should not happen.",
-           call. = FALSE)
+      stop(
+        "`dist` is NULL inside StatPdf$compute_layer(); this should not happen.",
+        call. = FALSE
+      )
     }
 
     d <- dimension_dist(object)
@@ -159,20 +164,25 @@ StatPdf <- ggplot2::ggproto(
     df <- make_density_df(object, ngrid = ngrid)
 
     base <- data.frame(
-      x            = df$x,
-      density      = scale * df$Density,
+      x = df$x,
+      density = scale * df$Density,
       distribution = as.character(df$Distribution),
       stringsAsFactors = FALSE
     )
     base$group <- as.integer(factor(base$distribution))
 
     panels <- unique(layout$layout$PANEL)
-    if (length(panels) == 0L) panels <- 1L
-    do.call(rbind, lapply(panels, function(p) {
-      out <- base
-      out$PANEL <- p
-      out
-    }))
+    if (length(panels) == 0L) {
+      panels <- 1L
+    }
+    do.call(
+      rbind,
+      lapply(panels, function(p) {
+        out <- base
+        out$PANEL <- p
+        out
+      })
+    )
   }
 )
 
@@ -188,16 +198,18 @@ StatPdf <- ggplot2::ggproto(
 #'   [ggplot2::geom_contour_filled()]. If `FALSE`, draw unfilled contour lines
 #'   using [ggplot2::geom_contour()].
 #' @export
-geom_pdf_2d <- function(mapping = NULL,
-                        data = NULL,
-                        dist,
-                        ngrid = 101,
-                        prob = seq(0.1, 0.9, by = 0.1),
-                        filled = TRUE,
-                        ...,
-                        na.rm = FALSE,
-                        show.legend = NA,
-                        inherit.aes = TRUE) {
+geom_pdf_2d <- function(
+  mapping = NULL,
+  data = NULL,
+  dist,
+  ngrid = 101,
+  prob = seq(0.1, 0.9, by = 0.1),
+  filled = TRUE,
+  ...,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
+) {
   if (missing(dist)) {
     stop("`dist` must be supplied (a distributional object).", call. = FALSE)
   }
@@ -207,10 +219,13 @@ geom_pdf_2d <- function(mapping = NULL,
 
   d <- dimension_dist(dist)
   if (any(d != 2)) {
-    stop("`geom_pdf_2d()` only supports bivariate distributions.", call. = FALSE)
+    stop(
+      "`geom_pdf_2d()` only supports bivariate distributions.",
+      call. = FALSE
+    )
   }
 
-  df  <- make_density_df(dist, ngrid = ngrid)
+  df <- make_density_df(dist, ngrid = ngrid)
   thr <- hdr_table(dist, prob = prob)
 
   default_mapping <- ggplot2::aes(x = x, y = y, z = Density)
@@ -228,10 +243,10 @@ geom_pdf_2d <- function(mapping = NULL,
     # reversed except the highest density level".
     thresholds_desc <- sort(unique(thr$density), decreasing = TRUE)
     ggplot2::geom_contour_filled(
-      data        = df,
-      mapping     = mapping %||% default_mapping,
-      breaks      = c(Inf, thresholds_desc),
-      na.rm       = na.rm,
+      data = df,
+      mapping = mapping %||% default_mapping,
+      breaks = c(Inf, thresholds_desc),
+      na.rm = na.rm,
       show.legend = show.legend,
       inherit.aes = inherit.aes,
       ...
@@ -241,10 +256,10 @@ geom_pdf_2d <- function(mapping = NULL,
     # ascending is fine and gives a natural low-to-high `level` factor.
     thresholds_asc <- sort(unique(thr$density))
     ggplot2::geom_contour(
-      data        = df,
-      mapping     = mapping %||% default_mapping,
-      breaks      = thresholds_asc,
-      na.rm       = na.rm,
+      data = df,
+      mapping = mapping %||% default_mapping,
+      breaks = thresholds_asc,
+      na.rm = na.rm,
       show.legend = show.legend,
       inherit.aes = inherit.aes,
       ...
