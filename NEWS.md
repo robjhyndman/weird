@@ -3,6 +3,7 @@
 * Added `fetch_air_quality()` to download Beijing air quality data from 12 monitoring stations (2013-2017).
 * Added `gun_deaths` dataset containing firearm homicide rates and gun ownership by country for 2017.
 * `wine_reviews` columns have been reordered.
+* `gg_density_layer()` removed and replaced with `geom_pdf()` and `geom_pdf_2d()`.
 * `lof_scores()` now returns 1 (instead of 0) when there are too many duplicates.
 * `mvscale()` now better handles missing and infinite values.
 
