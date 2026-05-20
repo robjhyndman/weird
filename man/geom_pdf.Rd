@@ -66,9 +66,7 @@ contour breaks. Defaults to \code{seq(0.1, 0.9, by = 0.1)}.}
 
 \item{filled}{Logical. If \code{TRUE} (default), draw filled HDR bands using
 \code{\link[ggplot2:geom_contour_filled]{ggplot2::geom_contour_filled()}}. If \code{FALSE}, draw unfilled contour lines
-using \code{\link[ggplot2:geom_contour]{ggplot2::geom_contour()}} -- useful when overlaying contours on
-another geom (e.g. a scatter of samples) or when you want full control
-over line aesthetics (\code{colour}, \code{linetype}, \code{linewidth}).}
+using \code{\link[ggplot2:geom_contour]{ggplot2::geom_contour()}}.}
 }
 \value{
 A ggplot2 layer.
@@ -122,7 +120,7 @@ ggplot() +
   geom_pdf_2d(dist = biv, filled = FALSE) +
   coord_equal()
 
-# Contour lines coloured by level, with a custom subset of HDR probabilities
+# Contour lines coloured by HDR level, with a custom subset of probabilities
 ggplot() +
   geom_pdf_2d(
     dist    = biv,
