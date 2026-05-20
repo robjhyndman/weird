@@ -90,10 +90,15 @@ gg_density <- function(
     )]
   }
 
+  # Pre-compute the density grid once and pass it through to gg_density1 /
+  # gg_density2 so neither the helper nor the geoms re-evaluate it.
+  df <- make_density_df(object, ngrid = ngrid)
+
+
   # HDR thresholds if needed
   if (hdr != "none") {
     # HDR thresholds
-    threshold <- hdr_table(object, prob) |>
+    threshold <- hdr_table_with_data(object, prob, df) |>
       dplyr::transmute(
         level = 100 * prob,
         Distribution = distribution,
@@ -120,10 +125,6 @@ gg_density <- function(
   } else {
     show_x <- NULL
   }
-
-  # Pre-compute the density grid once and pass it through to gg_density1 /
-  # gg_density2 so neither the helper nor the geoms re-evaluate it.
-  df <- make_density_df(object, ngrid = ngrid)
 
   if (d == 1) {
     if (hdr == "contours") {
@@ -387,7 +388,7 @@ gg_density2 <- function(
   if (!is.null(threshold)) {
     thresholds <- threshold$threshold
   } else {
-    thresholds <- hdr_table(object, prob = prob)$density
+    thresholds <- hdr_table_with_data(object, prob = prob, df)$density
   }
 
   p <- ggplot()

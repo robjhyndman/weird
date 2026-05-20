@@ -104,7 +104,6 @@ mix <- dist_mixture(
   dist_normal(2, 1),
   weights = c(1 / 3, 2 / 3)
 )
-
 ggplot() +
   geom_pdf(dist = mix) +
   geom_pdf(dist = dist_normal(-2, 1), scale = 1 / 3, linetype = "dashed") +

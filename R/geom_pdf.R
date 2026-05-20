@@ -214,7 +214,7 @@ geom_pdf_2d <- function(
   df <- density_df %||% make_density_df(dist, ngrid = ngrid)
 
   if (is.null(thresholds)) {
-    thresholds <- hdr_table(dist, prob = prob)$density
+    thresholds <- hdr_table_with_data(dist, prob = prob, df)$density
   }
 
   default_mapping <- ggplot2::aes(x = x, y = y, z = Density)
