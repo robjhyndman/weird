@@ -54,11 +54,11 @@ c(dist_normal(), dist_kde(c(rnorm(100), rnorm(100, 3, 1)))) |>
 #> # A tibble: 5 × 5
 #>    prob distribution     lower upper density
 #>   <dbl> <chr>            <dbl> <dbl>   <dbl>
-#> 1  0.5  N(0, 1)         -0.674 0.674  0.215 
-#> 2  0.95 N(0, 1)         -1.96  1.96   0.0596
-#> 3  0.5  kde[1d, h=0.65] -0.640 0.948  0.215 
-#> 4  0.5  kde[1d, h=0.65]  2.23  2.99   0.215 
-#> 5  0.95 kde[1d, h=0.65] -1.52  4.74   0.0596
+#> 1  0.5  N(0, 1)         -0.674 0.674  0.318 
+#> 2  0.95 N(0, 1)         -1.96  1.96   0.0584
+#> 3  0.5  kde[1d, h=0.65] -0.640 0.948  0.164 
+#> 4  0.5  kde[1d, h=0.65]  2.23  2.99   0.164 
+#> 5  0.95 kde[1d, h=0.65] -1.52  4.74   0.0607
 dist_kde(oldfaithful$duration) |> hdr_table(0.95)
 #> # A tibble: 2 × 5
 #>    prob distribution   lower upper density
@@ -68,7 +68,7 @@ dist_kde(oldfaithful$duration) |> hdr_table(0.95)
 # Bivariate HDRs
 dist_kde(oldfaithful[, c("duration", "waiting")]) |> hdr_table(0.90)
 #> # A tibble: 1 × 3
-#>   distribution                                      prob    density
-#>   <chr>                                            <dbl>      <dbl>
-#> 1 kde[2d, H={(41, 3.5e+02)', (3.5e+02, 2.3e+04)'}]   0.9 0.00000109
+#>   distribution                                      prob     density
+#>   <chr>                                            <dbl>       <dbl>
+#> 1 kde[2d, H={(41, 3.5e+02)', (3.5e+02, 2.3e+04)'}]   0.9 0.000000829
 ```

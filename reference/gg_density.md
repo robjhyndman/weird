@@ -88,6 +88,12 @@ optionally shown as points. The mode can also be drawn as a point. The
 combination of `hdr = "fill"`, `show_points = TRUE`, `show_mode = TRUE`,
 and `prob = c(0.5, 0.99)` is equivalent to showing HDR boxplots.
 
+Internally, density drawing is delegated to
+[`geom_pdf()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md)
+(1D) and
+[`geom_pdf_2d()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md)
+(2D).
+
 ## Author
 
 Rob J Hyndman

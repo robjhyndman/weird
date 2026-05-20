@@ -9,6 +9,10 @@
 - Added `gun_deaths` dataset containing firearm homicide rates and gun
   ownership by country for 2017.
 - `wine_reviews` columns have been reordered.
+- `gg_density_layer()` removed and replaced with
+  [`geom_pdf()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md)
+  and
+  [`geom_pdf_2d()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md).
 - [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
   now returns 1 (instead of 0) when there are too many duplicates.
 - [`mvscale()`](https://pkg.robjhyndman.com/weird/reference/mvscale.md)
@@ -65,8 +69,7 @@ CRAN release: 2026-01-27
   to handle more methods
 - Added
   [`gg_density()`](https://pkg.robjhyndman.com/weird/reference/gg_density.md)
-  and
-  [`gg_density_layer()`](https://pkg.robjhyndman.com/weird/reference/gg_density_layer.md)
+  and `gg_density_layer()`
 - Replaced `density_scores()` with
   [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   and added

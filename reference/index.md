@@ -87,12 +87,12 @@ Data sets included in the package
 
 ## Functions for producing plots
 
+- [`geom_pdf()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md)
+  [`geom_pdf_2d()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md)
+  : Probability density function geom
 - [`gg_density()`](https://pkg.robjhyndman.com/weird/reference/gg_density.md)
   : Produce ggplot of densities from distributional objects in 1 or 2
   dimensions
-- [`gg_density_layer()`](https://pkg.robjhyndman.com/weird/reference/gg_density_layer.md)
-  : Add ggplot layer of densities from distributional objects in 1
-  dimension
 - [`gg_bagplot()`](https://pkg.robjhyndman.com/weird/reference/bagplot.md)
   : Bagplot
 - [`gg_hdrboxplot()`](https://pkg.robjhyndman.com/weird/reference/gg_hdrboxplot.md)
