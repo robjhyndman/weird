@@ -65,6 +65,9 @@ The mode can also be drawn as a point.
 The combination of \code{hdr = "fill"}, \code{show_points = TRUE},
 \code{show_mode = TRUE}, and \code{prob = c(0.5, 0.99)} is equivalent to showing
 HDR boxplots.
+
+Internally, density drawing is delegated to \code{\link[=geom_pdf]{geom_pdf()}} (1D) and
+\code{\link[=geom_pdf_2d]{geom_pdf_2d()}} (2D).
 }
 \examples{
 # Univariate densities

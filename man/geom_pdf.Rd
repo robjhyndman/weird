@@ -12,6 +12,7 @@ geom_pdf(
   dist,
   scale = 1,
   ngrid = 501,
+  density_df = NULL,
   geom = "line",
   position = "identity",
   ...,
@@ -26,7 +27,9 @@ geom_pdf_2d(
   dist,
   ngrid = 101,
   prob = seq(0.1, 0.9, by = 0.1),
-  filled = TRUE,
+  filled = FALSE,
+  density_df = NULL,
+  thresholds = NULL,
   ...,
   na.rm = FALSE,
   show.legend = NA,
@@ -45,7 +48,11 @@ and \code{mapping} is \code{NULL}, \code{colour} is automatically mapped to the 
 
 \item{scale}{Scaling factor applied to the density.}
 
-\item{ngrid}{Number of grid points at which the density is evaluated.}
+\item{ngrid}{Number of grid points at which the density is evaluated.
+Ignored when \code{density_df} is supplied.}
+
+\item{density_df}{This argument is for internal package use to provide pre-computed
+data frame containing density values when it is available.}
 
 \item{geom}{The geometric object used to display the layer. Defaults to
 \code{"line"}; alternatives such as \code{"area"} or \code{"path"} also work.}
@@ -62,11 +69,18 @@ and \code{mapping} is \code{NULL}, \code{colour} is automatically mapped to the 
 \item{inherit.aes}{Logical; if \code{FALSE}, overrides the default aesthetics.}
 
 \item{prob}{Coverage probabilities for the highest density regions used as
-contour breaks. Defaults to \code{seq(0.1, 0.9, by = 0.1)}.}
+contour breaks. Defaults to \code{seq(0.1, 0.9, by = 0.1)}. Ignored when
+\code{thresholds} is supplied.}
 
-\item{filled}{Logical. If \code{TRUE} (default), draw filled HDR bands using
-\code{\link[ggplot2:geom_contour_filled]{ggplot2::geom_contour_filled()}}. If \code{FALSE}, draw unfilled contour lines
+\item{filled}{Logical. If \code{TRUE}, draw filled HDR bands using
+\code{\link[ggplot2:geom_contour_filled]{ggplot2::geom_contour_filled()}}. If \code{FALSE} (default), draw unfilled contour lines
 using \code{\link[ggplot2:geom_contour]{ggplot2::geom_contour()}}.}
+
+\item{thresholds}{Optional numeric vector of HDR density thresholds (the
+\code{density} column of an \code{hdr_table()} result). When supplied, the internal
+\code{hdr_table()} call is skipped. The conversion from raw thresholds to
+contour \code{breaks} (with or without the leading \code{Inf}) is handled
+internally based on \code{filled}.}
 }
 \value{
 A ggplot2 layer.
@@ -84,11 +98,7 @@ from it. The computed columns \code{x}, \code{density}, and \code{distribution} 
 available via \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}.
 }
 \examples{
-\dontrun{
-library(ggplot2)
-library(distributional)
-
-# ----- Univariate -----
+# Univariate example
 mix <- dist_mixture(
   dist_normal(-2, 1),
   dist_normal(2, 1),
@@ -104,32 +114,13 @@ ggplot() +
 ggplot() +
   geom_pdf(dist = c(dist_normal(0, 1), dist_student_t(df = 3)))
 
-# ----- Bivariate -----
+# Bivariate example
 biv <- dist_multivariate_normal(
   mu    = list(c(0, 0)),
   sigma = list(matrix(c(1, 0.6, 0.6, 1), nrow = 2))
 )
-
-# Default: filled HDR bands
 ggplot() +
-  geom_pdf_2d(dist = biv) +
-  coord_equal()
-
-# Just contour lines, no fill
-ggplot() +
-  geom_pdf_2d(dist = biv, filled = FALSE) +
-  coord_equal()
-
-# Contour lines coloured by HDR level, with a custom subset of probabilities
-ggplot() +
-  geom_pdf_2d(
-    dist    = biv,
-    filled  = FALSE,
-    prob    = c(0.5, 0.8, 0.95),
-    mapping = aes(x = x, y = y, z = Density, colour = after_stat(level))
-  ) +
-  coord_equal()
-}
+  geom_pdf_2d(dist = biv)
 }
 \author{
 Rob J Hyndman

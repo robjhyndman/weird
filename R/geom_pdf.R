@@ -1,7 +1,3 @@
-# Null-default helper. ggplot2 exports this since 3.5.0; redefine for safety.
-# Defined first so anything below can use it.
-`%||%` <- function(a, b) if (is.null(a)) b else a
-
 #' Probability density function geom
 #'
 #' @description
@@ -24,6 +20,9 @@
 #'   [dist_kde()].
 #' @param scale Scaling factor applied to the density.
 #' @param ngrid Number of grid points at which the density is evaluated.
+#'   Ignored when `density_df` is supplied.
+#' @param density_df This argument is for internal package use to provide pre-computed
+#' data frame containing density values when it is available.
 #' @param geom The geometric object used to display the layer. Defaults to
 #'   `"line"`; alternatives such as `"area"` or `"path"` also work.
 #' @param position Position adjustment, defaults to `"identity"`.
@@ -37,17 +36,12 @@
 #' @author Rob J Hyndman
 #'
 #' @examples
-#' \dontrun{
-#' library(ggplot2)
-#' library(distributional)
-#'
-#' # ----- Univariate -----
+#' # Univariate example
 #' mix <- dist_mixture(
 #'   dist_normal(-2, 1),
 #'   dist_normal(2, 1),
 #'   weights = c(1 / 3, 2 / 3)
 #' )
-#'
 #' ggplot() +
 #'   geom_pdf(dist = mix) +
 #'   geom_pdf(dist = dist_normal(-2, 1), scale = 1 / 3, linetype = "dashed") +
@@ -57,32 +51,13 @@
 #' ggplot() +
 #'   geom_pdf(dist = c(dist_normal(0, 1), dist_student_t(df = 3)))
 #'
-#' # ----- Bivariate -----
+#' # Bivariate example
 #' biv <- dist_multivariate_normal(
 #'   mu    = list(c(0, 0)),
 #'   sigma = list(matrix(c(1, 0.6, 0.6, 1), nrow = 2))
 #' )
-#'
-#' # Default: filled HDR bands
 #' ggplot() +
-#'   geom_pdf_2d(dist = biv) +
-#'   coord_equal()
-#'
-#' # Just contour lines, no fill
-#' ggplot() +
-#'   geom_pdf_2d(dist = biv, filled = FALSE) +
-#'   coord_equal()
-#'
-#' # Contour lines coloured by HDR level, with a custom subset of probabilities
-#' ggplot() +
-#'   geom_pdf_2d(
-#'     dist    = biv,
-#'     filled  = FALSE,
-#'     prob    = c(0.5, 0.8, 0.95),
-#'     mapping = aes(x = x, y = y, z = Density, colour = after_stat(level))
-#'   ) +
-#'   coord_equal()
-#' }
+#'   geom_pdf_2d(dist = biv)
 #' @export
 geom_pdf <- function(
   mapping = NULL,
@@ -90,6 +65,7 @@ geom_pdf <- function(
   dist,
   scale = 1,
   ngrid = 501,
+  density_df = NULL,
   geom = "line",
   position = "identity",
   ...,
@@ -115,6 +91,7 @@ geom_pdf <- function(
     inherit.aes = inherit.aes,
     params = list(
       dist = dist,
+      density_df = density_df,
       scale = scale,
       ngrid = ngrid,
       na.rm = na.rm,
@@ -138,12 +115,13 @@ StatPdf <- ggplot2::ggproto(
 
   required_aes = character(),
 
-  extra_params = c("na.rm", "dist", "scale", "ngrid"),
+  extra_params = c("na.rm", "dist", "density_df", "scale", "ngrid"),
 
   compute_layer = function(self, data, params, layout) {
     object <- params$dist
     ngrid <- params$ngrid %||% 501
     scale <- params$scale %||% 1
+    density_df <- params$density_df
 
     if (is.null(object)) {
       stop(
@@ -161,7 +139,7 @@ StatPdf <- ggplot2::ggproto(
       )
     }
 
-    df <- make_density_df(object, ngrid = ngrid)
+    df <- density_df %||% make_density_df(object, ngrid = ngrid)
 
     base <- data.frame(
       x = df$x,
@@ -193,10 +171,16 @@ StatPdf <- ggplot2::ggproto(
 
 #' @rdname geom_pdf
 #' @param prob Coverage probabilities for the highest density regions used as
-#'   contour breaks. Defaults to `seq(0.1, 0.9, by = 0.1)`.
-#' @param filled Logical. If `TRUE` (default), draw filled HDR bands using
-#'   [ggplot2::geom_contour_filled()]. If `FALSE`, draw unfilled contour lines
+#'   contour breaks. Defaults to `seq(0.1, 0.9, by = 0.1)`. Ignored when
+#'   `thresholds` is supplied.
+#' @param filled Logical. If `TRUE`, draw filled HDR bands using
+#'   [ggplot2::geom_contour_filled()]. If `FALSE` (default), draw unfilled contour lines
 #'   using [ggplot2::geom_contour()].
+#' @param thresholds Optional numeric vector of HDR density thresholds (the
+#'   `density` column of an `hdr_table()` result). When supplied, the internal
+#'   `hdr_table()` call is skipped. The conversion from raw thresholds to
+#'   contour `breaks` (with or without the leading `Inf`) is handled
+#'   internally based on `filled`.
 #' @export
 geom_pdf_2d <- function(
   mapping = NULL,
@@ -204,7 +188,9 @@ geom_pdf_2d <- function(
   dist,
   ngrid = 101,
   prob = seq(0.1, 0.9, by = 0.1),
-  filled = TRUE,
+  filled = FALSE,
+  density_df = NULL,
+  thresholds = NULL,
   ...,
   na.rm = FALSE,
   show.legend = NA,
@@ -225,40 +211,34 @@ geom_pdf_2d <- function(
     )
   }
 
-  df <- make_density_df(dist, ngrid = ngrid)
-  thr <- hdr_table(dist, prob = prob)
+  df <- density_df %||% make_density_df(dist, ngrid = ngrid)
+
+  if (is.null(thresholds)) {
+    thresholds <- hdr_table(dist, prob = prob)$density
+  }
 
   default_mapping <- ggplot2::aes(x = x, y = y, z = Density)
 
   if (filled) {
-    # IMPORTANT: thresholds must be in DESCENDING order here.
-    #
-    # geom_contour_filled() builds its bands from adjacent pairs of `breaks`
-    # IN THE ORDER GIVEN. With breaks = c(Inf, t_high, t_mid, ..., t_low) the
-    # adjacent pairs are (Inf, t_high), (t_high, t_mid), ..., (t_2nd_low, t_low),
-    # producing one band per HDR level INCLUDING the peak band z >= t_high.
-    # With ascending order (c(Inf, t_low, ..., t_high)) the very first pair
-    # (Inf, t_low) becomes a single band covering the entire 90% HDR while the
-    # peak band z > t_high is missing entirely, which manifests as "colours
-    # reversed except the highest density level".
-    thresholds_desc <- sort(unique(thr$density), decreasing = TRUE)
+    # Descending order matters: see comment in v6 for the explanation. With
+    # breaks = c(Inf, t_high, ..., t_low) the adjacent-pair bands cover the
+    # peak (Inf, t_high] and then each successive HDR ring inward to outward.
+    breaks_filled <- c(Inf, sort(unique(thresholds), decreasing = TRUE))
     ggplot2::geom_contour_filled(
       data = df,
       mapping = mapping %||% default_mapping,
-      breaks = c(Inf, thresholds_desc),
+      breaks = breaks_filled,
       na.rm = na.rm,
       show.legend = show.legend,
       inherit.aes = inherit.aes,
       ...
     )
   } else {
-    # For lines, ordering of breaks does not change which contours are drawn;
-    # ascending is fine and gives a natural low-to-high `level` factor.
-    thresholds_asc <- sort(unique(thr$density))
+    breaks_lines <- sort(unique(thresholds))
     ggplot2::geom_contour(
       data = df,
       mapping = mapping %||% default_mapping,
-      breaks = thresholds_asc,
+      breaks = breaks_lines,
       na.rm = na.rm,
       show.legend = show.legend,
       inherit.aes = inherit.aes,
