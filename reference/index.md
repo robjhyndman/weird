@@ -82,6 +82,8 @@ Data sets included in the package
 
 - [`dist_density()`](https://pkg.robjhyndman.com/weird/reference/dist_density.md)
   : Create distributional object based on a specified density
+- [`dist_mclust()`](https://pkg.robjhyndman.com/weird/reference/dist_mclust.md)
+  : Convert Gaussian mixture model to a distributional object
 - [`hdr_table()`](https://pkg.robjhyndman.com/weird/reference/hdr_table.md)
   : Table of Highest Density Regions
 
