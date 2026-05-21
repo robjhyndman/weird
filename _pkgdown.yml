@@ -57,6 +57,7 @@ reference:
 - title: Functions for distributions
   contents:
   - dist_density
+  - dist_mclust
   - hdr_table
 - title: Functions for producing plots
   contents:

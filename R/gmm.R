@@ -14,7 +14,8 @@
 #'   geom_point(data = oldfaithful, aes(x = duration, y = waiting), alpha = 0.1) +
 #'   labs(x = "Duration", y = "Waiting time")
 #' }
-gmm_to_dist <- function(object) {
+#' @export
+dist_mclust <- function(object) {
   if (!requireNamespace("mclust", quietly = TRUE)) {
     stop("Package 'mclust' is required to use this function.")
   }
