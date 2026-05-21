@@ -37,6 +37,7 @@ Imports:
   vctrs
 Suggests:
   mgcv,
+  mclust,
   testthat (>= 3.0.0),
   tidyr
 URL: https://pkg.robjhyndman.com/weird/, https://github.com/robjhyndman/weird
