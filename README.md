@@ -51,9 +51,9 @@ conflicts with other packages you have previously loaded:
 
 ``` r
 library(weird)
-#> ── Attaching packages ─────────────────────────────────────────── weird 2.0.0.9000 ──
-#> ✔ dplyr          1.2.1     ✔ distributional 0.7.0
-#> ✔ ggplot2        4.0.3
+#> ── Attaching core weird packages ──────────────────────────────── weird 2.1.0.9000 ──
+#> ✔ distributional 0.7.0     ✔ ggplot2        4.0.3
+#> ✔ dplyr          1.2.1
 #> ── Conflicts ───────────────────────────────────────────────────── weird_conflicts ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
