@@ -28,7 +28,6 @@ Imports:
   ks,
   mlpack,
   mvtnorm,
-  purrr (>= 0.2.4),
   RANN,
   rlang,
   robustbase,

@@ -17,16 +17,21 @@
 # weird_conflicts()
 weird_conflicts <- function() {
   envs <- grep("^package:", search(), value = TRUE)
-  envs <- purrr::set_names(envs)
+  envs <- stats::setNames(envs, envs)
   objs <- invert(lapply(envs, ls_env))
 
-  conflicts <- purrr::keep(objs, ~ length(.x) > 1)
+  conflicts <- Filter(\(x) length(x) > 1, objs)
 
   tidy_names <- paste0("package:", weird_packages())
-  conflicts <- purrr::keep(conflicts, ~ any(.x %in% tidy_names))
+  conflicts <- Filter(\(x) any(x %in% tidy_names), conflicts)
 
-  conflict_funs <- purrr::imap(conflicts, confirm_conflict)
-  conflict_funs <- purrr::compact(conflict_funs)
+  conflict_funs <- mapply(
+    confirm_conflict,
+    conflicts,
+    names(conflicts),
+    SIMPLIFY = FALSE
+  )
+  conflict_funs <- Filter(Negate(is.null), conflict_funs)
 
   structure(conflict_funs, class = "weird_conflicts")
 }
@@ -41,15 +46,15 @@ weird_conflict_message <- function(x) {
     right = "weird_conflicts"
   )
 
-  pkgs <- x |> purrr::map(~ gsub("^package:", "", .))
-  others <- pkgs |> purrr::map(`[`, -1)
-  other_calls <- purrr::map2_chr(
+  pkgs <- lapply(x, \(pkg) gsub("^package:", "", pkg))
+  others <- lapply(pkgs, `[`, -1)
+  other_calls <- mapply(
+    \(other, nm) paste0(crayon::blue(other), "::", nm, "()", collapse = ", "),
     others,
-    names(others),
-    ~ paste0(crayon::blue(.x), "::", .y, "()", collapse = ", ")
+    names(others)
   )
 
-  winner <- pkgs |> purrr::map_chr(1)
+  winner <- vapply(pkgs, `[[`, character(1), 1)
   funs <- format(paste0(
     crayon::blue(winner),
     "::",
@@ -74,9 +79,7 @@ print.weird_conflicts <- function(x, ..., startup = FALSE) {
 
 confirm_conflict <- function(packages, name) {
   # Only look at functions
-  objs <- packages |>
-    purrr::map(~ get(name, pos = .)) |>
-    purrr::keep(is.function)
+  objs <- Filter(is.function, lapply(packages, \(pos) get(name, pos = pos)))
 
   if (length(objs) <= 1) {
     return()

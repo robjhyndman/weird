@@ -16,15 +16,15 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
   some_data <- which(lengths(x) > 0)
   object <- object[some_data]
   x <- x[some_data]
-  show_x <- purrr::map2(
-    x,
-    names(x),
+  show_x <- Map(
     function(u, dist) {
       tmp <- dplyr::as_tibble(u) |> dplyr::mutate(distribution = dist)
       d <- NCOL(u)
       colnames(tmp)[seq(d)] <- c("x", "y")[seq(d)]
       return(tmp)
-    }
+    },
+    x,
+    names(x)
   )
   # Compute density values
   show_x <- mapply(
@@ -97,5 +97,5 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
     )
   }
   # Combine into a single tibble
-  purrr::list_rbind(show_x)
+  do.call(rbind, show_x)
 }

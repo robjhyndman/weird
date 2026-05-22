@@ -205,7 +205,7 @@ hdr_table_1d <- function(object, prob, dist_names) {
       df = intervals_split,
       SIMPLIFY = FALSE
     )
-    out <- purrr::list_rbind(per_dist)
+    out <- do.call(rbind, per_dist)
 
     # Average within each distribution (not across).
     out |>
@@ -214,7 +214,7 @@ hdr_table_1d <- function(object, prob, dist_names) {
       dplyr::ungroup()
   })
 
-  purrr::list_rbind(output)
+  do.call(rbind, output)
 }
 
 # 2D path: mass-weighted (1-p)-quantile of density values from a regular grid.
