@@ -159,10 +159,12 @@ gg_hdrboxplot <- function(
 #' @export
 hdr_table <- function(object, prob) {
   d <- dimension_dist(object)
-  if (d == 2) {
+  if (d == 1) {
+    density_df <- NULL
+  } else if (d == 2) {
     density_df <- make_density_df_2d(object)
   } else {
-    density_df <- NULL
+    stop("Not implemented for dimensions greater than 2")
   }
   hdr_table_with_data(object, prob, density_df)
 }
