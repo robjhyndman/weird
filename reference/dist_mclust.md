@@ -23,15 +23,18 @@ An object of class `distributional`
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 library(mclust)
-# Create a bivariate Gaussian mixture model for the Old Faithful data
-gmm <- oldfaithful |>
-  select(duration, waiting) |>
-  Mclust() |>
-  gmm_to_dist()
+#> Package 'mclust' version 6.1.2
+#> Type 'citation("mclust")' for citing this R package in publications.
+#> 
+#> Attaching package: ‘mclust’
+#> The following object is masked from ‘package:dplyr’:
+#> 
+#>     count
+# Univariate mixture density
+gmm <- Mclust(oldfaithful$duration) |> dist_mclust()
 gg_density(gmm) +
-  geom_point(data = oldfaithful, aes(x = duration, y = waiting), alpha = 0.1) +
-  labs(x = "Duration", y = "Waiting time")
-} # }
+  geom_jitter(data = oldfaithful, aes(x=duration, y = -0.0002),
+    width=0, height=0.0002, alpha = 0.1) +
+  labs(x = "Eruption duration", y = "")
 ```

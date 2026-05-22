@@ -16,8 +16,7 @@ gg_density(
   colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442",
     "#333333"),
   alpha = NULL,
-  jitter = FALSE,
-  ngrid = 501
+  jitter = FALSE
 )
 ```
 
@@ -69,10 +68,6 @@ gg_density(
   `show_points` is TRUE, a small amount of vertical jittering is applied
   to the observations. Ignored for bivariate distributions.
 
-- ngrid:
-
-  Number of grid points to use for the density function.
-
 ## Value
 
 A ggplot object.
@@ -87,12 +82,6 @@ HDR contour plot of the density function, with the observations
 optionally shown as points. The mode can also be drawn as a point. The
 combination of `hdr = "fill"`, `show_points = TRUE`, `show_mode = TRUE`,
 and `prob = c(0.5, 0.99)` is equivalent to showing HDR boxplots.
-
-Internally, density drawing is delegated to
-[`geom_pdf()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md)
-(1D) and
-[`geom_pdf_2d()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md)
-(2D).
 
 ## Author
 

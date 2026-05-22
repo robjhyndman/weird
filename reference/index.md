@@ -86,12 +86,11 @@ Data sets included in the package
   : Convert Gaussian mixture model to a distributional object
 - [`hdr_table()`](https://pkg.robjhyndman.com/weird/reference/hdr_table.md)
   : Table of Highest Density Regions
+- [`density_df()`](https://pkg.robjhyndman.com/weird/reference/density_df.md)
+  : Convert distributional object to a data frame
 
 ## Functions for producing plots
 
-- [`geom_pdf()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md)
-  [`geom_pdf_2d()`](https://pkg.robjhyndman.com/weird/reference/geom_pdf.md)
-  : Probability density function geom
 - [`gg_density()`](https://pkg.robjhyndman.com/weird/reference/gg_density.md)
   : Produce ggplot of densities from distributional objects in 1 or 2
   dimensions

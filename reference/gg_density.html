@@ -49,8 +49,7 @@
 <span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#0072b2"</span>, <span class="st">"#D55E00"</span>, <span class="st">"#009E73"</span>, <span class="st">"#CC79A7"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#F0E442"</span>,</span>
 <span>    <span class="st">"#333333"</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  jitter <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  ngrid <span class="op">=</span> <span class="fl">501</span></span>
+<span>  jitter <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -103,10 +102,6 @@ Defaults to min(1, 500/n), where n is the number of observations plotted.</p></d
 <code>show_points</code> is TRUE, a small amount of vertical jittering is applied to the
 observations. Ignored for bivariate distributions.</p></dd>
 
-
-<dt id="arg-ngrid">ngrid<a class="anchor" aria-label="anchor" href="#arg-ngrid"></a></dt>
-<dd><p>Number of grid points to use for the density function.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -123,8 +118,6 @@ The mode can also be drawn as a point.
 The combination of <code>hdr = "fill"</code>, <code>show_points = TRUE</code>,
 <code>show_mode = TRUE</code>, and <code>prob = c(0.5, 0.99)</code> is equivalent to showing
 HDR boxplots.</p>
-<p>Internally, density drawing is delegated to <code><a href="geom_pdf.html">geom_pdf()</a></code> (1D) and
-<code><a href="geom_pdf.html">geom_pdf_2d()</a></code> (2D).</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

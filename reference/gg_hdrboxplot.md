@@ -19,7 +19,6 @@ gg_hdrboxplot(
   show_anomalies = TRUE,
   alpha = NULL,
   jitter = TRUE,
-  ngrid = 501,
   ...
 )
 ```
@@ -70,10 +69,6 @@ gg_hdrboxplot(
 
   A logical value indicating if the points should be vertically jittered
   for the 1d box plots to reduce overplotting.
-
-- ngrid:
-
-  Number of grid points to use for the density function.
 
 - ...:
 
