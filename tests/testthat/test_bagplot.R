@@ -54,8 +54,8 @@ test_that("gg_bagplot show_points = TRUE contains no geom_polygon layers", {
 
 test_that("gg_bagplot axis mappings reflect the supplied variable names", {
   p <- gg_bagplot(df_bivar, v1, v2)
-  expect_equal(rlang::as_label(p$mapping$x), "v1")
-  expect_equal(rlang::as_label(p$mapping$y), "v2")
+  expect_equal(deparse(as.list(p)$mapping$x), "~v1")
+  expect_equal(deparse(as.list(p)$mapping$y), "~v2")
 })
 
 # Custom color ---------------------------------------------------------------

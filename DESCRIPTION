@@ -28,9 +28,7 @@ Imports:
   ks,
   mlpack,
   RANN,
-  rlang,
   robustbase,
-  rstudioapi (>= 0.7),
   stray,
   vctrs
 Suggests:

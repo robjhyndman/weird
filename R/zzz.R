@@ -1,19 +1,17 @@
 # Based on zzz.R from the tidyverse package
 
 .onAttach <- function(...) {
-  needed <- core[!is_attached(core)]
-  if (length(needed) == 0) {
-    return()
+  attached <- weird_attach()
+  packageStartupMessage(weird_attach_message(attached))
+
+  if (is_attached("conflicted")) {
+    return(invisible())
   }
 
-  crayon::num_colors(TRUE)
-  weird_attach()
-
-  if (!"package:conflicted" %in% search()) {
-    x <- weird_conflicts()
-    msg(weird_conflict_message(x), startup = TRUE)
-  }
+  conflicts <- weird_conflicts()
+  packageStartupMessage(weird_conflict_message(conflicts))
 }
+
 
 is_attached <- function(x) {
   paste0("package:", x) %in% search()

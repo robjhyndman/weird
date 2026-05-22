@@ -55,9 +55,9 @@ gg_hdrboxplot <- function(
   if (missing(var1)) {
     # Grab first variable
     data <- as.data.frame(data)
-    var1 <- rlang::sym(names(data)[1])
+    var1 <- as.symbol(names(data)[1])
     if (NCOL(data) > 1L) {
-      message("No variable selected. Using ", rlang::as_name(var1))
+      message("No variable selected. Using ", as.character(substitute(var1)))
     }
   }
   v2 <- dplyr::as_label(dplyr::enquo(var2))

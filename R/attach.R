@@ -22,25 +22,31 @@ same_library <- function(pkg) {
 
 weird_attach <- function() {
   to_load <- core_unloaded()
+  suppressPackageStartupMessages(
+    lapply(to_load, same_library)
+  )
+  invisible(to_load)
+}
+
+weird_attach_message <- function(to_load) {
   if (length(to_load) == 0) {
-    return(invisible())
+    return(NULL)
   }
 
-  msg(
-    cli::rule(
-      left = crayon::bold("Attaching packages"),
-      right = paste0("weird ", package_version("weird"))
-    ),
-    startup = TRUE
+  header <- cli::rule(
+    left = cli::style_bold("Attaching core weird packages"),
+    right = paste0("weird ", package_version_h("weird"))
   )
 
-  versions <- vapply(to_load, package_version, character(1))
+  to_load <- sort(to_load)
+  versions <- vapply(to_load, package_version_h, character(1))
+
   packages <- paste0(
-    crayon::green(cli::symbol$tick),
+    cli::col_green(cli::symbol$tick),
     " ",
-    crayon::blue(format(to_load)),
+    cli::col_blue(format(to_load)),
     " ",
-    crayon::col_align(versions, max(crayon::col_nchar(versions)))
+    cli::ansi_align(versions, max(cli::ansi_nchar(versions)))
   )
 
   if (length(packages) %% 2 == 1) {
@@ -49,22 +55,22 @@ weird_attach <- function() {
   col1 <- seq_len(length(packages) / 2)
   info <- paste0(packages[col1], "     ", packages[-col1])
 
-  msg(paste(info, collapse = "\n"), startup = TRUE)
-
-  suppressPackageStartupMessages(
-    lapply(to_load, same_library)
-  )
-
-  invisible()
+  paste0(header, "\n", paste(info, collapse = "\n"))
 }
 
-package_version <- function(x) {
-  version <- as.character(unclass(utils::packageVersion(x))[[1]])
+package_version_h <- function(pkg) {
+  highlight_version(utils::packageVersion(pkg))
+}
 
-  if (length(version) > 3) {
-    version[4:length(version)] <- crayon::red(as.character(version[
-      4:length(version)
-    ]))
+highlight_version <- function(x) {
+  x <- as.character(x)
+
+  is_dev <- function(x) {
+    x <- suppressWarnings(as.numeric(x))
+    !is.na(x) & x >= 9000
   }
-  paste0(version, collapse = ".")
+
+  pieces <- strsplit(x, ".", fixed = TRUE)
+  pieces <- lapply(pieces, function(x) ifelse(is_dev(x), cli::col_red(x), x))
+  vapply(pieces, paste, collapse = ".", FUN.VALUE = character(1))
 }
