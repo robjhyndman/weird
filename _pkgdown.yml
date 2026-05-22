@@ -59,10 +59,9 @@ reference:
   - dist_density
   - dist_mclust
   - hdr_table
+  - density_df
 - title: Functions for producing plots
   contents:
-  - geom_pdf
-  - geom_pdf_2d
   - gg_density
   - gg_bagplot
   - gg_hdrboxplot
