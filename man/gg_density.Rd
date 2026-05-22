@@ -14,8 +14,7 @@ gg_density(
   colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442",
     "#333333"),
   alpha = NULL,
-  jitter = FALSE,
-  ngrid = 501
+  jitter = FALSE
 )
 }
 \arguments{
@@ -46,8 +45,6 @@ Defaults to min(1, 500/n), where n is the number of observations plotted.}
 \item{jitter}{For univariate distributions, when \code{jitter} is \code{TRUE} and
 \code{show_points} is TRUE, a small amount of vertical jittering is applied to the
 observations. Ignored for bivariate distributions.}
-
-\item{ngrid}{Number of grid points to use for the density function.}
 }
 \value{
 A ggplot object.
@@ -65,9 +62,6 @@ The mode can also be drawn as a point.
 The combination of \code{hdr = "fill"}, \code{show_points = TRUE},
 \code{show_mode = TRUE}, and \code{prob = c(0.5, 0.99)} is equivalent to showing
 HDR boxplots.
-
-Internally, density drawing is delegated to \code{\link[=geom_pdf]{geom_pdf()}} (1D) and
-\code{\link[=geom_pdf_2d]{geom_pdf_2d()}} (2D).
 }
 \examples{
 # Univariate densities

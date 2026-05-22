@@ -11,9 +11,6 @@
 #' `show_mode = TRUE`, and `prob = c(0.5, 0.99)` is equivalent to showing
 #' HDR boxplots.
 #'
-#' Internally, density drawing is delegated to [geom_pdf()] (1D) and
-#' [geom_pdf_2d()] (2D).
-#'
 #' @param object distribution object from the distributional package or
 #' \code{\link{dist_kde}}()
 #' @param prob Probability of the HDRs to be drawn.
@@ -33,7 +30,6 @@
 #' @param jitter For univariate distributions, when `jitter` is `TRUE` and
 #' `show_points` is TRUE, a small amount of vertical jittering is applied to the
 #' observations. Ignored for bivariate distributions.
-#' @param ngrid Number of grid points to use for the density function.
 #' @return A ggplot object.
 #' @author Rob J Hyndman
 #' @examples
@@ -68,8 +64,7 @@ gg_density <- function(
     "#333333"
   ),
   alpha = NULL,
-  jitter = FALSE,
-  ngrid = 501
+  jitter = FALSE
 ) {
   if (min(prob) <= 0 || max(prob) >= 1) {
     stop("prob must be between 0 and 1")
@@ -91,9 +86,8 @@ gg_density <- function(
   }
 
   # Pre-compute the density grid once and pass it through to gg_density1 /
-  # gg_density2 so neither the helper nor the geoms re-evaluate it.
-  df <- make_density_df(object, ngrid = ngrid)
-
+  # gg_density2
+  df <- density_df(object)
 
   # HDR thresholds if needed
   if (hdr != "none") {
@@ -101,7 +95,7 @@ gg_density <- function(
     threshold <- hdr_table_with_data(object, prob, df) |>
       dplyr::transmute(
         level = 100 * prob,
-        Distribution = distribution,
+        distribution = distribution,
         threshold = density
       ) |>
       dplyr::distinct()
@@ -142,7 +136,6 @@ gg_density <- function(
       hdr_colors,
       alpha,
       jitter,
-      ngrid,
       df = df
     )
   } else if (d == 2) {
@@ -157,7 +150,6 @@ gg_density <- function(
       show_mode,
       hdr_colors,
       alpha,
-      ngrid,
       df = df
     )
   } else {
@@ -180,46 +172,35 @@ gg_density1 <- function(
   hdr_colors,
   alpha,
   jitter,
-  ngrid,
   df = NULL,
   show_density = TRUE
 ) {
   dist_names <- names_dist(object, unique = TRUE)
 
   if (is.null(df)) {
-    df <- make_density_df(object, ngrid = ngrid)
+    df <- density_df(object)
   }
-  maxden <- max(df$Density)
+  maxden <- max(df$density)
   discrete <- is.logical(df$x) | is.integer(df$x)
 
-  p <- ggplot()
+  p <- ggplot(data = df)
 
   # ----- Density representation -----
   if (show_density) {
     if (discrete) {
       p <- p +
         ggplot2::geom_segment(
-          data = df,
           mapping = aes(
             x = x,
             xend = x,
             y = 0,
-            yend = Density,
-            color = Distribution
+            yend = density,
+            color = distribution
           )
         )
     } else {
-      # Force the colour mapping unconditionally (geom_pdf's auto-mapping only
-      # fires for length(dist) > 1) so single-distribution plots still pick
-      # up their colour from scale_color_manual() below. Pass `df` through
-      # via density_df so geom_pdf does NOT call make_density_df() again.
       p <- p +
-        geom_pdf(
-          dist = object,
-          density_df = df,
-          ngrid = ngrid,
-          mapping = aes(colour = ggplot2::after_stat(distribution))
-        )
+        geom_line(aes(x = x, y = density, colour = distribution))
     }
   }
 
@@ -230,7 +211,7 @@ gg_density1 <- function(
       hdri <- distributional::hdr(object, size = u * 100, n = 4096)
       tibble(
         level = u * 100,
-        Distribution = dist_names,
+        distribution = dist_names,
         lower = vctrs::field(hdri, "lower"),
         upper = vctrs::field(hdri, "upper")
       ) |>
@@ -238,16 +219,16 @@ gg_density1 <- function(
     })
     hdrdf$id <- seq_len(NROW(hdrdf))
     hdrdf$ymin <- -maxden *
-      as.numeric(factor(hdrdf$Distribution, levels = dist_names)) /
+      as.numeric(factor(hdrdf$distribution, levels = dist_names)) /
       20
     hdrdf$ymax <- hdrdf$ymin + maxden / 20
     levels <- sort(unique(hdrdf$level), decreasing = TRUE)
-    for (dist in unique(hdrdf$Distribution)) {
+    for (dist in unique(hdrdf$distribution)) {
       for (i in seq_along(levels)) {
         p <- p +
           ggplot2::geom_rect(
             data = hdrdf[
-              hdrdf$Distribution == dist & hdrdf$level == levels[i],
+              hdrdf$distribution == dist & hdrdf$level == levels[i],
             ],
             aes(xmin = lower, xmax = upper, ymin = ymin, ymax = ymax),
             fill = rev(hdr_colors[[dist]])[i + 1]
@@ -263,7 +244,7 @@ gg_density1 <- function(
     }
     # Add y plotting position for observations
     show_x$y <- -maxden *
-      (as.numeric(factor(show_x$Distribution, levels = dist_names)) - 0.5) /
+      (as.numeric(factor(show_x$distribution, levels = dist_names)) - 0.5) /
       20
     if (jitter) {
       show_x$y <- show_x$y +
@@ -288,12 +269,12 @@ gg_density1 <- function(
     if (hdr == "points") {
       # Add one interval at a time because we can't use multiple ggplot color scales
       levels <- sort(unique(show_x$level))
-      for (dist in unique(show_x$Distribution)) {
+      for (dist in unique(show_x$distribution)) {
         for (i in seq_along(levels)) {
           p <- p +
             ggplot2::geom_point(
               data = show_x[
-                show_x$Distribution == dist & show_x$level == levels[i],
+                show_x$distribution == dist & show_x$level == levels[i],
               ],
               mapping = aes(x = x, y = y),
               color = hdr_colors[[dist]][i + 1]
@@ -304,7 +285,7 @@ gg_density1 <- function(
       p <- p +
         ggplot2::geom_point(
           data = show_x,
-          mapping = aes(x = x, y = y, color = Distribution),
+          mapping = aes(x = x, y = y, color = distribution),
           alpha = alpha
         )
     }
@@ -321,12 +302,12 @@ gg_density1 <- function(
   # ----- Mode markers -----
   if (show_mode) {
     modes <- df |>
-      dplyr::group_by(Distribution) |>
-      dplyr::filter(Density == max(Density)) |>
+      dplyr::group_by(distribution) |>
+      dplyr::filter(density == max(density)) |>
       dplyr::ungroup() |>
-      dplyr::select(mode = x, Distribution) |>
+      dplyr::select(mode = x, distribution) |>
       dplyr::mutate(
-        i = as.numeric(factor(Distribution, levels = dist_names)),
+        i = as.numeric(factor(distribution, levels = dist_names)),
         lower = -maxden * i / 20,
         upper = -maxden * (i - 1) / 20
       ) |>
@@ -337,8 +318,8 @@ gg_density1 <- function(
         mapping = aes(
           x = mode,
           y = y,
-          group = Distribution,
-          color = Distribution
+          group = distribution,
+          color = distribution
         ),
         linewidth = 1
       )
@@ -372,7 +353,6 @@ gg_density2 <- function(
   show_mode,
   hdr_colors,
   alpha,
-  ngrid,
   df = NULL
 ) {
   if (length(object) > 1) {
@@ -381,7 +361,7 @@ gg_density2 <- function(
   hdr_colors <- hdr_colors[[1]]
 
   if (is.null(df)) {
-    df <- make_density_df(object, ngrid = ngrid)
+    df <- density_df(object)
   }
   # Reuse the threshold densities computed by gg_density(); fall back to a
   # fresh hdr_table() call only if the caller did not pre-compute them.
@@ -391,17 +371,13 @@ gg_density2 <- function(
     thresholds <- hdr_table_with_data(object, prob = prob, df)$density
   }
 
-  p <- ggplot()
+  p <- ggplot(data = df)
 
   if (hdr == "fill") {
     p <- p +
-      geom_pdf_2d(
-        dist = object,
-        ngrid = ngrid,
-        prob = prob,
-        filled = TRUE,
-        density_df = df,
-        thresholds = thresholds
+      geom_contour_filled(
+        aes(x = x, y = y, z = density),
+        breaks = c(Inf, threshold$threshold)
       ) +
       ggplot2::scale_fill_manual(
         values = hdr_colors[-1],
@@ -410,13 +386,9 @@ gg_density2 <- function(
       )
   } else if (hdr == "contours") {
     p <- p +
-      geom_pdf_2d(
-        dist = object,
-        ngrid = ngrid,
-        prob = prob,
-        filled = FALSE,
-        density_df = df,
-        thresholds = thresholds,
+      geom_contour(
+        aes(x = x, y = y, z = density),
+        breaks = threshold$threshold,
         colour = hdr_colors[1]
       )
   }
@@ -469,7 +441,7 @@ gg_density2 <- function(
   }
 
   if (show_mode) {
-    modes <- df |> dplyr::filter(Density == max(Density))
+    modes <- df |> dplyr::filter(density == max(density))
     p <- p +
       ggplot2::geom_point(
         data = modes,
@@ -483,8 +455,7 @@ gg_density2 <- function(
 
 utils::globalVariables(c(
   "dist",
-  "Density",
-  "Distribution",
+  "density",
   "distribution",
   "level",
   "i",

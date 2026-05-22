@@ -22,7 +22,6 @@
 #' Defaults to min(1, 500/n), where n is the number of observations plotted.
 #' @param jitter A logical value indicating if the points should be vertically jittered
 #' for the 1d box plots to reduce overplotting.
-#' @param ngrid Number of grid points to use for the density function.
 #' @param ... Other arguments passed to \code{\link{dist_kde}}.
 #' @return A ggplot object showing an HDR plot or scatterplot of the data.
 #' @author Rob J Hyndman
@@ -51,7 +50,6 @@ gg_hdrboxplot <- function(
   show_anomalies = TRUE,
   alpha = NULL,
   jitter = TRUE,
-  ngrid = 501,
   ...
 ) {
   if (missing(var1)) {
@@ -80,15 +78,15 @@ gg_hdrboxplot <- function(
 
   # HDR thresholds
   # Pre-compute the density grid ONCE and pass it to both hdr_table() and the
-  # downstream gg_density helpers. Previously make_density_df() was called
+  # downstream gg_density helpers. Previously density_df() was called
   # inline in each of the two gg_density* calls, and hdr_table() did its own
   # internal sampling -- a triple-evaluation pattern.
-  df <- make_density_df(dist, ngrid = ngrid)
+  df <- density_df(dist)
 
   threshold <- hdr_table_with_data(dist, prob, density_df = df) |>
     dplyr::transmute(
       level = 100 * prob,
-      Distribution = distribution,
+      distribution = distribution,
       threshold = density
     ) |>
     dplyr::distinct()
@@ -110,7 +108,6 @@ gg_hdrboxplot <- function(
       show_mode = TRUE,
       show_anomalies = show_anomalies,
       alpha = alpha,
-      ngrid = ngrid,
       df = df
     ) +
       ggplot2::guides(fill = "none", color = "none")
@@ -127,7 +124,6 @@ gg_hdrboxplot <- function(
       show_anomalies = show_anomalies,
       alpha = alpha,
       jitter = jitter,
-      ngrid = ngrid,
       df = df,
       show_density = FALSE
     ) +
@@ -163,8 +159,8 @@ gg_hdrboxplot <- function(
 #' @export
 hdr_table <- function(object, prob) {
   d <- dimension_dist(object)
-  if(d == 2) {
-    density_df <- make_density_df_2d(object, ngrid = 101)
+  if (d == 2) {
+    density_df <- make_density_df_2d(object)
   } else {
     density_df <- NULL
   }
@@ -240,7 +236,7 @@ hdr_table_2d <- function(object, prob, dist_names, density_df) {
   if (length(object) > 1L) {
     stop("Currently only supporting one bivariate density")
   }
-  thresholds <- hdr_thresholds_from_grid(density_df$Density, prob)
+  thresholds <- hdr_thresholds_from_grid(density_df$density, prob)
   tibble(
     distribution = dist_names[1],
     prob = prob,
@@ -257,7 +253,7 @@ hdr_table_2d <- function(object, prob, dist_names, density_df) {
 # smallest density level at which the cumulative mass reaches p.
 #
 # Under a uniform-cell-area assumption (true to good approximation for the
-# grids produced by make_density_df_2d() -- the only non-uniformity is the
+# grids produced by density_df_2d() -- the only non-uniformity is the
 # 0.0001*support boundary padding, which lies in very-low-density regions and
 # contributes negligibly at the probabilities we plot), the cell area cancels
 # from the normalisation and the implementation reduces to a cumsum on the

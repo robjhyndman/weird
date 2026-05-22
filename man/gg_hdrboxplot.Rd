@@ -14,7 +14,6 @@ gg_hdrboxplot(
   show_anomalies = TRUE,
   alpha = NULL,
   jitter = TRUE,
-  ngrid = 501,
   ...
 )
 }
@@ -42,8 +41,6 @@ Defaults to min(1, 500/n), where n is the number of observations plotted.}
 
 \item{jitter}{A logical value indicating if the points should be vertically jittered
 for the 1d box plots to reduce overplotting.}
-
-\item{ngrid}{Number of grid points to use for the density function.}
 
 \item{...}{Other arguments passed to \code{\link{dist_kde}}.}
 }

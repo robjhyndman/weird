@@ -1,28 +1,29 @@
-# Make a long-form data frame containing densities from a distributional
-# object on a regular plotting grid.
-#
-# Output columns:
-#   x                 (always)
-#   y                 (only for bivariate distributions)
-#   Distribution      character, one row per (gridpoint, distribution)
-#   Density           numeric
-#
-# Internal helper; not exported.
-make_density_df <- function(object, ngrid = 501, range_n = 1000L) {
+#' Convert distributional object to a data frame
+#'
+#' Make a long-form data frame containing densities from a distributional
+#' object on a regular grid for plotting.
+#'
+#' @param object A distributional object
+#' @return Data frame with columns `x`, `y` (if bivariate), `density`, and `distribution`.
+#' @examples
+#' dist_kde(oldfaithful$duration) |> density_df()
+#'
+#' @export
+density_df <- function(object) {
   d <- dimension_dist(object)
   if (d > 2) {
     stop("Only univariate and bivariate densities are supported")
   }
   if (d == 1) {
-    make_density_df_1d(object, ngrid = ngrid)
+    make_density_df_1d(object)
   } else {
-    make_density_df_2d(object, ngrid = ngrid, range_n = range_n)
+    make_density_df_2d(object)
   }
 }
 
 # ---- 1D ------------------------------------------------------------------
 
-make_density_df_1d <- function(object, ngrid) {
+make_density_df_1d <- function(object, ngrid = 501L) {
   rand <- unlist(distributional::generate(object, times = 1))
 
   if (is.logical(rand)) {
@@ -54,16 +55,16 @@ make_density_df_1d <- function(object, ngrid) {
   if (length(object) == 1L) {
     return(dplyr::as_tibble(data.frame(
       x = grid_x,
-      Distribution = dist_names,
-      Density = dens[[1]],
+      distribution = dist_names,
+      density = dens[[1]],
       stringsAsFactors = FALSE
     )))
   }
 
   out <- data.frame(
     x = rep(grid_x, times = length(object)),
-    Distribution = rep(dist_names, each = length(grid_x)),
-    Density = unlist(dens, use.names = FALSE),
+    distribution = rep(dist_names, each = length(grid_x)),
+    density = unlist(dens, use.names = FALSE),
     stringsAsFactors = FALSE
   )
   dplyr::as_tibble(out)
@@ -71,21 +72,18 @@ make_density_df_1d <- function(object, ngrid) {
 
 # ---- 2D ------------------------------------------------------------------
 
-make_density_df_2d <- function(object, ngrid, range_n = 1000L) {
-  ngrid <- min(ngrid, 101)
+make_density_df_2d <- function(object, ngrid = 101L, range_n = 1000L) {
   if (length(object) > 1) {
     stop("Currently only supporting one bivariate density")
   }
-
   fam <- stats::family(object)
-
   if ("kde" %in% fam) {
     kde <- vctrs::vec_data(object)[[1]]$kde
     grid <- expand.grid(
       x = kde$eval.points[[1]],
       y = kde$eval.points[[2]]
     )
-    grid$Density <- as.vector(kde$estimate)
+    grid$density <- as.vector(kde$estimate)
   } else {
     range_xy <- bivariate_range(object, fam = fam, range_n = range_n)
     support <- range_xy[2, ] - range_xy[1, ]
@@ -103,11 +101,11 @@ make_density_df_2d <- function(object, ngrid, range_n = 1000L) {
     )
 
     grid <- expand.grid(x = x, y = y)
-    grid$Density <- density(object, at = as.matrix(grid))[[1]]
+    grid$density <- density(object, at = as.matrix(grid))[[1]]
   }
 
-  grid$Distribution <- names_dist(object, unique = TRUE)[1]
-  dplyr::as_tibble(grid[, c("x", "y", "Distribution", "Density")])
+  grid$distribution <- names_dist(object, unique = TRUE)[1]
+  dplyr::as_tibble(grid[, c("x", "y", "distribution", "density")])
 }
 
 # Bounding box for the plotting grid of a bivariate distribution.
@@ -165,7 +163,7 @@ mvnorm_range <- function(object) {
   }
 
   sds <- sqrt(diag(sigma))
-  if (any(!is.finite(sds)) || any(sds <= 0)) {
+  if (!all(is.finite(sds)) || any(sds <= 0)) {
     return(NULL)
   }
 

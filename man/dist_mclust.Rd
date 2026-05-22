@@ -16,15 +16,11 @@ An object of class \code{distributional}
 Convert Gaussian mixture model to a distributional object
 }
 \examples{
-\dontrun{
 library(mclust)
-# Create a bivariate Gaussian mixture model for the Old Faithful data
-gmm <- oldfaithful |>
-  select(duration, waiting) |>
-  Mclust() |>
-  gmm_to_dist()
+# Univariate mixture density
+gmm <- Mclust(oldfaithful$duration) |> dist_mclust()
 gg_density(gmm) +
-  geom_point(data = oldfaithful, aes(x = duration, y = waiting), alpha = 0.1) +
-  labs(x = "Duration", y = "Waiting time")
-}
+  geom_jitter(data = oldfaithful, aes(x=duration, y = -0.0002),
+    width=0, height=0.0002, alpha = 0.1) +
+  labs(x = "Eruption duration", y = "")
 }
