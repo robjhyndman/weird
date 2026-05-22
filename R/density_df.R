@@ -51,6 +51,10 @@ make_density_df_1d <- function(object, ngrid = 501L) {
     )
   }
 
+  if (family(object) == "mvnorm") {
+    # 1d multivariate normal
+    grid_x <- as.matrix(grid_x)
+  }
   dens <- density(object, at = grid_x)
   dist_names <- names_dist(object, unique = TRUE)
 
