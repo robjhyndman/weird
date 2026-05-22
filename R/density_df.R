@@ -51,7 +51,7 @@ make_density_df_1d <- function(object, ngrid = 501L) {
     )
   }
 
-  if (family(object) == "mvnorm") {
+  if (stats::family(object) == "mvnorm") {
     # 1d multivariate normal
     grid_x <- as.matrix(grid_x)
   }
