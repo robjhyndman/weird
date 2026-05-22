@@ -376,7 +376,7 @@ gg_density2 <- function(
     p <- p +
       geom_contour_filled(
         aes(x = x, y = y, z = density),
-        breaks = c(Inf, threshold$threshold)
+        breaks = c(Inf, thresholds)
       ) +
       ggplot2::scale_fill_manual(
         values = hdr_colors[-1],
@@ -387,7 +387,7 @@ gg_density2 <- function(
     p <- p +
       geom_contour(
         aes(x = x, y = y, z = density),
-        breaks = threshold$threshold,
+        breaks = thresholds,
         colour = hdr_colors[1]
       )
   }
