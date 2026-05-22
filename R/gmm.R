@@ -43,6 +43,9 @@ dist_mclust <- function(object) {
   if (object$G == 1L) {
     return(dist_list[[1]])
   } else {
-    do.call(distributional::dist_mixture, c(dist_list, list(weights = par$pro)))
+    unname(do.call(
+      distributional::dist_mixture,
+      c(dist_list, list(weights = par$pro))
+    ))
   }
 }
