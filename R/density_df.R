@@ -14,8 +14,15 @@ density_df <- function(object) {
   if (d > 2) {
     stop("Only univariate and bivariate densities are supported")
   }
+  dist_names <- names_dist(object, unique = TRUE)
   if (length(object) > 1) {
-    dplyr::bind_rows(lapply(object, density_df))
+    out <- lapply(object, density_df)
+    out <- mapply(function(x,name) {
+      x$distribution <- name
+      x
+      }, out, as.list(dist_names), SIMPLIFY = FALSE
+    )
+    dplyr::bind_rows(out)
   } else if (d == 1) {
     make_density_df_1d(object)
   } else {
@@ -26,6 +33,7 @@ density_df <- function(object) {
 # ---- 1D ------------------------------------------------------------------
 
 make_density_df_1d <- function(object, ngrid = 501L) {
+  stopifnot(length(object) == 1)
   rand <- unlist(distributional::generate(object, times = 1))
 
   if (is.logical(rand)) {
@@ -56,32 +64,19 @@ make_density_df_1d <- function(object, ngrid = 501L) {
     grid_x <- as.matrix(grid_x)
   }
   dens <- density(object, at = grid_x)
-  dist_names <- names_dist(object, unique = TRUE)
 
-  if (length(object) == 1L) {
-    return(dplyr::as_tibble(data.frame(
-      x = grid_x,
-      distribution = dist_names,
-      density = dens[[1]],
-      stringsAsFactors = FALSE
-    )))
-  }
-
-  out <- data.frame(
-    x = rep(grid_x, times = length(object)),
-    distribution = rep(dist_names, each = length(grid_x)),
-    density = unlist(dens, use.names = FALSE),
+  return(dplyr::as_tibble(data.frame(
+    x = grid_x,
+    distribution = names_dist(object),
+    density = dens[[1]],
     stringsAsFactors = FALSE
-  )
-  dplyr::as_tibble(out)
+  )))
 }
 
 # ---- 2D ------------------------------------------------------------------
 
 make_density_df_2d <- function(object, ngrid = 101L, range_n = 1000L) {
-  if (length(object) > 1) {
-    stop("Currently only supporting one bivariate density")
-  }
+  stopifnot(length(object) == 1)
   fam <- stats::family(object)
   if ("kde" %in% fam) {
     kde <- vctrs::vec_data(object)[[1]]$kde
@@ -110,7 +105,7 @@ make_density_df_2d <- function(object, ngrid = 101L, range_n = 1000L) {
     grid$density <- density(object, at = as.matrix(grid))[[1]]
   }
 
-  grid$distribution <- names_dist(object, unique = TRUE)[1]
+  grid$distribution <- names_dist(object)
   dplyr::as_tibble(grid[, c("x", "y", "distribution", "density")])
 }
 
