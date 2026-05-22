@@ -76,11 +76,7 @@ gg_hdrboxplot <- function(
   hdr_colors <- list(hdr_palette(color = color, prob = c(prob, 1)))
   names(hdr_colors) <- names_dist(dist)
 
-  # HDR thresholds
-  # Pre-compute the density grid ONCE and pass it to both hdr_table() and the
-  # downstream gg_density helpers. Previously density_df() was called
-  # inline in each of the two gg_density* calls, and hdr_table() did its own
-  # internal sampling -- a triple-evaluation pattern.
+  # Pre-compute density grid once for use by both hdr_table() and gg_density*.
   df <- density_df(dist)
 
   threshold <- hdr_table_with_data(dist, prob, density_df = df) |>
@@ -183,17 +179,10 @@ hdr_table_with_data <- function(object, prob, density_df) {
   output |> dplyr::arrange(distribution, prob)
 }
 
-# 1D path: keep distributional::hdr() for the canonical interval endpoints
-# (this is the part the public output relies on: `lower` and `upper` columns).
-# The threshold density is read off at the lower endpoints and then averaged
-# WITHIN each distribution to smooth floating-point noise across multiple
-# intervals at the same density level.
-#
-# Bug-fix note: the previous implementation averaged density values across
-# every row at a given probability level, conflating distributions. For a
-# single-distribution plot this had no observable effect (all rows shared the
-# same level anyway); for multi-distribution 1D plots it produced a single
-# averaged threshold across distributions, which is incorrect.
+# 1D path: use distributional::hdr() for canonical interval endpoints
+# (`lower`/`upper` columns). Threshold density is read at each lower endpoint
+# and then averaged within each distribution to smooth floating-point noise
+# across multiple intervals at the same level.
 hdr_table_1d <- function(object, prob, dist_names) {
   output <- lapply(prob, function(p) {
     hdri <- distributional::hdr(object, size = p * 100, n = 4096)
@@ -229,11 +218,6 @@ hdr_table_1d <- function(object, prob, dist_names) {
 }
 
 # 2D path: mass-weighted (1-p)-quantile of density values from a regular grid.
-#
-# Equivalent (in the limit) to the previous Monte Carlo estimate but
-# deterministic and ~50x faster for typical inputs because it eliminates the
-# 1e5-sample distributional::generate() call and the 1e5 density evaluations
-# that followed it.
 hdr_table_2d <- function(object, prob, dist_names, density_df) {
   if (length(object) > 1L) {
     stop("Currently only supporting one bivariate density")
@@ -275,7 +259,7 @@ hdr_thresholds_from_grid <- function(density, prob) {
   )
 }
 
-# Color palette designed for plotting Highest Density Regions (unchanged).
+# Color palette for plotting Highest Density Regions.
 hdr_palette <- function(n, color = "#0072b2", prob = NULL) {
   if (missing(prob)) {
     prob <- seq(n - 1) / n

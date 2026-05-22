@@ -89,9 +89,8 @@ gg_density <- function(
   # gg_density2
   df <- density_df(object)
 
-  # HDR thresholds if needed
   if (hdr != "none") {
-    # HDR thresholds
+    # Compute HDR threshold densities
     threshold <- hdr_table_with_data(object, prob, df) |>
       dplyr::transmute(
         level = 100 * prob,
@@ -251,7 +250,7 @@ gg_density1 <- function(
         stats::runif(NROW(show_x), -maxden / 45, maxden / 45)
     }
     if (hdr == "fill") {
-      # Drop observations obscured by largest HDR
+      # Drop points inside any HDR region (they'd be hidden under the fill)
       include <- paste0(prob * 100, "%")
       show_x <- show_x |> dplyr::filter(!(group %in% include))
     }
@@ -398,7 +397,7 @@ gg_density2 <- function(
       alpha <- min(1, 500 / NROW(show_x))
     }
     if (hdr == "fill") {
-      # Drop observations obscured by largest HDR
+      # Drop points inside any HDR region (they'd be hidden under the fill)
       include <- paste0(prob * 100, "%")
       show_x <- show_x |> dplyr::filter(!(group %in% include))
     }

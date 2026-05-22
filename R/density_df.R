@@ -151,11 +151,7 @@ bivariate_range <- function(
 # treats NULL as "please fall back to sampling".
 #
 # Bounds are mu +/- 4 * sd on each marginal. 4 sigma covers ~99.994% of
-# marginal mass, which is comfortably outside the widest HDR coverage we
-# typically plot (default max prob = 0.9 corresponds to roughly 2.15 sigma in
-# Mahalanobis distance, or up to ~2.15 marginal sigma when a contour grazes
-# an axis). Slightly more generous than strictly necessary, matching what the
-# previous 1e5-sample empirical bound delivered.
+# marginal mass, well outside the widest HDR coverage typically plotted.
 mvnorm_range <- function(object) {
   d_data <- vctrs::vec_data(object)[[1]]
   mu <- d_data$mu
