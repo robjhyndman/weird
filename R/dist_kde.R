@@ -228,7 +228,8 @@ generate.dist_kde <- function(x, times, ...) {
   if (d == 1) {
     x$kde$x[i] + stats::rnorm(times, sd = x$kde$h)
   } else {
-    x$kde$x[i, ] + mvtnorm::rmvnorm(times, sigma = x$kde$H)
+    U <- chol(x$kde$H)
+    x$kde$x[i, ] + matrix(rnorm(d * times), nrow = times) %*% U
   }
 }
 

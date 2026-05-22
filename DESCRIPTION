@@ -27,7 +27,6 @@ Imports:
   grDevices,
   ks,
   mlpack,
-  mvtnorm,
   RANN,
   rlang,
   robustbase,
