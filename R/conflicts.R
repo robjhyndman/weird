@@ -42,26 +42,26 @@ weird_conflict_message <- function(x) {
   }
 
   header <- cli::rule(
-    left = crayon::bold("Conflicts"),
+    left = cli::style_bold("Conflicts"),
     right = "weird_conflicts"
   )
 
   pkgs <- lapply(x, \(pkg) gsub("^package:", "", pkg))
   others <- lapply(pkgs, `[`, -1)
   other_calls <- mapply(
-    \(other, nm) paste0(crayon::blue(other), "::", nm, "()", collapse = ", "),
+    \(other, nm) paste0(cli::col_blue(other), "::", nm, "()", collapse = ", "),
     others,
     names(others)
   )
 
   winner <- vapply(pkgs, `[[`, character(1), 1)
   funs <- format(paste0(
-    crayon::blue(winner),
+    cli::col_blue(winner),
     "::",
-    crayon::green(paste0(names(x), "()"))
+    cli::col_green(paste0(names(x), "()"))
   ))
   bullets <- paste0(
-    crayon::red(cli::symbol$cross),
+    cli::col_red(cli::symbol$cross),
     " ",
     funs,
     " masks ",

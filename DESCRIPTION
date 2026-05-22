@@ -17,8 +17,7 @@ Depends:
 Imports:
   aplpack,
   broom,
-  cli (>= 1.0.0),
-  crayon (>= 1.3.4),
+  cli (>= 3.6.1),
   dbscan,
   distributional,
   dplyr (>= 0.7.4),

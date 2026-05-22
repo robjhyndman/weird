@@ -229,7 +229,7 @@ generate.dist_kde <- function(x, times, ...) {
     x$kde$x[i] + stats::rnorm(times, sd = x$kde$h)
   } else {
     U <- chol(x$kde$H)
-    x$kde$x[i, ] + matrix(rnorm(d * times), nrow = times) %*% U
+    x$kde$x[i, ] + matrix(stats::rnorm(d * times), nrow = times) %*% U
   }
 }
 
