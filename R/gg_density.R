@@ -206,7 +206,7 @@ gg_density1 <- function(
   # ----- HDR fill rectangles below the axis -----
   if (hdr == "fill") {
     prob_desc <- sort(unique(prob), decreasing = TRUE)
-    hdrdf <- purrr::map_dfr(prob_desc, function(u) {
+    hdrdf <- dplyr::bind_rows(lapply(prob_desc, function(u) {
       hdri <- distributional::hdr(object, size = u * 100, n = 4096)
       tibble(
         level = u * 100,
@@ -215,7 +215,7 @@ gg_density1 <- function(
         upper = vctrs::field(hdri, "upper")
       ) |>
         tidyr::unnest(c(lower, upper))
-    })
+    }))
     hdrdf$id <- seq_len(NROW(hdrdf))
     hdrdf$ymin <- -maxden *
       as.numeric(factor(hdrdf$distribution, levels = dist_names)) /

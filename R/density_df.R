@@ -15,7 +15,7 @@ density_df <- function(object) {
     stop("Only univariate and bivariate densities are supported")
   }
   if (length(object) > 1) {
-    purrr::map_dfr(object, density_df)
+    dplyr::bind_rows(lapply(object, density_df))
   } else if (d == 1) {
     make_density_df_1d(object)
   } else {
