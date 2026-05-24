@@ -6,7 +6,7 @@ object on a regular grid for plotting.
 ## Usage
 
 ``` r
-density_df(object)
+density_df(object, ngrid = NULL)
 ```
 
 ## Arguments
@@ -14,6 +14,11 @@ density_df(object)
 - object:
 
   A distributional object
+
+- ngrid:
+
+  Number of grid points in each dimension. Defaults to 501 for
+  univariate distributions and 101 for bivariate distributions.
 
 ## Value
 

@@ -16,7 +16,8 @@ gg_density(
   colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442",
     "#333333"),
   alpha = NULL,
-  jitter = FALSE
+  jitter = FALSE,
+  ngrid = NULL
 )
 ```
 
@@ -67,6 +68,13 @@ gg_density(
   For univariate distributions, when `jitter` is `TRUE` and
   `show_points` is TRUE, a small amount of vertical jittering is applied
   to the observations. Ignored for bivariate distributions.
+
+- ngrid:
+
+  Number of grid points in each dimension, passed to
+  [`density_df()`](https://pkg.robjhyndman.com/weird/reference/density_df.md).
+  Defaults to 501 for univariate distributions and 101 for bivariate
+  distributions.
 
 ## Value
 

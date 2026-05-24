@@ -42,7 +42,7 @@ object on a regular grid for plotting.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">density_df</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">density_df</span><span class="op">(</span><span class="va">object</span>, ngrid <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -51,6 +51,11 @@ object on a regular grid for plotting.</p>
 
 <dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>A distributional object</p></dd>
+
+
+<dt id="arg-ngrid">ngrid<a class="anchor" aria-label="anchor" href="#arg-ngrid"></a></dt>
+<dd><p>Number of grid points in each dimension. Defaults to 501 for
+univariate distributions and 101 for bivariate distributions.</p></dd>
 
 </dl></div>
     <div class="section level2">
