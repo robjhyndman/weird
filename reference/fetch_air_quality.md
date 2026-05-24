@@ -86,8 +86,8 @@ A data frame with 420,768 rows and 17 columns:
 
 ## Source
 
-UCI Machine Learning Repository
-<https://archive.ics.uci.edu/dataset/501/beijing+multi+site+air+quality+data>
+Chen, S. (2017). Beijing Multi-Site Air Quality Dataset. UCI Machine
+Learning Repository. <doi:10.24432/C5RK5G>
 
 ## Value
 
