@@ -22,6 +22,8 @@
   now better handles missing and infinite values.
 - [`dist_kde()`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)
   is now robust to missing values.
+- Removed several dependencies
+- Bug fixes and documentation improvements
 
 ## weird 2.1.0
 

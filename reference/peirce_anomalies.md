@@ -49,13 +49,9 @@ Rob J Hyndman
 ``` r
 y <- rnorm(1000)
 tibble(y = y) |> filter(peirce_anomalies(y))
-#> # A tibble: 1 × 1
-#>       y
-#>   <dbl>
-#> 1  3.81
+#> # A tibble: 0 × 1
+#> # ℹ 1 variable: y <dbl>
 tibble(y = y) |> filter(chauvenet_anomalies(y))
-#> # A tibble: 1 × 1
-#>       y
-#>   <dbl>
-#> 1  3.81
+#> # A tibble: 0 × 1
+#> # ℹ 1 variable: y <dbl>
 ```
