@@ -212,7 +212,6 @@ surprisals_prob.gam <- function(
 
 utils::globalVariables(
   c(
-    ".resid",
     ".se.fit",
     ".std.resid",
     ".resid",
