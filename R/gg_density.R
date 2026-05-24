@@ -91,18 +91,9 @@ gg_density <- function(
 
   if (hdr != "none") {
     # Compute HDR threshold densities
-    threshold <- hdr_table_with_data(object, prob, df) |>
-      dplyr::transmute(
-        level = 100 * prob,
-        distribution = distribution,
-        threshold = density
-      ) |>
-      dplyr::distinct()
+    threshold <- make_threshold(object, prob, df)
     # HDR color palette
-    hdr_colors <- lapply(colors, function(u) {
-      hdr_palette(color = u, prob = c(prob, 1))
-    })
-    names(hdr_colors) <- names_dist(object, unique = TRUE)
+    hdr_colors <- make_hdr_colors(object, colors, prob)
   } else {
     threshold <- NULL
     hdr_colors <- as.list(colors)
@@ -367,7 +358,7 @@ gg_density2 <- function(
   if (!is.null(threshold)) {
     thresholds <- threshold$threshold
   } else {
-    thresholds <- hdr_table_with_data(object, prob = prob, df)$density
+    thresholds <- make_threshold(object, prob = prob, df)$threshold
   }
 
   p <- ggplot(data = df)

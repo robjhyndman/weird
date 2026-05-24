@@ -70,23 +70,14 @@ gg_hdrboxplot <- function(
   }
   dist <- dist_kde(data[, seq(d)], ...)
   hdr <- dplyr::if_else(show_points, "points", "fill")
+  prob <- sort(prob)
 
   # Set up color palette
-  prob <- sort(prob)
-  hdr_colors <- list(hdr_palette(color = color, prob = c(prob, 1)))
-  names(hdr_colors) <- names_dist(dist)
+  hdr_colors <- make_hdr_colors(dist, color, prob)
 
   # Pre-compute density grid once for use by both hdr_table() and gg_density*.
   df <- density_df(dist)
-
-  threshold <- hdr_table_with_data(dist, prob, density_df = df) |>
-    dplyr::transmute(
-      level = 100 * prob,
-      distribution = distribution,
-      threshold = density
-    ) |>
-    dplyr::distinct()
-
+  threshold <- make_threshold(dist, prob, df)
   show_x <- show_data(dist, prob, threshold, anomalies = show_anomalies)
   if (NROW(show_x) != NROW(data)) {
     stop("Something has gone wrong here!")
@@ -272,6 +263,24 @@ hdr_palette <- function(n, color = "#0072b2", prob = NULL) {
   )]
   idx <- approx(seq(0.01, 1, by = 0.01), seq(100), prob, rule = 2)$y
   c(color, pc_colors[idx])
+}
+
+make_hdr_colors <- function(object, colors, prob) {
+  hdr_colors <- lapply(colors, function(u) {
+    hdr_palette(color = u, prob = c(prob, 1))
+  })
+  names(hdr_colors) <- names_dist(object, unique = TRUE)
+  hdr_colors
+}
+
+make_threshold <- function(dist, prob, df) {
+  hdr_table_with_data(dist, prob, density_df = df) |>
+    dplyr::transmute(
+      level = 100 * prob,
+      distribution = distribution,
+      threshold = density
+    ) |>
+    dplyr::distinct()
 }
 
 #' @importFrom utils head tail
