@@ -39,11 +39,17 @@
 <li>
 <code>wine_reviews</code> columns have been reordered.</li>
 <li>
-<code>gg_density_layer()</code> removed and replaced with <code>geom_pdf()</code> and <code>geom_pdf_2d()</code>.</li>
+<code>gg_density_layer()</code> removed,</li>
+<li>
+<code><a href="../reference/density_df.html">density_df()</a></code> added, converting a distributional object to a data frame containing density values over a grid, suitable for plotting.</li>
+<li>
+<code><a href="../reference/dist_mclust.html">dist_mclust()</a></code> added to convert a Gaussian mixture model (<code>Mclust</code> object) to a distributional object.</li>
 <li>
 <code><a href="../reference/lof_scores.html">lof_scores()</a></code> now returns 1 (instead of 0) when there are too many duplicates.</li>
 <li>
 <code><a href="../reference/mvscale.html">mvscale()</a></code> now better handles missing and infinite values.</li>
+<li>
+<code><a href="../reference/dist_kde.html">dist_kde()</a></code> is now robust to missing values.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.0" id="weird-210">weird 2.1.0<a class="anchor" aria-label="anchor" href="#weird-210"></a></h2><p class="text-muted">CRAN release: 2026-05-05</p>
