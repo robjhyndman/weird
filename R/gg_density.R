@@ -66,16 +66,25 @@ gg_density <- function(
   alpha = NULL,
   jitter = FALSE
 ) {
+  # Check prob
   if (min(prob) <= 0 || max(prob) >= 1) {
     stop("prob must be between 0 and 1")
   }
   prob <- sort(prob)
+  # Check dimension
   d <- dimension_dist(object)
+  if (d < 1 || d > 2) {
+    stop("Only univariate and bivariate densities are supported")
+  }
+  # Check hdr
   if (is.null(hdr)) {
     hdr <- if (d == 1) "none" else "contours"
   }
   hdr <- match.arg(hdr, c("none", "fill", "points", "contours"))
-
+  if (d == 1 && hdr == "contours") {
+    stop("Contours not possible for univariate densities")
+  }
+  # Check colors
   if (length(object) > length(colors)) {
     warning(
       "Insufficient colors. Some densities will be plotted in the same color."
@@ -85,8 +94,7 @@ gg_density <- function(
     )]
   }
 
-  # Pre-compute the density grid once and pass it through to gg_density1 /
-  # gg_density2
+  # Pre-compute the density grid
   df <- density_df(object)
 
   if (hdr != "none") {
@@ -111,9 +119,6 @@ gg_density <- function(
   }
 
   if (d == 1) {
-    if (hdr == "contours") {
-      stop("Contours not possible for univariate densities")
-    }
     gg_density1(
       object,
       show_x,
@@ -142,8 +147,6 @@ gg_density <- function(
       alpha,
       df = df
     )
-  } else {
-    stop("Only univariate and bivariate densities are supported")
   }
 }
 
