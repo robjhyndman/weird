@@ -47,23 +47,6 @@ grubbs_anomalies <- function(y, alpha = 0.05) {
   return(abs(z) > threshold)
 }
 
-# grubbs_test <- function(y, ...) {
-#   z <- (y - mean(y, na.rm = TRUE)) / stats::sd(y, na.rm = TRUE)
-#   n <- length(y)
-#   maxz <- max(abs(z))
-#   alpha <- c(10^(-(7:2)), seq(0.02,0.50, by=0.01))
-#   t2 <- qt(1 - alpha / (2 * n), n - 2)
-#   threshold <- (n - 1) / sqrt(n) * sqrt(t2^2 / (n - 2 + t2^2))
-#   p <-
-#
-#   pval <- pt(maxz, n-2)
-#   output <- list(statistic = c(maxz = max(abs(z))), alternative = alt, p.value = pval,
-#                  method = "Dixon test for outliers", data.name = DNAME)
-#   class(RVAL) <- "htest"
-#   return(RVAL)
-#
-# }
-
 #' @rdname grubbs_anomalies
 #' @param two_sided If \code{TRUE}, both minimum and maximums will be considered. Otherwise
 #' only the maximum will be used. (Take negative values to consider only the minimum with
