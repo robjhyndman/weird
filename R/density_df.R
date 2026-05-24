@@ -4,12 +4,14 @@
 #' object on a regular grid for plotting.
 #'
 #' @param object A distributional object
+#' @param ngrid Number of grid points in each dimension. Defaults to 501 for
+#'   univariate distributions and 101 for bivariate distributions.
 #' @return Data frame with columns `x`, `y` (if bivariate), `density`, and `distribution`.
 #' @examples
 #' dist_kde(oldfaithful$duration) |> density_df()
 #'
 #' @export
-density_df <- function(object) {
+density_df <- function(object, ngrid = NULL) {
   info <- lapply(object, dist_info)
   dims <- vapply(info, \(x) x[["dim"]], integer(1L))
   if (any(dims > 2)) {
@@ -25,18 +27,22 @@ density_df <- function(object) {
       if (all(types == types[1])) {
         # All distributions of the same type (logical, integer, real)
         # Use a common grid
-        grid_x <- find_grid_1d(object, type = types[1])
+        grid_x <- find_grid_1d(
+          object,
+          ngrid = if (is.null(ngrid)) 501L else ngrid,
+          type = types[1]
+        )
         out <- lapply(object, \(o) make_density_df_1d(o, grid_x = grid_x))
       } else {
-        out <- lapply(object, density_df)
+        out <- lapply(object, \(o) density_df(o, ngrid = ngrid))
       }
     } else if (all(dims == d) && d == 2) {
       # We have only 2d distributions
       # Use a common grid (as no integer or logical bivariate distributions defined)
-      grid <- find_grid_2d(object)
+      grid <- find_grid_2d(object, ngrid = if (is.null(ngrid)) 101L else ngrid)
       out <- lapply(object, \(o) make_density_df_2d(o, grid = grid))
     } else {
-      out <- lapply(object, density_df)
+      out <- lapply(object, \(o) density_df(o, ngrid = ngrid))
     }
     out <- mapply(
       function(x, name) {
@@ -49,9 +55,9 @@ density_df <- function(object) {
     )
     dplyr::bind_rows(out)
   } else if (d == 1) {
-    make_density_df_1d(object)
+    make_density_df_1d(object, ngrid = if (is.null(ngrid)) 501L else ngrid)
   } else {
-    make_density_df_2d(object)
+    make_density_df_2d(object, ngrid = if (is.null(ngrid)) 101L else ngrid)
   }
 }
 

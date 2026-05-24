@@ -4,10 +4,13 @@
 \alias{density_df}
 \title{Convert distributional object to a data frame}
 \usage{
-density_df(object)
+density_df(object, ngrid = NULL)
 }
 \arguments{
 \item{object}{A distributional object}
+
+\item{ngrid}{Number of grid points in each dimension. Defaults to 501 for
+univariate distributions and 101 for bivariate distributions.}
 }
 \value{
 Data frame with columns \code{x}, \code{y} (if bivariate), \code{density}, and \code{distribution}.

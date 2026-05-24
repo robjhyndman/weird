@@ -14,7 +14,8 @@ gg_density(
   colors = c("#0072b2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442",
     "#333333"),
   alpha = NULL,
-  jitter = FALSE
+  jitter = FALSE,
+  ngrid = NULL
 )
 }
 \arguments{
@@ -45,6 +46,10 @@ Defaults to min(1, 500/n), where n is the number of observations plotted.}
 \item{jitter}{For univariate distributions, when \code{jitter} is \code{TRUE} and
 \code{show_points} is TRUE, a small amount of vertical jittering is applied to the
 observations. Ignored for bivariate distributions.}
+
+\item{ngrid}{Number of grid points in each dimension, passed to
+\code{\link[=density_df]{density_df()}}. Defaults to 501 for univariate distributions and 101 for
+bivariate distributions.}
 }
 \value{
 A ggplot object.
