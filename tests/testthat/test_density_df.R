@@ -30,7 +30,7 @@ test_that("density_df", {
   expect_equal(dim(df), c(501L + 10201L, 4L))
   df <- c(
     dist_multivariate_normal(mu = list(c(0, 0)), sigma = list(diag(2))),
-    dist_multivariate_normal(mu = list(c(1,1)), sigma = list(diag(2)))
+    dist_multivariate_normal(mu = list(c(1, 1)), sigma = list(diag(2)))
   ) |>
     density_df()
   expect_equal(dim(df), c(2 * 10201L, 4L))
