@@ -25,7 +25,7 @@
 #'   geom_jitter(height = 0, width = 0.2, alpha = 0.1) +
 #'   scale_y_log10()
 #' }
-#' @source \url{https://www.kaggle.com/}
+#' @source \url{https://www.kaggle.com/datasets/zynicide/wine-reviews}
 #' @aliases wine_reviews
 #' @export
 fetch_wine_reviews <- function() {

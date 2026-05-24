@@ -37,8 +37,8 @@
 #'   ggplot(aes(x = temperature, y = pm2_5)) +
 #'   geom_point(alpha = 0.1)
 #' }
-#' @source UCI Machine Learning Repository
-#' \url{https://archive.ics.uci.edu/dataset/501/beijing+multi+site+air+quality+data}
+#' @source Chen, S. (2017). Beijing Multi-Site Air Quality Dataset.
+#' UCI Machine Learning Repository. <doi:10.24432/C5RK5G>
 #' @aliases air_quality
 #' @export
 fetch_air_quality <- function() {
