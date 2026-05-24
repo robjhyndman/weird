@@ -9,6 +9,8 @@
 * `lof_scores()` now returns 1 (instead of 0) when there are too many duplicates.
 * `mvscale()` now better handles missing and infinite values.
 * `dist_kde()` is now robust to missing values.
+* Removed several dependencies
+* Bug fixes and documentation improvements
 
 # weird 2.1.0
 
