@@ -1,47 +1,57 @@
 #' Compute robust multivariate scaled data
 #'
 #' @description A multivariate version of [base::scale()], that takes account
-#' of the covariance matrix of the data, and uses robust estimates
-#' of center, scale and covariance by default.
-#' The centers are removed using medians,
+#' of the covariance matrix of the data. By default, robust estimates are used:
+#' the centers are removed using medians,
 #' the scale function for univariate data is `s_Qn`,
-#' the covariance matrix for multivariate data is estimated using a robust OGK estimate.
+#' and the covariance matrix for multivariate data is estimated using a robust MCD estimate.
 #' The data are scaled using the Cholesky decomposition of
 #' the inverse (co)variance. Then the scaled data are returned.
 #' Details of the methods are provided by Hyndman (2026).
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.6, 3.6 and 3.7.
 #'
 #' @details Optionally, the centering and scaling can be done for each variable
-#' separately, so there is no rotation of the data, by setting `cov = NULL`.
+#' separately, by setting `cov = NULL`, so there is no rotation of the data,
 #' Also optionally, non-robust methods can be used by specifying `center = mean`,
 #' `scale = stats::sd()`, and `cov = stats::cov()`. Any non-numeric columns are retained
 #' with a warning.
+#' Missing values are removed before the centers, scale and cov are estimated.
 #'
 #' @param object A vector, matrix, or data frame containing some numerical data.
 #' @param center A function to compute the center of each numerical variable. Set
 #' to NULL if no centering is required.
 #' @param scale	 A function to scale each numerical variable. When
-#' `cov = robustbase::covOGK()`, it is passed as the `sigmamu` argument.
-#' @param cov A function to compute the covariance matrix. Set to NULL if no rotation required.
+#' `cov = robustbase::covOGK()`, `scale` is passed as the `sigmamu` argument. When
+#'  `cov = robustbase::covMcd()`, `scale` is passed as the `scalefn` argument.
+#' @param cov A function to compute the covariance matrix. Set to NULL if no rotation required. `cov()` must either return the matrix directly, or a list containing a matrix named `cov`.
+#' @param alpha When `cov = robustbase::covMcd()`, `alpha` controls the size of the subsets over which the determinant is minimized. Otherwise it is ignored. Set to 0.9 by default.
 #' @param warning Should a warning be issued if non-numeric columns are ignored?
+#' @param ... Other arguments are passed to `cov()`.
 #' @return A vector, matrix or data frame of the same size and class as `object`,
-#' but with numerical variables replaced by scaled versions.
+#' but with numerical variables replaced by scaled versions (renamed if they have been rotated).
 #' @seealso [base::scale()], [stats::sd()], [stats::cov()], [robustbase::covOGK()], [robustbase::s_Qn()]
 #' @author Rob J Hyndman
 #' @examples
-#' # Univariate z-scores (no rotation)
-#' z <- mvscale(faithful, center = mean, scale = sd, cov = NULL, warning = FALSE)
+#' # Univariate z-scores
+#' z <- mvscale(oldfaithful$duration, center = mean, scale = sd)
+#' # Non-robust scaling with no rotation
+#' oldfaithful |>
+#'   mvscale(center = mean, scale = sd, cov = NULL, warning = FALSE)
 #' # Non-robust scaling with rotation
-#' z <- mvscale(faithful, center = mean, cov = stats::cov, warning = FALSE)
+#' oldfaithful |>
+#'   mvscale(center = mean, scale = sd, cov = stats::cov, warning = FALSE)
 #' # Robust scaling and rotation
-#' z <- mvscale(faithful, warning = FALSE)
+#' oldfaithful |>
+#'   mvscale(warning = FALSE)
 #' @export
 mvscale <- function(
   object,
   center = stats::median,
   scale = robustbase::s_Qn,
-  cov = robustbase::covOGK,
-  warning = TRUE
+  cov = robustbase::covMcd,
+  alpha = 0.9,
+  warning = TRUE,
+  ...
 ) {
   d <- NCOL(object)
   # Check if input is a vector
@@ -61,8 +71,8 @@ mvscale <- function(
     }
     numeric_col <- rep(TRUE, NCOL(object))
     mat <- object
-  } else {
-    # It must be a data frame. So let's find the numeric columns
+  } else if (inherits(object, "data.frame")) {
+    # Find the numeric columns
     numeric_col <- unlist(lapply(object, is.numeric))
     if (!all(numeric_col) && warning) {
       warning(
@@ -71,6 +81,8 @@ mvscale <- function(
       )
     }
     mat <- as.matrix(object[, numeric_col])
+  } else {
+    stop("object must be a numeric vector, matrix or data frame")
   }
   if (any(mat == Inf & !is.na(mat))) {
     stop("object contains infinite values")
@@ -80,13 +92,9 @@ mvscale <- function(
     med <- apply(mat, 2, \(x) center(na.omit(x)))
     mat <- sweep(mat, 2L, med)
   }
-  # Create more resilient version of scale function
+  # scale function that ignores missing values
   if (!is.null(scale)) {
-    my_scale <- function(x, ...) {
-      s <- scale(na.omit(x), ...)
-      s[s == 0] <- 1 # Avoid division by zero
-      return(s)
-    }
+    my_scale <- function(x, ...) scale(na.omit(x), ...)
   } else {
     my_scale <- function(x, ...) 1
   }
@@ -97,13 +105,26 @@ mvscale <- function(
       return(as.vector(z))
     }
   } else if (!is.null(cov)) {
-    # Remove missing values
+    # Compute covariance matrix from non-missing values
     mat_nomissing <- mat[stats::complete.cases(mat), , drop = FALSE]
     if (identical(cov, robustbase::covOGK)) {
-      S <- cov(mat_nomissing, sigmamu = my_scale)$cov
+      S <- cov(mat_nomissing, sigmamu = my_scale, ...)
+    } else if (identical(cov, robustbase::covMcd)) {
+      S <- cov(mat_nomissing, scalefn = my_scale, alpha = alpha, ...)
     } else {
-      S <- cov(mat_nomissing)
+      S <- cov(mat_nomissing, ...)
     }
+    if (is.list(S)) {
+      if ("cov" %in% names(S)) {
+        S <- S$cov
+      } else {
+        stop("I can't find a covariance matrix in the list returned by cov()")
+      }
+    }
+    if (!inherits(S, "matrix")) {
+      stop("cov() did not return a matrix")
+    }
+    # Invert covariance matrix
     Sinv <- try(solve(S), silent = TRUE)
     if (inherits(Sinv, "try-error")) {
       # Add a small ridge to the covariance matrix to avoid singularity issues
@@ -114,9 +135,11 @@ mvscale <- function(
       }
       warning("Covariance matrix is singular. Adding a small ridge penalty.")
     }
+    # Compute scaled and rotated data
     U <- chol(Sinv)
     z <- mat %*% t(U)
   } else {
+    # Just scale, no rotation
     s <- apply(mat, 2, my_scale)
     z <- sweep(mat, 2L, s, "/")
   }
