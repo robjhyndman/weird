@@ -270,8 +270,8 @@ names_dist <- function(object, unique = FALSE) {
   idx <- which(object_names != "")
   dist_names[idx] <- object_names[idx]
   if (unique) {
-    make.unique(dist_names)
+    unname(make.unique(dist_names))
   } else {
-    dist_names
+    unname(dist_names)
   }
 }
