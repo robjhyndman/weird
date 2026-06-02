@@ -68,7 +68,7 @@ dist_kde(oldfaithful$duration) |> hdr_table(0.95)
 # Bivariate HDRs
 dist_kde(oldfaithful[, c("duration", "waiting")]) |> hdr_table(0.90)
 #> # A tibble: 1 × 3
-#>   distribution                                      prob     density
-#>   <chr>                                            <dbl>       <dbl>
-#> 1 kde[2d, H={(41, 3.5e+02)', (3.5e+02, 2.3e+04)'}]   0.9 0.000000829
+#>   distribution                                      prob    density
+#>   <chr>                                            <dbl>      <dbl>
+#> 1 kde[2d, H={(41, 3.5e+02)', (3.5e+02, 2.3e+04)'}]   0.9 0.00000109
 ```
