@@ -30,11 +30,11 @@ devtools::check()
 
 You have two options to run R code:
 
-* `Rscript --no-environ  -e "code"`. 
+* `Rscript --no-environ  -e "code"`.
 
   Without `--no-environ`, every R call fails with `"Fatal error: cannot create 'R_TempDir'"` because the sandbox blocks reads of `~/.Renviron`, which R reads during startup before creating `tempdir()`.
 
-* If the mcp-repl tool is available, you can use it instead. Note that its default sandbox blocks network requests. 
+* If the mcp-repl tool is available, you can use it instead. Note that its default sandbox blocks network requests.
 
 Other commands:
 
@@ -72,10 +72,10 @@ air format .
 
 ### `NEWS.md`
 
-- Every user-facing change should be given a bullet in `NEWS.md`. 
+- Every user-facing change should be given a bullet in `NEWS.md`.
 - Changes that shouldn't get a bullet:
     - Small documentation changes.
-    - Internal refactorings. 
+    - Internal refactorings.
     - Fixes to bugs introduced in the current dev version.
 - Each bullet should briefly describe the change to the end user and mention the related issue in parentheses.
 - A bullet can consist of multiple sentences but should not contain any new lines (i.e. DO NOT line wrap).
@@ -85,7 +85,7 @@ air format .
 ### Writing
 
 - Use sentence case for headings.
-- Use US English.
+- Use Australian English.
 
 ### Proofreading
 
