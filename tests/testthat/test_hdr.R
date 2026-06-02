@@ -106,6 +106,53 @@ test_that("hdr_table density positive (2d)", {
   expect_true(all(result_2d$density > 0))
 })
 
+test_that("hdr_table 2d threshold matches data-point quantile (n >= 200)", {
+  set.seed(1)
+  dist <- dist_kde(cbind(rnorm(300), rnorm(300)))
+  prob <- c(0.5, 0.9, 0.99)
+  result <- hdr_table(dist, prob = prob)
+  den_at_data <- density(dist, at = vctrs::vec_data(dist)[[1]]$kde$x)[[1]]
+  expected <- vapply(
+    prob,
+    \(p) stats::quantile(den_at_data, probs = 1 - p, type = 8, names = FALSE),
+    numeric(1L)
+  )
+  expect_equal(result$density[order(result$prob)], expected[order(prob)])
+})
+
+test_that("hdr_table 2d works for a non-KDE density (grid fallback)", {
+  sigma <- matrix(c(1, 0.5, 0.5, 1), 2, 2)
+  dist <- distributional::dist_multivariate_normal(
+    mu = list(c(0, 0)),
+    sigma = list(sigma)
+  )
+  result <- hdr_table(dist, prob = c(0.5, 0.9))
+  expect_s3_class(result, "tbl_df")
+  expect_true(all(result$density > 0))
+  expect_gt(
+    result$density[result$prob == 0.5],
+    result$density[result$prob == 0.9]
+  )
+})
+
+test_that("hdr_table 1d and 2d use the same falpha definition", {
+  # Both paths estimate falpha as the (1 - p) quantile of the density at the
+  # data points. Verify the 1d path agrees with that definition too, so the two
+  # dimensions are consistent.
+  set.seed(1)
+  dist <- dist_kde(rnorm(300))
+  p <- 0.95
+  result <- hdr_table(dist, prob = p)
+  den_at_data <- density(dist, at = vctrs::vec_data(dist)[[1]]$kde$x)[[1]]
+  expected <- stats::quantile(
+    den_at_data,
+    probs = 1 - p,
+    type = 8,
+    names = FALSE
+  )
+  expect_equal(result$density[1], expected, tolerance = 1e-2)
+})
+
 # gg_hdrboxplot() ---------------------------------------------------------
 
 df_1d <- data.frame(x = rnorm(100))

@@ -208,12 +208,31 @@ hdr_table_1d <- function(object, prob, dist_names) {
   do.call(rbind, output)
 }
 
-# 2D path: mass-weighted (1-p)-quantile of density values from a regular grid.
+# 2D path. For a KDE with enough data, falpha is the (1 - p) quantile of the
+# density evaluated at the data points, matching the 1D path (hdr.dist_kde).
+# This keeps the HDR threshold consistent with surprisal-based anomalies, which
+# are also computed from the density at the data points. For non-KDE densities,
+# or a KDE with fewer than 200 points, there is no data (or not enough of it) to
+# estimate falpha this way, so we fall back to the mass-weighted
+# (1-p)-quantile of density values from the regular grid.
 hdr_table_2d <- function(object, prob, dist_names, density_df) {
   if (length(object) > 1L) {
     stop("Currently only supporting one bivariate density")
   }
-  thresholds <- hdr_thresholds_from_grid(density_df$density, prob)
+  is_kde <- "kde" %in% stats::family(object)
+  kde_x <- if (is_kde) vctrs::vec_data(object)[[1]]$kde$x else NULL
+  if (!is_kde || NROW(kde_x) < 200) {
+    thresholds <- hdr_thresholds_from_grid(density_df$density, prob)
+  } else {
+    den_at_data <- density(object, at = kde_x)[[1]]
+    thresholds <- vapply(
+      prob,
+      function(p) {
+        stats::quantile(den_at_data, probs = 1 - p, type = 8, names = FALSE)
+      },
+      numeric(1L)
+    )
+  }
   tibble(
     distribution = dist_names[1],
     prob = prob,
