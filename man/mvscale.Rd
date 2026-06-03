@@ -11,6 +11,7 @@ mvscale(
   cov = robustbase::covMcd,
   alpha = 0.9,
   warning = TRUE,
+  what = c("object", "terms", "all"),
   ...
 )
 }
@@ -29,6 +30,10 @@ to NULL if no centering is required.}
 \item{alpha}{When \code{cov = robustbase::covMcd()}, \code{alpha} controls the size of the subsets over which the determinant is minimized. Otherwise it is ignored. Set to 0.9 by default.}
 
 \item{warning}{Should a warning be issued if non-numeric columns are ignored?}
+
+\item{what}{What to return? Default \code{"object"} returns the scaled data.
+Alternatively, \code{"terms"} returns the location and scale/covariance estimates,
+while \code{"all"} gives both the scaled data and estimated quantities.}
 
 \item{...}{Other arguments are passed to \code{cov()}.}
 }
