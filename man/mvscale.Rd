@@ -31,10 +31,6 @@ to NULL if no centering is required.}
 
 \item{warning}{Should a warning be issued if non-numeric columns are ignored?}
 
-\item{what}{What to return? Default \code{"object"} returns the scaled data.
-Alternatively, \code{"terms"} returns the location and scale/covariance estimates,
-while \code{"all"} gives both the scaled data and estimated quantities.}
-
 \item{...}{Other arguments are passed to \code{cov()}.}
 }
 \value{
