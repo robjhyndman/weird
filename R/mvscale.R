@@ -105,8 +105,8 @@ mvscale <- function(
   if (d == 1L) {
     scl <- my_scale(mat)
     z <- mat / scl
+    terms_list <- c(terms_list, list("scale" = scl, "scale_inverse" = 1/scl))
     if (is_vec) {
-      terms_list <- c(terms_list, list("scale" = scl, "scale_inverse" = 1/scl))
       z <- as.vector(z)
       for(a in seq_along(terms_list)) attr(z, which = names(terms_list)[a]) <- terms_list[[a]]
       return(z)
