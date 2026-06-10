@@ -91,6 +91,8 @@ Data sets included in the package
 
 ## Functions for producing plots
 
+- [`biplot_projection()`](https://pkg.robjhyndman.com/weird/reference/biplot_projection.md)
+  : Biplot of a two-dimensional projection
 - [`gg_density()`](https://pkg.robjhyndman.com/weird/reference/gg_density.md)
   : Produce ggplot of densities from distributional objects in 1 or 2
   dimensions

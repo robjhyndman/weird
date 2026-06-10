@@ -2,6 +2,9 @@
 
 ## weird (development version)
 
+- [`biplot_projection()`](https://pkg.robjhyndman.com/weird/reference/biplot_projection.md)
+  added, drawing a two-dimensional projection of scores with the
+  original variable axes overlaid as arrows.
 - Added
   [`fetch_air_quality()`](https://pkg.robjhyndman.com/weird/reference/fetch_air_quality.md)
   to download Beijing air quality data from 12 monitoring stations
