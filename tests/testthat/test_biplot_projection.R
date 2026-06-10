@@ -57,7 +57,7 @@ test_that("label_threshold drops short loadings from the text layer", {
 
 test_that("biplot_projection accepts custom colours without error", {
   expect_no_error(
-    biplot_projection(pca, point_colour = "#FF0000", arrow_colour = "#00FF00")
+    biplot_projection(pca, colour = "#FF0000", arrow_colour = "#00FF00")
   )
 })
 

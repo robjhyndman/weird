@@ -19,10 +19,8 @@
 #' Ignored if `object` is supplied.
 #' @param label_threshold Only loadings whose absolute length exceeds this
 #' threshold are labelled. The default of `0` labels every non-zero loading.
-#' @param alpha The transparency of the points and arrows, between `0` (fully
-#' transparent) and `1` (fully opaque).
-#' @param point_colour Colour of the points.
 #' @param arrow_colour Colour of the arrows and labels.
+#' @param ... Additional arguments passed to [ggplot2::geom_point()].
 #' @return A `ggplot` object.
 #' @author Rob J Hyndman
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R",
@@ -39,9 +37,8 @@ biplot_projection <- function(
   scores = NULL,
   loadings = NULL,
   label_threshold = 0,
-  alpha = 1,
-  point_colour = "#0072B2",
-  arrow_colour = "#c14b14"
+  arrow_colour = "#c14b14",
+  ...
 ) {
   if (!is.null(object)) {
     if (inherits(object, "prcomp")) {
@@ -75,13 +72,12 @@ biplot_projection <- function(
   )
   arrow_scale <- min(pmin(sx, sy))
   ggplot(scores, aes(x = x, y = y)) +
-    geom_point(alpha = alpha, colour = point_colour) +
+    geom_point(...) +
     geom_segment(
       data = loadings,
       aes(x = 0, y = 0, xend = arrow_scale * x, yend = arrow_scale * y),
       arrow = arrow(length = unit(1 / 2, "picas"), type = "closed", angle = 15),
-      colour = arrow_colour,
-      alpha = alpha
+      colour = arrow_colour
     ) +
     geom_text(
       data = dplyr::filter(loadings, x^2 + y^2 > label_threshold^2),

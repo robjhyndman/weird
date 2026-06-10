@@ -10,7 +10,6 @@ outlier_map(
   scores = NULL,
   loadings = NULL,
   show_thresholds = TRUE,
-  alpha = 0.7,
   ...
 )
 }
@@ -35,9 +34,6 @@ retained component. Ignored if \code{object} is supplied.}
 object, the score-distance and orthogonal-distance cutoffs are drawn as
 dashed lines and observations are coloured by type. Ignored when \code{scores}
 and \code{loadings} are passed directly.}
-
-\item{alpha}{The transparency of the points, between \code{0} (fully transparent)
-and \code{1} (fully opaque).}
 
 \item{...}{Additional arguments passed to \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}.}
 }

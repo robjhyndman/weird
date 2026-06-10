@@ -37,8 +37,6 @@
 #' object, the score-distance and orthogonal-distance cutoffs are drawn as
 #' dashed lines and observations are coloured by type. Ignored when `scores`
 #' and `loadings` are passed directly.
-#' @param alpha The transparency of the points, between `0` (fully transparent)
-#' and `1` (fully opaque).
 #' @param ... Additional arguments passed to [ggplot2::geom_point()].
 #' @return A `ggplot` object.
 #' @author Rob J Hyndman
@@ -57,7 +55,6 @@ outlier_map <- function(
   scores = NULL,
   loadings = NULL,
   show_thresholds = TRUE,
-  alpha = 0.7,
   ...
 ) {
   pca_like <- !is.null(object)
@@ -117,7 +114,7 @@ outlier_map <- function(
       )
     )
     p <- ggplot(df, aes(x = sd, y = od, colour = type)) +
-      geom_point(alpha = alpha, size = 2, ...) +
+      geom_point(...) +
       geom_vline(
         xintercept = cutoff_sd,
         linetype = "dashed",
@@ -139,8 +136,12 @@ outlier_map <- function(
       guides(colour = guide_legend(nrow = 2)) +
       theme(legend.position = "bottom")
   } else {
+    dots <- list(...)
+    if (is.null(dots$colour) && is.null(dots$color)) {
+      dots$colour <- "#0072B2"
+    }
     p <- ggplot(df, aes(x = sd, y = od)) +
-      geom_point(alpha = alpha, size = 2, colour = "#0072B2", ...)
+      do.call(geom_point, dots)
   }
   p +
     labs(x = "Score distance", y = "Orthogonal distance", title = title)

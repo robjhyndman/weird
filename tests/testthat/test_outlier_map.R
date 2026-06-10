@@ -53,6 +53,13 @@ test_that("show_thresholds = FALSE drops cutoff lines and type colours", {
   expect_setequal(names(p$data), c("sd", "od"))
 })
 
+test_that("single-colour points default to blue but respect colour in ...", {
+  p <- outlier_map(pca, data = Y, show_thresholds = FALSE)
+  expect_equal(p$layers[[1]]$aes_params$colour, "#0072B2")
+  p2 <- outlier_map(pca, data = Y, show_thresholds = FALSE, colour = "red")
+  expect_equal(p2$layers[[1]]$aes_params$colour, "red")
+})
+
 test_that("thresholds are ignored when scores and loadings are passed", {
   p <- outlier_map(scores = pca$x, loadings = pca$rotation, data = Y)
   geoms <- vapply(p$layers, function(l) class(l$geom)[1], character(1))
