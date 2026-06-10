@@ -15,20 +15,20 @@ biplot_projection(
 )
 }
 \arguments{
-\item{object}{Optionally, the output of \code{\link[stats:prcomp]{stats::prcomp()}} or an rrcov \verb{Pca*}
+\item{object}{Optionally, the output of \code{\link[stats:prcomp]{stats::prcomp()}} or an \verb{rrcov::Pca*}
 function. If supplied, the scores and loadings are extracted from it and the
 \code{scores} and \code{loadings} arguments are ignored.}
 
-\item{scores}{A matrix or data frame of scores, with the first two columns
-used as the horizontal and vertical coordinates. Ignored if \code{object} is
-supplied.}
+\item{scores}{A matrix or data frame of scores centred about the origin,
+with the first two columns used as the horizontal and vertical coordinates.
+Ignored if \code{object} is supplied.}
 
 \item{loadings}{A matrix or data frame of loadings, with row names giving the
 variable names and the first two columns used as the arrow directions.
 Ignored if \code{object} is supplied.}
 
-\item{label_threshold}{Only loadings whose squared length exceeds this
-threshold are labelled. The default of \code{0} labels every loading.}
+\item{label_threshold}{Only loadings whose absolute length exceeds this
+threshold are labelled. The default of \code{0} labels every non-zero loading.}
 
 \item{alpha}{The transparency of the points and arrows, between \code{0} (fully
 transparent) and \code{1} (fully opaque).}
@@ -52,6 +52,10 @@ point cloud, and only loadings longer than \code{label_threshold} are labelled.
 oldfaithful[, c("duration", "waiting")] |>
   prcomp(scale = TRUE) |>
   biplot_projection()
+}
+\references{
+Hyndman, R J (2026) "That's weird: Anomaly detection using R",
+Chapter 9, \url{https://OTexts.com/weird/}.
 }
 \author{
 Rob J Hyndman

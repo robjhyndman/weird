@@ -1,6 +1,6 @@
 #' Augment data with results from a robust principal component analysis
 #'
-#' @description Augment the data with information from an rrcov `Pca*` object
+#' @description Augment the data with information from an `rrcov::Pca*` object
 #' (such as the output of [rrcov::PcaHubert()] or [rrcov::PcaClassic()]). The
 #' returned tibble contains the principal component scores (`.fittedPC1`,
 #' `.fittedPC2`, ...), the score distance (`.sd`) and the orthogonal distance
@@ -9,7 +9,7 @@
 #' orthogonal distance measures how far it lies *from* the subspace. If `data`
 #' is supplied, its columns are returned alongside these results.
 #'
-#' @param x An rrcov `Pca*` object.
+#' @param x An `rrcov::Pca*` object.
 #' @param data The original data matrix or data frame used to compute the PCA.
 #' If supplied, its columns are bound to the left of the returned tibble.
 #' @param ... Unused.

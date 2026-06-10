@@ -25,8 +25,9 @@
 #' function. For a `prcomp` object, set the number of retained components with
 #' its `rank.` argument. If supplied, the `scores` and `loadings` arguments are
 #' ignored.
-#' @param data The original data matrix or data frame used to compute the PCA.
-#' Required to compute the orthogonal distances, except when `object` is an
+#' @param data The original data matrix or data frame used to compute the
+#' projection, scaled if the projection was computed on scaled data. This is
+#' required to compute the orthogonal distances, except when `object` is a
 #' rrcov `Pca*` object (which stores them).
 #' @param scores A matrix or data frame of scores, with one column per retained
 #' component. Ignored if `object` is supplied.

@@ -2,28 +2,31 @@
 #'
 #' @description Draw a two-dimensional projection of the scores with the
 #' original variable axes overlaid as arrows (loadings), as in a biplot. Pass
-#' `object` (the output of [stats::prcomp()] or an rrcov `Pca*` function);
-#' otherwise supply `scores` and `loadings` directly. The arrows are stretched
-#' by a common factor so that the longest arrow just reaches the edge of the
-#' point cloud, and only loadings longer than `label_threshold` are labelled.
+#' `object` (the output of [stats::prcomp()] or an `rrcov::Pca*` function);
+#' otherwise supply `scores` and `loadings` directly. All scores should be
+#' centred about the origin. The arrows are stretched by a common factor so that
+#' the longest arrow just reaches the edge of the point cloud, and only loadings
+#' longer than `label_threshold` are labelled.
 #'
-#' @param object Optionally, the output of [stats::prcomp()] or an rrcov `Pca*`
+#' @param object Optionally, the output of [stats::prcomp()] or an `rrcov::Pca*`
 #' function. If supplied, the scores and loadings are extracted from it and the
 #' `scores` and `loadings` arguments are ignored.
-#' @param scores A matrix or data frame of scores, with the first two columns
-#' used as the horizontal and vertical coordinates. Ignored if `object` is
-#' supplied.
+#' @param scores A matrix or data frame of scores centred about the origin,
+#' with the first two columns used as the horizontal and vertical coordinates.
+#' Ignored if `object` is supplied.
 #' @param loadings A matrix or data frame of loadings, with row names giving the
 #' variable names and the first two columns used as the arrow directions.
 #' Ignored if `object` is supplied.
-#' @param label_threshold Only loadings whose squared length exceeds this
-#' threshold are labelled. The default of `0` labels every loading.
+#' @param label_threshold Only loadings whose absolute length exceeds this
+#' threshold are labelled. The default of `0` labels every non-zero loading.
 #' @param alpha The transparency of the points and arrows, between `0` (fully
 #' transparent) and `1` (fully opaque).
 #' @param point_colour Colour of the points.
 #' @param arrow_colour Colour of the arrows and labels.
 #' @return A `ggplot` object.
 #' @author Rob J Hyndman
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R",
+#' Chapter 9, \url{https://OTexts.com/weird/}.
 #' @examples
 #' oldfaithful[, c("duration", "waiting")] |>
 #'   prcomp(scale = TRUE) |>
@@ -81,7 +84,7 @@ biplot_projection <- function(
       alpha = alpha
     ) +
     geom_text(
-      data = dplyr::filter(loadings, x^2 + y^2 > label_threshold),
+      data = dplyr::filter(loadings, x^2 + y^2 > label_threshold^2),
       aes(
         label = varname,
         x = arrow_scale * x,

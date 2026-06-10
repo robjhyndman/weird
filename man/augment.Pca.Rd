@@ -7,7 +7,7 @@
 \method{augment}{Pca}(x, data = NULL, ...)
 }
 \arguments{
-\item{x}{An rrcov \verb{Pca*} object.}
+\item{x}{An \verb{rrcov::Pca*} object.}
 
 \item{data}{The original data matrix or data frame used to compute the PCA.
 If supplied, its columns are bound to the left of the returned tibble.}
@@ -18,7 +18,7 @@ If supplied, its columns are bound to the left of the returned tibble.}
 A \code{\link[tibble:tibble]{tibble::tibble()}} with one row per observation.
 }
 \description{
-Augment the data with information from an rrcov \verb{Pca*} object
+Augment the data with information from an \verb{rrcov::Pca*} object
 (such as the output of \code{\link[rrcov:PcaHubert]{rrcov::PcaHubert()}} or \code{\link[rrcov:PcaClassic]{rrcov::PcaClassic()}}). The
 returned tibble contains the principal component scores (\code{.fittedPC1},
 \code{.fittedPC2}, ...), the score distance (\code{.sd}) and the orthogonal distance

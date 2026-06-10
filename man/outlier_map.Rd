@@ -20,8 +20,9 @@ function. For a \code{prcomp} object, set the number of retained components with
 its \code{rank.} argument. If supplied, the \code{scores} and \code{loadings} arguments are
 ignored.}
 
-\item{data}{The original data matrix or data frame used to compute the PCA.
-Required to compute the orthogonal distances, except when \code{object} is an
+\item{data}{The original data matrix or data frame used to compute the
+projection, scaled if the projection was computed on scaled data. This is
+required to compute the orthogonal distances, except when \code{object} is a
 rrcov \verb{Pca*} object (which stores them).}
 
 \item{scores}{A matrix or data frame of scores, with one column per retained
