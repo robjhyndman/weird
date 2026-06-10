@@ -42,7 +42,6 @@ outlier_map(
   scores = NULL,
   loadings = NULL,
   show_thresholds = TRUE,
-  alpha = 0.7,
   ...
 )
 ```
@@ -59,9 +58,10 @@ outlier_map(
 
 - data:
 
-  The original data matrix or data frame used to compute the PCA.
-  Required to compute the orthogonal distances, except when `object` is
-  an rrcov `Pca*` object (which stores them).
+  The original data matrix or data frame used to compute the projection,
+  scaled if the projection was computed on scaled data. This is required
+  to compute the orthogonal distances, except when `object` is a rrcov
+  `Pca*` object (which stores them).
 
 - scores:
 
@@ -79,11 +79,6 @@ outlier_map(
   score-distance and orthogonal-distance cutoffs are drawn as dashed
   lines and observations are coloured by type. Ignored when `scores` and
   `loadings` are passed directly.
-
-- alpha:
-
-  The transparency of the points, between `0` (fully transparent) and
-  `1` (fully opaque).
 
 - ...:
 

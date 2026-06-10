@@ -1,6 +1,6 @@
 # Augment data with results from a robust principal component analysis
 
-Augment the data with information from an rrcov `Pca*` object (such as
+Augment the data with information from an `rrcov::Pca*` object (such as
 the output of
 [`rrcov::PcaHubert()`](https://rdrr.io/pkg/rrcov/man/PcaHubert.html) or
 [`rrcov::PcaClassic()`](https://rdrr.io/pkg/rrcov/man/PcaClassic.html)).
@@ -23,7 +23,7 @@ augment(x, data = NULL, ...)
 
 - x:
 
-  An rrcov `Pca*` object.
+  An `rrcov::Pca*` object.
 
 - data:
 

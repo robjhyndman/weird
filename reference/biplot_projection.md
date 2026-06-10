@@ -3,11 +3,12 @@
 Draw a two-dimensional projection of the scores with the original
 variable axes overlaid as arrows (loadings), as in a biplot. Pass
 `object` (the output of
-[`stats::prcomp()`](https://rdrr.io/r/stats/prcomp.html) or an rrcov
-`Pca*` function); otherwise supply `scores` and `loadings` directly. The
-arrows are stretched by a common factor so that the longest arrow just
-reaches the edge of the point cloud, and only loadings longer than
-`label_threshold` are labelled.
+[`stats::prcomp()`](https://rdrr.io/r/stats/prcomp.html) or an
+`rrcov::Pca*` function); otherwise supply `scores` and `loadings`
+directly. All scores should be centred about the origin. The arrows are
+stretched by a common factor so that the longest arrow just reaches the
+edge of the point cloud, and only loadings longer than `label_threshold`
+are labelled.
 
 ## Usage
 
@@ -17,9 +18,8 @@ biplot_projection(
   scores = NULL,
   loadings = NULL,
   label_threshold = 0,
-  alpha = 1,
-  point_colour = "#0072B2",
-  arrow_colour = "#c14b14"
+  arrow_colour = "#c14b14",
+  ...
 )
 ```
 
@@ -28,15 +28,16 @@ biplot_projection(
 - object:
 
   Optionally, the output of
-  [`stats::prcomp()`](https://rdrr.io/r/stats/prcomp.html) or an rrcov
-  `Pca*` function. If supplied, the scores and loadings are extracted
-  from it and the `scores` and `loadings` arguments are ignored.
+  [`stats::prcomp()`](https://rdrr.io/r/stats/prcomp.html) or an
+  `rrcov::Pca*` function. If supplied, the scores and loadings are
+  extracted from it and the `scores` and `loadings` arguments are
+  ignored.
 
 - scores:
 
-  A matrix or data frame of scores, with the first two columns used as
-  the horizontal and vertical coordinates. Ignored if `object` is
-  supplied.
+  A matrix or data frame of scores centred about the origin, with the
+  first two columns used as the horizontal and vertical coordinates.
+  Ignored if `object` is supplied.
 
 - loadings:
 
@@ -46,25 +47,26 @@ biplot_projection(
 
 - label_threshold:
 
-  Only loadings whose squared length exceeds this threshold are
-  labelled. The default of `0` labels every loading.
-
-- alpha:
-
-  The transparency of the points and arrows, between `0` (fully
-  transparent) and `1` (fully opaque).
-
-- point_colour:
-
-  Colour of the points.
+  Only loadings whose absolute length exceeds this threshold are
+  labelled. The default of `0` labels every non-zero loading.
 
 - arrow_colour:
 
   Colour of the arrows and labels.
 
+- ...:
+
+  Additional arguments passed to
+  [`ggplot2::geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html).
+
 ## Value
 
 A `ggplot` object.
+
+## References
+
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
+9, <https://OTexts.com/weird/>.
 
 ## Author
 

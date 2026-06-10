@@ -119,7 +119,6 @@ ignored when <code>scores</code> and <code>loadings</code> are passed directly.<
 <span>  scores <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  loadings <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_thresholds <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -136,8 +135,9 @@ ignored.</p></dd>
 
 
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>The original data matrix or data frame used to compute the PCA.
-Required to compute the orthogonal distances, except when <code>object</code> is an
+<dd><p>The original data matrix or data frame used to compute the
+projection, scaled if the projection was computed on scaled data. This is
+required to compute the orthogonal distances, except when <code>object</code> is a
 rrcov <code>Pca*</code> object (which stores them).</p></dd>
 
 
@@ -156,11 +156,6 @@ retained component. Ignored if <code>object</code> is supplied.</p></dd>
 object, the score-distance and orthogonal-distance cutoffs are drawn as
 dashed lines and observations are coloured by type. Ignored when <code>scores</code>
 and <code>loadings</code> are passed directly.</p></dd>
-
-
-<dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
-<dd><p>The transparency of the points, between <code>0</code> (fully transparent)
-and <code>1</code> (fully opaque).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
