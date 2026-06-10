@@ -28,6 +28,8 @@
 #' oldfaithful[, c("duration", "waiting")] |>
 #'   prcomp(scale = TRUE) |>
 #'   biplot_projection()
+#' @importFrom ggplot2 geom_point geom_segment geom_text labs
+#' @importFrom grid unit arrow
 #' @export
 biplot_projection <- function(
   object = NULL,
@@ -36,14 +38,13 @@ biplot_projection <- function(
   label_threshold = 0,
   alpha = 1,
   point_colour = "#0072B2",
-  arrow_colour = "#c14b14",
-  ...
+  arrow_colour = "#c14b14"
 ) {
   if (!is.null(object)) {
     if (inherits(object, "prcomp")) {
       scores <- object$x[, 1:2]
       loadings <- object$rotation[, 1:2]
-    } else if (methods::is(object, "Pca")) {
+    } else if (inherits(object, "Pca")) {
       scores <- object$scores[, 1:2]
       loadings <- object$loadings[, 1:2]
     } else {
@@ -53,9 +54,10 @@ biplot_projection <- function(
   scores <- as.data.frame(scores)
   axis_labels <- colnames(scores)[1:2]
   colnames(scores)[1:2] <- c("x", "y")
-  loadings <- as.data.frame(loadings) |>
-    tibble::rownames_to_column("varname")
-  colnames(loadings)[2:3] <- c("x", "y")
+  rn_loadings <- row.names(loadings)
+  loadings <- as.data.frame(loadings)
+  loadings$varname <- rn_loadings
+  colnames(loadings)[1:2] <- c("x", "y")
   # Largest common scale keeping every arrow tip inside the score bounding
   # box: for each arrow take the binding axis, then the tightest arrow wins.
   sx <- ifelse(
@@ -85,8 +87,9 @@ biplot_projection <- function(
         x = arrow_scale * x,
         y = arrow_scale * y * 1.05
       ),
-      colour = arrow_colour,
-      ...
+      colour = arrow_colour
     ) +
     labs(x = axis_labels[1], y = axis_labels[2])
 }
+
+utils::globalVariables("varname")

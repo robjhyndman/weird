@@ -67,7 +67,7 @@ outlier_map <- function(
       d <- prcomp_distances(object, data, k)
       cutoff_sd <- sqrt(qchisq(0.975, df = k))
       cutoff_od <- od_cutoff(d$od)
-    } else if (methods::is(object, "Pca")) {
+    } else if (inherits(object, "Pca")) {
       k <- object$k
       aug <- augment(object)
       d <- list(sd = aug$.sd, od = aug$.od)

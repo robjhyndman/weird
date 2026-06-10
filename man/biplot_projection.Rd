@@ -8,7 +8,10 @@ biplot_projection(
   object = NULL,
   scores = NULL,
   loadings = NULL,
-  label_threshold = 0
+  label_threshold = 0,
+  alpha = 1,
+  point_colour = "#0072B2",
+  arrow_colour = "#c14b14"
 )
 }
 \arguments{
@@ -26,6 +29,13 @@ Ignored if \code{object} is supplied.}
 
 \item{label_threshold}{Only loadings whose squared length exceeds this
 threshold are labelled. The default of \code{0} labels every loading.}
+
+\item{alpha}{The transparency of the points and arrows, between \code{0} (fully
+transparent) and \code{1} (fully opaque).}
+
+\item{point_colour}{Colour of the points.}
+
+\item{arrow_colour}{Colour of the arrows and labels.}
 }
 \value{
 A \code{ggplot} object.
@@ -33,15 +43,15 @@ A \code{ggplot} object.
 \description{
 Draw a two-dimensional projection of the scores with the
 original variable axes overlaid as arrows (loadings), as in a biplot. Pass
-\code{object} (the output of \code{\link[stats:prcomp]{stats::prcomp()}} or an rrcov \verb{Pca*} function) to take
-the scores and loadings from it; otherwise supply \code{scores} and \code{loadings}
-directly. The arrows are stretched by a common factor so that the longest
-arrow just reaches the edge of the point cloud, and only loadings longer than
-\code{label_threshold} are labelled.
+\code{object} (the output of \code{\link[stats:prcomp]{stats::prcomp()}} or an rrcov \verb{Pca*} function);
+otherwise supply \code{scores} and \code{loadings} directly. The arrows are stretched
+by a common factor so that the longest arrow just reaches the edge of the
+point cloud, and only loadings longer than \code{label_threshold} are labelled.
 }
 \examples{
-pca <- prcomp(oldfaithful[, c("duration", "waiting")], scale = TRUE)
-biplot_projection(pca)
+oldfaithful[, c("duration", "waiting")] |>
+  prcomp(scale = TRUE) |>
+  biplot_projection()
 }
 \author{
 Rob J Hyndman
