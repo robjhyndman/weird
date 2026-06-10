@@ -20,6 +20,7 @@ mvscale(
   cov = robustbase::covMcd,
   alpha = 0.9,
   warning = TRUE,
+  what = c("object", "terms", "all"),
   ...
 )
 ```
