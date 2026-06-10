@@ -4,11 +4,10 @@ Draw a two-dimensional projection of the scores with the original
 variable axes overlaid as arrows (loadings), as in a biplot. Pass
 `object` (the output of
 [`stats::prcomp()`](https://rdrr.io/r/stats/prcomp.html) or an rrcov
-`Pca*` function) to take the scores and loadings from it; otherwise
-supply `scores` and `loadings` directly. The arrows are stretched by a
-common factor so that the longest arrow just reaches the edge of the
-point cloud, and only loadings longer than `label_threshold` are
-labelled.
+`Pca*` function); otherwise supply `scores` and `loadings` directly. The
+arrows are stretched by a common factor so that the longest arrow just
+reaches the edge of the point cloud, and only loadings longer than
+`label_threshold` are labelled.
 
 ## Usage
 
@@ -17,7 +16,10 @@ biplot_projection(
   object = NULL,
   scores = NULL,
   loadings = NULL,
-  label_threshold = 0
+  label_threshold = 0,
+  alpha = 1,
+  point_colour = "#0072B2",
+  arrow_colour = "#c14b14"
 )
 ```
 
@@ -47,6 +49,19 @@ biplot_projection(
   Only loadings whose squared length exceeds this threshold are
   labelled. The default of `0` labels every loading.
 
+- alpha:
+
+  The transparency of the points and arrows, between `0` (fully
+  transparent) and `1` (fully opaque).
+
+- point_colour:
+
+  Colour of the points.
+
+- arrow_colour:
+
+  Colour of the arrows and labels.
+
 ## Value
 
 A `ggplot` object.
@@ -58,6 +73,7 @@ Rob J Hyndman
 ## Examples
 
 ``` r
-pca <- prcomp(oldfaithful[, c("duration", "waiting")], scale = TRUE)
-biplot_projection(pca)
+oldfaithful[, c("duration", "waiting")] |>
+  prcomp(scale = TRUE) |>
+  biplot_projection()
 ```

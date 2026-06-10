@@ -96,7 +96,14 @@ Data sets included in the package
 - [`gg_density()`](https://pkg.robjhyndman.com/weird/reference/gg_density.md)
   : Produce ggplot of densities from distributional objects in 1 or 2
   dimensions
+- [`outlier_map()`](https://pkg.robjhyndman.com/weird/reference/outlier_map.md)
+  : Outlier map from a projection or principal component analysis
 - [`gg_bagplot()`](https://pkg.robjhyndman.com/weird/reference/bagplot.md)
   : Bagplot
 - [`gg_hdrboxplot()`](https://pkg.robjhyndman.com/weird/reference/gg_hdrboxplot.md)
   : HDR plot
+
+## Functions for working with principal component analyses
+
+- [`augment(`*`<Pca>`*`)`](https://pkg.robjhyndman.com/weird/reference/augment.Pca.md)
+  : Augment data with results from a robust principal component analysis

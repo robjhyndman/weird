@@ -2,6 +2,10 @@
 
 ## weird (development version)
 
+- [`augment()`](https://generics.r-lib.org/reference/augment.html)
+  method added for rrcov `Pca*` objects, returning the principal
+  component scores, score distances and orthogonal distances, optionally
+  alongside the original data.
 - [`biplot_projection()`](https://pkg.robjhyndman.com/weird/reference/biplot_projection.md)
   added, drawing a two-dimensional projection of scores with the
   original variable axes overlaid as arrows.
@@ -23,6 +27,11 @@
   now returns 1 (instead of 0) when there are too many duplicates.
 - [`mvscale()`](https://pkg.robjhyndman.com/weird/reference/mvscale.md)
   now better handles missing and infinite values.
+- [`outlier_map()`](https://pkg.robjhyndman.com/weird/reference/outlier_map.md)
+  added, drawing the score distance against the orthogonal distance for
+  a `prcomp` or rrcov `Pca*` object, with optional cutoff thresholds
+  classifying observations as regular, good leverage points, orthogonal
+  outliers or bad leverage points.
 - [`dist_kde()`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)
   is now robust to missing values.
 - Removed several dependencies
