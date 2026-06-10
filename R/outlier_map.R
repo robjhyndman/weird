@@ -126,7 +126,8 @@ outlier_map <- function(
           "Good leverage point" = "#009E73",
           "Orthogonal outlier" = "#D55E00",
           "Bad leverage point" = "black"
-        )
+        ),
+        drop = FALSE
       ) +
       guides(colour = guide_legend(nrow = 2)) +
       theme(legend.position = "bottom")
