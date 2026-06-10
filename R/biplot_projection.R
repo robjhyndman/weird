@@ -42,16 +42,34 @@ biplot_projection <- function(
 ) {
   if (!is.null(object)) {
     if (inherits(object, "prcomp")) {
+      stopifnot(ncol(object$x) >= 2L)
       scores <- object$x[, 1:2]
       loadings <- object$rotation[, 1:2]
     } else if (inherits(object, "Pca")) {
+      stopifnot(ncol(object$scores) >= 2L)
       scores <- object$scores[, 1:2]
       loadings <- object$loadings[, 1:2]
     } else {
-      stop("`object` must be the output of prcomp() or an rrcov Pca* function")
+      stop("object must be the output of prcomp() or an rrcov::Pca* function")
+    }
+  } else {
+    if (is.null(scores) || is.null(loadings)) {
+      stop("Supply object, or both scores and loadings.")
+    }
+    if (ncol(scores) < 2L || ncol(loadings) < 2L) {
+      stop("scores and loadings must have at least two columns.")
     }
   }
   scores <- as.data.frame(scores)
+  # Check scores contain positive and negative values
+  if (
+    !(any(scores[, 1] > 0) &&
+      any(scores[, 1] < 0) &&
+      any(scores[, 2] > 0) &&
+      any(scores[, 2] < 0))
+  ) {
+    warning("scores should be centred about the origin.")
+  }
   axis_labels <- colnames(scores)[1:2]
   colnames(scores)[1:2] <- c("x", "y")
   rn_loadings <- row.names(loadings)
