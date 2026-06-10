@@ -62,6 +62,7 @@ reference:
   - density_df
 - title: Functions for producing plots
   contents:
+  - biplot_projection
   - gg_density
   - gg_bagplot
   - gg_hdrboxplot

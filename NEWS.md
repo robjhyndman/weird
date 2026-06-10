@@ -1,5 +1,6 @@
 # weird (development version)
 
+* `biplot_projection()` added, drawing a two-dimensional projection of scores with the original variable axes overlaid as arrows.
 * Added `fetch_air_quality()` to download Beijing air quality data from 12 monitoring stations (2013-2017).
 * Added `gun_deaths` dataset containing firearm homicide rates and gun ownership by country for 2017.
 * `wine_reviews` columns have been reordered.
