@@ -49,6 +49,33 @@ test_that("mvscale errors on non-numeric matrix", {
   expect_error(mvscale(m), "numeric")
 })
 
+test_that("mvscale renames matrix columns z1, z2, ... when rotation applied", {
+  z <- mvscale(mat3, warning = FALSE)
+  expect_equal(colnames(z), paste0("z", seq_len(ncol(mat3))))
+})
+
+test_that("mvscale with cov = NULL does not rename matrix columns", {
+  m <- mat2
+  colnames(m) <- c("a", "b")
+  z <- mvscale(m, cov = NULL, warning = FALSE)
+  expect_equal(colnames(z), c("a", "b"))
+})
+
+test_that("mvscale does not rename a single column (no rotation occurs)", {
+  df1 <- data.frame(a = rnorm(20))
+  expect_equal(names(mvscale(df1, warning = FALSE)), "a")
+  m1 <- matrix(rnorm(20), ncol = 1, dimnames = list(NULL, "a"))
+  expect_equal(colnames(mvscale(m1, warning = FALSE)), "a")
+})
+
+test_that("mvscale stores covariance and its inverse as scale attributes", {
+  z <- mvscale(mat3, warning = FALSE)
+  S <- attr(z, "scale")
+  Sinv <- attr(z, "scale_inverse")
+  expect_equal(dim(S), c(ncol(mat3), ncol(mat3)))
+  expect_equal(S %*% Sinv, diag(ncol(mat3)), tolerance = 1e-6)
+})
+
 # Data frame input ------------------------------------------------------
 
 test_that("mvscale returns a data frame for data frame input", {
@@ -185,4 +212,16 @@ test_that("mvscale errors on Inf in a data frame", {
   df_inf <- df_num
   df_inf[1, 1] <- Inf
   expect_snapshot(mvscale(df_inf, warning = FALSE), error = TRUE)
+})
+
+test_that("mvscale errors on -Inf in a vector", {
+  v_inf <- v_num
+  v_inf[5] <- -Inf
+  expect_snapshot(mvscale(v_inf, warning = FALSE), error = TRUE)
+})
+
+test_that("mvscale errors on -Inf in a matrix", {
+  mat_inf <- mat2
+  mat_inf[1, 2] <- -Inf
+  expect_snapshot(mvscale(mat_inf, warning = FALSE), error = TRUE)
 })
