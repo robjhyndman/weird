@@ -54,6 +54,7 @@ mvscale <- function(
   ...
 ) {
   d <- NCOL(object)
+  terms_list <- list()
   # Check if input is a vector
   is_vec <- d == 1L &&
     !inherits(object, "matrix") &&
@@ -91,6 +92,7 @@ mvscale <- function(
   if (!is.null(center)) {
     med <- apply(mat, 2, \(x) center(na.omit(x)))
     mat <- sweep(mat, 2L, med)
+    terms_list <- c(terms_list, list("center" = med))
   }
   # scale function that ignores missing values
   if (!is.null(scale)) {
@@ -100,9 +102,13 @@ mvscale <- function(
   }
   # Scale
   if (d == 1L) {
-    z <- mat / my_scale(mat)
+    scl <- my_scale(mat)
+    z <- mat / scl
+    terms_list <- c(terms_list, list("scale" = scl, "scale_inverse" = 1/scl))
     if (is_vec) {
-      return(as.vector(z))
+      z <- as.vector(z)
+      for(a in seq_along(terms_list)) attr(z, which = names(terms_list)[a]) <- terms_list[[a]]
+      return(z)
     }
   } else if (!is.null(cov)) {
     # Compute covariance matrix from non-missing values
@@ -135,6 +141,7 @@ mvscale <- function(
       }
       warning("Covariance matrix is singular. Adding a small ridge penalty.")
     }
+    terms_list <- c(terms_list, list("scale" = S, "scale_inverse" = Sinv))
     # Compute scaled and rotated data
     U <- chol(Sinv)
     z <- mat %*% t(U)
@@ -142,6 +149,7 @@ mvscale <- function(
     # Just scale, no rotation
     s <- apply(mat, 2, my_scale)
     z <- sweep(mat, 2L, s, "/")
+    terms_list <- c(terms_list, list("scale" = s, scale_inverse = 1/s))
   }
   # Convert back to matrix, data frame or tibble if necessary
   idx <- which(numeric_col)
@@ -152,5 +160,6 @@ mvscale <- function(
   if (!is.null(cov)) {
     names(object)[numeric_col] <- paste0("z", seq(sum(numeric_col)))
   }
+  for(a in seq_along(terms_list)) attr(object, which = names(terms_list)[a]) <- terms_list[[a]]
   return(object)
 }

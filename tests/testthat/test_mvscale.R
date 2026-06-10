@@ -22,6 +22,12 @@ test_that("mvscale centres vector to approximately zero median", {
   expect_equal(median(z), 0, tolerance = 1e-6)
 })
 
+test_that("mvscale terms agrees with results from default arguments", {
+  z <- mvscale(v_num, warning = FALSE)
+  expect_equal(median(v_num), attr(z, "center"), tolerance = 1e-6)
+  expect_equal(robustbase::s_Qn(v_num), attr(z, "scale"), tolerance = 1e-6)
+})
+
 test_that("mvscale errors on non-numeric vector", {
   expect_error(mvscale(letters), "numeric")
 })
@@ -96,6 +102,18 @@ test_that("mvscale with cov = NULL scales each column by s_Qn", {
   # After centering and scaling by s_Qn, s_Qn of each column should be ~1
   col_scales <- apply(z, 2, robustbase::s_Qn)
   expect_equal(col_scales, c(1, 1), tolerance = 0.01)
+})
+
+test_that("mvscale with cov = NULL scales each column by s_Qn", {
+  z <- mvscale(mat2, cov = NULL, warning = FALSE)
+  col_scales <- apply(mat2, 2, robustbase::s_Qn)
+  expect_equal(attr(z, "scale"), col_scales, tolerance = 0.01)
+})
+
+test_that("mvscale with cov = NULL centers each column by median", {
+  z <- mvscale(mat2, cov = NULL, warning = FALSE)
+  col_centers <- apply(mat2, 2, median)
+  expect_equal(attr(z, "center"), col_centers, tolerance = 0.01)
 })
 
 # cov = stats::cov (non-robust rotation) --------------------------------
