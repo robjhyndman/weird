@@ -1,5 +1,6 @@
 # weird (development version)
 
+* `augment()` method added for rrcov `Pca*` objects, returning the principal component scores, score distances and orthogonal distances, optionally alongside the original data.
 * `biplot_projection()` added, drawing a two-dimensional projection of scores with the original variable axes overlaid as arrows.
 * Added `fetch_air_quality()` to download Beijing air quality data from 12 monitoring stations (2013-2017).
 * Added `gun_deaths` dataset containing firearm homicide rates and gun ownership by country for 2017.
@@ -9,6 +10,7 @@
 * `dist_mclust()` added to convert a Gaussian mixture model (`Mclust` object) to a distributional object.
 * `lof_scores()` now returns 1 (instead of 0) when there are too many duplicates.
 * `mvscale()` now better handles missing and infinite values.
+* `outlier_map()` added, drawing the score distance against the orthogonal distance for a `prcomp` or rrcov `Pca*` object, with optional cutoff thresholds classifying observations as regular, good leverage points, orthogonal outliers or bad leverage points.
 * `dist_kde()` is now robust to missing values.
 * Removed several dependencies
 * Bug fixes and documentation improvements

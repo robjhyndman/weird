@@ -10,3 +10,7 @@
 #' @importFrom ggplot2 geom_contour_filled geom_contour scale_fill_manual
 #' @export
 ggplot2::autoplot
+
+#' @importFrom broom augment
+#' @export
+broom::augment

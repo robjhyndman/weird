@@ -64,5 +64,9 @@ reference:
   contents:
   - biplot_projection
   - gg_density
+  - outlier_map
   - gg_bagplot
   - gg_hdrboxplot
+- title: Functions for working with principal component analyses
+  contents:
+  - augment.Pca

@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{autoplot}
+\alias{augment}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -11,6 +12,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{broom}{\code{\link[broom:augment]{augment}}}
+
   \item{ggplot2}{\code{\link[ggplot2:autoplot]{autoplot()}}}
 }}
 
