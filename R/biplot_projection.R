@@ -29,7 +29,7 @@
 #' oldfaithful[, c("duration", "waiting")] |>
 #'   prcomp(scale = TRUE) |>
 #'   biplot_projection()
-#' @importFrom ggplot2 geom_point geom_segment geom_text labs
+#' @importFrom ggplot2 geom_point geom_segment geom_text labs expansion scale_x_continuous
 #' @importFrom grid unit arrow
 #' @export
 biplot_projection <- function(
@@ -89,6 +89,15 @@ biplot_projection <- function(
     ifelse(loadings$y < 0, min(scores$y) / loadings$y, Inf)
   )
   arrow_scale <- min(pmin(sx, sy))
+  labels <- loadings[loadings$x^2 + loadings$y^2 > label_threshold^2, ]
+  # Only expand the x axis on a side that has a label running off the edge:
+  # positive-x labels extend right, negative-x labels extend left.
+  x_expand <- expansion(
+    mult = c(
+      if (any(labels$x < 0)) 0.08 else 0.05,
+      if (any(labels$x > 0)) 0.08 else 0.05
+    )
+  )
   ggplot(scores, aes(x = x, y = y)) +
     geom_point(...) +
     geom_segment(
@@ -98,14 +107,16 @@ biplot_projection <- function(
       colour = arrow_colour
     ) +
     geom_text(
-      data = dplyr::filter(loadings, x^2 + y^2 > label_threshold^2),
+      data = labels,
       aes(
         label = varname,
-        x = arrow_scale * x,
-        y = arrow_scale * y * 1.05
+        x = arrow_scale * x * 1.02,
+        y = arrow_scale * y * 1.02,
+        hjust = ifelse(x > 0, 0, 1)
       ),
       colour = arrow_colour
     ) +
+    scale_x_continuous(expand = x_expand) +
     labs(x = axis_labels[1], y = axis_labels[2])
 }
 
