@@ -92,19 +92,14 @@ outlier_map <- function(
   }
 
   if (show) {
+    sd_hi <- df$sd > cutoff_sd
+    od_hi <- df$od > cutoff_od
     df$type <- factor(
-      ifelse(
-        df$sd <= cutoff_sd & df$od <= cutoff_od,
-        "Regular",
-        ifelse(
-          df$sd > cutoff_sd & df$od <= cutoff_od,
-          "Good leverage point",
-          ifelse(
-            df$sd <= cutoff_sd & df$od > cutoff_od,
-            "Orthogonal outlier",
-            "Bad leverage point"
-          )
-        )
+      dplyr::case_when(
+        !sd_hi & !od_hi ~ "Regular",
+        sd_hi & !od_hi ~ "Good leverage point",
+        !sd_hi & od_hi ~ "Orthogonal outlier",
+        TRUE ~ "Bad leverage point"
       ),
       levels = c(
         "Orthogonal outlier",
