@@ -85,7 +85,7 @@ mvscale <- function(
   } else {
     stop("object must be a numeric vector, matrix or data frame")
   }
-  if (any(mat == Inf & !is.na(mat))) {
+  if (any(is.infinite(mat))) {
     stop("object contains infinite values")
   }
   # Remove centers
@@ -104,10 +104,12 @@ mvscale <- function(
   if (d == 1L) {
     scl <- my_scale(mat)
     z <- mat / scl
-    terms_list <- c(terms_list, list("scale" = scl, "scale_inverse" = 1/scl))
+    terms_list <- c(terms_list, list("scale" = scl, "scale_inverse" = 1 / scl))
     if (is_vec) {
       z <- as.vector(z)
-      for(a in seq_along(terms_list)) attr(z, which = names(terms_list)[a]) <- terms_list[[a]]
+      for (a in seq_along(terms_list)) {
+        attr(z, which = names(terms_list)[a]) <- terms_list[[a]]
+      }
       return(z)
     }
   } else if (!is.null(cov)) {
@@ -149,7 +151,7 @@ mvscale <- function(
     # Just scale, no rotation
     s <- apply(mat, 2, my_scale)
     z <- sweep(mat, 2L, s, "/")
-    terms_list <- c(terms_list, list("scale" = s, scale_inverse = 1/s))
+    terms_list <- c(terms_list, list("scale" = s, scale_inverse = 1 / s))
   }
   # Convert back to matrix, data frame or tibble if necessary
   idx <- which(numeric_col)
@@ -157,9 +159,11 @@ mvscale <- function(
     object[, idx[i]] <- z[, i]
   }
   # Rename columns if there has been rotation
-  if (!is.null(cov)) {
-    names(object)[numeric_col] <- paste0("z", seq(sum(numeric_col)))
+  if (d > 1L && !is.null(cov)) {
+    colnames(object)[numeric_col] <- paste0("z", seq(sum(numeric_col)))
   }
-  for(a in seq_along(terms_list)) attr(object, which = names(terms_list)[a]) <- terms_list[[a]]
+  for (a in seq_along(terms_list)) {
+    attr(object, which = names(terms_list)[a]) <- terms_list[[a]]
+  }
   return(object)
 }
