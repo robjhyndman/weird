@@ -46,6 +46,24 @@ test_that("outlier_map draws cutoff lines and colours by type when shown", {
   )
 })
 
+test_that("outlier_map shows all four types in the legend when some are absent", {
+  set.seed(1)
+  Y2 <- data.frame(a = rnorm(30), b = rnorm(30))
+  p <- outlier_map(prcomp(Y2, scale = TRUE, rank. = 1), data = Y2)
+  breaks <- ggplot2::ggplot_build(p)$plot$scales$scales[[1]]$get_breaks()
+  expect_setequal(
+    breaks,
+    c(
+      "Orthogonal outlier",
+      "Regular",
+      "Bad leverage point",
+      "Good leverage point"
+    )
+  )
+  # Placeholder rows for absent types are kept out of the main plot data.
+  expect_all_true(!is.na(p$data$sd))
+})
+
 test_that("show_thresholds = FALSE drops cutoff lines and type colours", {
   p <- outlier_map(pca, data = Y, show_thresholds = FALSE)
   geoms <- vapply(p$layers, function(l) class(l$geom)[1], character(1))

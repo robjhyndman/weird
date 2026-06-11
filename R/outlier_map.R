@@ -131,6 +131,18 @@ outlier_map <- function(
       ) +
       guides(colour = guide_legend(nrow = 2)) +
       theme(legend.position = "bottom")
+    # Add invisible placeholder points for any type absent from the data so
+    # that every type gets a coloured key in the legend. These are dropped from
+    # the panel via na.rm and kept out of the main plot data via their own layer.
+    missing <- setdiff(levels(df$type), df$type)
+    if (length(missing) > 0) {
+      placeholder <- tibble(
+        sd = NA_real_,
+        od = NA_real_,
+        type = factor(missing, levels = levels(df$type))
+      )
+      p <- p + geom_point(data = placeholder, na.rm = TRUE)
+    }
   } else {
     dots <- list(...)
     if (is.null(dots$colour) && is.null(dots$color)) {
