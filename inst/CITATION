@@ -3,7 +3,7 @@ if(!length(year))
   year <- substr(Sys.Date(),1,4)
 vers <- meta$Version
 if(is.null(vers))
-  vers <- packageVersion("forecast")
+  vers <- utils::packageVersion("weird")
 vers <- paste("R package version", vers)
 
 citHeader("To cite the weird package in publications, please use:")
