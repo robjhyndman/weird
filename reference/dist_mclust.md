@@ -24,7 +24,7 @@ An object of class `distributional`
 
 ``` r
 library(mclust)
-#> Package 'mclust' version 6.1.2
+#> Package 'mclust' version 6.1.3
 #> Type 'citation("mclust")' for citing this R package in publications.
 #> 
 #> Attaching package: ‘mclust’
