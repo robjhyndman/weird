@@ -15,7 +15,7 @@ Authors@R:
            family = "Tvedebrink",
            role = "ctb"
     ),
-    person(given = "RStudio", role = "cph")
+    person(given = "Posit Software, PBC", role = "cph")
   )
 Depends:
     R (>= 4.1.0)
