@@ -47,7 +47,7 @@ kde_bandwidth <- function(
     }
   }
   if (method == "lookout") {
-    if (packageVersion("mlpack") < "4.8.0")
+    if (packageVersion("mlpack") < "4.8.0") {
       death_radi <- mlpack::emst(mvscale(as.matrix(data)))$output[, 3]
     } else {
       death_radi <- mlpack::emst(mvscale(as.matrix(data)))[, 3]
