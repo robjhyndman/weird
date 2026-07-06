@@ -9,4 +9,4 @@
 
 0 errors | 0 warnings | 1 note
 
-Note on invalid URL (https://www.espncricinfo.com/) is a false positive. The URL is correct.
+Note on invalid URLs are false positives. All URLs have been checked.
