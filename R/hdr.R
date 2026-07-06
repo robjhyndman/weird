@@ -134,7 +134,7 @@ gg_hdrboxplot <- function(
 #' @return A tibble
 #' @author Rob J Hyndman
 #' @references Hyndman, R J (1996) "Computing and Graphing Highest Density Regions", *The American Statistician*, 50(2), 120–126. \url{https://robjhyndman.com/publications/hdr/}
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.5, 3.4. \url{https://OTexts.com/weird/}.
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.7, 3.4. \url{https://OTexts.com/weird/}.
 #' @seealso \code{\link{gg_hdrboxplot}}
 #' @examples
 #' # Univariate HDRs

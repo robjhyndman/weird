@@ -34,7 +34,7 @@
 #' @param ... Other arguments are passed to the appropriate method.
 #' @author Rob J Hyndman
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R",
-#' Chapter 6, \url{https://OTexts.com/weird/}.
+#' Chapter 7, \url{https://OTexts.com/weird/}.
 #' @references Hyndman, R J & Frazier, D T (2026) "Anomaly detection using surprisals",
 #' \url{https://robjhyndman.com/publications/surprisals.html}.
 #' @return A numerical vector containing the surprisals or surprisal probabilities.

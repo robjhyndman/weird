@@ -109,7 +109,7 @@ warpbreaks |>
 }
 \references{
 Hyndman, R J (2026) "That's weird: Anomaly detection using R",
-Chapter 6, \url{https://OTexts.com/weird/}.
+Chapter 7, \url{https://OTexts.com/weird/}.
 
 Hyndman, R J & Frazier, D T (2026) "Anomaly detection using surprisals",
 \url{https://robjhyndman.com/publications/surprisals.html}.
