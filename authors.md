@@ -7,7 +7,7 @@
 
 - **Torben Tvedebrink**. Contributor.
 
-- **RStudio**. Copyright holder.
+- **Posit Software, PBC**. Copyright holder.
 
 ## Citation
 
