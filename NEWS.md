@@ -9,7 +9,7 @@
 * `density_df()` added, converting a distributional object to a data frame containing density values over a grid, suitable for plotting.
 * `dist_mclust()` added to convert a Gaussian mixture model (`Mclust` object) to a distributional object.
 * `lof_scores()` now returns 1 (instead of 0) when there are too many duplicates.
-* `mvscale()` now better handles missing and infinite values.
+* `mvscale()` now better handles missing and infinite values, and returns centering and scaling terms as attributes.
 * `outlier_map()` added, drawing the score distance against the orthogonal distance for a `prcomp` or rrcov `Pca*` object, with optional cutoff thresholds classifying observations as regular, good leverage points, orthogonal outliers or bad leverage points.
 * `dist_kde()` is now robust to missing values.
 * Removed several dependencies

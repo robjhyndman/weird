@@ -9,9 +9,14 @@ Authors@R:
            family = "Hyndman",
            role = c("aut", "cre", "cph"),
            email = "Rob.Hyndman@monash.edu",
-           comment = c(ORCID = "0000-0002-2140-5352")),
-    person(given = "RStudio",
-           role = c("cph")))
+           comment = c(ORCID = "0000-0002-2140-5352")
+    ),
+    person(given = "Torben",
+           family = "Tvedebrink",
+           role = "ctb"
+    ),
+    person(given = "RStudio", role = "cph")
+  )
 Depends:
     R (>= 4.1.0)
 Imports:
