@@ -1,4 +1,4 @@
-# weird (development version)
+# weird 3.0.0
 
 * Moved the Old Faithful Geyser examples from the README into a new vignette, `vignette("old-faithful")`.
 * `augment()` method added for rrcov `Pca*` objects, returning the principal component scores, score distances and orthogonal distances, optionally alongside the original data.
