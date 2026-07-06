@@ -34,7 +34,7 @@ Numerical vector containing LOF values
 ## References
 
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
-7.3, <https://OTexts.com/weird/>.
+6.6, <https://OTexts.com/weird/>.
 
 ## See also
 

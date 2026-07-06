@@ -40,7 +40,7 @@ and last `bandwidth` observations cannot be declared anomalies.
 ## References
 
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
-9.2, <https://OTexts.com/weird/>.
+10.2, <https://OTexts.com/weird/>.
 
 ## Author
 

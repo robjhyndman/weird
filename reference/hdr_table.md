@@ -35,7 +35,7 @@ Hyndman, R J (1996) "Computing and Graphing Highest Density Regions",
 <https://robjhyndman.com/publications/hdr/>
 
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
-2.5, 3.4. <https://OTexts.com/weird/>.
+2.7, 3.4. <https://OTexts.com/weird/>.
 
 ## See also
 

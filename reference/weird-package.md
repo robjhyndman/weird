@@ -27,4 +27,6 @@ Authors:
 
 Other contributors:
 
+- Torben Tvedebrink \[contributor\]
+
 - RStudio \[copyright holder\]

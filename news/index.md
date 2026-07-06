@@ -26,7 +26,8 @@
 - [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
   now returns 1 (instead of 0) when there are too many duplicates.
 - [`mvscale()`](https://pkg.robjhyndman.com/weird/reference/mvscale.md)
-  now better handles missing and infinite values.
+  now better handles missing and infinite values, and returns centering
+  and scaling terms as attributes.
 - [`outlier_map()`](https://pkg.robjhyndman.com/weird/reference/outlier_map.md)
   added, drawing the score distance against the orthogonal distance for
   a `prcomp` or rrcov `Pca*` object, with optional cutoff thresholds
