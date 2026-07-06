@@ -16,6 +16,10 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/old-faithful.html">Old Faithful Geyser example</a></li>
+  </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -34,10 +38,17 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="weird-development-version">weird (development version)<a class="anchor" aria-label="anchor" href="#weird-development-version"></a></h2>
-<ul><li>
+<ul><li>Moved the Old Faithful Geyser examples from the README into a new vignette, <code><a href="../articles/old-faithful.html">vignette("old-faithful")</a></code>.</li>
+<li>
 <code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code> method added for rrcov <code>Pca*</code> objects, returning the principal component scores, score distances and orthogonal distances, optionally alongside the original data.</li>
 <li>
+<code><a href="../reference/dist_mclust.html">dist_mclust()</a></code> added to convert a Gaussian mixture model (<code>Mclust</code> object) to a distributional object.</li>
+<li>
+<code><a href="../reference/density_df.html">density_df()</a></code> added, converting a distributional object to a data frame containing density values over a grid, suitable for plotting.</li>
+<li>
 <code><a href="../reference/biplot_projection.html">biplot_projection()</a></code> added, drawing a two-dimensional projection of scores with the original variable axes overlaid as arrows.</li>
+<li>
+<code><a href="../reference/outlier_map.html">outlier_map()</a></code> added, drawing the score distance against the orthogonal distance for a <code>prcomp</code> or rrcov <code>Pca*</code> object, with optional cutoff thresholds classifying observations as regular, good leverage points, orthogonal outliers or bad leverage points.</li>
 <li>Added <code><a href="../reference/fetch_air_quality.html">fetch_air_quality()</a></code> to download Beijing air quality data from 12 monitoring stations (2013-2017).</li>
 <li>Added <code>gun_deaths</code> dataset containing firearm homicide rates and gun ownership by country for 2017.</li>
 <li>
@@ -45,15 +56,9 @@
 <li>
 <code>gg_density_layer()</code> removed,</li>
 <li>
-<code><a href="../reference/density_df.html">density_df()</a></code> added, converting a distributional object to a data frame containing density values over a grid, suitable for plotting.</li>
-<li>
-<code><a href="../reference/dist_mclust.html">dist_mclust()</a></code> added to convert a Gaussian mixture model (<code>Mclust</code> object) to a distributional object.</li>
-<li>
 <code><a href="../reference/lof_scores.html">lof_scores()</a></code> now returns 1 (instead of 0) when there are too many duplicates.</li>
 <li>
 <code><a href="../reference/mvscale.html">mvscale()</a></code> now better handles missing and infinite values, and returns centering and scaling terms as attributes.</li>
-<li>
-<code><a href="../reference/outlier_map.html">outlier_map()</a></code> added, drawing the score distance against the orthogonal distance for a <code>prcomp</code> or rrcov <code>Pca*</code> object, with optional cutoff thresholds classifying observations as regular, good leverage points, orthogonal outliers or bad leverage points.</li>
 <li>
 <code><a href="../reference/dist_kde.html">dist_kde()</a></code> is now robust to missing values.</li>
 <li>Removed several dependencies</li>
