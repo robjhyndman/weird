@@ -11,3 +11,7 @@ docs/
 .vscode
 .positai
 docs
+inst/doc
+vignettes/*.html
+vignettes/*_cache
+vignettes/*_files
