@@ -33,8 +33,8 @@ ggsave(hex_scatter, height = 6, width = 6)
 
 img_cropped <- hex_crop(
   images = hex_scatter,
-  bg_fill = "#236d7a",
-  border_colour = "#44d6ec",
+  bg_fill = "#65775c",
+  border_colour = "#f49b02",
   border_size = 72
 )
 
@@ -46,7 +46,7 @@ ggplot() +
     y = 0.08,
     label = "weird",
     family = "singleday",
-    size = 96,
+    size = 120,
     colour = "white",
     angle = 30,
     hjust = 0,
