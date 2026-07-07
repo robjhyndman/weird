@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
   dev = "ragg_png",
   dpi = 200
 )
-options(width = 85)
+options(width = 75)
 set.seed(1967)
 # Fira Sans font for graphics
 ggplot2::theme_set(
