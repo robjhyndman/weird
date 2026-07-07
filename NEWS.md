@@ -1,3 +1,5 @@
+# weird (development version)
+
 # weird 3.0.0
 
 * Moved the Old Faithful Geyser examples from the README into a new vignette, `vignette("old-faithful")`.
