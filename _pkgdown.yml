@@ -10,8 +10,8 @@ template:
     heading_font:
       google: Fira Sans
     code_font: Hack, mono
-    primary: '#234460'
-    link-color: '#234460'
+    primary: '#65775c'
+    link-color: '#65775c'
   includes:
     in_header: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
 authors:
