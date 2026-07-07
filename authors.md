@@ -12,7 +12,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/robjhyndman/weird/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/robjhyndman/weird/blob/v3.0.0/inst/CITATION)
 
 Hyndman RJ (2026). *weird: Functions and Data Sets for "That's Weird:
 Anomaly Detection Using R" by Rob J Hyndman*. R package version 3.0.0,
