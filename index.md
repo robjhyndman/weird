@@ -42,10 +42,10 @@ conflicts with other packages you have previously loaded:
 ``` r
 
 library(weird)
-#> ── Attaching core weird packages ───────────────────────────────────── weird 3.0.0 ──
+#> ── Attaching core weird packages ─────────────────────────── weird 3.0.0 ──
 #> ✔ distributional 0.8.1     ✔ ggplot2        4.0.3
 #> ✔ dplyr          1.2.1
-#> ── Conflicts ───────────────────────────────────────────────────── weird_conflicts ──
+#> ── Conflicts ─────────────────────────────────────────── weird_conflicts ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
 ```
