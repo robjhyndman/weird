@@ -4,6 +4,8 @@
 
 ## weird 3.0.0
 
+CRAN release: 2026-07-06
+
 - Moved the Old Faithful Geyser examples from the README into a new
   vignette,
   [`vignette("old-faithful")`](https://pkg.robjhyndman.com/weird/articles/old-faithful.md).
