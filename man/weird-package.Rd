@@ -28,7 +28,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Torben Tvedebrink [contributor]
-  \item RStudio [copyright holder]
+  \item Posit Software, PBC [copyright holder]
 }
 
 }
