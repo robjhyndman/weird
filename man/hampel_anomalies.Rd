@@ -4,14 +4,27 @@
 \alias{hampel_anomalies}
 \title{Identify anomalies using the Hampel filter}
 \usage{
-hampel_anomalies(y, bandwidth, k = 3)
+hampel_anomalies(
+  y,
+  bandwidth,
+  k = 3,
+  alpha = NULL,
+  approximation = c("none", "gpd", "empirical")
+)
 }
 \arguments{
 \item{y}{numeric vector containing time series}
 
 \item{bandwidth}{integer width of the window around each observation}
 
-\item{k}{numeric number of standard deviations to declare an outlier}
+\item{k}{numeric number of standard deviations to declare an outlier. Ignored if \code{alpha} is specified.}
+
+\item{alpha}{numeric significance level for declaring an anomaly under a normal distribution.
+If specified, \code{k} is ignored and the threshold is determined by the significance level.}
+
+\item{approximation}{character string specifying the method to use for approximating
+the tail of the distribution of surprisal values. Options are "none" (no approximation),
+"gpd" (generalized Pareto distribution), or "empirical" (empirical distribution).}
 }
 \value{
 logical vector identifying which observations are anomalies.
