@@ -41,10 +41,13 @@ hampel_anomalies <- function(
   alpha = NULL,
   approximation = c("none", "gpd", "empirical")
 ) {
+  approximation <- match.arg(approximation)
   stopifnot(is.numeric(y))
   stopifnot(is.numeric(bandwidth) && length(bandwidth) == 1 && bandwidth >= 1)
   stopifnot(is.numeric(k) && length(k) == 1 && k > 0)
-  stopifnot(is.numeric(alpha) && length(alpha) == 1 && alpha > 0 && alpha < 1)
+  if (!is.null(alpha)) {
+    stopifnot(is.numeric(alpha) && length(alpha) == 1 && alpha > 0 && alpha < 1)
+  }
   stopifnot(approximation %in% c("none", "gpd", "empirical"))
   if (abs(bandwidth - round(bandwidth)) > 1e-8) {
     stop("Bandwidth must be an integer")
@@ -78,9 +81,9 @@ hampel_anomalies <- function(
   } else {
     # Find anomalies
     s <- -dnorm(abs(y - m) / mad * 0.6744898, log = TRUE)
-    p <- weird:::surprisal_prob_from_s(
+    p <- surprisal_prob_from_s(
       s,
-      distribution = dist_normal(),
+      distribution = distributional::dist_normal(),
       approximation = approximation
     )
     return(p < alpha)
