@@ -199,6 +199,14 @@ gg_density1 <- function(
       p <- p +
         geom_line(aes(x = x, y = density, colour = distribution))
     }
+    object_family <- family(object)
+    if ("kde" %in% object_family) {
+      # Grab axis label from first kde object in the list
+      names <- vctrs::vec_data(object[object_family == "kde"][1])[[1]]$kde$names
+      if (!is.null(names)) {
+        p <- p + labs(x = names[1])
+      }
+    }
   }
 
   # ----- HDR fill rectangles below the axis -----
@@ -445,6 +453,12 @@ gg_density2 <- function(
         mapping = aes(x = x, y = y),
         color = hdr_colors[1]
       )
+  }
+  if (family(object) == "kde") {
+    names <- vctrs::vec_data(object)[[1]]$kde$names
+    if (!is.null(names)) {
+      p <- p + labs(x = names[1], y = names[2])
+    }
   }
 
   p
