@@ -6,7 +6,13 @@ using mean absolute deviations in the vicinity of each observation.
 ## Usage
 
 ``` r
-hampel_anomalies(y, bandwidth, k = 3)
+hampel_anomalies(
+  y,
+  bandwidth,
+  k = 3,
+  alpha = NULL,
+  approximation = c("none", "gpd", "empirical")
+)
 ```
 
 ## Arguments
@@ -21,7 +27,21 @@ hampel_anomalies(y, bandwidth, k = 3)
 
 - k:
 
-  numeric number of standard deviations to declare an outlier
+  numeric number of standard deviations to declare an outlier. Ignored
+  if `alpha` is specified.
+
+- alpha:
+
+  numeric significance level for declaring an anomaly under a normal
+  distribution. If specified, `k` is ignored and the threshold is
+  determined by the significance level.
+
+- approximation:
+
+  character string specifying the method to use for approximating the
+  tail of the distribution of surprisal values. Options are "none" (no
+  approximation), "gpd" (generalized Pareto distribution), or
+  "empirical" (empirical distribution).
 
 ## Value
 
@@ -55,7 +75,12 @@ df <- tibble(
   y = c(rnorm(20), 5, rnorm(20))
 ) |>
   mutate(hampel = hampel_anomalies(y, bandwidth = 3, k = 4))
+#> Error in mutate(tibble(time = seq(41), y = c(rnorm(20), 5, rnorm(20))),     hampel = hampel_anomalies(y, bandwidth = 3, k = 4)): ℹ In argument: `hampel = hampel_anomalies(y, bandwidth = 3, k = 4)`.
+#> Caused by error in `hampel_anomalies()`:
+#> ! is.numeric(alpha) && length(alpha) == 1 && alpha > 0 && alpha <  .... is not TRUE
 df |> ggplot(aes(x = time, y = y)) +
   geom_line() +
   geom_point(data = df |> filter(hampel), col = "red")
+#> Error in ggplot(df, aes(x = time, y = y)): `data` cannot be a function.
+#> ℹ Have you misspelled the `data` argument in `ggplot()`?
 ```

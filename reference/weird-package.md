@@ -29,4 +29,4 @@ Other contributors:
 
 - Torben Tvedebrink \[contributor\]
 
-- RStudio \[copyright holder\]
+- Posit Software, PBC \[copyright holder\]
