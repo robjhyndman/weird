@@ -15,7 +15,8 @@ hampel_anomalies(
 \arguments{
 \item{y}{numeric vector containing time series}
 
-\item{bandwidth}{integer width of the window around each observation}
+\item{bandwidth}{integer specifying half-width of the window around each observation. That is, each window
+contains observations from t-bandwidth, ..., t+bandwidth. Must be at least 1.}
 
 \item{k}{numeric number of standard deviations to declare an anomaly. Ignored if \code{alpha} is specified.}
 

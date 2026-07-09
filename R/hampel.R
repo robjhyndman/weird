@@ -11,7 +11,8 @@
 #' The first `bandwidth` and last `bandwidth` observations cannot
 #' be declared anomalies.
 #' @param y numeric vector containing time series
-#' @param bandwidth integer width of the window around each observation
+#' @param bandwidth integer specifying half-width of the window around each observation. That is, each window
+#' contains observations from t-bandwidth, ..., t+bandwidth. Must be at least 1.
 #' @param k numeric number of standard deviations to declare an anomaly. Ignored if `alpha` is specified.
 #' @param alpha numeric significance level for declaring an anomaly under a normal distribution.
 #' If specified, `k` is ignored and the threshold is determined by the significance level.
