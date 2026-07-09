@@ -3,7 +3,7 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   old-faithful: old-faithful.html
-last_built: 2026-07-09T04:04Z
+last_built: 2026-07-09T04:17Z
 urls:
   reference: https://pkg.robjhyndman.com/weird/reference
   article: https://pkg.robjhyndman.com/weird/articles
