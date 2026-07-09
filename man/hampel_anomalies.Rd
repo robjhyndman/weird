@@ -17,7 +17,7 @@ hampel_anomalies(
 
 \item{bandwidth}{integer width of the window around each observation}
 
-\item{k}{numeric number of standard deviations to declare an outlier. Ignored if \code{alpha} is specified.}
+\item{k}{numeric number of standard deviations to declare an anomaly. Ignored if \code{alpha} is specified.}
 
 \item{alpha}{numeric significance level for declaring an anomaly under a normal distribution.
 If specified, \code{k} is ignored and the threshold is determined by the significance level.}

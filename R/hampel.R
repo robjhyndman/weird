@@ -12,7 +12,7 @@
 #' be declared anomalies.
 #' @param y numeric vector containing time series
 #' @param bandwidth integer width of the window around each observation
-#' @param k numeric number of standard deviations to declare an outlier. Ignored if `alpha` is specified.
+#' @param k numeric number of standard deviations to declare an anomaly. Ignored if `alpha` is specified.
 #' @param alpha numeric significance level for declaring an anomaly under a normal distribution.
 #' If specified, `k` is ignored and the threshold is determined by the significance level.
 #' @param approximation character string specifying the method to use for approximating
@@ -61,7 +61,7 @@ hampel_anomalies <- function(
     endrule = "keep",
     na.action = "na.omit"
   )
-  # Set MAD to Inf so end points are not considered outliers
+  # Set MAD to Inf so end points are not considered anomalies
   mad <- rep(Inf, n)
   # Running MADs
   for (i in (bandwidth + 1):(n - bandwidth)) {
@@ -70,7 +70,7 @@ hampel_anomalies <- function(
       na.rm = TRUE
     )
   }
-  # Find outliers
+  # Find anomalies
   if (is.null(alpha)) {
     alpha <- 2 * stats::pnorm(-k)
   } else if (approximation == "none") {
