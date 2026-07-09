@@ -23,7 +23,9 @@ hampel_anomalies(
 
 - bandwidth:
 
-  integer width of the window around each observation
+  integer specifying half-width of the window around each observation.
+  That is, each window contains observations from t-bandwidth, ...,
+  t+bandwidth. Must be at least 1.
 
 - k:
 
