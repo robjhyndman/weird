@@ -27,7 +27,7 @@ hampel_anomalies(
 
 - k:
 
-  numeric number of standard deviations to declare an outlier. Ignored
+  numeric number of standard deviations to declare an anomaly. Ignored
   if `alpha` is specified.
 
 - alpha:
