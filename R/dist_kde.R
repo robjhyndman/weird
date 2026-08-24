@@ -280,28 +280,22 @@ kurtosis.dist_kde <- function(x, ..., na.rm = FALSE) {
 
 # hdr.dist_kde is a modification of distributional:::hdr.dist_default,
 # but uses the KDE at the data points to find falpha,
-# rather than the KDE at the quantiles of the distribution.
-# This avoids the problem of having surprisal anomalies that are inconsistent with the HDR
-# Number of observations required tentatively set to 200.
+# rather than using the quantiles of the transformed distribution.
+# This avoids the problem of having surprisal anomalies that are inconsistent with the HDR.
 
 #' @exportS3Method distributional::hdr
 hdr.dist_kde <- function(object, size, n = 4096) {
-  if (NROW(object$kde$x) < 200) {
-    # Just use the default. There is not enough data to get a good estimate of falpha
-    NextMethod()
-  } else {
-    dist_y <- density(object, at = object$kde$x)
-    falpha <- quantile(dist_y, probs = 1 - size / 100, type = 8)
-    x <- quantile(object, seq(0.5 / n, 1 - 0.5 / n, length.out = n))
-    y <- density(object, at = x)
-    hdr <- crossing_alpha(falpha, x, y)
-    lower_hdr <- seq_along(hdr) %% 2 == 1
-    distributional::new_hdr(
-      lower = list(hdr[lower_hdr]),
-      upper = list(hdr[!lower_hdr]),
-      size = size
-    )
-  }
+  dist_y <- density(object, at = object$kde$x)
+  falpha <- quantile(dist_y, probs = 1 - size / 100, type = 8)
+  x <- quantile(object, seq(0.5 / n, 1 - 0.5 / n, length.out = n))
+  y <- density(object, at = x)
+  hdr <- crossing_alpha(falpha, x, y)
+  lower_hdr <- seq_along(hdr) %% 2 == 1
+  distributional::new_hdr(
+    lower = list(hdr[lower_hdr]),
+    upper = list(hdr[!lower_hdr]),
+    size = size
+  )
 }
 
 crossing_alpha <- function(alpha, x, y) {
