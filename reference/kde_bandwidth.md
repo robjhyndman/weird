@@ -2,13 +2,18 @@
 
 Bandwidth matrices are estimated in several ways including a normal
 reference rule, a robust version of the normal reference rule (default),
-a plugin estimator, or using the approach of Hyndman, Kandanaarachchi &
-Turner (2026). Details of each method are given in Hyndman (2026).
+a plugin estimator, a smoothed cross-validation estimator, or using the
+approach of Hyndman, Kandanaarachchi & Turner (2026). Details of each
+method are given in Hyndman (2026).
 
 ## Usage
 
 ``` r
-kde_bandwidth(data, method = c("robust", "normal", "plugin", "lookout"), ...)
+kde_bandwidth(
+  data,
+  method = c("robust", "normal", "plugin", "scv", "lookout"),
+  ...
+)
 ```
 
 ## Arguments
@@ -22,8 +27,9 @@ kde_bandwidth(data, method = c("robust", "normal", "plugin", "lookout"), ...)
   A character string giving the method to use. Possibilities are:
   `"normal"` (normal reference rule), `"robust"` (a robust version of
   the normal reference rule, the default), `"plugin"` (a plugin
-  estimator), and `"lookout"` (the bandwidth matrix estimate of Hyndman,
-  Kandanaarachchi & Turner, 2026).
+  estimator), `"scv"` (a smoothed cross-validation estimator), and
+  `"lookout"` (the bandwidth matrix estimate of Hyndman, Kandanaarachchi
+  & Turner, 2026).
 
 - ...:
 

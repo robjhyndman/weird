@@ -2,6 +2,22 @@
 
 ## weird (development version)
 
+- [`dist_kde()`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)
+  HDR calculations now always use the density at the data points
+  (previously this required at least 200 observations), following
+  `hdrcde`.
+- [`gg_density()`](https://pkg.robjhyndman.com/weird/reference/gg_density.md)
+  now labels the axis with the variable name when plotting a `dist_kde`
+  object, if available.
+- [`hampel_anomalies()`](https://pkg.robjhyndman.com/weird/reference/hampel_anomalies.md)
+  gains `alpha` and `approximation` arguments, allowing anomalies to be
+  declared using a significance level rather than a fixed number of
+  standard deviations.
+- [`kde_bandwidth()`](https://pkg.robjhyndman.com/weird/reference/kde_bandwidth.md)
+  gains `method = "scv"`, a smoothed cross-validation bandwidth
+  estimator using
+  [`ks::hscv()`](https://mvstat.net/ks/reference/Hscv.html)/[`ks::Hscv()`](https://mvstat.net/ks/reference/Hscv.html).
+
 ## weird 3.0.0
 
 CRAN release: 2026-07-06

@@ -38,7 +38,15 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="weird-development-version">weird (development version)<a class="anchor" aria-label="anchor" href="#weird-development-version"></a></h2>
-</div>
+<ul><li>
+<code><a href="../reference/dist_kde.html">dist_kde()</a></code> HDR calculations now always use the density at the data points (previously this required at least 200 observations), following <code>hdrcde</code>.</li>
+<li>
+<code><a href="../reference/gg_density.html">gg_density()</a></code> now labels the axis with the variable name when plotting a <code>dist_kde</code> object, if available.</li>
+<li>
+<code><a href="../reference/hampel_anomalies.html">hampel_anomalies()</a></code> gains <code>alpha</code> and <code>approximation</code> arguments, allowing anomalies to be declared using a significance level rather than a fixed number of standard deviations.</li>
+<li>
+<code><a href="../reference/kde_bandwidth.html">kde_bandwidth()</a></code> gains <code>method = "scv"</code>, a smoothed cross-validation bandwidth estimator using <code><a href="https://mvstat.net/ks/reference/Hscv.html" class="external-link">ks::hscv()</a></code>/<code><a href="https://mvstat.net/ks/reference/Hscv.html" class="external-link">ks::Hscv()</a></code>.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.0.0" id="weird-300">weird 3.0.0<a class="anchor" aria-label="anchor" href="#weird-300"></a></h2><p class="text-muted">CRAN release: 2026-07-06</p>
 <ul><li>Moved the Old Faithful Geyser examples from the README into a new vignette, <code><a href="../articles/old-faithful.html">vignette("old-faithful")</a></code>.</li>
