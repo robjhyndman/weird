@@ -4,6 +4,7 @@
 #' a normal reference rule,
 #' a robust version of the normal reference rule (default),
 #' a plugin estimator,
+#' a smoothed cross-validation estimator,
 #' or using the approach of Hyndman, Kandanaarachchi & Turner (2026).
 #' Details of each method are given in Hyndman (2026).
 #'
@@ -11,7 +12,8 @@
 #' @param method A character string giving the method to use. Possibilities are:
 #' `"normal"` (normal reference rule),
 #' `"robust"` (a robust version of the normal reference rule, the default),
-#' `"plugin"` (a plugin estimator), and
+#' `"plugin"` (a plugin estimator),
+#' `"scv"` (a smoothed cross-validation estimator), and
 #' `"lookout"` (the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner, 2026).
 #' @param ... Additional arguments are ignored.
 #' @references Hyndman, R J, Kandanaarachchi, S & Turner, K (2026)
@@ -30,7 +32,7 @@
 
 kde_bandwidth <- function(
   data,
-  method = c("robust", "normal", "plugin", "lookout"),
+  method = c("robust", "normal", "plugin", "scv", "lookout"),
   ...
 ) {
   method <- match.arg(method)
@@ -44,6 +46,13 @@ kde_bandwidth <- function(
       return(stats::bw.SJ(data))
     } else {
       return(ks::Hpi(data))
+    }
+  }
+  if (method == "scv") {
+    if (d == 1L) {
+      return(ks::hscv(data))
+    } else {
+      return(ks::Hscv(data))
     }
   }
   if (method == "lookout") {

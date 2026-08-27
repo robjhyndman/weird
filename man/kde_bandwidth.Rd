@@ -4,7 +4,11 @@
 \alias{kde_bandwidth}
 \title{Robust bandwidth estimation for kernel density estimation}
 \usage{
-kde_bandwidth(data, method = c("robust", "normal", "plugin", "lookout"), ...)
+kde_bandwidth(
+  data,
+  method = c("robust", "normal", "plugin", "scv", "lookout"),
+  ...
+)
 }
 \arguments{
 \item{data}{A numeric matrix or data frame.}
@@ -12,7 +16,8 @@ kde_bandwidth(data, method = c("robust", "normal", "plugin", "lookout"), ...)
 \item{method}{A character string giving the method to use. Possibilities are:
 \code{"normal"} (normal reference rule),
 \code{"robust"} (a robust version of the normal reference rule, the default),
-\code{"plugin"} (a plugin estimator), and
+\code{"plugin"} (a plugin estimator),
+\code{"scv"} (a smoothed cross-validation estimator), and
 \code{"lookout"} (the bandwidth matrix estimate of Hyndman, Kandanaarachchi & Turner, 2026).}
 
 \item{...}{Additional arguments are ignored.}
@@ -25,6 +30,7 @@ Bandwidth matrices are estimated in several ways including
 a normal reference rule,
 a robust version of the normal reference rule (default),
 a plugin estimator,
+a smoothed cross-validation estimator,
 or using the approach of Hyndman, Kandanaarachchi & Turner (2026).
 Details of each method are given in Hyndman (2026).
 }

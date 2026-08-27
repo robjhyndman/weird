@@ -29,7 +29,7 @@ dist_kde <- function(
   y,
   h = NULL,
   H = NULL,
-  method = c("robust", "normal", "plugin", "lookout"),
+  method = c("robust", "normal", "plugin", "scv", "lookout"),
   ...
 ) {
   method <- match.arg(method)

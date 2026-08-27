@@ -45,6 +45,12 @@ test_that("kde_bandwidth plugin works for univariate data", {
   expect_gt(h, 0)
 })
 
+test_that("kde_bandwidth scv works for univariate data", {
+  h <- kde_bandwidth(x_uni, method = "scv")
+  expect_length(h, 1)
+  expect_gt(h, 0)
+})
+
 test_that("kde_bandwidth lookout works for univariate data", {
   h <- kde_bandwidth(x_uni, method = "lookout")
   expect_length(h, 1)
@@ -69,6 +75,13 @@ test_that("kde_bandwidth normal works for multivariate data", {
 
 test_that("kde_bandwidth plugin works for bivariate data", {
   h <- kde_bandwidth(dat_bi, method = "plugin")
+  expect_true(is.matrix(h))
+  expect_equal(dim(h), c(2L, 2L))
+  expect_true(is_pd(h))
+})
+
+test_that("kde_bandwidth scv works for bivariate data", {
+  h <- kde_bandwidth(dat_bi, method = "scv")
   expect_true(is.matrix(h))
   expect_equal(dim(h), c(2L, 2L))
   expect_true(is_pd(h))
