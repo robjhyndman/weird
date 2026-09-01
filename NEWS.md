@@ -1,9 +1,10 @@
 # weird (development version)
 
-* `dist_kde()` HDR calculations now always use the density at the data points (previously this required at least 200 observations), following `hdrcde`.
-* `gg_density()` now labels the axis with the variable name when plotting a `dist_kde` object, if available.
-* `hampel_anomalies()` gains `alpha` and `approximation` arguments, allowing anomalies to be declared using a significance level rather than a fixed number of standard deviations.
-* `kde_bandwidth()` gains `method = "scv"`, a smoothed cross-validation bandwidth estimator using `ks::hscv()`/`ks::Hscv()`.
+- `dist_kde()` HDR calculations now always use the density at the data points (previously this required at least 200 observations), following `hdrcde`.
+- `dist_density()` removed in favour of `distributional::dist_density()`.
+- `gg_density()` now labels the axis with the variable name when plotting a `dist_kde` object, if available.
+- `hampel_anomalies()` gains `alpha` and `approximation` arguments, allowing anomalies to be declared using a significance level rather than a fixed number of standard deviations.
+- `kde_bandwidth()` gains `method = "scv"`, a smoothed cross-validation bandwidth estimator using `ks::hscv()`/`ks::Hscv()`.
 
 # weird 3.0.0
 

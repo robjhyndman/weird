@@ -325,3 +325,24 @@ parameters.dist_kde <- function(x, ...) {
     list(h = x$kde$h)
   }
 }
+
+# Trapezoidal integration of y(x) over x
+# Assumes x is ordered and x and y are the same length
+# Returns cumulative integral over a grid
+cumintegral <- function(x, y, grid = TRUE) {
+  n <- length(x)
+  if (n == 1) {
+    return(list(x = x, y = 0))
+  }
+  if (grid) {
+    # Set up fine grid
+    xgrid <- seq(x[1], x[n], l = 1001)
+    ygrid <- stats::approx(x, y, xout = xgrid)$y
+  } else {
+    xgrid <- x
+    ygrid <- y
+  }
+  # Apply trapezoidal rule
+  cell <- 0.5 * (ygrid[1:1000] + ygrid[2:1001]) * (xgrid[2] - xgrid[1])
+  list(x = xgrid, y = cumsum(c(0, cell)))
+}
