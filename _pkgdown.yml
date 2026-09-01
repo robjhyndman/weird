@@ -58,6 +58,7 @@ reference:
   contents:
   - dist_mclust
   - hdr_table
+  - hdr_regions
   - density_df
 - title: Functions for producing plots
   contents:

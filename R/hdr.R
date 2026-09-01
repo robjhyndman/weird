@@ -170,42 +170,66 @@ hdr_table_with_data <- function(object, prob, density_df) {
   output |> dplyr::arrange(distribution, prob)
 }
 
-# 1D path: use distributional::hdr() for canonical interval endpoints
-# (`lower`/`upper` columns). Threshold density is read at each lower endpoint
-# and then averaged within each distribution to smooth floating-point noise
-# across multiple intervals at the same level.
+# 1D path: compute interval endpoints and threshold density separately for
+# each distribution, since dist_kde has a much cheaper path available
+# (hdr_intervals_kde()) than the generic distributional::hdr() dispatch.
 hdr_table_1d <- function(object, prob, dist_names) {
-  output <- lapply(prob, function(p) {
-    hdri <- distributional::hdr(object, size = p * 100, n = 4096)
-    intervals <- tibble(
-      prob = p,
-      distribution = dist_names,
-      lower = vctrs::field(hdri, "lower"),
-      upper = vctrs::field(hdri, "upper")
-    ) |>
-      tidyr::unnest(c(lower, upper))
+  per_dist <- mapply(
+    function(dist, name) {
+      hdr_intervals_1d(dist, prob) |>
+        dplyr::mutate(distribution = name, .before = 1)
+    },
+    dist = as.list(object),
+    name = dist_names,
+    SIMPLIFY = FALSE
+  )
+  do.call(rbind, per_dist)
+}
 
-    # Threshold density at each lower endpoint, computed per distribution.
-    intervals_split <- split(intervals, intervals$distribution)[dist_names]
-    per_dist <- mapply(
-      function(dist, df) {
-        df$density <- unlist(density(dist, at = df$lower))
-        df
-      },
-      dist = as.list(object),
-      df = intervals_split,
-      SIMPLIFY = FALSE
+# Interval endpoints and threshold density for the HDR of a single 1d
+# distribution, for each requested prob. Some distributions (e.g. a
+# multimodal dist_kde) can have several disjoint intervals per prob.
+hdr_intervals_1d <- function(object, prob) {
+  if ("kde" %in% stats::family(object)) {
+    hdr_intervals_kde(object, prob)
+  } else {
+    # Use distributional::hdr() for canonical interval endpoints. Threshold
+    # density is read at each lower endpoint and then averaged to smooth
+    # floating-point noise across multiple intervals at the same level.
+    do.call(
+      rbind,
+      lapply(prob, function(p) {
+        hdri <- distributional::hdr(object, size = p * 100, n = 4096)
+        lower <- vctrs::field(hdri, "lower")[[1]]
+        upper <- vctrs::field(hdri, "upper")[[1]]
+        density <- mean(unlist(density(object, at = lower)))
+        tibble(prob = p, lower = lower, upper = upper, density = density)
+      })
     )
-    out <- do.call(rbind, per_dist)
+  }
+}
 
-    # Average within each distribution (not across).
-    out |>
-      dplyr::group_by(distribution) |>
-      dplyr::mutate(density = mean(density)) |>
-      dplyr::ungroup()
-  })
+# Interval endpoints and threshold density for a single dist_kde
+# distribution, for each requested prob. Only falpha (the threshold) depends
+# on prob, so the density at the data points and the quantile grid used to
+# trace interval boundaries are computed once here, rather than once per
+# prob inside distributional::hdr()/hdr.dist_kde().
+hdr_intervals_kde <- function(object, prob, n = 4096) {
+  x <- vctrs::vec_data(object)[[1]]$kde$x
+  den_data <- unlist(density(object, at = x))
+  grid_x <- unlist(quantile(object, seq(0.5 / n, 1 - 0.5 / n, length.out = n)))
+  grid_y <- unlist(density(object, at = grid_x))
 
-  do.call(rbind, output)
+  do.call(
+    rbind,
+    lapply(prob, function(p) {
+      falpha <- hdr_thresholds_from_data(den_data, p)
+      hdr <- crossing_alpha(falpha, grid_x, grid_y)
+      lower <- sort(hdr[seq_along(hdr) %% 2 == 1])
+      upper <- sort(hdr[seq_along(hdr) %% 2 == 0])
+      tibble(prob = p, lower = lower, upper = upper, density = falpha)
+    })
+  )
 }
 
 # 2D path. For a KDE, falpha is the (1 - p) quantile of the density evaluated
@@ -224,18 +248,23 @@ hdr_table_2d <- function(object, prob, dist_names, density_df) {
   } else {
     kde_x <- vctrs::vec_data(object)[[1]]$kde$x
     den_at_data <- density(object, at = kde_x)[[1]]
-    thresholds <- vapply(
-      prob,
-      function(p) {
-        stats::quantile(den_at_data, probs = 1 - p, type = 8, names = FALSE)
-      },
-      numeric(1L)
-    )
+    thresholds <- hdr_thresholds_from_data(den_at_data, prob)
   }
   tibble(
     distribution = dist_names[1],
     prob = prob,
     density = thresholds
+  )
+}
+
+# falpha is the (1 - p) quantile of the density evaluated at the data points.
+hdr_thresholds_from_data <- function(den_at_data, prob) {
+  vapply(
+    prob,
+    function(p) {
+      stats::quantile(den_at_data, probs = 1 - p, type = 8, names = FALSE)
+    },
+    numeric(1L)
   )
 }
 
@@ -266,6 +295,104 @@ hdr_thresholds_from_grid <- function(density, prob) {
     },
     numeric(1L)
   )
+}
+
+#' @title Highest density regions for each observation
+#' @description
+#' For a `dist_kde` object, determine which highest density region (HDR)
+#' each observation falls in, for one or more coverage probabilities. Some
+#' densities are multimodal, so the HDR for a given `prob` can consist of
+#' several disjoint regions; the returned columns identify the specific
+#' region (`1`, `2`, ...) that each observation falls in, ordered from
+#' lowest to highest along the first variable, with `NA` for observations
+#' outside the HDR at that `prob`.
+#' @param object A `dist_kde` object, as returned by `dist_kde()`, containing
+#' a single distribution estimated from univariate or bivariate data.
+#' @param prob A numeric vector of probabilities giving the HDR coverage
+#' (between 0 and 1).
+#' @return A tibble containing the data used to estimate `object` (in
+#' column `x`, and `y` for bivariate data), along with one additional integer
+#' column per element of `prob` (named `hdr_<100*prob>`) showing which region
+#' of the corresponding HDR each observation falls in.
+#' @author Rob J Hyndman
+#' @seealso \code{\link{hdr_table}}, \code{\link{gg_hdrboxplot}}
+#' @examples
+#' dist_kde(oldfaithful$duration) |> hdr_regions(c(0.5, 0.95))
+#' dist_kde(oldfaithful[, c("duration", "waiting")]) |> hdr_regions(0.90)
+#' @export
+hdr_regions <- function(object, prob) {
+  if (!("kde" %in% stats::family(object))) {
+    stop("object must be a dist_kde object")
+  }
+  if (length(object) != 1L) {
+    stop("hdr_regions() requires a single dist_kde distribution")
+  }
+  d <- dimension_dist(object)
+  prob <- sort(unique(prob))
+  if (d == 1L) {
+    hdr_regions_1d(object, prob)
+  } else if (d == 2L) {
+    hdr_regions_2d(object, prob)
+  } else {
+    stop("hdr_regions() is not implemented for dimensions greater than 2")
+  }
+}
+
+hdr_colname <- function(prob) {
+  paste0("hdr_", 100 * prob)
+}
+
+hdr_regions_1d <- function(object, prob) {
+  x <- vctrs::vec_data(object)[[1]]$kde$x
+  intervals <- hdr_intervals_kde(object, prob)
+
+  out <- tibble(x = x)
+  for (p in prob) {
+    ivl <- intervals[intervals$prob == p, ]
+    region <- rep(NA_integer_, length(x))
+    for (j in seq_len(nrow(ivl))) {
+      region[x >= ivl$lower[j] & x <= ivl$upper[j]] <- j
+    }
+    out[[hdr_colname(p)]] <- region
+  }
+  out
+}
+
+hdr_regions_2d <- function(object, prob) {
+  kde <- vctrs::vec_data(object)[[1]]$kde
+  xy <- kde$x
+  ex <- kde$eval.points[[1]]
+  ey <- kde$eval.points[[2]]
+  grid_xy <- as.matrix(expand.grid(x = ex, y = ey))
+  den_data <- unlist(density(object, at = xy))
+  nn_idx <- RANN::nn2(data = grid_xy, query = xy, k = 1L)$nn.idx[, 1]
+  thresholds <- hdr_thresholds_from_data(den_data, prob)
+
+  out <- tibble(x = xy[, 1], y = xy[, 2])
+  for (i in seq_along(prob)) {
+    threshold <- thresholds[i]
+    # kde$estimate is already an nx x ny matrix, so this comparison keeps its shape.
+    labels <- label_components(kde$estimate > threshold)
+    region <- as.vector(labels)[nn_idx]
+    region[region == 0L | den_data <= threshold] <- NA_integer_
+    out[[hdr_colname(prob[i])]] <- region
+  }
+  out
+}
+
+# Label the 4-connected components of a logical matrix, returning an integer
+# matrix of the same shape (0 = FALSE cells). Grid cells one row/column apart
+# are at Euclidean distance 1 and diagonal neighbours at distance sqrt(2), so
+# dbscan() with eps = 1.1 and minPts = 1 links only 4-connected cells and
+# leaves no cell unclustered.
+label_components <- function(mask) {
+  idx <- which(mask, arr.ind = TRUE)
+  labels <- matrix(0L, nrow(mask), ncol(mask))
+  if (nrow(idx) == 0L) {
+    return(labels)
+  }
+  labels[idx] <- dbscan::dbscan(idx, eps = 1.1, minPts = 1)$cluster
+  labels
 }
 
 # Color palette for plotting Highest Density Regions.

@@ -153,6 +153,77 @@ test_that("hdr_table 1d and 2d use the same falpha definition", {
   expect_equal(result$density[1], expected, tolerance = 1e-2)
 })
 
+# hdr_regions() ------------------------------------------------------------
+
+test_that("hdr_regions returns tibble with correct columns (1d)", {
+  set.seed(1)
+  result <- dist_kde(rnorm(200)) |> hdr_regions(c(0.5, 0.95))
+  expect_s3_class(result, "tbl_df")
+  expect_equal(names(result), c("x", "hdr_50", "hdr_95"))
+  expect_equal(nrow(result), 200L)
+})
+
+test_that("hdr_regions coverage matches prob for a unimodal 1d density", {
+  set.seed(1)
+  result <- dist_kde(rnorm(2000)) |> hdr_regions(c(0.5, 0.9))
+  expect_equal(mean(!is.na(result$hdr_50)), 0.5, tolerance = 0.05)
+  expect_equal(mean(!is.na(result$hdr_90)), 0.9, tolerance = 0.05)
+})
+
+test_that("hdr_regions identifies two separate regions for a bimodal 1d density", {
+  set.seed(1)
+  result <- dist_kde(c(rnorm(300), rnorm(300, 8))) |> hdr_regions(0.5)
+  expect_setequal(na.omit(result$hdr_50), c(1L, 2L))
+  low_mode <- result$x < 4
+  expect_all_equal(result$hdr_50[low_mode & !is.na(result$hdr_50)], 1L)
+  expect_all_equal(result$hdr_50[!low_mode & !is.na(result$hdr_50)], 2L)
+})
+
+test_that("hdr_regions returns tibble with correct columns (2d)", {
+  set.seed(1)
+  result <- dist_kde(cbind(rnorm(200), rnorm(200))) |> hdr_regions(c(0.5, 0.9))
+  expect_s3_class(result, "tbl_df")
+  expect_equal(names(result), c("x", "y", "hdr_50", "hdr_90"))
+  expect_equal(nrow(result), 200L)
+})
+
+test_that("hdr_regions coverage matches prob for a unimodal 2d density", {
+  set.seed(1)
+  result <- dist_kde(cbind(rnorm(1000), rnorm(1000))) |> hdr_regions(0.9)
+  expect_equal(mean(!is.na(result$hdr_90)), 0.9, tolerance = 0.05)
+})
+
+test_that("hdr_regions identifies two separate regions for a bimodal 2d density", {
+  set.seed(2)
+  data <- rbind(
+    cbind(rnorm(300), rnorm(300)),
+    cbind(rnorm(300, 10), rnorm(300, 10))
+  )
+  result <- dist_kde(data) |> hdr_regions(0.5)
+  expect_setequal(na.omit(result$hdr_50), c(1L, 2L))
+  low_mode <- result$x < 5
+  expect_all_equal(result$hdr_50[low_mode & !is.na(result$hdr_50)], 1L)
+  expect_all_equal(result$hdr_50[!low_mode & !is.na(result$hdr_50)], 2L)
+})
+
+test_that("hdr_regions errors for dimensions greater than 2", {
+  set.seed(1)
+  dist <- dist_kde(cbind(rnorm(50), rnorm(50), rnorm(50)))
+  expect_snapshot(hdr_regions(dist, 0.5), error = TRUE)
+})
+
+test_that("hdr_regions errors for multiple distributions", {
+  dist <- dist_kde(list(rnorm(100), rnorm(100)))
+  expect_snapshot(hdr_regions(dist, 0.5), error = TRUE)
+})
+
+test_that("hdr_regions errors for a non-kde distribution", {
+  expect_snapshot(
+    hdr_regions(distributional::dist_normal(), 0.5),
+    error = TRUE
+  )
+})
+
 # gg_hdrboxplot() ---------------------------------------------------------
 
 df_1d <- data.frame(x = rnorm(100))

@@ -4,6 +4,7 @@
 - `dist_density()` removed in favour of `distributional::dist_density()`.
 - `gg_density()` now labels the axis with the variable name when plotting a `dist_kde` object, if available.
 - `hampel_anomalies()` gains `alpha` and `approximation` arguments, allowing anomalies to be declared using a significance level rather than a fixed number of standard deviations.
+- `hdr_regions()` added, showing which highest density region each observation falls in, for one or more coverage probabilities, from a univariate or bivariate `dist_kde` object.
 - `kde_bandwidth()` gains `method = "scv"`, a smoothed cross-validation bandwidth estimator using `ks::hscv()`/`ks::Hscv()`.
 
 # weird 3.0.0

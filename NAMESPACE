@@ -43,6 +43,7 @@ export(gg_hdrboxplot)
 export(glosh_scores)
 export(grubbs_anomalies)
 export(hampel_anomalies)
+export(hdr_regions)
 export(hdr_table)
 export(kde_bandwidth)
 export(lof_scores)
@@ -55,46 +56,60 @@ export(surprisals)
 export(surprisals_prob)
 importFrom(aplpack,compute.bagplot)
 importFrom(broom,augment)
-importFrom(dbscan,hdbscan)
-importFrom(dbscan,lof)
-importFrom(dplyr,filter)
-importFrom(dplyr,select)
-importFrom(dplyr,tibble)
-importFrom(evd,fpot)
-importFrom(evd,pgpd)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,autoplot)
-importFrom(ggplot2,expansion)
-importFrom(ggplot2,geom_contour)
-importFrom(ggplot2,geom_contour_filled)
-importFrom(ggplot2,geom_hline)
-importFrom(ggplot2,geom_line)
-importFrom(ggplot2,geom_point)
-importFrom(ggplot2,geom_polygon)
-importFrom(ggplot2,geom_segment)
-importFrom(ggplot2,geom_text)
-importFrom(ggplot2,geom_vline)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,guide_legend)
-importFrom(ggplot2,guides)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,scale_colour_manual)
-importFrom(ggplot2,scale_fill_manual)
-importFrom(ggplot2,scale_x_continuous)
-importFrom(ggplot2,theme)
-importFrom(grid,arrow)
-importFrom(grid,unit)
-importFrom(stats,approx)
-importFrom(stats,dbinom)
-importFrom(stats,density)
-importFrom(stats,dnorm)
-importFrom(stats,dpois)
-importFrom(stats,mad)
-importFrom(stats,median)
-importFrom(stats,na.omit)
-importFrom(stats,qchisq)
-importFrom(stats,qnorm)
-importFrom(stats,quantile)
-importFrom(stats,var)
-importFrom(utils,head)
-importFrom(utils,tail)
+importFrom(dbscan,
+  hdbscan,
+  lof
+)
+importFrom(dplyr,
+  filter,
+  select,
+  tibble
+)
+importFrom(evd,
+  fpot,
+  pgpd
+)
+importFrom(ggplot2,
+  aes,
+  autoplot,
+  expansion,
+  geom_contour,
+  geom_contour_filled,
+  geom_hline,
+  geom_line,
+  geom_point,
+  geom_polygon,
+  geom_segment,
+  geom_text,
+  geom_vline,
+  ggplot,
+  guide_legend,
+  guides,
+  labs,
+  scale_colour_manual,
+  scale_fill_manual,
+  scale_x_continuous,
+  theme
+)
+importFrom(grid,
+  arrow,
+  unit
+)
+importFrom(stats,
+  approx,
+  dbinom,
+  density,
+  dnorm,
+  dpois,
+  mad,
+  median,
+  na.omit,
+  qchisq,
+  qnorm,
+  quantile,
+  var
+)
+importFrom(utils,
+  head,
+  tail
+)
