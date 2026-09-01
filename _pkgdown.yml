@@ -56,7 +56,6 @@ reference:
   - kde_bandwidth
 - title: Functions for distributions
   contents:
-  - dist_density
   - dist_mclust
   - hdr_table
   - density_df
