@@ -75,10 +75,19 @@ gg_hdrboxplot <- function(
   # Set up color palette
   hdr_colors <- make_hdr_colors(dist, color, prob)
 
-  # Pre-compute density grid once for use by both hdr_table() and gg_density*.
+  # Pre-compute density grid once for use by both hdr_table() and gg_density*,
+  # and density at the data points once for use by both make_threshold() and
+  # show_data() (dist is always a single dist_kde distribution here).
   df <- density_df(dist)
-  threshold <- make_threshold(dist, prob, df)
-  show_x <- show_data(dist, prob, threshold, anomalies = show_anomalies)
+  den_at_data <- kde_den_at_data(dist)
+  threshold <- make_threshold(dist, prob, df, den_at_data = den_at_data)
+  show_x <- show_data(
+    dist,
+    prob,
+    threshold,
+    anomalies = show_anomalies,
+    den_at_data = den_at_data
+  )
   if (NROW(show_x) != NROW(data)) {
     stop("Something has gone wrong here!")
   }
@@ -156,15 +165,21 @@ hdr_table <- function(object, prob) {
   hdr_table_with_data(object, prob, density_df)
 }
 
-hdr_table_with_data <- function(object, prob, density_df) {
+hdr_table_with_data <- function(object, prob, density_df, den_at_data = NULL) {
   d <- dimension_dist(object)
   prob <- sort(unique(prob), decreasing = TRUE)
   dist_names <- names_dist(object)
 
   output <- if (d == 1L) {
-    hdr_table_1d(object, prob, dist_names)
+    hdr_table_1d(object, prob, dist_names, den_at_data = den_at_data)
   } else {
-    hdr_table_2d(object, prob, dist_names, density_df = density_df)
+    hdr_table_2d(
+      object,
+      prob,
+      dist_names,
+      density_df = density_df,
+      den_at_data = den_at_data
+    )
   }
 
   output |> dplyr::arrange(distribution, prob)
@@ -173,10 +188,14 @@ hdr_table_with_data <- function(object, prob, density_df) {
 # 1D path: compute interval endpoints and threshold density separately for
 # each distribution, since dist_kde has a much cheaper path available
 # (hdr_intervals_kde()) than the generic distributional::hdr() dispatch.
-hdr_table_1d <- function(object, prob, dist_names) {
+# `den_at_data`, when supplied, is the density at the data points for
+# `object`'s single distribution (see kde_den_at_data()), letting a caller
+# that already has it (gg_hdrboxplot()) avoid recomputing it here.
+hdr_table_1d <- function(object, prob, dist_names, den_at_data = NULL) {
+  reuse <- !is.null(den_at_data) && length(object) == 1L
   per_dist <- mapply(
     function(dist, name) {
-      hdr_intervals_1d(dist, prob) |>
+      hdr_intervals_1d(dist, prob, den_at_data = if (reuse) den_at_data) |>
         dplyr::mutate(distribution = name, .before = 1)
     },
     dist = as.list(object),
@@ -189,9 +208,9 @@ hdr_table_1d <- function(object, prob, dist_names) {
 # Interval endpoints and threshold density for the HDR of a single 1d
 # distribution, for each requested prob. Some distributions (e.g. a
 # multimodal dist_kde) can have several disjoint intervals per prob.
-hdr_intervals_1d <- function(object, prob) {
+hdr_intervals_1d <- function(object, prob, den_at_data = NULL) {
   if ("kde" %in% stats::family(object)) {
-    hdr_intervals_kde(object, prob)
+    hdr_intervals_kde(object, prob, den_at_data = den_at_data)
   } else {
     # Use distributional::hdr() for canonical interval endpoints. Threshold
     # density is read at each lower endpoint and then averaged to smooth
@@ -213,17 +232,20 @@ hdr_intervals_1d <- function(object, prob) {
 # distribution, for each requested prob. Only falpha (the threshold) depends
 # on prob, so the density at the data points and the quantile grid used to
 # trace interval boundaries are computed once here, rather than once per
-# prob inside distributional::hdr()/hdr.dist_kde().
-hdr_intervals_kde <- function(object, prob, n = 4096) {
-  x <- vctrs::vec_data(object)[[1]]$kde$x
-  den_data <- unlist(density(object, at = x))
+# prob inside distributional::hdr()/hdr.dist_kde(). `den_at_data` lets a
+# caller that already has the density at the data points (kde_den_at_data())
+# pass it in rather than have it recomputed.
+hdr_intervals_kde <- function(object, prob, n = 4096, den_at_data = NULL) {
+  if (is.null(den_at_data)) {
+    den_at_data <- kde_den_at_data(object)
+  }
   grid_x <- unlist(quantile(object, seq(0.5 / n, 1 - 0.5 / n, length.out = n)))
   grid_y <- unlist(density(object, at = grid_x))
 
   do.call(
     rbind,
     lapply(prob, function(p) {
-      falpha <- hdr_thresholds_from_data(den_data, p)
+      falpha <- hdr_thresholds_from_data(den_at_data, p)
       hdr <- crossing_alpha(falpha, grid_x, grid_y)
       lower <- sort(hdr[seq_along(hdr) %% 2 == 1])
       upper <- sort(hdr[seq_along(hdr) %% 2 == 0])
@@ -232,13 +254,25 @@ hdr_intervals_kde <- function(object, prob, n = 4096) {
   )
 }
 
+# Density at the data points used to fit a single KDE distribution.
+kde_den_at_data <- function(object) {
+  x <- vctrs::vec_data(object)[[1]]$kde$x
+  unlist(density(object, at = x))
+}
+
 # 2D path. For a KDE, falpha is the (1 - p) quantile of the density evaluated
 # at the data points, matching the 1D path (hdr.dist_kde). This keeps the HDR
 # threshold consistent with surprisal-based anomalies, which are also computed
 # from the density at the data points. For non-KDE densities, there is no
 # sample to estimate falpha this way, so we fall back to the mass-weighted
 # (1-p)-quantile of density values from the regular grid.
-hdr_table_2d <- function(object, prob, dist_names, density_df) {
+hdr_table_2d <- function(
+  object,
+  prob,
+  dist_names,
+  density_df,
+  den_at_data = NULL
+) {
   if (length(object) > 1L) {
     stop("Currently only supporting one bivariate density")
   }
@@ -246,8 +280,9 @@ hdr_table_2d <- function(object, prob, dist_names, density_df) {
   if (!is_kde) {
     thresholds <- hdr_thresholds_from_grid(density_df$density, prob)
   } else {
-    kde_x <- vctrs::vec_data(object)[[1]]$kde$x
-    den_at_data <- density(object, at = kde_x)[[1]]
+    if (is.null(den_at_data)) {
+      den_at_data <- kde_den_at_data(object)
+    }
     thresholds <- hdr_thresholds_from_data(den_at_data, prob)
   }
   tibble(
@@ -364,7 +399,7 @@ hdr_regions_2d <- function(object, prob) {
   ex <- kde$eval.points[[1]]
   ey <- kde$eval.points[[2]]
   grid_xy <- as.matrix(expand.grid(x = ex, y = ey))
-  den_data <- unlist(density(object, at = xy))
+  den_data <- kde_den_at_data(object)
   nn_idx <- RANN::nn2(data = grid_xy, query = xy, k = 1L)$nn.idx[, 1]
   thresholds <- hdr_thresholds_from_data(den_data, prob)
 
@@ -418,8 +453,8 @@ make_hdr_colors <- function(object, colors, prob) {
   hdr_colors
 }
 
-make_threshold <- function(dist, prob, df) {
-  hdr_table_with_data(dist, prob, density_df = df) |>
+make_threshold <- function(dist, prob, df, den_at_data = NULL) {
+  hdr_table_with_data(dist, prob, density_df = df, den_at_data = den_at_data) |>
     dplyr::transmute(
       level = 100 * prob,
       distribution = distribution,

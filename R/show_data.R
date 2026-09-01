@@ -1,7 +1,13 @@
 # Function to construct a data frame for plotting purposes
 # The object is a distributional object returned from dist_kde()
 
-show_data <- function(object, prob, threshold, anomalies = FALSE) {
+show_data <- function(
+  object,
+  prob,
+  threshold,
+  anomalies = FALSE,
+  den_at_data = NULL
+) {
   # Names of distributions
   dist_names <- names_dist(object)
   d <- dimension_dist(object)
@@ -26,17 +32,22 @@ show_data <- function(object, prob, threshold, anomalies = FALSE) {
     x,
     names(x)
   )
-  # Compute density values
-  show_x <- mapply(
-    function(u, dist) {
-      d <- NCOL(u) - 1
-      u$den <- unlist(density(dist, at = as.matrix(u[, seq(d)])))
-      return(u)
-    },
-    u = show_x,
-    dist = as.list(object),
-    SIMPLIFY = FALSE
-  )
+  # Compute density values, reusing a precomputed vector when the caller
+  # (gg_hdrboxplot(), for its single KDE distribution) already has it.
+  if (!is.null(den_at_data) && length(object) == 1L) {
+    show_x[[1]]$den <- den_at_data
+  } else {
+    show_x <- mapply(
+      function(u, dist) {
+        d <- NCOL(u) - 1
+        u$den <- unlist(density(dist, at = as.matrix(u[, seq(d)])))
+        return(u)
+      },
+      u = show_x,
+      dist = as.list(object),
+      SIMPLIFY = FALSE
+    )
+  }
   # Compute surprisal probabilities
   if (anomalies) {
     show_x <- mapply(
