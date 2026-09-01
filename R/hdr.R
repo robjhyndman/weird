@@ -345,8 +345,8 @@ hdr_thresholds_from_grid <- function(density, prob) {
 #' a single distribution estimated from univariate or bivariate data.
 #' @param prob A numeric vector of probabilities giving the HDR coverage
 #' (between 0 and 1).
-#' @return A tibble containing the data used to estimate `object` (in
-#' column `x`, and `y` for bivariate data), along with one additional integer
+#' @return A tibble containing the data used to estimate `object`,
+#' along with one additional integer
 #' column per element of `prob` (named `hdr_<100*prob>`) showing which region
 #' of the corresponding HDR each observation falls in.
 #' @author Rob J Hyndman
@@ -378,10 +378,14 @@ hdr_colname <- function(prob) {
 }
 
 hdr_regions_1d <- function(object, prob) {
-  x <- vctrs::vec_data(object)[[1]]$kde$x
+  kde <- vctrs::vec_data(object)[[1]]$kde
+  x <- as.vector(kde$x)
+  xname <- colnames(kde$x)
+  xname <- if (is.null(xname)) "x" else xname[1]
   intervals <- hdr_intervals_kde(object, prob)
 
   out <- tibble(x = x)
+  names(out)[1] <- xname
   for (p in prob) {
     ivl <- intervals[intervals$prob == p, ]
     region <- rep(NA_integer_, length(x))
@@ -396,6 +400,10 @@ hdr_regions_1d <- function(object, prob) {
 hdr_regions_2d <- function(object, prob) {
   kde <- vctrs::vec_data(object)[[1]]$kde
   xy <- kde$x
+  varnames <- colnames(xy)
+  if (is.null(varnames)) {
+    varnames <- c("x", "y")
+  }
   ex <- kde$eval.points[[1]]
   ey <- kde$eval.points[[2]]
   grid_xy <- as.matrix(expand.grid(x = ex, y = ey))
@@ -404,6 +412,7 @@ hdr_regions_2d <- function(object, prob) {
   thresholds <- hdr_thresholds_from_data(den_data, prob)
 
   out <- tibble(x = xy[, 1], y = xy[, 2])
+  names(out)[1:2] <- varnames
   for (i in seq_along(prob)) {
     threshold <- thresholds[i]
     # kde$estimate is already an nx x ny matrix, so this comparison keeps its shape.

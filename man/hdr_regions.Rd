@@ -14,8 +14,8 @@ a single distribution estimated from univariate or bivariate data.}
 (between 0 and 1).}
 }
 \value{
-A tibble containing the data used to estimate \code{object} (in
-column \code{x}, and \code{y} for bivariate data), along with one additional integer
+A tibble containing the data used to estimate \code{object},
+along with one additional integer
 column per element of \code{prob} (named \verb{hdr_<100*prob>}) showing which region
 of the corresponding HDR each observation falls in.
 }

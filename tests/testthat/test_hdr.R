@@ -179,6 +179,19 @@ test_that("hdr_regions identifies two separate regions for a bimodal 1d density"
   expect_all_equal(result$hdr_50[!low_mode & !is.na(result$hdr_50)], 2L)
 })
 
+test_that("hdr_regions uses original variable names when available (1d)", {
+  set.seed(1)
+  result <- dist_kde(oldfaithful["duration"]) |> hdr_regions(0.5)
+  expect_equal(names(result), c("duration", "hdr_50"))
+})
+
+test_that("hdr_regions uses original variable names when available (2d)", {
+  set.seed(1)
+  result <- dist_kde(oldfaithful[, c("duration", "waiting")]) |>
+    hdr_regions(0.5)
+  expect_equal(names(result), c("duration", "waiting", "hdr_50"))
+})
+
 test_that("hdr_regions returns tibble with correct columns (2d)", {
   set.seed(1)
   result <- dist_kde(cbind(rnorm(200), rnorm(200))) |> hdr_regions(c(0.5, 0.9))
