@@ -27,15 +27,12 @@ ggplot2::theme_set(
 # weird  <img src="man/figures/weird-hex.png" align="right" width = 150 />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/robjhyndman/weird/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/robjhyndman/weird/actions/workflows/R-CMD-check.yaml)
-[![CRAN status](https://www.r-pkg.org/badges/version/weird)](https://CRAN.R-project.org/package=weird)
-[![Downloads](https://cranlogs.r-pkg.org/badges/weird)](https://cran.r-project.org/package=weird)
-[![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-<!-- badges: end -->
+[![R-CMD-check](https://github.com/robjhyndman/weird/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/robjhyndman/weird/actions/workflows/R-CMD-check.yaml) [![CRAN status](https://www.r-pkg.org/badges/version/weird)](https://CRAN.R-project.org/package=weird) [![Downloads](https://cranlogs.r-pkg.org/badges/weird)](https://cran.r-project.org/package=weird) [![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) <!-- badges: end -->
 
 ## Overview
 
-The weird package contains functions and data used in the book [*That's Weird: Anomaly Detection Using R*](https://OTexts.com/weird/) by Rob J Hyndman. It also loads several packages needed to do the analysis described in the book.
+The weird package contains functions and data used in the book [*That's Weird: Anomaly Detection Using R*](https://OTexts.com/weird/) by Rob J Hyndman.
+It also loads several packages needed to do the analysis described in the book.
 
 ## Installation
 
