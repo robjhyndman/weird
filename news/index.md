@@ -1,5 +1,7 @@
 # Changelog
 
+## weird (development version)
+
 ## weird 3.1.0
 
 - [`dist_kde()`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)
