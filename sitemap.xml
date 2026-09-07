@@ -10,7 +10,6 @@
 <url><loc>https://pkg.robjhyndman.com/weird/reference/biplot_projection.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/cricket_batting.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/density_df.html</loc></url>
-<url><loc>https://pkg.robjhyndman.com/weird/reference/dist_density.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/dist_kde.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/dist_mclust.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/fetch_air_quality.html</loc></url>
@@ -22,6 +21,7 @@
 <url><loc>https://pkg.robjhyndman.com/weird/reference/grubbs_anomalies.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/gun_deaths.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/hampel_anomalies.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird/reference/hdr_regions.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/hdr_table.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/index.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/kde_bandwidth.html</loc></url>

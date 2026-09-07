@@ -230,7 +230,10 @@ the methods.
 oldfaithful |>
   mutate(
     surprisal = surprisals(cbind(duration, waiting)),
-    surprisal_prob = surprisals_prob(cbind(duration, waiting), approximation = "gpd"),
+    surprisal_prob = surprisals_prob(
+      cbind(duration, waiting),
+      approximation = "gpd"
+    ),
     strayscore = stray_scores(cbind(duration, waiting)),
     lofscore = lof_scores(cbind(duration, waiting), k = 150),
     gloshscore = glosh_scores(cbind(duration, waiting))

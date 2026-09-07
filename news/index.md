@@ -6,17 +6,23 @@
   HDR calculations now always use the density at the data points
   (previously this required at least 200 observations), following
   `hdrcde`.
+- `dist_density()` removed in favour of
+  `distributional::dist_density()`.
 - [`gg_density()`](https://pkg.robjhyndman.com/weird/reference/gg_density.md)
   now labels the axis with the variable name when plotting a `dist_kde`
   object, if available.
-- [`hampel_anomalies()`](https://pkg.robjhyndman.com/weird/reference/hampel_anomalies.md)
-  gains `alpha` and `approximation` arguments, allowing anomalies to be
-  declared using a significance level rather than a fixed number of
-  standard deviations.
+- [`hdr_regions()`](https://pkg.robjhyndman.com/weird/reference/hdr_regions.md)
+  added, showing which highest density region each observation falls in,
+  for one or more coverage probabilities, from a univariate or bivariate
+  `dist_kde` object.
 - [`kde_bandwidth()`](https://pkg.robjhyndman.com/weird/reference/kde_bandwidth.md)
   gains `method = "scv"`, a smoothed cross-validation bandwidth
   estimator using
   [`ks::hscv()`](https://mvstat.net/ks/reference/Hscv.html)/[`ks::Hscv()`](https://mvstat.net/ks/reference/Hscv.html).
+- [`hampel_anomalies()`](https://pkg.robjhyndman.com/weird/reference/hampel_anomalies.md)
+  gains `alpha` and `approximation` arguments, allowing anomalies to be
+  declared using a significance level rather than a fixed number of
+  standard deviations.
 
 ## weird 3.0.0
 
@@ -104,8 +110,7 @@ CRAN release: 2026-01-27
   [distributional](https://pkg.robjhyndman.com/distributional/) objects
 - Added
   [`dist_kde()`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)
-  and
-  [`dist_density()`](https://pkg.robjhyndman.com/weird/reference/dist_density.md)
+  and `dist_density()`
 - Removed `as_kde()` and `autoplot.kde()`
 - Rewrote
   [`kde_bandwidth()`](https://pkg.robjhyndman.com/weird/reference/kde_bandwidth.md)

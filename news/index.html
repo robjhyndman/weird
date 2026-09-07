@@ -41,11 +41,15 @@
 <ul><li>
 <code><a href="../reference/dist_kde.html">dist_kde()</a></code> HDR calculations now always use the density at the data points (previously this required at least 200 observations), following <code>hdrcde</code>.</li>
 <li>
+<code>dist_density()</code> removed in favour of <code>distributional::dist_density()</code>.</li>
+<li>
 <code><a href="../reference/gg_density.html">gg_density()</a></code> now labels the axis with the variable name when plotting a <code>dist_kde</code> object, if available.</li>
 <li>
-<code><a href="../reference/hampel_anomalies.html">hampel_anomalies()</a></code> gains <code>alpha</code> and <code>approximation</code> arguments, allowing anomalies to be declared using a significance level rather than a fixed number of standard deviations.</li>
+<code><a href="../reference/hdr_regions.html">hdr_regions()</a></code> added, showing which highest density region each observation falls in, for one or more coverage probabilities, from a univariate or bivariate <code>dist_kde</code> object.</li>
 <li>
 <code><a href="../reference/kde_bandwidth.html">kde_bandwidth()</a></code> gains <code>method = "scv"</code>, a smoothed cross-validation bandwidth estimator using <code><a href="https://mvstat.net/ks/reference/Hscv.html" class="external-link">ks::hscv()</a></code>/<code><a href="https://mvstat.net/ks/reference/Hscv.html" class="external-link">ks::Hscv()</a></code>.</li>
+<li>
+<code><a href="../reference/hampel_anomalies.html">hampel_anomalies()</a></code> gains <code>alpha</code> and <code>approximation</code> arguments, allowing anomalies to be declared using a significance level rather than a fixed number of standard deviations.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.0.0" id="weird-300">weird 3.0.0<a class="anchor" aria-label="anchor" href="#weird-300"></a></h2><p class="text-muted">CRAN release: 2026-07-06</p>
@@ -97,7 +101,7 @@
 <ul><li>Added <code>fr_mortality</code> data set</li>
 <li>Updated <code>oldfaithful</code> and <code>cricket_batting</code> data sets</li>
 <li>Refactored package to use <a href="https://pkg.robjhyndman.com/distributional/" class="external-link">distributional</a> objects</li>
-<li>Added <code><a href="../reference/dist_kde.html">dist_kde()</a></code> and <code><a href="../reference/dist_density.html">dist_density()</a></code>
+<li>Added <code><a href="../reference/dist_kde.html">dist_kde()</a></code> and <code>dist_density()</code>
 </li>
 <li>Removed <code>as_kde()</code> and <code>autoplot.kde()</code>
 </li>

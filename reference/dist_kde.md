@@ -68,7 +68,7 @@ Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
 dist_kde(c(rnorm(200), rnorm(100, 5)))
 #> <distribution[1]>
 #> [1] kde[1d, h=0.6]
-dist_kde(cbind(rnorm(200), rnorm(200, 5)))
+dist_kde(cbind(rnorm(200), rnorm(200, 5)), binned = TRUE)
 #> <distribution[1]>
 #> [1] kde[2d, H={(0.15, -0.0041)', (-0.0041, 0.2)'}]
 ```
