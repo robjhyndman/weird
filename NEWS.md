@@ -1,3 +1,5 @@
+# weird (development version)
+
 # weird 3.1.0
 
 - `dist_kde()` HDR calculations now always use the density at the data points (previously this required at least 200 observations), following `hdrcde`.
