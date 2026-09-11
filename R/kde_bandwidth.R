@@ -61,7 +61,7 @@ kde_bandwidth <- function(
     } else {
       death_radi <- mlpack::emst(mvscale(as.matrix(data)))[, 3]
     }
-    cc <- unname(quantile(death_radi, probs = 0.98, type = 8L))
+    cc <- unname(quantile(death_radi, probs = 0.98, type = 8L))^2
   } else {
     cc <- (4 / (n * (d + 2)))^(2 / (d + 4))
   }
