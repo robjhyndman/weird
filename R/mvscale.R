@@ -29,7 +29,7 @@
 #' @param ... Other arguments are passed to `cov()`.
 #' @return A vector, matrix or data frame of the same size and class as `object`,
 #' but with numerical variables replaced by scaled versions (renamed if they have been rotated).
-#' @seealso [base::scale()], [stats::sd()], [stats::cov()], [robustbase::covOGK()], [robustbase::s_Qn()]
+#' @seealso [base::scale()], [stats::sd()], [stats::cov()], [robustbase::covMcd()], [robustbase::covOGK()], [robustbase::s_Qn()]
 #' @author Rob J Hyndman
 #' @examples
 #' # Univariate z-scores

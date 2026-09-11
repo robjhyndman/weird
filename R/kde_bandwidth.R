@@ -76,7 +76,11 @@ kde_bandwidth <- function(
     if (method == "normal") {
       S <- stats::cov(data)
     } else {
-      S <- robustbase::covOGK(data, sigmamu = robustbase::s_Qn)$cov
+      S <- robustbase::covMcd(
+        data,
+        scalefn = robustbase::s_Qn,
+        alpha = 0.9
+      )$cov
     }
   }
   return(cc * S)
