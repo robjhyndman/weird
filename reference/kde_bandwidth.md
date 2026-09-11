@@ -60,7 +60,7 @@ kde_bandwidth(oldfaithful$duration)
 #> [1] 5.087698
 # Bivariate bandwidth calculation
 kde_bandwidth(oldfaithful[, c("duration", "waiting")])
-#>           [,1]       [,2]
-#> [1,]  40.53793   349.3449
-#> [2,] 349.34486 22918.0734
+#>           duration   waiting
+#> duration  36.75439   287.378
+#> waiting  287.37804 16331.163
 ```

@@ -70,5 +70,5 @@ dist_kde(c(rnorm(200), rnorm(100, 5)))
 #> [1] kde[1d, h=0.6]
 dist_kde(cbind(rnorm(200), rnorm(200, 5)), binned = TRUE)
 #> <distribution[1]>
-#> [1] kde[2d, H={(0.15, -0.0041)', (-0.0041, 0.2)'}]
+#> [1] kde[2d, H={(0.15, -0.00045)', (-0.00045, 0.19)'}]
 ```

@@ -4,12 +4,14 @@
 
 ## weird 3.1.0
 
+CRAN release: 2026-09-07
+
 - [`dist_kde()`](https://pkg.robjhyndman.com/weird/reference/dist_kde.md)
   HDR calculations now always use the density at the data points
   (previously this required at least 200 observations), following
   `hdrcde`.
 - `dist_density()` removed in favour of
-  `distributional::dist_density()`.
+  [`distributional::dist_density()`](https://pkg.mitchelloharawild.com/distributional/reference/dist_density.html).
 - [`gg_density()`](https://pkg.robjhyndman.com/weird/reference/gg_density.md)
   now labels the axis with the variable name when plotting a `dist_kde`
   object, if available.
