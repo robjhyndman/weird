@@ -2,6 +2,12 @@
 
 ## weird (development version)
 
+- [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
+  and
+  [`glosh_scores()`](https://pkg.robjhyndman.com/weird/reference/glosh_scores.md)
+  now use `k` nearest neighbours excluding the observation itself.
+  Previously the observation itself was also included.
+
 ## weird 3.1.0
 
 CRAN release: 2026-09-07

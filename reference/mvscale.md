@@ -89,6 +89,7 @@ Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
 [`base::scale()`](https://rdrr.io/r/base/scale.html),
 [`stats::sd()`](https://rdrr.io/r/stats/sd.html),
 [`stats::cov()`](https://rdrr.io/r/stats/cor.html),
+[`robustbase::covMcd()`](https://rdrr.io/pkg/robustbase/man/covMcd.html),
 [`robustbase::covOGK()`](https://rdrr.io/pkg/robustbase/man/covOGK.html),
 [`robustbase::s_Qn()`](https://rdrr.io/pkg/robustbase/man/Qn.html)
 

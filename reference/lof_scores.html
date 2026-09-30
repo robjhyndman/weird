@@ -64,7 +64,7 @@ The function uses <code>dbscan::<a href="https://rdrr.io/pkg/dbscan/man/lof.html
 
 
 <dt id="arg-k">k<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>Number of neighbours to include. Default: 5.</p></dd>
+<dd><p>Number of neighbours to include, not counting the observation itself. Default: 10.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -93,14 +93,14 @@ The function uses <code>dbscan::<a href="https://rdrr.io/pkg/dbscan/man/lof.html
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">49</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">lof_scores</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.9983730 0.9530704 1.4581287 1.4350465 1.0936686 0.9831049 1.2510033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.1366891 1.2742153 1.2479500 0.9876898 1.7937903 0.9711415 1.2997004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.9824765 0.9685810 0.9920072 1.9850663 1.1054990 0.9834240 1.0711687</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.9715196 1.0551016 0.9955457 1.0936686 1.7614975 1.1938283 1.0106213</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.9925144 1.0547248 1.8030587 1.8323102 1.0517139 0.9638423 1.3947665</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [36] 1.0356019 1.0517139 0.9634494 1.0517139 2.7723964 1.4698172 0.9783248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43] 0.9948258 0.9538828 1.0162370 1.5496747 0.9801937 0.9585490 1.6119820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [50] 5.2982752</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.0096678 0.9096734 1.5140288 1.4897710 1.0973761 0.9840656 1.2456017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.1178574 1.3149432 1.3044255 0.9338505 1.8223900 1.0121577 1.2950718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.9700961 0.9859028 0.9778204 2.1336587 1.1054722 1.0201806 1.0360693</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.9612158 1.0527714 1.0015513 1.1031130 1.8841164 1.1770505 1.0253005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.9398436 1.0620404 1.9280166 1.8653797 1.0860752 0.9639613 1.4615795</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [36] 1.0138871 1.0428862 1.0060650 1.0428274 2.6696275 1.5135282 0.9262469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43] 0.9945040 0.9922049 1.0053606 1.6288322 1.0193277 0.9906005 1.7039236</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [50] 5.5399565</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
