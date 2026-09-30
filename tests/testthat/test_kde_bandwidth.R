@@ -122,3 +122,14 @@ test_that(
     formals(dist_kde)$method
   )
 )
+
+test_that("lookout bandwidth handles near-duplicate points", {
+  # mlpack::emst() overflows the C stack on points that differ only by
+  # floating-point error, so kde_bandwidth() must round before calling it
+  set.seed(1)
+  x <- matrix(rnorm(40), ncol = 2)
+  y <- rbind(x, x + 1e-16 * sign(x), x - 2e-16 * sign(x))
+  H <- kde_bandwidth(y, method = "lookout")
+  expect_equal(dim(H), c(2L, 2L))
+  expect_true(all(is.finite(H)))
+})

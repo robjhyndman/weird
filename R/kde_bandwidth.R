@@ -56,10 +56,14 @@ kde_bandwidth <- function(
     }
   }
   if (method == "lookout") {
+    # Round the scaled data so that points differing only by floating-point
+    # error become exact duplicates; mlpack::emst() can overflow the C stack
+    # on near-duplicate points.
+    z <- round(mvscale(as.matrix(data)), 10)
     if (utils::packageVersion("mlpack") < "4.8.0") {
-      death_radi <- mlpack::emst(mvscale(as.matrix(data)))$output[, 3]
+      death_radi <- mlpack::emst(z)$output[, 3]
     } else {
-      death_radi <- mlpack::emst(mvscale(as.matrix(data)))[, 3]
+      death_radi <- mlpack::emst(z)[, 3]
     }
     cc <- unname(quantile(death_radi, probs = 0.98, type = 8L))^2
   } else {

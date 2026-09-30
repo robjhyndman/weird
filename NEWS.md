@@ -1,5 +1,6 @@
 # weird (development version)
 
+- `kde_bandwidth(method = "lookout")` no longer crashes R when the data contain points that differ only by floating-point error (e.g. PCA scores of identical observations); `mlpack::emst()` could overflow the C stack on such near-duplicates.
 - `lof_scores()` and `glosh_scores()` now use `k` nearest neighbours excluding the observation itself.
   Previously the observation itself was also included.
 
