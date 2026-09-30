@@ -92,3 +92,23 @@ test_that("glosh_scores respects the k argument", {
   expect_length(scores_k20, length(y_uni))
   expect_false(isTRUE(all.equal(scores_k5, scores_k20)))
 })
+
+# k counts neighbours excluding the point itself ------------------------
+
+test_that("lof_scores uses k neighbours excluding the point itself", {
+  expect_equal(
+    lof_scores(y_mat, k = 5),
+    dbscan::lof(y_mat, minPts = 6)
+  )
+})
+
+test_that("glosh_scores core distances use the k-th nearest neighbour", {
+  expect_equal(
+    glosh_scores(y_mat, k = 5),
+    dbscan::hdbscan(y_mat, minPts = 6)$outlier_scores
+  )
+  expect_equal(
+    dbscan::hdbscan(y_mat, minPts = 6)$coredist,
+    unname(dbscan::kNNdist(y_mat, k = 5))
+  )
+})

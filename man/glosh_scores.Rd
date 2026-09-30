@@ -9,7 +9,7 @@ glosh_scores(y, k = 10, ...)
 \arguments{
 \item{y}{Numerical matrix or vector of data}
 
-\item{k}{Minimum cluster size. Default: 5.}
+\item{k}{Number of neighbours to include, not counting the observation itself. Default: 10.}
 
 \item{...}{Additional arguments passed to \code{dbscan::\link[dbscan]{hdbscan}}}
 }
@@ -18,7 +18,7 @@ Numerical vector containing GLOSH values
 }
 \description{
 Compute Global-Local Outlier Score from Hierarchies. This is based
-on hierarchical clustering where the minimum cluster size is k. The resulting
+on hierarchical clustering, using core distances to the k-th nearest neighbour. The resulting
 outlier score is a measure of how anomalous each observation is.
 The function uses \code{dbscan::\link[dbscan]{hdbscan}} to do the calculation.
 }

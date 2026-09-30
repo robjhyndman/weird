@@ -1,5 +1,8 @@
 # weird (development version)
 
+- `lof_scores()` and `glosh_scores()` now use `k` nearest neighbours excluding the observation itself.
+  Previously the observation itself was also included.
+
 # weird 3.1.0
 
 - `dist_kde()` HDR calculations now always use the density at the data points (previously this required at least 200 observations), following `hdrcde`.

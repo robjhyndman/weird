@@ -4,7 +4,7 @@
 #' the density of neighbouring points.
 #' The function uses \code{dbscan::\link[dbscan]{lof}} to do the calculation.
 #' @param y Numerical matrix or vector of data
-#' @param k Number of neighbours to include. Default: 5.
+#' @param k Number of neighbours to include, not counting the observation itself. Default: 10.
 #' @param ... Additional arguments passed to \code{dbscan::\link[dbscan]{lof}}
 #' @return Numerical vector containing LOF values
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 6.6,
@@ -19,18 +19,18 @@
 #' @importFrom dbscan lof
 lof_scores <- function(y, k = 10, ...) {
   y <- na.omit(y)
-  lof <- dbscan::lof(as.matrix(y), minPts = k, ...)
+  lof <- dbscan::lof(as.matrix(y), minPts = k + 1, ...)
   lof[lof == Inf] <- 1
   return(lof)
 }
 
 #' @title GLOSH scores
 #' @description Compute Global-Local Outlier Score from Hierarchies. This is based
-#' on hierarchical clustering where the minimum cluster size is k. The resulting
+#' on hierarchical clustering, using core distances to the k-th nearest neighbour. The resulting
 #' outlier score is a measure of how anomalous each observation is.
 #' The function uses \code{dbscan::\link[dbscan]{hdbscan}} to do the calculation.
 #' @param y Numerical matrix or vector of data
-#' @param k Minimum cluster size. Default: 5.
+#' @param k Number of neighbours to include, not counting the observation itself. Default: 10.
 #' @param ... Additional arguments passed to \code{dbscan::\link[dbscan]{hdbscan}}
 #' @return Numerical vector containing GLOSH values
 #' @author Rob J Hyndman
@@ -42,5 +42,5 @@ lof_scores <- function(y, k = 10, ...) {
 #'  \code{dbscan::\link[dbscan]{glosh}}
 #' @importFrom dbscan hdbscan
 glosh_scores <- function(y, k = 10, ...) {
-  dbscan::hdbscan(as.matrix(y), minPts = k, ...)$outlier_scores
+  dbscan::hdbscan(as.matrix(y), minPts = k + 1, ...)$outlier_scores
 }

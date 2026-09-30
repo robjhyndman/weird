@@ -9,7 +9,7 @@ lof_scores(y, k = 10, ...)
 \arguments{
 \item{y}{Numerical matrix or vector of data}
 
-\item{k}{Number of neighbours to include. Default: 5.}
+\item{k}{Number of neighbours to include, not counting the observation itself. Default: 10.}
 
 \item{...}{Additional arguments passed to \code{dbscan::\link[dbscan]{lof}}}
 }
