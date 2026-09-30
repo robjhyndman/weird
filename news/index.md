@@ -2,6 +2,11 @@
 
 ## weird (development version)
 
+- `kde_bandwidth(method = "lookout")` no longer crashes R when the data
+  contain points that differ only by floating-point error (e.g. PCA
+  scores of identical observations);
+  [`mlpack::emst()`](https://rdrr.io/pkg/mlpack/man/emst.html) could
+  overflow the C stack on such near-duplicates.
 - [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
   and
   [`glosh_scores()`](https://pkg.robjhyndman.com/weird/reference/glosh_scores.md)
