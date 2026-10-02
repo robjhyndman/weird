@@ -42,6 +42,8 @@
 <code>kde_bandwidth(method = "lookout")</code> no longer crashes R when the data contain points that differ only by floating-point error (e.g. PCA scores of identical observations); <code><a href="https://rdrr.io/pkg/mlpack/man/emst.html" class="external-link">mlpack::emst()</a></code> could overflow the C stack on such near-duplicates.</li>
 <li>
 <code><a href="../reference/lof_scores.html">lof_scores()</a></code> and <code><a href="../reference/glosh_scores.html">glosh_scores()</a></code> now use <code>k</code> nearest neighbours excluding the observation itself. Previously the observation itself was also included.</li>
+<li>
+<code><a href="../reference/lof_scores.html">lof_scores()</a></code> no longer replaces infinite values by 1.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.1.0" id="weird-310">weird 3.1.0<a class="anchor" aria-label="anchor" href="#weird-310"></a></h2><p class="text-muted">CRAN release: 2026-09-07</p>

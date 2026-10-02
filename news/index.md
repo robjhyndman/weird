@@ -12,6 +12,8 @@
   [`glosh_scores()`](https://pkg.robjhyndman.com/weird/reference/glosh_scores.md)
   now use `k` nearest neighbours excluding the observation itself.
   Previously the observation itself was also included.
+- [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
+  no longer replaces infinite values by 1.
 
 ## weird 3.1.0
 

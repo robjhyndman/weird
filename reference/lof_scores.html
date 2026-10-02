@@ -73,7 +73,10 @@ The function uses <code>dbscan::<a href="https://rdrr.io/pkg/dbscan/man/lof.html
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Numerical vector containing LOF values</p>
+    <p>Numerical vector containing LOF values. An observation has an infinite
+LOF when its neighbourhood includes at least <code>k + 1</code> identical observations
+(whose local reachability density is infinite) but it is not one of them;
+the identical observations themselves have LOF values of 1.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
