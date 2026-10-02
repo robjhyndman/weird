@@ -14,7 +14,10 @@ lof_scores(y, k = 10, ...)
 \item{...}{Additional arguments passed to \code{dbscan::\link[dbscan]{lof}}}
 }
 \value{
-Numerical vector containing LOF values
+Numerical vector containing LOF values. An observation has an infinite
+LOF when its neighbourhood includes at least \code{k + 1} identical observations
+(whose local reachability density is infinite) but it is not one of them;
+the identical observations themselves have LOF values of 1.
 }
 \description{
 Compute local outlier factors using k nearest neighbours. A local

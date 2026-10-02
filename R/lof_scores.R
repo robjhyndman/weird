@@ -6,7 +6,10 @@
 #' @param y Numerical matrix or vector of data
 #' @param k Number of neighbours to include, not counting the observation itself. Default: 10.
 #' @param ... Additional arguments passed to \code{dbscan::\link[dbscan]{lof}}
-#' @return Numerical vector containing LOF values
+#' @return Numerical vector containing LOF values. An observation has an infinite
+#' LOF when its neighbourhood includes at least \code{k + 1} identical observations
+#' (whose local reachability density is infinite) but it is not one of them;
+#' the identical observations themselves have LOF values of 1.
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 6.6,
 #' \url{https://OTexts.com/weird/}.
 #' @author Rob J Hyndman
@@ -20,7 +23,6 @@
 lof_scores <- function(y, k = 10, ...) {
   y <- na.omit(y)
   lof <- dbscan::lof(as.matrix(y), minPts = k + 1, ...)
-  lof[lof == Inf] <- 1
   return(lof)
 }
 

@@ -16,10 +16,17 @@ test_that("lof_scores returns a numeric vector of length n", {
   expect_length(scores, length(y_uni))
 })
 
-test_that("lof_scores returns non-negative values with no Inf", {
+test_that("lof_scores returns non-negative values with no Inf for continuous data", {
   scores <- lof_scores(y_uni)
   expect_true(all(scores >= 0))
   expect_false(any(is.infinite(scores)))
+})
+
+test_that("lof_scores keeps infinite values next to a group of identical observations", {
+  y_dup <- c(rep(0, 15), 0.3, 0.6, y_uni + 5)
+  scores <- lof_scores(y_dup, k = 10)
+  expect_equal(scores[1:15], rep(1, 15))
+  expect_true(all(is.infinite(scores[16:17])))
 })
 
 test_that("lof_scores drops NAs before scoring", {
