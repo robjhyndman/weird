@@ -27,7 +27,7 @@ fetch_wine_reviews()
 Data frame
 }
 \description{
-A data set containing data on wines from 44 countries, taken from \emph{Wine Enthusiast Magazine}
+A data set containing data on wines from 42 countries, taken from \emph{Wine Enthusiast Magazine}
 during the week of 15 June 2017. The data are downloaded and returned.
 }
 \examples{

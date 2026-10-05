@@ -1,6 +1,6 @@
 #' Wine prices and points
 #'
-#' A data set containing data on wines from 44 countries, taken from *Wine Enthusiast Magazine*
+#' A data set containing data on wines from 42 countries, taken from *Wine Enthusiast Magazine*
 #' during the week of 15 June 2017. The data are downloaded and returned.
 #'
 #' @format A data frame with 110,203 rows and 8 columns:
