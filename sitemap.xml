@@ -12,7 +12,9 @@
 <url><loc>https://pkg.robjhyndman.com/weird/reference/density_df.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/dist_kde.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/dist_mclust.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird/reference/fashion.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/fetch_air_quality.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird/reference/fetch_pets2006.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/fetch_wine_reviews.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/fr_mortality.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/gg_density.html</loc></url>
@@ -37,6 +39,7 @@
 <url><loc>https://pkg.robjhyndman.com/weird/reference/surprisals.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/surprisals_data.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/surprisals_model.html</loc></url>
+<url><loc>https://pkg.robjhyndman.com/weird/reference/us_mortality.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/us_senate.html</loc></url>
 <url><loc>https://pkg.robjhyndman.com/weird/reference/weird-package.html</loc></url>
 </urlset>

@@ -2,6 +2,12 @@
 
 ## weird (development version)
 
+- New data sets `us_mortality` (US weekly deaths and death rates,
+  2015–2025) and `fashion` (Fashion-MNIST sneakers with planted images
+  of other classes).
+- New
+  [`fetch_pets2006()`](https://pkg.robjhyndman.com/weird/reference/fetch_pets2006.md)
+  function to download frames from the PETS2006 video.
 - New data sets `us_senate_edges` and `us_senate_members`, giving the US
   Senate co-voting networks from the 40th to the 113th Congress, with
   the name, state, party and ICPSR identifier of each senator.

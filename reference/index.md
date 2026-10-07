@@ -21,12 +21,18 @@ Data sets included in the package
   : Old faithful eruption data
 - [`fr_mortality`](https://pkg.robjhyndman.com/weird/reference/fr_mortality.md)
   : French mortality rates by age and sex
+- [`us_mortality`](https://pkg.robjhyndman.com/weird/reference/us_mortality.md)
+  : US weekly mortality
+- [`fashion`](https://pkg.robjhyndman.com/weird/reference/fashion.md) :
+  Fashion-MNIST sneakers
 - [`us_senate_edges`](https://pkg.robjhyndman.com/weird/reference/us_senate.md)
   [`us_senate_members`](https://pkg.robjhyndman.com/weird/reference/us_senate.md)
   : US Senate co-voting networks
 - [`fetch_air_quality()`](https://pkg.robjhyndman.com/weird/reference/fetch_air_quality.md)
   : Air quality data for 12 Beijing monitoring stations from 2013 to
   2017
+- [`fetch_pets2006()`](https://pkg.robjhyndman.com/weird/reference/fetch_pets2006.md)
+  : PETS2006 video frames
 - [`fetch_wine_reviews()`](https://pkg.robjhyndman.com/weird/reference/fetch_wine_reviews.md)
   : Wine prices and points
 
