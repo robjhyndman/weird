@@ -2,6 +2,9 @@
 
 ## weird (development version)
 
+- New data sets `us_senate_edges` and `us_senate_members`, giving the US
+  Senate co-voting networks from the 40th to the 113th Congress, with
+  the name, state, party and ICPSR identifier of each senator.
 - `kde_bandwidth(method = "lookout")` no longer crashes R when the data
   contain points that differ only by floating-point error (e.g. PCA
   scores of identical observations);

@@ -3,8 +3,8 @@
 Compute local outlier factors using k nearest neighbours. A local
 outlier factor is a measure of how anomalous each observation is based
 on the density of neighbouring points. The function uses
-`dbscan::`[`lof`](https://rdrr.io/pkg/dbscan/man/lof.html) to do the
-calculation.
+`dbscan::`[`lof`](http://michael.hahsler.net/dbscan/reference/lof.md) to
+do the calculation.
 
 ## Usage
 
@@ -26,7 +26,7 @@ lof_scores(y, k = 10, ...)
 - ...:
 
   Additional arguments passed to
-  `dbscan::`[`lof`](https://rdrr.io/pkg/dbscan/man/lof.html)
+  `dbscan::`[`lof`](http://michael.hahsler.net/dbscan/reference/lof.md)
 
 ## Value
 
@@ -43,7 +43,7 @@ Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
 
 ## See also
 
-`dbscan::`[`lof`](https://rdrr.io/pkg/dbscan/man/lof.html)
+`dbscan::`[`lof`](http://michael.hahsler.net/dbscan/reference/lof.md)
 
 ## Author
 

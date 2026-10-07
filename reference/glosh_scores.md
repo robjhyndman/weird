@@ -4,8 +4,8 @@ Compute Global-Local Outlier Score from Hierarchies. This is based on
 hierarchical clustering, using core distances to the k-th nearest
 neighbour. The resulting outlier score is a measure of how anomalous
 each observation is. The function uses
-`dbscan::`[`hdbscan`](https://rdrr.io/pkg/dbscan/man/hdbscan.html) to do
-the calculation.
+`dbscan::`[`hdbscan`](http://michael.hahsler.net/dbscan/reference/hdbscan.md)
+to do the calculation.
 
 ## Usage
 
@@ -27,7 +27,7 @@ glosh_scores(y, k = 10, ...)
 - ...:
 
   Additional arguments passed to
-  `dbscan::`[`hdbscan`](https://rdrr.io/pkg/dbscan/man/hdbscan.html)
+  `dbscan::`[`hdbscan`](http://michael.hahsler.net/dbscan/reference/hdbscan.md)
 
 ## Value
 
@@ -35,7 +35,7 @@ Numerical vector containing GLOSH values
 
 ## See also
 
-`dbscan::`[`glosh`](https://rdrr.io/pkg/dbscan/man/glosh.html)
+`dbscan::`[`glosh`](http://michael.hahsler.net/dbscan/reference/glosh.md)
 
 ## Author
 
