@@ -30,8 +30,11 @@ reference:
   - gun_deaths
   - oldfaithful
   - fr_mortality
+  - us_mortality
+  - fashion
   - us_senate
   - fetch_air_quality
+  - fetch_pets2006
   - fetch_wine_reviews
 - title: Functions for scaling data
   contents: mvscale

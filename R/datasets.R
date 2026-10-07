@@ -169,3 +169,64 @@
 
 #' @rdname us_senate
 "us_senate_members"
+
+#' US weekly mortality
+#'
+#' Weekly deaths and death rates in the USA, by sex and age group, from the
+#' second week of 2015 to the 50th week of 2025. The data are from the
+#' Short-Term Mortality Fluctuations (STMF) series of the Human Mortality
+#' Database. The most recent weeks are subject to reporting delays.
+#'
+#' @format A data frame with `r nrow(us_mortality)` rows and
+#' `r ncol(us_mortality)` columns:
+#' \describe{
+#'   \item{Year}{Year}
+#'   \item{Week}{ISO week of the year}
+#'   \item{Sex}{"Female", "Male" or "Total"}
+#'   \item{Age}{Age group: "0-14", "15-64", "65-74", "75-84", "85+" or "Total"}
+#'   \item{Deaths}{Number of deaths}
+#'   \item{Mortality}{Weekly death rate: deaths divided by population exposure}
+#' }
+#' @return Data frame
+#' @examples
+#' us_mortality |>
+#'   filter(Sex == "Total", Age != "Total") |>
+#'   mutate(time = Year + (Week - 1) / 52) |>
+#'   ggplot(aes(x = time, y = Mortality, colour = Age)) +
+#'   geom_line() +
+#'   scale_y_log10()
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 10,
+#' \url{https://OTexts.com/weird/}.
+#' @source Human Mortality Database. Max Planck Institute for Demographic
+#' Research (Germany), University of California, Berkeley (USA), and French
+#' Institute for Demographic Studies (France). \url{https://www.mortality.org}
+"us_mortality"
+
+#' Fashion-MNIST sneakers
+#'
+#' All 1000 images of sneakers from the Fashion-MNIST test set, together with
+#' 10 images from other classes of varying similarity to sneakers: four ankle
+#' boots, three sandals, two bags and one pair of trousers. Each image is
+#' 28 x 28 pixels.
+#'
+#' @format A data frame with `r nrow(fashion)` rows and
+#' `r ncol(fashion)` columns:
+#' \describe{
+#'   \item{id}{Index of the image in the Fashion-MNIST test set}
+#'   \item{label}{Class of the image (a factor with the 10 Fashion-MNIST classes)}
+#'   \item{planted}{`TRUE` for the 10 images that are not sneakers}
+#'   \item{pixels}{A 1010 x 784 integer matrix of pixel intensities, from 0
+#'     (white) to 255 (black), with one row per image. Each row contains the
+#'     28 x 28 pixels of an image, stored row by row, so
+#'     `matrix(pixels[i, ], nrow = 28, byrow = TRUE)` gives image `i`.}
+#' }
+#' @return Data frame
+#' @examples
+#' fashion |>
+#'   count(label)
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 13,
+#' \url{https://OTexts.com/weird/}.
+#' @source Xiao, H., Rasul, K., & Vollgraf, R. (2017). Fashion-MNIST: a novel
+#' image dataset for benchmarking machine learning algorithms.
+#' \url{https://github.com/zalandoresearch/fashion-mnist} (MIT licence)
+"fashion"
