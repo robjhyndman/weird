@@ -142,3 +142,21 @@ test_that("gun_deaths region values are valid", {
   )
   expect_in(gun_deaths$region, valid_regions)
 })
+
+# --- us_senate ----------------------------------------------------------------
+
+test_that("us_senate_members identifies every node", {
+  expect_named(
+    us_senate_members,
+    c("congress", "node", "name", "state", "party", "icpsr")
+  )
+  expect_all_true(complete.cases(us_senate_members))
+  expect_equal(anyDuplicated(us_senate_members[c("congress", "icpsr")]), 0L)
+  expect_in(
+    paste(
+      us_senate_edges$congress,
+      c(us_senate_edges$from, us_senate_edges$to)
+    ),
+    paste(us_senate_members$congress, us_senate_members$node)
+  )
+})

@@ -106,3 +106,66 @@
 #' @examples
 #' gun_deaths
 "gun_deaths"
+
+#' US Senate co-voting networks
+#'
+#' Co-voting networks for the US Senate from the 40th to the 113th Congress
+#' (1867 to 2015). Each Congress gives an undirected network in which each
+#' node is a senator, and an edge connects two senators if they voted the same
+#' way (both yea or both nay) on at least 80% of the bills for which they were
+#' both present. The data are taken from Lee, Li and Wilson (2020).
+#' Although they state that Independent senators were excluded, a few
+#' Independent and minor-party senators are included, coded as Democrat or
+#' Republican.
+#'
+#' `us_senate_edges` contains the edges of every network, and `us_senate_members`
+#' contains the name, state and party of each senator. Senators are numbered
+#' from 1 within each Congress, so the same number refers to different
+#' senators in different Congresses; use `icpsr` to follow a senator across
+#' Congresses. From the 84th Congress onwards, node 1 is the President, whose
+#' announced positions on bills are treated as votes.
+#'
+#' @format `us_senate_edges` is a data frame with `r nrow(us_senate_edges)` rows and
+#' `r ncol(us_senate_edges)` columns:
+#' \describe{
+#'   \item{congress}{Congress number}
+#'   \item{from}{Node number of one senator}
+#'   \item{to}{Node number of the other senator}
+#' }
+#' `us_senate_members` is a data frame with `r nrow(us_senate_members)` rows and
+#' `r ncol(us_senate_members)` columns:
+#' \describe{
+#'   \item{congress}{Congress number}
+#'   \item{node}{Node number of the senator}
+#'   \item{name}{Name of the senator (surname first)}
+#'   \item{state}{Two-letter state abbreviation ("USA" for the President)}
+#'   \item{party}{"Democrat" or "Republican"}
+#'   \item{icpsr}{ICPSR identifier of the senator, as used by Voteview}
+#' }
+#' @return Data frame
+#' @examples
+#' # Number of co-voting edges in each Congress
+#' us_senate_edges |>
+#'   count(congress)
+#' # Party composition of the 100th Congress
+#' us_senate_members |>
+#'   filter(congress == 100) |>
+#'   count(party)
+#' # Congresses in which Patrick Leahy served
+#' us_senate_members |>
+#'   filter(icpsr == 14307)
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 12,
+#' \url{https://OTexts.com/weird/}.
+#' @source Lee, J., Li, G., & Wilson, J. D. (2020). Varying-coefficient models
+#' for dynamic networks. *Computational Statistics & Data Analysis*, 152, 107052.
+#' \doi{10.1016/j.csda.2020.107052}. Data available from
+#' \url{https://github.com/jihuilee/VCERGM}.
+#'
+#' Names, states and ICPSR identifiers from Lewis, J. B., Poole, K.,
+#' Rosenthal, H., Boche, A., Rudkin, A., & Sonnet, L. Voteview: Congressional
+#' roll-call votes database. \url{https://voteview.com/}
+#' @name us_senate
+"us_senate_edges"
+
+#' @rdname us_senate
+"us_senate_members"
