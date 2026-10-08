@@ -1,6 +1,9 @@
 # US weekly deaths and death rates from the Short-Term Mortality Fluctuations
 # (STMF) series of the Human Mortality Database, https://www.mortality.org/
-# File USAstmfout.csv downloaded January 2026.
+# File USAstmfout.csv downloaded October 2026.
+# Only complete years (2015--2025) are kept. The file labels the week starting
+# 29 December 2025 as 2025 week 53, but under ISO 8601 it is 2026 week 1
+# (2025 has 52 ISO weeks), so it is dropped along with the rest of 2026.
 
 library(dplyr)
 library(tidyr)
@@ -13,6 +16,7 @@ colnames(stmf) <- c(
   "Split", "SplitSex", "Forecast"
 )
 us_mortality <- stmf |>
+  filter(Year <= 2025, !(Year == 2025 & Week == 53)) |>
   select(Year, Week, Sex, starts_with("D_"), starts_with("R_")) |>
   pivot_longer(
     c(starts_with("D_"), starts_with("R_")),
