@@ -1,9 +1,9 @@
 # US weekly mortality
 
 Weekly deaths and death rates in the USA, by sex and age group, from the
-second week of 2015 to the 50th week of 2025. The data are from the
+second week of 2015 to the last week of 2025. The data are from the
 Short-Term Mortality Fluctuations (STMF) series of the Human Mortality
-Database. The most recent weeks are subject to reporting delays.
+Database.
 
 ## Usage
 
@@ -13,7 +13,7 @@ us_mortality
 
 ## Format
 
-A data frame with 10278 rows and 6 columns:
+A data frame with 10314 rows and 6 columns:
 
 - Year:
 
