@@ -154,8 +154,8 @@
 #' # Congresses in which Patrick Leahy served
 #' us_senate_members |>
 #'   filter(icpsr == 14307)
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 12,
-#' \url{https://OTexts.com/weird/}.
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 15,
+#' \url{https://OTexts.com/weird/network.html}.
 #' @source Lee, J., Li, G., & Wilson, J. D. (2020). Varying-coefficient models
 #' for dynamic networks. *Computational Statistics & Data Analysis*, 152, 107052.
 #' \doi{10.1016/j.csda.2020.107052}. Data available from
@@ -195,8 +195,8 @@
 #'   ggplot(aes(x = time, y = Mortality, colour = Age)) +
 #'   geom_line() +
 #'   scale_y_log10()
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 10,
-#' \url{https://OTexts.com/weird/}.
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 11,
+#' \url{https://OTexts.com/weird/timeseries.html}.
 #' @source Human Mortality Database. Max Planck Institute for Demographic
 #' Research (Germany), University of California, Berkeley (USA), and French
 #' Institute for Demographic Studies (France). \url{https://www.mortality.org}
@@ -225,7 +225,7 @@
 #' fashion |>
 #'   count(label)
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 13,
-#' \url{https://OTexts.com/weird/}.
+#' \url{https://OTexts.com/weird/imagevideo.html}.
 #' @source Xiao, H., Rasul, K., & Vollgraf, R. (2017). Fashion-MNIST: a novel
 #' image dataset for benchmarking machine learning algorithms.
 #' \url{https://github.com/zalandoresearch/fashion-mnist} (MIT licence)
@@ -271,7 +271,7 @@
 #' }
 #' @return Data frame
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 10,
-#' \url{https://OTexts.com/weird/}.
+#' \url{https://OTexts.com/weird/text.html}.
 #' @examples
 #' road_deaths |>
 #'   ggplot(aes(x = age, fill = road_user)) +

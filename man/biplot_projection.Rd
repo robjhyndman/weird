@@ -52,7 +52,7 @@ oldfaithful[, c("duration", "waiting")] |>
 }
 \references{
 Hyndman, R J (2026) "That's weird: Anomaly detection using R",
-Chapter 9, \url{https://OTexts.com/weird/}.
+Chapter 9, \url{https://OTexts.com/weird/highdim.html}.
 }
 \author{
 Rob J Hyndman

@@ -24,7 +24,7 @@
 #' @return A `ggplot` object.
 #' @author Rob J Hyndman
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R",
-#' Chapter 9, \url{https://OTexts.com/weird/}.
+#' Chapter 9, \url{https://OTexts.com/weird/highdim.html}.
 #' @examples
 #' oldfaithful[, c("duration", "waiting")] |>
 #'   prcomp(scale = TRUE) |>

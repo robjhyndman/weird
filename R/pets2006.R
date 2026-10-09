@@ -22,7 +22,7 @@
 #' }
 #' @return Data frame
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 13,
-#' \url{https://OTexts.com/weird/}.
+#' \url{https://OTexts.com/weird/imagevideo.html}.
 #' @examples
 #' \dontrun{
 #' pets2006 <- fetch_pets2006()

@@ -63,6 +63,6 @@ road_deaths |>
 }
 \references{
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 10,
-\url{https://OTexts.com/weird/}.
+\url{https://OTexts.com/weird/text.html}.
 }
 \keyword{datasets}

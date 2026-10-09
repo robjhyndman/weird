@@ -76,7 +76,7 @@ us_senate_members |>
   filter(icpsr == 14307)
 }
 \references{
-Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 12,
-\url{https://OTexts.com/weird/}.
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 15,
+\url{https://OTexts.com/weird/network.html}.
 }
 \keyword{datasets}
