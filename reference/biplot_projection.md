@@ -66,7 +66,7 @@ A `ggplot` object.
 ## References
 
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
-9, <https://OTexts.com/weird/>.
+9, <https://OTexts.com/weird/highdim.html>.
 
 ## Author
 

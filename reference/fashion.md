@@ -47,7 +47,7 @@ Data frame
 ## References
 
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
-13, <https://OTexts.com/weird/>.
+13, <https://OTexts.com/weird/imagevideo.html>.
 
 ## Examples
 

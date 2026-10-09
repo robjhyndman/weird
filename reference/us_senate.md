@@ -91,7 +91,7 @@ votes.
 ## References
 
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
-12, <https://OTexts.com/weird/>.
+15, <https://OTexts.com/weird/network.html>.
 
 ## Examples
 

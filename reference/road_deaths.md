@@ -118,7 +118,7 @@ mostly missing before 2002, and `remoteness`, `sa4`, `lga` and
 ## References
 
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
-10, <https://OTexts.com/weird/>.
+10, <https://OTexts.com/weird/text.html>.
 
 ## Examples
 

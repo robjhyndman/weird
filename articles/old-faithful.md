@@ -110,7 +110,7 @@ oldfaithful |> filter(dixon_anomalies(duration))
 There are at least three anomalies in this example (due to recording
 errors), but none of these methods detect them all. An explanation of
 these tests is provided in [Chapter 4 of the
-book](https://OTexts.com/weird/04-tests.html)
+book](https://OTexts.com/weird/tests.html)
 
 ## Boxplots
 
@@ -151,7 +151,7 @@ contains 99% of the observations. The plots use vertical jittering to
 reduce overplotting, and highlight potential outliers (those points
 lying outside the 99% HDR which have surprisal probability less than
 0.0005). An explanation of these plots is provided in [Chapter 5 of the
-book](https://OTexts.com/weird/05-boxplots.html).
+book](https://OTexts.com/weird/boxplots.html).
 
 It is also possible to produce bivariate boxplots. Several variations
 are provided in the package. Here are two types of bagplot.
