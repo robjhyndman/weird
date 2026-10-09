@@ -36,14 +36,5 @@
 #' @aliases pets2006
 #' @export
 fetch_pets2006 <- function() {
-  # Download to temporary file to avoid repeated downloads in the same session
-  dest_file <- file.path(tempdir(), "pets2006.rds")
-  if (!file.exists(dest_file)) {
-    utils::download.file(
-      url = "https://github.com/robjhyndman/weird/raw/main/data-raw/pets2006.rds",
-      destfile = dest_file,
-      mode = "wb"
-    )
-  }
-  readRDS(dest_file)
+  fetch_rds("pets2006")
 }

@@ -36,14 +36,5 @@
 #' @aliases oz_books
 #' @export
 fetch_oz_books <- function() {
-  # Download to temporary file to avoid repeated downloads in the same session
-  dest_file <- file.path(tempdir(), "oz_books.rds")
-  if (!file.exists(dest_file)) {
-    utils::download.file(
-      url = "https://github.com/robjhyndman/weird/raw/main/data-raw/oz_books.rds",
-      destfile = dest_file,
-      mode = "wb"
-    )
-  }
-  readRDS(dest_file)
+  fetch_rds("oz_books")
 }

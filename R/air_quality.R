@@ -42,14 +42,5 @@
 #' @aliases air_quality
 #' @export
 fetch_air_quality <- function() {
-  dest_folder <- tempdir()
-  dest_file <- paste0(dest_folder, "/air_quality.rds")
-  if (!file.exists(dest_file)) {
-    utils::download.file(
-      url = "https://github.com/robjhyndman/weird/raw/main/data-raw/air_quality.rds",
-      destfile = dest_file,
-      mode = "wb"
-    )
-  }
-  readRDS(dest_file)
+  fetch_rds("air_quality")
 }

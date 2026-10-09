@@ -17,3 +17,15 @@ oz_books_raw <- if (file.exists("../../data-raw/oz_books.rds")) {
 } else {
   NULL
 }
+
+# Create an empty temporary directory that is deleted when the calling test ends
+local_temp_dir <- function(env = parent.frame()) {
+  dir <- tempfile()
+  dir.create(dir)
+  do.call(
+    on.exit,
+    list(bquote(unlink(.(dir), recursive = TRUE)), add = TRUE),
+    envir = env
+  )
+  dir
+}
