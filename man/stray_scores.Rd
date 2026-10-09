@@ -21,8 +21,8 @@ Compute stray scores indicating how anomalous each observation is.
 # Univariate data
 y <- c(6, rnorm(49))
 scores <- stray_scores(y)
-threshold <- stray::find_threshold(scores, alpha = 0.01, outtail = "max", p = 0.5, tn = 50)
-which(scores > threshold)
+# Indices of anomalies
+stray::find_threshold(scores, alpha = 0.01, outtail = "max", p = 0.5, tn = 50)
 }
 \references{
 Talagala, P D, Hyndman, R J, and Smith-Miles, K (2021) Anomaly detection

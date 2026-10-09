@@ -10,8 +10,8 @@
 #' # Univariate data
 #' y <- c(6, rnorm(49))
 #' scores <- stray_scores(y)
-#' threshold <- stray::find_threshold(scores, alpha = 0.01, outtail = "max", p = 0.5, tn = 50)
-#' which(scores > threshold)
+#' # Indices of anomalies
+#' stray::find_threshold(scores, alpha = 0.01, outtail = "max", p = 0.5, tn = 50)
 #' @export
 #' @rdname stray_scores
 stray_scores <- function(y, ...) {
