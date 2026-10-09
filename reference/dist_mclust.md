@@ -23,14 +23,9 @@ An object of class `distributional`
 ## Examples
 
 ``` r
-library(mclust)
+library(mclust, exclude = "count")
 #> Package 'mclust' version 6.1.3
 #> Type 'citation("mclust")' for citing this R package in publications.
-#> 
-#> Attaching package: ‘mclust’
-#> The following object is masked from ‘package:dplyr’:
-#> 
-#>     count
 # Univariate mixture density
 gmm <- Mclust(oldfaithful$duration) |> dist_mclust()
 gg_density(gmm) +

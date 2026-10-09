@@ -54,5 +54,12 @@ Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
 ``` r
 fashion |>
   count(label)
-#> Error in order(y): unimplemented type 'list' in 'orderVector1'
+#> # A tibble: 5 × 2
+#>   label          n
+#>   <fct>      <int>
+#> 1 Trousers       1
+#> 2 Sandal         3
+#> 3 Sneaker     1000
+#> 4 Bag            2
+#> 5 Ankle boot     4
 ```

@@ -99,12 +99,29 @@ Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
 # Number of co-voting edges in each Congress
 us_senate_edges |>
   count(congress)
-#> Error in order(y): unimplemented type 'list' in 'orderVector1'
+#> # A tibble: 74 × 2
+#>    congress     n
+#>       <int> <int>
+#>  1       40    70
+#>  2       41    88
+#>  3       42   176
+#>  4       43   290
+#>  5       44   642
+#>  6       45   425
+#>  7       46  1084
+#>  8       47   978
+#>  9       48   377
+#> 10       49   422
+#> # ℹ 64 more rows
 # Party composition of the 100th Congress
 us_senate_members |>
   filter(congress == 100) |>
   count(party)
-#> Error in order(y): unimplemented type 'list' in 'orderVector1'
+#> # A tibble: 2 × 2
+#>   party          n
+#>   <chr>      <int>
+#> 1 Democrat      55
+#> 2 Republican    47
 # Congresses in which Patrick Leahy served
 us_senate_members |>
   filter(icpsr == 14307)

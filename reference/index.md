@@ -28,6 +28,8 @@ Data sets included in the package
 - [`us_senate_edges`](https://pkg.robjhyndman.com/weird/reference/us_senate.md)
   [`us_senate_members`](https://pkg.robjhyndman.com/weird/reference/us_senate.md)
   : US Senate co-voting networks
+- [`road_deaths`](https://pkg.robjhyndman.com/weird/reference/road_deaths.md)
+  : Australian road deaths
 - [`fetch_air_quality()`](https://pkg.robjhyndman.com/weird/reference/fetch_air_quality.md)
   : Air quality data for 12 Beijing monitoring stations from 2013 to
   2017

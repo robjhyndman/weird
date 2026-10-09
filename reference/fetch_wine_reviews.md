@@ -12,7 +12,7 @@ fetch_wine_reviews()
 
 ## Format
 
-A data frame with 110,203 rows and 8 columns:
+A data frame with 111,592 rows and 9 columns:
 
 - country:
 
@@ -45,6 +45,10 @@ A data frame with 110,203 rows and 8 columns:
 - price:
 
   Price of a bottle of wine in \$US
+
+- description:
+
+  Text of the review
 
 ## Source
 

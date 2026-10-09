@@ -39,8 +39,7 @@ Rob J Hyndman
 # Univariate data
 y <- c(6, rnorm(49))
 scores <- stray_scores(y)
-threshold <- stray::find_threshold(scores, alpha = 0.01, outtail = "max", p = 0.5, tn = 50)
-which(scores > threshold)
-#> Warning: longer object length is not a multiple of shorter object length
-#> integer(0)
+# Indices of anomalies
+stray::find_threshold(scores, alpha = 0.01, outtail = "max", p = 0.5, tn = 50)
+#> [1]  1 10 14 27 30 38 41 48 49
 ```
