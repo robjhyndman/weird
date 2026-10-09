@@ -230,3 +230,54 @@
 #' image dataset for benchmarking machine learning algorithms.
 #' \url{https://github.com/zalandoresearch/fashion-mnist} (MIT licence)
 "fashion"
+
+#' Australian road deaths
+#'
+#' Every death from a road crash in Australia from January 1989 to December 2025,
+#' from the Australian Road Deaths Database (ARDD). Each row is a person killed;
+#' people killed in the same crash share a `crash_id`. A death is counted if the
+#' crash occurred on a public road, was unintentional, and the person died within
+#' 30 days.
+#'
+#' Missing values (coded as -9 or "Unknown" in the source) are `NA`. Some
+#' variables were not recorded for early years: `heavy_rigid_truck` is mostly
+#' missing before 2002, and `remoteness`, `sa4`, `lga` and `road_type` are
+#' missing before 2014 and incomplete until 2017.
+#'
+#' @format A data frame with `r nrow(road_deaths)` rows and
+#' `r ncol(road_deaths)` columns:
+#' \describe{
+#'   \item{crash_id}{Crash identifier}
+#'   \item{state}{State or territory where the crash occurred}
+#'   \item{year}{Year of crash}
+#'   \item{month}{Month of crash (1--12)}
+#'   \item{day_of_week}{Day of the week of the crash}
+#'   \item{time}{Time of crash in hours after midnight (e.g. 14.5 is 2:30pm)}
+#'   \item{crash_type}{Single or multiple vehicle crash}
+#'   \item{bus}{Was a bus involved?}
+#'   \item{heavy_rigid_truck}{Was a heavy rigid truck involved?}
+#'   \item{articulated_truck}{Was an articulated truck involved?}
+#'   \item{speed_limit}{Posted speed limit at the crash location (km/h)}
+#'   \item{road_user}{Road user type of the person killed}
+#'   \item{gender}{Sex of the person killed}
+#'   \item{age}{Age of the person killed (years)}
+#'   \item{remoteness}{ABS remoteness area of the crash location (ASGS 2021)}
+#'   \item{sa4}{ABS Statistical Area Level 4 of the crash location (ASGS 2021)}
+#'   \item{lga}{Local government area of the crash location (ASGS 2021)}
+#'   \item{road_type}{Type of road}
+#'   \item{christmas}{Did the crash occur in the 12 days from 23 December?}
+#'   \item{easter}{Did the crash occur in the 5 days from the Thursday before
+#'     Good Friday?}
+#' }
+#' @return Data frame
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 10,
+#' \url{https://OTexts.com/weird/}.
+#' @examples
+#' road_deaths |>
+#'   ggplot(aes(x = age, fill = road_user)) +
+#'   geom_histogram(binwidth = 1)
+#' @source Bureau of Infrastructure and Transport Research Economics (2026).
+#' Australian Road Deaths Database, fatalities. Downloaded 9 October 2026.
+#' Licensed under CC BY.
+#' \url{https://catalogue.data.infrastructure.gov.au/dataset/australian-road-deaths-database}
+"road_deaths"

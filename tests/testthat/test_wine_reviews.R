@@ -10,15 +10,16 @@ test_that("wine_reviews has expected column names", {
       "variety",
       "year",
       "points",
-      "price"
+      "price",
+      "description"
     )
   )
 })
 
 test_that("wine_reviews has expected dimensions", {
   skip_if(is.null(wine_reviews_raw))
-  expect_equal(nrow(wine_reviews_raw), 110203L)
-  expect_equal(ncol(wine_reviews_raw), 8L)
+  expect_equal(nrow(wine_reviews_raw), 111592L)
+  expect_equal(ncol(wine_reviews_raw), 9L)
 })
 
 test_that("wine_reviews has expected column types", {
@@ -31,6 +32,7 @@ test_that("wine_reviews has expected column types", {
   expect_type(wine_reviews_raw$points, "double")
   expect_type(wine_reviews_raw$price, "double")
   expect_type(wine_reviews_raw$year, "double")
+  expect_type(wine_reviews_raw$description, "character")
 })
 
 test_that("wine_reviews points are in range 80-100", {

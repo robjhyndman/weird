@@ -5,7 +5,7 @@
 \alias{wine_reviews}
 \title{Wine prices and points}
 \format{
-A data frame with 110,203 rows and 8 columns:
+A data frame with 111,592 rows and 9 columns:
 \describe{
 \item{country}{Country of origin}
 \item{state}{State or province of origin}
@@ -15,6 +15,7 @@ A data frame with 110,203 rows and 8 columns:
 \item{year}{Year of wine}
 \item{points}{Points allocated by WineEnthusiast reviewer on a scale of 0-100}
 \item{price}{Price of a bottle of wine in $US}
+\item{description}{Text of the review}
 }
 }
 \source{

@@ -72,14 +72,15 @@ wine_reviews <- readr::read_csv(here::here(
     variety,
     year,
     points,
-    price
+    price,
+    description
   ) |>
   distinct()
 
 # usethis::use_data(wine_reviews, overwrite = TRUE)
 # Save to data-raw folder for downloading at run time. This circumvents the
 ## non-ASCII data rule of CRAN.
-saveRDS(wine_reviews, here::here("data-raw/wine_reviews.rds"))
+saveRDS(wine_reviews, here::here("data-raw/wine_reviews.rds"), compress = "xz")
 
 # Synthetic data
 set.seed(1)

@@ -3,7 +3,7 @@
 #' A data set containing data on wines from 42 countries, taken from *Wine Enthusiast Magazine*
 #' during the week of 15 June 2017. The data are downloaded and returned.
 #'
-#' @format A data frame with 110,203 rows and 8 columns:
+#' @format A data frame with 111,592 rows and 9 columns:
 #' \describe{
 #'   \item{country}{Country of origin}
 #'   \item{state}{State or province of origin}
@@ -13,6 +13,7 @@
 #'   \item{year}{Year of wine}
 #'   \item{points}{Points allocated by WineEnthusiast reviewer on a scale of 0-100}
 #'   \item{price}{Price of a bottle of wine in $US}
+#'   \item{description}{Text of the review}
 #' }
 #' @return Data frame
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 1.4,

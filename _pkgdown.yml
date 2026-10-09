@@ -33,6 +33,7 @@ reference:
   - us_mortality
   - fashion
   - us_senate
+  - road_deaths
   - fetch_air_quality
   - fetch_pets2006
   - fetch_wine_reviews
