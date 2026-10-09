@@ -2,6 +2,7 @@
 
 - New data sets `us_mortality` (US weekly deaths and death rates, 2015--2025) and `fashion` (Fashion-MNIST sneakers with planted images of other classes).
 - New `fetch_pets2006()` function to download frames from the PETS2006 video.
+- New `fetch_oz_books()` function to download the text of 29 Oz books by L. Frank Baum and Ruth Plumly Thompson.
 - New data set `road_deaths`, giving every road crash death in Australia from 1989 to 2025.
 - New data sets `us_senate_edges` and `us_senate_members`, giving the US Senate co-voting networks from the 40th to the 113th Congress, with the name, state, party and ICPSR identifier of each senator.
 - `kde_bandwidth(method = "lookout")` no longer crashes R when the data contain points that differ only by floating-point error (e.g. PCA scores of identical observations); `mlpack::emst()` could overflow the C stack on such near-duplicates.

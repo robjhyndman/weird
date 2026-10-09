@@ -11,3 +11,9 @@ wine_reviews_raw <- if (file.exists("../../data-raw/wine_reviews.rds")) {
 } else {
   NULL
 }
+
+oz_books_raw <- if (file.exists("../../data-raw/oz_books.rds")) {
+  readRDS("../../data-raw/oz_books.rds")
+} else {
+  NULL
+}
