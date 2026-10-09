@@ -33,6 +33,8 @@ Data sets included in the package
 - [`fetch_air_quality()`](https://pkg.robjhyndman.com/weird/reference/fetch_air_quality.md)
   : Air quality data for 12 Beijing monitoring stations from 2013 to
   2017
+- [`fetch_oz_books()`](https://pkg.robjhyndman.com/weird/reference/fetch_oz_books.md)
+  : Oz books by L. Frank Baum and Ruth Plumly Thompson
 - [`fetch_pets2006()`](https://pkg.robjhyndman.com/weird/reference/fetch_pets2006.md)
   : PETS2006 video frames
 - [`fetch_wine_reviews()`](https://pkg.robjhyndman.com/weird/reference/fetch_wine_reviews.md)
