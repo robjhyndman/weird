@@ -3,7 +3,7 @@
 #' @param object Object of class `Mclust`, output from the [[mclust::Mclust]] function
 #' @return An object of class `distributional`
 #' @examples
-#' library(mclust)
+#' library(mclust, exclude = "count")
 #' # Univariate mixture density
 #' gmm <- Mclust(oldfaithful$duration) |> dist_mclust()
 #' gg_density(gmm) +

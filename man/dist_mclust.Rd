@@ -16,7 +16,7 @@ An object of class \code{distributional}
 Convert Gaussian mixture model to a distributional object
 }
 \examples{
-library(mclust)
+library(mclust, exclude = "count")
 # Univariate mixture density
 gmm <- Mclust(oldfaithful$duration) |> dist_mclust()
 gg_density(gmm) +
