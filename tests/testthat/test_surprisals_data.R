@@ -191,3 +191,29 @@ test_that("surprisals_prob handles a vector of discrete distributions", {
   expect_equal(p[2], exact_discrete_prob(7, 0:100, dpois(0:100, 10)))
 })
 
+
+test_that("surprisals_prob is accurate in the tails of skewed distributions", {
+  # Gamma(2, 1): density below f(y) on (0, a) and (y, Inf), with f(a) = f(y)
+  f <- function(x) dgamma(x, 2, 1)
+  exact <- function(y) {
+    fy <- f(y)
+    a <- if (y > 1) uniroot(function(x) f(x) - fy, c(0, 1), tol = 1e-14)$root else y
+    b <- if (y > 1) y else uniroot(function(x) f(x) - fy, c(1, 50), tol = 1e-14)$root
+    pgamma(a, 2) + pgamma(b, 2, lower.tail = FALSE)
+  }
+  y <- c(0.01, 3, 8, 15, 30)
+  p <- surprisals_prob(y, distribution = distributional::dist_gamma(2, 1))
+  # Compare relative errors, which matter most for the smallest probabilities
+  expect_equal(p / vapply(y, exact, numeric(1)), rep(1, length(y)), tolerance = 1e-4)
+})
+
+test_that("surprisals_prob handles multimodal densities", {
+  # Equal mixture of N(0,1) and N(6,1): for y = 10 the region is beyond -4 and 10
+  m <- distributional::dist_mixture(
+    distributional::dist_normal(0, 1),
+    distributional::dist_normal(6, 1),
+    weights = c(0.5, 0.5)
+  )
+  p <- surprisals_prob(10, distribution = m)
+  expect_equal(p / pnorm(-4), 1, tolerance = 1e-3)
+})

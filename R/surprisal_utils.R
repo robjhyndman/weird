@@ -89,18 +89,8 @@ surprisal_prob_from_s <- function(
     p <- 2 *
       (1 - distributional::cdf(distribution, q = centre + abs(y - centre))[[1]])
   } else {
-    # Slower computation, but more general (although approximate)
-    dist_x <- stats::quantile(
-      distribution,
-      seq(1e-6, 1 - 1e-6, length.out = 10001)
-    )
-    dist_x <- unique(unlist(dist_x))
-    dist_y <- -unlist(density(distribution, dist_x, log = TRUE))
-    prob <- (rank(dist_y) - 1) / length(dist_y)
-    if (all(is.na(dist_y)) || all(is.na(prob))) {
-      return(rep(NA_real_, n))
-    }
-    p <- 1 - approx(dist_y, prob, xout = s, rule = 2, ties = mean)$y
+    # Slower computation, but more general
+    p <- surprisal_continuous_prob(s, distribution)
   }
   p[s == Inf] <- 0
   return(p)
@@ -177,6 +167,127 @@ surprisal_discrete_prob <- function(s, distribution) {
     },
     numeric(1)
   )
+}
+
+# Surprisal probabilities for a univariate continuous distribution: the
+# probability of the region where the density is no more than at the
+# observation. The density is evaluated on a grid of quantiles, extended into
+# the tails until it is below the density of every observation; the region's
+# boundaries are found where the log density crosses that of the observation.
+surprisal_continuous_prob <- function(s, distribution) {
+  log_den <- function(x) {
+    pmax(unlist(stats::density(distribution, x, log = TRUE)), -1e10)
+  }
+  cdf <- function(x) unlist(distributional::cdf(distribution, x))
+  x <- stats::quantile(distribution, seq(1e-6, 1 - 1e-6, length.out = 10001))
+  x <- sort(unique(unlist(x)))
+  if (all(is.na(x))) {
+    return(rep(NA_real_, length(s)))
+  }
+  lim <- vctrs::field(distributional::support(distribution), "lim")[[1]]
+  target <- -max(s[is.finite(s)], -Inf)
+  # Extend the grid geometrically until the density is below the target, or
+  # the edge of the support is reached
+  width <- max(diff(range(x)), 1)
+  extend <- function(end, direction, limit) {
+    out <- numeric(0)
+    for (k in 0:60) {
+      new <- end + direction * width * 2^k
+      if (direction * (new - limit) >= 0) {
+        return(c(out, limit))
+      }
+      out <- c(out, new)
+      if (log_den(new) <= target) {
+        return(out)
+      }
+    }
+    out
+  }
+  x <- c(extend(x[1], -1, lim[1]), x, extend(x[length(x)], 1, lim[2]))
+  x <- sort(unique(x[is.finite(x)]))
+  lx <- log_den(x)
+  m <- length(x)
+  # Grid interval i is crossed by every level L with lo[i] <= L < hi[i]. With
+  # the levels sorted, findInterval() gives the range of levels crossing each
+  # interval, so all crossings are found without scanning the grid for each
+  # observation.
+  level <- -s
+  ok <- which(!is.na(s))
+  ord <- ok[order(level[ok])]
+  sorted <- level[ord]
+  lo <- pmin(lx[-m], lx[-1])
+  hi <- pmax(lx[-m], lx[-1])
+  first <- findInterval(lo, sorted, left.open = TRUE) + 1
+  count <- pmax(0, findInterval(hi, sorted, left.open = TRUE) - first + 1)
+  obs <- ord[sequence(count, from = first)]
+  i <- rep(seq_len(m - 1), count)
+  root <- find_crossings(log_den, x[i], x[i + 1], lx[i], lx[i + 1], level[obs])
+  # Each observation's probability is the sum of the gaps between the runs
+  # where the density is above its own (rather than 1 minus the runs), so
+  # small tail probabilities keep their precision. The run boundaries are the
+  # crossings, plus the ends of the grid when the density there is above the
+  # observation's. In order along the grid, the gaps are (e1, e2), (e3, e4), ...
+  # with e1 = 0 and the last = 1, so p is the alternating sum of the edges.
+  n <- length(s)
+  first_above <- which(lx[1] > level)
+  last_above <- which(lx[m] > level)
+  edge <- c(rep(0, n), rep(0, length(first_above)), cdf(root),
+    rep(1, length(last_above)), rep(1, n))
+  group <- c(seq_len(n), first_above, obs, last_above, seq_len(n))
+  key <- c(rep(0, n), rep(1, length(first_above)), 1 + i,
+    rep(m + 1, length(last_above)), rep(m + 2, n))
+  o <- order(group, key)
+  position <- sequence(tabulate(group, nbins = n))
+  sign <- ifelse(position %% 2 == 0, 1, -1)
+  p <- numeric(n)
+  p[sort(unique(group))] <- rowsum(sign * edge[o], group[o])[, 1]
+  # Levels above the whole grid (no outcome more likely) or below it
+  p[level >= max(lx)] <- 1
+  p[level < min(lx)] <- 0
+  p[is.na(s)] <- NA_real_
+  pmax(0, pmin(1, p))
+}
+
+# Points where f(z) = level, each bracketed by [a, b] with f(a) = fa and
+# f(b) = fb on either side of it, all solved at once by false position
+# (Illinois variant), with a bisection step every fifth iteration in case it
+# stalls (f is clamped to a large negative value at the edges of the support)
+find_crossings <- function(f, a, b, fa, fb, level) {
+  ga <- fa - level
+  gb <- fb - level
+  root <- (a + b) / 2
+  active <- seq_along(a)
+  last <- integer(length(a))
+  for (iter in seq_len(100)) {
+    if (length(active) == 0L) {
+      break
+    }
+    A <- a[active]
+    B <- b[active]
+    gA <- ga[active]
+    gB <- gb[active]
+    z <- if (iter %% 5 == 0) (A + B) / 2 else (A * gB - B * gA) / (gB - gA)
+    z <- pmin(pmax(z, pmin(A, B)), pmax(A, B))
+    gz <- f(z) - level[active]
+    root[active] <- z
+    # Keep the endpoint on the other side of the crossing; halve the value at
+    # an endpoint retained twice in a row (the Illinois modification)
+    left <- sign(gz) == sign(gA)
+    a[active[left]] <- z[left]
+    ga[active[left]] <- gz[left]
+    b[active[!left]] <- z[!left]
+    gb[active[!left]] <- gz[!left]
+    side <- ifelse(left, 1L, 2L)
+    repeat_left <- left & last[active] == 1L
+    repeat_right <- !left & last[active] == 2L
+    gb[active[repeat_left]] <- gb[active[repeat_left]] / 2
+    ga[active[repeat_right]] <- ga[active[repeat_right]] / 2
+    last[active] <- side
+    done <- abs(gz) < 1e-10 |
+      abs(b[active] - a[active]) <= 1e-12 * pmax(1, abs(z))
+    active <- active[!done]
+  }
+  root
 }
 
 # Check if all distributions are discrete (integer-valued support)
