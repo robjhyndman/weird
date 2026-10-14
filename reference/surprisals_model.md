@@ -148,6 +148,24 @@ glm_breaks <- glm(breaks ~ wool + tension, data = warpbreaks, family = poisson)
 warpbreaks |>
   mutate(prob = surprisals_prob(glm_breaks)) |>
   filter(prob < 0.05)
-#>   breaks wool tension       prob
-#> 1     70    A       L 0.04923568
+#>    breaks wool tension         prob
+#> 1      26    A       L 2.196495e-02
+#> 2      54    A       L 3.274781e-02
+#> 3      25    A       L 1.416330e-02
+#> 4      70    A       L 1.725704e-05
+#> 5      26    A       L 2.196495e-02
+#> 6      67    A       L 9.775439e-05
+#> 7      18    A       M 4.057162e-02
+#> 8      17    A       M 2.532383e-02
+#> 9      12    A       M 5.592226e-04
+#> 10     18    A       M 4.057162e-02
+#> 11     36    A       H 1.808900e-02
+#> 12     10    A       H 2.761928e-03
+#> 13     43    A       H 4.347453e-04
+#> 14     14    B       L 4.234165e-04
+#> 15     19    B       L 1.395205e-02
+#> 16     20    B       L 2.273242e-02
+#> 17     42    B       M 6.111506e-04
+#> 18     39    B       M 3.707466e-03
+#> 19     39    B       M 3.707466e-03
 ```
