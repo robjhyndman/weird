@@ -46,6 +46,8 @@ surprisal_prob_from_s <- function(
     if (dimension_dist(distribution) > 1) {
       warning("Using a gpd approximation for multivariate data")
       approximation <- "gpd"
+    } else if (is_discrete(distribution)) {
+      approximation <- "discrete"
     } else if (identical(unique(stats::family(distribution)), "normal")) {
       approximation <- "normal"
     } else if (is_symmetric(distribution)) {
@@ -78,6 +80,8 @@ surprisal_prob_from_s <- function(
     p <- surprisal_gpd_prob(s, threshold_probability)
   } else if (approximation == "empirical") {
     p <- rank(-s, ties.method = "max", na.last = "keep") / sum(!is.na(s))
+  } else if (approximation == "discrete") {
+    p <- surprisal_discrete_prob(s, distribution)
   } else if (approximation == "normal") {
     p <- surprisal_normal_prob(s, distribution)
   } else if (approximation == "symmetric" && !is.null(y)) {
@@ -136,6 +140,52 @@ surprisal_normal_prob <- function(s, distribution) {
   sigma2 <- distributional::variance(distribution)
   z <- sqrt(abs(2 * s - log(2 * pi * sigma2)))
   2 * (1 - stats::pnorm(z))
+}
+
+# Exact surprisal probabilities for discrete distributions: the total
+# probability of all outcomes that are no more likely than the observation.
+# Each value of s may come from a different distribution.
+surprisal_discrete_prob <- function(s, distribution) {
+  distribution <- distribution[rep_len(seq_along(distribution), length(s))]
+  vapply(
+    seq_along(s),
+    function(i) {
+      if (is.na(s[i])) {
+        return(NA_real_)
+      }
+      d <- distribution[i]
+      fy <- exp(-s[i])
+      pmf <- function(x) unlist(stats::density(d, x))
+      cdf <- function(x) unlist(distributional::cdf(d, x))
+      lim <- vctrs::field(distributional::support(d), "lim")[[1]]
+      # Enumerate the support, or for an infinite support, far enough into the
+      # tails that every outcome beyond is less likely than the observation
+      lower <- lim[1]
+      if (!is.finite(lower)) {
+        lower <- unlist(stats::quantile(d, 1e-15))
+        while (pmf(lower) > fy) lower <- 2 * lower - 1
+      }
+      upper <- lim[2]
+      if (!is.finite(upper)) {
+        upper <- unlist(stats::quantile(d, 1 - 1e-15))
+        while (pmf(upper) > fy) upper <- 2 * upper + 1
+      }
+      f <- pmf(seq(lower, upper))
+      # Allow for rounding error so the observation itself is counted, and in
+      # the sum (which can exceed 1 when the observation is at the mode)
+      min(1, sum(f[f <= fy * (1 + 1e-9)]) + cdf(lower - 1) + (1 - cdf(upper)))
+    },
+    numeric(1)
+  )
+}
+
+# Check if all distributions are discrete (integer-valued support)
+is_discrete <- function(dist) {
+  all(vapply(
+    vctrs::field(distributional::support(dist), "x"),
+    is.integer,
+    logical(1)
+  ))
 }
 
 # Check if distribution is symmetric

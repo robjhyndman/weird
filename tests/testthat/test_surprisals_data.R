@@ -157,3 +157,37 @@ test_that("surprisals_prob.data.frame agrees with surprisals_prob.matrix", {
   p_mat <- surprisals_prob(mat_bi, approximation = "gpd")
   expect_equal(p_df, p_mat)
 })
+
+# Exact surprisal probability of y under a discrete distribution with pmf f
+# on the support x: total probability of outcomes no more likely than y
+exact_discrete_prob <- function(y, x, f) {
+  sum(f[f <= f[x == y] * (1 + 1e-9)])
+}
+
+test_that("surprisals_prob is exact for binomial distributions", {
+  x <- 0:83
+  f <- dbinom(x, 83, 0.0183)
+  y <- c(0, 1, 2, 5, 12, 33)
+  p <- surprisals_prob(y, distribution = distributional::dist_binomial(83, 0.0183))
+  expect_equal(p, vapply(y, exact_discrete_prob, numeric(1), x = x, f = f))
+  # Symmetric discrete distributions too
+  f <- dbinom(0:20, 20, 0.5)
+  p <- surprisals_prob(3, distribution = distributional::dist_binomial(20, 0.5))
+  expect_equal(p, exact_discrete_prob(3, 0:20, f))
+})
+
+test_that("surprisals_prob is exact for Poisson distributions", {
+  x <- 0:200
+  f <- dpois(x, 4)
+  y <- c(0, 4, 9, 25)
+  p <- surprisals_prob(y, distribution = distributional::dist_poisson(4))
+  expect_equal(p, vapply(y, exact_discrete_prob, numeric(1), x = x, f = f))
+})
+
+test_that("surprisals_prob handles a vector of discrete distributions", {
+  d <- distributional::dist_poisson(c(2, 10))
+  p <- surprisals_prob(c(7, 7), distribution = d)
+  expect_equal(p[1], exact_discrete_prob(7, 0:100, dpois(0:100, 2)))
+  expect_equal(p[2], exact_discrete_prob(7, 0:100, dpois(0:100, 10)))
+})
+
