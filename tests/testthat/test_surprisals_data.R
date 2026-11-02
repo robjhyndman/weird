@@ -110,6 +110,15 @@ test_that("surprisals_prob approximation = 'gpd' works (univariate)", {
   expect_true(all(p >= 0 & p <= 1, na.rm = TRUE))
 })
 
+test_that("GPD approximation converges when the excesses have a large scale", {
+  set.seed(1)
+  s <- c(rnorm(180), 2 + evd::rgpd(20, scale = 200, shape = 2.5))
+  expect_no_warning(p <- surprisal_gpd_prob(s, 0.1))
+  # Same fit as on the original scale, with the scale parameter multiplied
+  expect_equal(surprisal_gpd_prob(s / 1000, 0.1), p)
+  expect_true(all(diff(p[order(s)]) <= 0))
+})
+
 test_that("surprisals_prob approximation = 'empirical' works (univariate)", {
   p <- surprisals_prob(y_uni, approximation = "empirical")
   expect_type(p, "double")

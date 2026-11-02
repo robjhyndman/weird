@@ -113,7 +113,18 @@ surprisal_gpd_prob <- function(s, threshold_p) {
   # if (any(!finite, na.rm = TRUE)) {
   #  warning("Infinite surprisals will be ignored in GPD")
   # }
-  gpd <- evd::fpot(s[finite], threshold = threshold_q, std.err = FALSE)$estimate
+  # Fit to excesses divided by their median, as the optimiser fails to
+  # converge when the scale is large. The GPD scale is then rescaled.
+  excess <- s[finite & s > threshold_q] - threshold_q
+  c <- stats::median(excess, na.rm = TRUE)
+  fit <- suppressWarnings(
+    evd::fpot(excess / c, threshold = 0, std.err = FALSE)
+  )
+  if (fit$convergence != "successful") {
+    warning("GPD fit did not converge: ", fit$convergence)
+  }
+  gpd <- fit$estimate
+  gpd["scale"] <- gpd["scale"] * c
   p <- threshold_p *
     evd::pgpd(
       s,
