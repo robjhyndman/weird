@@ -29,6 +29,12 @@
   Previously the observation itself was also included.
 - [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
   no longer replaces infinite values by 1.
+- The GPD approximation in
+  [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
+  is now fitted to rescaled excesses, so the optimiser converges when
+  the surprisals above the threshold are large. Previously the fit could
+  stop at the iteration limit, giving inaccurate tail probabilities. A
+  warning is now given if the fit does not converge.
 
 ## weird 3.1.0
 

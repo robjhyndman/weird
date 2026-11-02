@@ -49,6 +49,7 @@
 <code><a href="../reference/lof_scores.html">lof_scores()</a></code> and <code><a href="../reference/glosh_scores.html">glosh_scores()</a></code> now use <code>k</code> nearest neighbours excluding the observation itself. Previously the observation itself was also included.</li>
 <li>
 <code><a href="../reference/lof_scores.html">lof_scores()</a></code> no longer replaces infinite values by 1.</li>
+<li>The GPD approximation in <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> is now fitted to rescaled excesses, so the optimiser converges when the surprisals above the threshold are large. Previously the fit could stop at the iteration limit, giving inaccurate tail probabilities. A warning is now given if the fit does not converge.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.1.0" id="weird-310">weird 3.1.0<a class="anchor" aria-label="anchor" href="#weird-310"></a></h2><p class="text-muted">CRAN release: 2026-09-07</p>
