@@ -48,6 +48,7 @@ reference:
   - surprisals
   - surprisals.lm
   - surprisals.numeric
+  - surprisals.factor
 - title: Functions for identifying anomalies
   contents:
   - chauvenet_anomalies

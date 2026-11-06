@@ -1,5 +1,6 @@
 # weird (development version)
 
+- `surprisals()` and `surprisals_prob()` now have methods for factors, giving the surprisals and exact surprisal probabilities of categorical data. The category probabilities are estimated from the data (optionally with a Dirichlet `prior` added to each count, and with `loo = TRUE` for leave-one-out estimates), or supplied with `prob`.
 - New data sets `us_mortality` (US weekly deaths and death rates, 2015--2025) and `fashion` (Fashion-MNIST sneakers with planted images of other classes).
 - New `fetch_pets2006()` function to download frames from the PETS2006 video.
 - New `fetch_oz_books()` function to download the text of 29 Oz books by L. Frank Baum and Ruth Plumly Thompson.
