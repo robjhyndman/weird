@@ -2,6 +2,14 @@
 
 ## weird (development version)
 
+- [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
+  and
+  [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
+  now have methods for factors, giving the surprisals and exact
+  surprisal probabilities of categorical data. The category
+  probabilities are estimated from the data (optionally with a Dirichlet
+  `prior` added to each count, and with `loo = TRUE` for leave-one-out
+  estimates), or supplied with `prob`.
 - New data sets `us_mortality` (US weekly deaths and death rates,
   2015–2025) and `fashion` (Fashion-MNIST sneakers with planted images
   of other classes).

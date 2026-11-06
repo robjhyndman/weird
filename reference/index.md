@@ -70,6 +70,9 @@ Data sets included in the package
   [`surprisals_prob(`*`<matrix>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_data.md)
   [`surprisals_prob(`*`<data.frame>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_data.md)
   : Surprisals and surprisal probabilities computed from data
+- [`surprisals(`*`<factor>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_factor.md)
+  [`surprisals_prob(`*`<factor>`*`)`](https://pkg.robjhyndman.com/weird/reference/surprisals_factor.md)
+  : Surprisals and surprisal probabilities of categorical data
 
 ## Functions for identifying anomalies
 
