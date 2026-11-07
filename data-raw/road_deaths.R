@@ -45,6 +45,15 @@ road_deaths <- ardd |>
         "Motorcycle rider",
         "Motorcycle pillion passenger",
         "Pedal cyclist"
+      ),
+      # Shortened so that tables of road_user fit on one line
+      labels = c(
+        "Driver",
+        "Passenger",
+        "Pedestrian",
+        "Motorcycle rider",
+        "Motorcycle passenger",
+        "Pedal cyclist"
       )
     ),
     gender = factor(Gender, levels = c("Male", "Female")),
