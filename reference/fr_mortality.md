@@ -23,8 +23,8 @@ Data frame
 
 ## References
 
-Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
-1.4, <https://OTexts.com/weird/>.
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
+12, <https://OTexts.com/weird/timeseries.html>.
 
 ## Examples
 

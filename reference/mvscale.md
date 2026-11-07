@@ -82,7 +82,7 @@ removed before the centers, scale and cov are estimated.
 ## References
 
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section
-2.6, 3.6 and 3.7.
+2.8, 3.6 and 3.7.
 
 ## See also
 

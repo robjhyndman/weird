@@ -64,7 +64,7 @@ Project Gutenberg.
 ## References
 
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter
-10, <https://OTexts.com/weird/>.
+11, <https://OTexts.com/weird/text.html>.
 
 ## Examples
 
