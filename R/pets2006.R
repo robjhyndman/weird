@@ -21,7 +21,7 @@
 #'     `matrix(pixels[i, ], nrow = 96)` gives frame `i` as an image.}
 #' }
 #' @return Data frame
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 13,
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 14,
 #' \url{https://OTexts.com/weird/imagevideo.html}.
 #' @examples
 #' \dontrun{

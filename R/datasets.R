@@ -81,8 +81,8 @@
 #' @format A data frame with `r nrow(fr_mortality)` rows and
 #' `r ncol(fr_mortality)` columns.
 #' @source Human Mortality Database \url{https://www.mortality.org}
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 1.4,
-#' \url{https://OTexts.com/weird/}.
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 12,
+#' \url{https://OTexts.com/weird/timeseries.html}.
 #' @return Data frame
 #' @examples
 #' fr_mortality
@@ -154,7 +154,7 @@
 #' # Congresses in which Patrick Leahy served
 #' us_senate_members |>
 #'   filter(icpsr == 14307)
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 15,
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 16,
 #' \url{https://OTexts.com/weird/network.html}.
 #' @source Lee, J., Li, G., & Wilson, J. D. (2020). Varying-coefficient models
 #' for dynamic networks. *Computational Statistics & Data Analysis*, 152, 107052.
@@ -195,7 +195,7 @@
 #'   ggplot(aes(x = time, y = Mortality, colour = Age)) +
 #'   geom_line() +
 #'   scale_y_log10()
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 11,
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 12,
 #' \url{https://OTexts.com/weird/timeseries.html}.
 #' @source Human Mortality Database. Max Planck Institute for Demographic
 #' Research (Germany), University of California, Berkeley (USA), and French
@@ -224,7 +224,7 @@
 #' @examples
 #' fashion |>
 #'   count(label)
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 13,
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 14,
 #' \url{https://OTexts.com/weird/imagevideo.html}.
 #' @source Xiao, H., Rasul, K., & Vollgraf, R. (2017). Fashion-MNIST: a novel
 #' image dataset for benchmarking machine learning algorithms.
@@ -271,7 +271,7 @@
 #' }
 #' @return Data frame
 #' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 10,
-#' \url{https://OTexts.com/weird/text.html}.
+#' \url{https://OTexts.com/weird/categorical.html}.
 #' @examples
 #' road_deaths |>
 #'   ggplot(aes(x = age, fill = road_user)) +

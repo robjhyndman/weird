@@ -39,7 +39,7 @@ fashion |>
   count(label)
 }
 \references{
-Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 13,
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 14,
 \url{https://OTexts.com/weird/imagevideo.html}.
 }
 \keyword{datasets}

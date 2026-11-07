@@ -48,6 +48,6 @@ oz_books |>
 }
 }
 \references{
-Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 10,
-\url{https://OTexts.com/weird/}.
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 11,
+\url{https://OTexts.com/weird/text.html}.
 }

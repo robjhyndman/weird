@@ -8,7 +8,7 @@
 #' The data are scaled using the Cholesky decomposition of
 #' the inverse (co)variance. Then the scaled data are returned.
 #' Details of the methods are provided by Hyndman (2026).
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.6, 3.6 and 3.7.
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.8, 3.6 and 3.7.
 #'
 #' @details Optionally, the centering and scaling can be done for each variable
 #' separately, by setting `cov = NULL`, so there is no rotation of the data,

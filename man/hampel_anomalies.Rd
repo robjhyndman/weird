@@ -56,8 +56,8 @@ df |> ggplot(aes(x = time, y = y)) +
   geom_point(data = df |> filter(hampel), col = "red")
 }
 \references{
-Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 10.2,
-\url{https://OTexts.com/weird/}.
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 12.2,
+\url{https://OTexts.com/weird/timeseries.html}.
 }
 \author{
 Rob J Hyndman

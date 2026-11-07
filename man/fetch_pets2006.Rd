@@ -48,6 +48,6 @@ image(t(matrix(pets2006$pixels[951, ], nrow = 96))[, 96:1], col = grey.colors(25
 }
 }
 \references{
-Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 13,
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 14,
 \url{https://OTexts.com/weird/imagevideo.html}.
 }

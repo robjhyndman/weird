@@ -22,8 +22,8 @@
 #'   \item{text}{Text of the paragraph}
 #' }
 #' @return Data frame
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 10,
-#' \url{https://OTexts.com/weird/}.
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 11,
+#' \url{https://OTexts.com/weird/text.html}.
 #' @examples
 #' \dontrun{
 #' oz_books <- fetch_oz_books()

@@ -42,7 +42,7 @@ us_mortality |>
   scale_y_log10()
 }
 \references{
-Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 11,
+Hyndman, R J (2026) "That's weird: Anomaly detection using R", Chapter 12,
 \url{https://OTexts.com/weird/timeseries.html}.
 }
 \keyword{datasets}

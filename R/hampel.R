@@ -20,8 +20,8 @@
 #' the tail of the distribution of surprisal values. Options are "none" (no approximation),
 #' "gpd" (generalized Pareto distribution), or "empirical" (empirical distribution).
 #' @return logical vector identifying which observations are anomalies.
-#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 10.2,
-#' \url{https://OTexts.com/weird/}.
+#' @references Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 12.2,
+#' \url{https://OTexts.com/weird/timeseries.html}.
 #' @author Rob J Hyndman
 #' @examples
 #' set.seed(1)
