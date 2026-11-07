@@ -179,20 +179,20 @@ Chapter 7, <a href="https://OTexts.com/weird/density.html" class="external-link"
 <span class="r-in"><span>  <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/mclust-internal.html" class="external-link">count</a></span><span class="op">(</span><span class="va">road_user</span>, <span class="va">gender</span>, <span class="va">p</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    road_user                    gender       p     n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Motorcycle pillion passenger Male   0.002<span style="text-decoration: underline;">98</span>   173</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Pedal cyclist                Female 0.006<span style="text-decoration: underline;">66</span>   213</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Motorcycle pillion passenger Female 0.010<span style="text-decoration: underline;">4</span>    218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Motorcycle rider             Female 0.015<span style="text-decoration: underline;">3</span>    286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Pedal cyclist                Male   0.039<span style="text-decoration: underline;">2</span>   <span style="text-decoration: underline;">1</span>382</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Pedestrian                   Female 0.089<span style="text-decoration: underline;">1</span>   <span style="text-decoration: underline;">2</span>893</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Pedestrian                   Male   0.194    <span style="text-decoration: underline;">6</span>064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Passenger                    Female 0.300    <span style="text-decoration: underline;">6</span>194</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Driver                       Female 0.412    <span style="text-decoration: underline;">6</span>464</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Passenger                    Male   0.531    <span style="text-decoration: underline;">6</span>906</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> Motorcycle rider             Male   0.659    <span style="text-decoration: underline;">7</span>428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> Driver                       Male   1       <span style="text-decoration: underline;">19</span>761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    road_user            gender       p     n</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Motorcycle passenger Male   0.002<span style="text-decoration: underline;">98</span>   173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> Pedal cyclist        Female 0.006<span style="text-decoration: underline;">66</span>   213</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Motorcycle passenger Female 0.010<span style="text-decoration: underline;">4</span>    218</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Motorcycle rider     Female 0.015<span style="text-decoration: underline;">3</span>    286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Pedal cyclist        Male   0.039<span style="text-decoration: underline;">2</span>   <span style="text-decoration: underline;">1</span>382</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Pedestrian           Female 0.089<span style="text-decoration: underline;">1</span>   <span style="text-decoration: underline;">2</span>893</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Pedestrian           Male   0.194    <span style="text-decoration: underline;">6</span>064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Passenger            Female 0.300    <span style="text-decoration: underline;">6</span>194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Driver               Female 0.412    <span style="text-decoration: underline;">6</span>464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Passenger            Male   0.531    <span style="text-decoration: underline;">6</span>906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> Motorcycle rider     Male   0.659    <span style="text-decoration: underline;">7</span>428</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> Driver               Male   1       <span style="text-decoration: underline;">19</span>761</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

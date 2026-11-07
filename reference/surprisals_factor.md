@@ -129,18 +129,18 @@ road_deaths |>
   count(road_user, gender, p) |>
   arrange(p)
 #> # A tibble: 12 × 4
-#>    road_user                    gender       p     n
-#>    <fct>                        <fct>    <dbl> <int>
-#>  1 Motorcycle pillion passenger Male   0.00298   173
-#>  2 Pedal cyclist                Female 0.00666   213
-#>  3 Motorcycle pillion passenger Female 0.0104    218
-#>  4 Motorcycle rider             Female 0.0153    286
-#>  5 Pedal cyclist                Male   0.0392   1382
-#>  6 Pedestrian                   Female 0.0891   2893
-#>  7 Pedestrian                   Male   0.194    6064
-#>  8 Passenger                    Female 0.300    6194
-#>  9 Driver                       Female 0.412    6464
-#> 10 Passenger                    Male   0.531    6906
-#> 11 Motorcycle rider             Male   0.659    7428
-#> 12 Driver                       Male   1       19761
+#>    road_user            gender       p     n
+#>    <fct>                <fct>    <dbl> <int>
+#>  1 Motorcycle passenger Male   0.00298   173
+#>  2 Pedal cyclist        Female 0.00666   213
+#>  3 Motorcycle passenger Female 0.0104    218
+#>  4 Motorcycle rider     Female 0.0153    286
+#>  5 Pedal cyclist        Male   0.0392   1382
+#>  6 Pedestrian           Female 0.0891   2893
+#>  7 Pedestrian           Male   0.194    6064
+#>  8 Passenger            Female 0.300    6194
+#>  9 Driver               Female 0.412    6464
+#> 10 Passenger            Male   0.531    6906
+#> 11 Motorcycle rider     Male   0.659    7428
+#> 12 Driver               Male   1       19761
 ```
