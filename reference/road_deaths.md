@@ -66,7 +66,7 @@ A data frame with 58168 rows and 20 columns:
 
 - gender:
 
-  Sex of the person killed
+  Gender of the person killed
 
 - age:
 
