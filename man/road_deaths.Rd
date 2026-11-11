@@ -20,7 +20,7 @@ A data frame with 58168 rows and
 \item{articulated_truck}{Was an articulated truck involved?}
 \item{speed_limit}{Posted speed limit at the crash location (km/h)}
 \item{road_user}{Road user type of the person killed}
-\item{gender}{Sex of the person killed}
+\item{gender}{Gender of the person killed}
 \item{age}{Age of the person killed (years)}
 \item{remoteness}{ABS remoteness area of the crash location (ASGS 2021)}
 \item{sa4}{ABS Statistical Area Level 4 of the crash location (ASGS 2021)}
