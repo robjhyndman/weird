@@ -10,6 +10,7 @@
 - `lof_scores()` and `glosh_scores()` now use `k` nearest neighbours excluding the observation itself.
   Previously the observation itself was also included.
 - `lof_scores()` no longer replaces infinite values by 1.
+- `surprisals()` and `surprisals_prob()` are much faster for Gaussian mixtures (e.g. from `dist_mclust()`), which are now evaluated directly rather than one observation at a time, and give finite surprisals for observations far into the tails, where the mixture density previously underflowed to zero.
 - The GPD approximation in `surprisals_prob()` is now fitted to rescaled excesses, so the optimiser converges when the surprisals above the threshold are large. Previously the fit could stop at the iteration limit, giving inaccurate tail probabilities. A warning is now given if the fit does not converge.
 
 # weird 3.1.0

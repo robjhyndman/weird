@@ -187,7 +187,7 @@ surprisal_discrete_prob <- function(s, distribution) {
 # boundaries are found where the log density crosses that of the observation.
 surprisal_continuous_prob <- function(s, distribution) {
   log_den <- function(x) {
-    pmax(unlist(stats::density(distribution, x, log = TRUE)), -1e10)
+    pmax(unlist(log_density_at(distribution, x)), -1e10)
   }
   cdf <- function(x) unlist(distributional::cdf(distribution, x))
   x <- stats::quantile(distribution, seq(1e-6, 1 - 1e-6, length.out = 10001))
@@ -341,3 +341,51 @@ is_symmetric <- function(dist) {
 
 #' @importFrom stats quantile
 #' @importFrom evd fpot
+
+# Log density of a single distribution at `at`. A mixture of normal or
+# multivariate normal components (as returned by dist_mclust()) is evaluated
+# directly: distributional (<= 0.9.0) evaluates mixture densities one point at
+# a time, which is very slow for large data, and takes the log of the density,
+# which underflows to -Inf in the tails.
+log_density_at <- function(distribution, at) {
+  if (length(distribution) == 1L && stats::family(distribution) == "mixture") {
+    mixture <- vctrs::vec_data(distribution)[[1]]
+    is_normal <- vapply(
+      mixture$dist,
+      inherits,
+      logical(1L),
+      what = c("dist_normal", "dist_mvnorm")
+    )
+    if (all(is_normal)) {
+      return(log_density_normal_mixture(mixture, at))
+    }
+  }
+  stats::density(distribution, at = at, log = TRUE)
+}
+
+# Log density of a mixture of normal or multivariate normal components at the
+# points (or rows) of `at`, combined with log-sum-exp
+log_density_normal_mixture <- function(mixture, at) {
+  log_dens <- Map(
+    function(w, component) {
+      if (inherits(component, "dist_mvnorm")) {
+        ld <- log_dmvnorm(as.matrix(at), component$mu, component$sigma)
+      } else {
+        ld <- stats::dnorm(at, component$mu, component$sigma, log = TRUE)
+      }
+      log(w) + ld
+    },
+    mixture$w,
+    mixture$dist
+  )
+  m <- Reduce(pmax, log_dens)
+  m[!is.finite(m)] <- 0
+  m + log(Reduce(`+`, lapply(log_dens, function(ld) exp(ld - m))))
+}
+
+# Multivariate normal log density at the rows of x
+log_dmvnorm <- function(x, mean, sigma) {
+  R <- chol(sigma)
+  z <- backsolve(R, t(x) - c(mean), transpose = TRUE)
+  -colSums(z^2) / 2 - sum(log(diag(R))) - length(mean) * log(2 * pi) / 2
+}

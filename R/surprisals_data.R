@@ -57,7 +57,7 @@ surprisals.numeric <- function(
   if (length(distribution) == NROW(object)) {
     den <- mapply(density, distribution, object, log = TRUE)
   } else {
-    den <- density(distribution, at = object, log = TRUE)
+    den <- log_density_at(distribution, at = object)
     if (is.list(den)) {
       if (length(den) > 1) {
         stop("What's going on?")

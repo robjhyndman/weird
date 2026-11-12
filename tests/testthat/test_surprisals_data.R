@@ -226,3 +226,38 @@ test_that("surprisals_prob handles multimodal densities", {
   p <- surprisals_prob(10, distribution = m)
   expect_equal(p / pnorm(-4), 1, tolerance = 1e-3)
 })
+
+test_that("normal mixture log densities match distributional and avoid underflow", {
+  # Univariate
+  mix1 <- distributional::dist_mixture(
+    distributional::dist_normal(0, 1),
+    distributional::dist_normal(5, 2),
+    weights = c(0.3, 0.7)
+  )
+  y <- c(-2, 0, 2.5, 6)
+  expect_equal(
+    log_density_at(mix1, y),
+    log(0.3 * dnorm(y) + 0.7 * dnorm(y, 5, 2))
+  )
+  expect_equal(
+    surprisals(y, distribution = mix1),
+    -log(0.3 * dnorm(y) + 0.7 * dnorm(y, 5, 2))
+  )
+  expect_true(is.finite(log_density_at(mix1, 1000)))
+  # Multivariate
+  sigma2 <- matrix(c(2, 0.5, 0.5, 1), 2, 2)
+  mix2 <- distributional::dist_mixture(
+    distributional::dist_multivariate_normal(list(c(0, 0)), list(diag(2))),
+    distributional::dist_multivariate_normal(list(c(3, 1)), list(sigma2)),
+    weights = c(0.4, 0.6)
+  )
+  expect_equal(
+    log_density_at(mix2, mat_bi),
+    unname(density(mix2, mat_bi, log = TRUE)[[1]])
+  )
+  expect_equal(
+    surprisals(mat_bi, distribution = mix2),
+    -unname(density(mix2, mat_bi, log = TRUE)[[1]])
+  )
+  expect_true(is.finite(log_density_at(mix2, cbind(100, -100))))
+})
