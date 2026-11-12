@@ -37,6 +37,14 @@
   Previously the observation itself was also included.
 - [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
   no longer replaces infinite values by 1.
+- [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
+  and
+  [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
+  are much faster for Gaussian mixtures (e.g. from
+  [`dist_mclust()`](https://pkg.robjhyndman.com/weird/reference/dist_mclust.md)),
+  which are now evaluated directly rather than one observation at a
+  time, and give finite surprisals for observations far into the tails,
+  where the mixture density previously underflowed to zero.
 - The GPD approximation in
   [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   is now fitted to rescaled excesses, so the optimiser converges when
