@@ -2,6 +2,8 @@
 
 ## weird 3.2.0
 
+CRAN release: 2026-11-20
+
 ### Breaking changes
 
 - [`glosh_scores()`](https://pkg.robjhyndman.com/weird/reference/glosh_scores.md)
