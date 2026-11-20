@@ -24,7 +24,7 @@ An object of class `distributional`
 
 ``` r
 library(mclust, exclude = "count")
-#> Package 'mclust' version 6.1.3
+#> Package 'mclust' version 6.1.4
 #> Type 'citation("mclust")' for citing this R package in publications.
 # Univariate mixture density
 gmm <- Mclust(oldfaithful$duration) |> dist_mclust()

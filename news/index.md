@@ -1,7 +1,31 @@
 # Changelog
 
-## weird (development version)
+## weird 3.2.0
 
+### Breaking changes
+
+- [`glosh_scores()`](https://pkg.robjhyndman.com/weird/reference/glosh_scores.md)
+  and
+  [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
+  now use the `k` nearest neighbours excluding the observation itself.
+  Previously the observation itself was also included, so scores will
+  differ from earlier versions.
+- [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
+  no longer replaces infinite values by 1.
+
+### New features
+
+- New data sets: `fashion` (Fashion-MNIST sneakers with planted images
+  of other classes), `road_deaths` (every road crash death in Australia
+  from 1989 to 2025), `us_mortality` (US weekly deaths and death rates,
+  2015–2025), and `us_senate_edges` and `us_senate_members` (US Senate
+  co-voting networks from the 40th to the 113th Congress, with the name,
+  state, party and ICPSR identifier of each senator).
+- [`fetch_oz_books()`](https://pkg.robjhyndman.com/weird/reference/fetch_oz_books.md)
+  downloads the text of 29 Oz books by L. Frank Baum and Ruth Plumly
+  Thompson.
+- [`fetch_pets2006()`](https://pkg.robjhyndman.com/weird/reference/fetch_pets2006.md)
+  downloads frames from the PETS2006 video.
 - [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   and
   [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
@@ -10,47 +34,28 @@
   probabilities are estimated from the data (optionally with a Dirichlet
   `prior` added to each count, and with `loo = TRUE` for leave-one-out
   estimates), or supplied with `prob`.
-- New data sets `us_mortality` (US weekly deaths and death rates,
-  2015–2025) and `fashion` (Fashion-MNIST sneakers with planted images
-  of other classes).
-- New
-  [`fetch_pets2006()`](https://pkg.robjhyndman.com/weird/reference/fetch_pets2006.md)
-  function to download frames from the PETS2006 video.
-- New
-  [`fetch_oz_books()`](https://pkg.robjhyndman.com/weird/reference/fetch_oz_books.md)
-  function to download the text of 29 Oz books by L. Frank Baum and Ruth
-  Plumly Thompson.
-- New data set `road_deaths`, giving every road crash death in Australia
-  from 1989 to 2025.
-- New data sets `us_senate_edges` and `us_senate_members`, giving the US
-  Senate co-voting networks from the 40th to the 113th Congress, with
-  the name, state, party and ICPSR identifier of each senator.
+
+### Minor improvements and bug fixes
+
 - `kde_bandwidth(method = "lookout")` no longer crashes R when the data
   contain points that differ only by floating-point error (e.g. PCA
   scores of identical observations);
   [`mlpack::emst()`](https://rdrr.io/pkg/mlpack/man/emst.html) could
   overflow the C stack on such near-duplicates.
-- [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
-  and
-  [`glosh_scores()`](https://pkg.robjhyndman.com/weird/reference/glosh_scores.md)
-  now use `k` nearest neighbours excluding the observation itself.
-  Previously the observation itself was also included.
-- [`lof_scores()`](https://pkg.robjhyndman.com/weird/reference/lof_scores.md)
-  no longer replaces infinite values by 1.
 - [`surprisals()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   and
   [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
   are much faster for Gaussian mixtures (e.g. from
   [`dist_mclust()`](https://pkg.robjhyndman.com/weird/reference/dist_mclust.md)),
   which are now evaluated directly rather than one observation at a
-  time, and give finite surprisals for observations far into the tails,
-  where the mixture density previously underflowed to zero.
-- The GPD approximation in
-  [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
-  is now fitted to rescaled excesses, so the optimiser converges when
-  the surprisals above the threshold are large. Previously the fit could
-  stop at the iteration limit, giving inaccurate tail probabilities. A
-  warning is now given if the fit does not converge.
+  time. They also give finite surprisals for observations far into the
+  tails, where the mixture density previously underflowed to zero.
+- [`surprisals_prob()`](https://pkg.robjhyndman.com/weird/reference/surprisals.md)
+  now fits the GPD approximation to rescaled excesses, so the optimiser
+  converges when the surprisals above the threshold are large.
+  Previously the fit could stop at the iteration limit, giving
+  inaccurate tail probabilities. A warning is now given if the fit does
+  not converge.
 
 ## weird 3.1.0
 

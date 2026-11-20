@@ -37,24 +37,34 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="weird-development-version">weird (development version)<a class="anchor" aria-label="anchor" href="#weird-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="3.2.0" id="weird-320">weird 3.2.0<a class="anchor" aria-label="anchor" href="#weird-320"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-3-2-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-3-2-0"></a></h3>
 <ul><li>
-<code><a href="../reference/surprisals.html">surprisals()</a></code> and <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> now have methods for factors, giving the surprisals and exact surprisal probabilities of categorical data. The category probabilities are estimated from the data (optionally with a Dirichlet <code>prior</code> added to each count, and with <code>loo = TRUE</code> for leave-one-out estimates), or supplied with <code>prob</code>.</li>
-<li>New data sets <code>us_mortality</code> (US weekly deaths and death rates, 2015–2025) and <code>fashion</code> (Fashion-MNIST sneakers with planted images of other classes).</li>
-<li>New <code><a href="../reference/fetch_pets2006.html">fetch_pets2006()</a></code> function to download frames from the PETS2006 video.</li>
-<li>New <code><a href="../reference/fetch_oz_books.html">fetch_oz_books()</a></code> function to download the text of 29 Oz books by L. Frank Baum and Ruth Plumly Thompson.</li>
-<li>New data set <code>road_deaths</code>, giving every road crash death in Australia from 1989 to 2025.</li>
-<li>New data sets <code>us_senate_edges</code> and <code>us_senate_members</code>, giving the US Senate co-voting networks from the 40th to the 113th Congress, with the name, state, party and ICPSR identifier of each senator.</li>
-<li>
-<code>kde_bandwidth(method = "lookout")</code> no longer crashes R when the data contain points that differ only by floating-point error (e.g. PCA scores of identical observations); <code><a href="https://rdrr.io/pkg/mlpack/man/emst.html" class="external-link">mlpack::emst()</a></code> could overflow the C stack on such near-duplicates.</li>
-<li>
-<code><a href="../reference/lof_scores.html">lof_scores()</a></code> and <code><a href="../reference/glosh_scores.html">glosh_scores()</a></code> now use <code>k</code> nearest neighbours excluding the observation itself. Previously the observation itself was also included.</li>
+<code><a href="../reference/glosh_scores.html">glosh_scores()</a></code> and <code><a href="../reference/lof_scores.html">lof_scores()</a></code> now use the <code>k</code> nearest neighbours excluding the observation itself. Previously the observation itself was also included, so scores will differ from earlier versions.</li>
 <li>
 <code><a href="../reference/lof_scores.html">lof_scores()</a></code> no longer replaces infinite values by 1.</li>
-<li>
-<code><a href="../reference/surprisals.html">surprisals()</a></code> and <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> are much faster for Gaussian mixtures (e.g. from <code><a href="../reference/dist_mclust.html">dist_mclust()</a></code>), which are now evaluated directly rather than one observation at a time, and give finite surprisals for observations far into the tails, where the mixture density previously underflowed to zero.</li>
-<li>The GPD approximation in <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> is now fitted to rescaled excesses, so the optimiser converges when the surprisals above the threshold are large. Previously the fit could stop at the iteration limit, giving inaccurate tail probabilities. A warning is now given if the fit does not converge.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="new-features-3-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-2-0"></a></h3>
+<ul><li>New data sets: <code>fashion</code> (Fashion-MNIST sneakers with planted images of other classes), <code>road_deaths</code> (every road crash death in Australia from 1989 to 2025), <code>us_mortality</code> (US weekly deaths and death rates, 2015–2025), and <code>us_senate_edges</code> and <code>us_senate_members</code> (US Senate co-voting networks from the 40th to the 113th Congress, with the name, state, party and ICPSR identifier of each senator).</li>
+<li>
+<code><a href="../reference/fetch_oz_books.html">fetch_oz_books()</a></code> downloads the text of 29 Oz books by L. Frank Baum and Ruth Plumly Thompson.</li>
+<li>
+<code><a href="../reference/fetch_pets2006.html">fetch_pets2006()</a></code> downloads frames from the PETS2006 video.</li>
+<li>
+<code><a href="../reference/surprisals.html">surprisals()</a></code> and <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> now have methods for factors, giving the surprisals and exact surprisal probabilities of categorical data. The category probabilities are estimated from the data (optionally with a Dirichlet <code>prior</code> added to each count, and with <code>loo = TRUE</code> for leave-one-out estimates), or supplied with <code>prob</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-and-bug-fixes-3-2-0">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-3-2-0"></a></h3>
+<ul><li>
+<code>kde_bandwidth(method = "lookout")</code> no longer crashes R when the data contain points that differ only by floating-point error (e.g. PCA scores of identical observations); <code><a href="https://rdrr.io/pkg/mlpack/man/emst.html" class="external-link">mlpack::emst()</a></code> could overflow the C stack on such near-duplicates.</li>
+<li>
+<code><a href="../reference/surprisals.html">surprisals()</a></code> and <code><a href="../reference/surprisals.html">surprisals_prob()</a></code> are much faster for Gaussian mixtures (e.g. from <code><a href="../reference/dist_mclust.html">dist_mclust()</a></code>), which are now evaluated directly rather than one observation at a time. They also give finite surprisals for observations far into the tails, where the mixture density previously underflowed to zero.</li>
+<li>
+<code><a href="../reference/surprisals.html">surprisals_prob()</a></code> now fits the GPD approximation to rescaled excesses, so the optimiser converges when the surprisals above the threshold are large. Previously the fit could stop at the iteration limit, giving inaccurate tail probabilities. A warning is now given if the fit does not converge.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.1.0" id="weird-310">weird 3.1.0<a class="anchor" aria-label="anchor" href="#weird-310"></a></h2><p class="text-muted">CRAN release: 2026-09-07</p>
 <ul><li>
