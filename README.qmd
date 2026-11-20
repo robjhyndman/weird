@@ -1,5 +1,7 @@
 ---
-format: gfm
+format:
+  gfm:
+    default-image-extension: ""
 ---
 
 <!-- README.md is generated from README.qmd. Please edit that file -->
