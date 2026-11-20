@@ -4,7 +4,7 @@
 
 library(weird)
 #> Warning: no DISPLAY variable so Tk is not available
-#> ── Attaching core weird packages ───────────────────────────────────── weird 3.2.0 ──
+#> ── Attaching core weird packages ──────────────────────────────── weird 3.2.0.9000 ──
 #> ✔ distributional 0.9.0     ✔ ggplot2        4.0.4
 #> ✔ dplyr          1.2.1
 #> ── Conflicts ───────────────────────────────────────────────────── weird_conflicts ──
