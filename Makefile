@@ -32,7 +32,7 @@ install:
 	R CMD INSTALL .
 
 pkgdown:
-	Rscript --no-environ -e "pkgdown::build_site('.')"
+	FONTCONFIG_FILE=$(CURDIR)/pkgdown/fonts.conf Rscript --no-environ -e "pkgdown::build_site('.')"
 
 release:
 	Rscript --no-environ -e "devtools::submit_cran(args = c('--compact-vignettes=both'))"
