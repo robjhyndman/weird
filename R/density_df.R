@@ -9,7 +9,6 @@
 #' @return Data frame with columns `x`, `y` (if bivariate), `density`, and `distribution`.
 #' @examples
 #' dist_kde(oldfaithful$duration) |> density_df()
-#'
 #' @export
 density_df <- function(object, ngrid = NULL) {
   info <- lapply(object, dist_info)

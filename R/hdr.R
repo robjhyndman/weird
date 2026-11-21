@@ -38,7 +38,6 @@
 #'   gg_hdrboxplot(Average)
 #' oldfaithful |>
 #'   gg_hdrboxplot(duration, waiting, show_points = TRUE)
-#'
 #' @export
 gg_hdrboxplot <- function(
   data,

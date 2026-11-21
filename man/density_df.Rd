@@ -21,5 +21,4 @@ object on a regular grid for plotting.
 }
 \examples{
 dist_kde(oldfaithful$duration) |> density_df()
-
 }

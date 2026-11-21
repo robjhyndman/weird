@@ -41,7 +41,6 @@ random values from the kde is equivalent to a smoothed bootstrap.
 \examples{
 dist_kde(c(rnorm(200), rnorm(100, 5)))
 dist_kde(cbind(rnorm(200), rnorm(200, 5)), binned = TRUE)
-
 }
 \references{
 Hyndman, R J (2026) "That's weird: Anomaly detection using R", Section 2.9 and 3.9,

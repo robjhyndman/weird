@@ -67,7 +67,6 @@ cricket_batting |>
   gg_hdrboxplot(Average)
 oldfaithful |>
   gg_hdrboxplot(duration, waiting, show_points = TRUE)
-
 }
 \references{
 Hyndman, R J (1996) Computing and Graphing Highest Density Regions,

@@ -22,7 +22,6 @@
 #' @examples
 #' dist_kde(c(rnorm(200), rnorm(100, 5)))
 #' dist_kde(cbind(rnorm(200), rnorm(200, 5)), binned = TRUE)
-#'
 #' @export
 
 dist_kde <- function(
